@@ -2977,7 +2977,14 @@ function loadDayNotes(){ try{ return JSON.parse(localStorage.getItem(DAYNOTES_KE
 function saveDayNotes(){ try{ localStorage.setItem(DAYNOTES_KEY, JSON.stringify(daynotes)); }catch(e){} }
 let daynotes=loadDayNotes();
 const VWATCH_KEY='cdga-video-watched-v1';
-function loadVideoWatched(){ try{ return JSON.parse(localStorage.getItem(VWATCH_KEY))||{}; }catch(e){ return {}; } }
+function loadVideoWatched(){
+  try{
+    const o=JSON.parse(localStorage.getItem(VWATCH_KEY))||{};
+    // 清理之前 cb.dataset.vurl 误读 bug 写入的脏 key（如 "undefined"）
+    for(const k in o) if(k==='undefined'||!k.startsWith('http')) delete o[k];
+    return o;
+  }catch(e){ return {}; }
+}
 function saveVideoWatched(){ try{ localStorage.setItem(VWATCH_KEY, JSON.stringify(videoWatched)); }catch(e){} }
 let videoWatched=loadVideoWatched();
 function setVideoWatched(url,on){ if(on) videoWatched[url]=todayISO(); else delete videoWatched[url]; saveVideoWatched(); }
@@ -3317,7 +3324,8 @@ function renderDay(iso){
   if(jumpBtn) jumpBtn.onclick=()=>{ const t=document.getElementById('dcArtNote'); if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); t.focus(); } };
   dayCard.querySelectorAll('.dc-vchk').forEach(cb=>{
     cb.onchange=()=>{
-      const url=cb.dataset.vurl;
+      const url=cb.closest('.dc-video').dataset.vurl;  // data-vurl 在 <label> 上，不在 <input> 上
+      if(!url) return;
       setVideoWatched(url, cb.checked);
       cb.closest('.dc-video').classList.toggle('done', cb.checked);
       const seriesEl=cb.closest('.dc-series');
