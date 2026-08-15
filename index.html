@@ -529,6 +529,32 @@ details.q[open] summary{margin-bottom:4px}
 .dc-btn.ghost .dc-prog{background:var(--bg-2);color:var(--text-2)}
 .dc-tip{font-size:12.5px;color:var(--text-3);line-height:1.6;margin:10px 0 0;padding:9px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid var(--accent)}
 .dc-tip b{color:var(--text)}
+/* ===== 治疗标签 + 优先级 + 每日用量 (2026-08-15) ===== */
+.dc-summary{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:11px 14px;margin:14px 0;background:var(--surface-2);border-radius:10px;border:1px solid var(--border)}
+.dc-summary-item{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--text-2)}
+.dc-summary-item b{font-weight:700;color:var(--text);font-size:14px}
+.dc-summary-time.warn{color:#c47a00;font-weight:700}
+.dc-summary-time.over{color:#c0392b;font-weight:700}
+.dc-tag-treat{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;margin-right:4px;vertical-align:middle;letter-spacing:.02em;line-height:1.5}
+.dc-tag-treat.t-浏览{background:#eef2f7;color:#5a6478;border:1px solid #dde2ec}
+.dc-tag-treat.t-精读{background:#e6f4ea;color:#1e7a3a;border:1px solid #cfe5d4}
+.dc-tag-treat.t-背诵{background:#fce8e6;color:#a93226;border:1px solid #f5cdc8}
+.dc-tag-treat.t-实操{background:#ede7f6;color:#5e35b1;border:1px solid #d8cdee}
+.dc-tag-prio{display:inline-block;font-size:10px;font-weight:800;padding:2px 5px;border-radius:4px;margin-left:4px;vertical-align:middle;letter-spacing:.03em}
+.dc-tag-prio.p-P1{background:#c0392b;color:#fff}
+.dc-tag-prio.p-P2{background:#e0a800;color:#fff}
+.dc-tag-prio.p-P3{background:#888;color:#fff}
+.dc-mini{display:inline-block;font-size:11px;color:var(--text-3);margin-left:4px;font-variant-numeric:tabular-nums}
+.dc-link,.dc-reschip{display:inline-flex;align-items:center;gap:4px;margin:3px 6px 3px 0;padding:5px 10px;font-size:13px}
+.dc-link{background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--accent);text-decoration:none;font-weight:500}
+.dc-link:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dc-reschip{cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;color:var(--text-2)}
+.dc-reschip:hover{background:var(--surface);border-color:var(--accent);color:var(--accent)}
+.dc-fold-toggle{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--text-3);background:none;border:1px dashed var(--border);padding:4px 10px;border-radius:6px;cursor:pointer;margin-top:6px;transition:.15s}
+.dc-fold-toggle:hover{color:var(--accent);border-color:var(--accent)}
+.dc-fold-block{display:none;margin-top:6px;padding-top:6px;border-top:1px dashed var(--border)}
+.dc-fold-block.open{display:block}
+.dc-art-treat{margin:6px 0 0}
 .dc-reslist{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .dc-reschip{font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:.15s}
 .dc-reschip:hover{border-color:var(--accent);color:var(--accent)}
@@ -2593,12 +2619,12 @@ const U={
 // 兼容保留 search（极少数周次兜底用）
 const search='https://search.bilibili.com/all?keyword=CDGA+%E5%8C%97%E5%A4%A7%E9%9D%92%E9%B8%9F';
 const RES={
-  sohu:{name:'搜狐·11域逐域详解',file:'资料/03_机构免费资料/free_11知识领域详解_搜狐.html'},
-  notes:{name:'⭐ 11域备考笔记.md',file:'资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md'},
-  oval:{name:'OvalEdge·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架详解_OvalEdge.html'},
-  sogeti:{name:'Sogeti·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架_Sogeti.html'},
-  damaPdf:{name:'DAMA·DMBOK框架一页纸(PDF)',file:'资料/03_机构免费资料/dama-dmbok-overview.pdf'},
-  dgiPdf:{name:'DGI·数据治理框架(PDF)',file:'资料/03_机构免费资料/dgi-data-governance-overview.pdf'}
+  sohu:{name:'搜狐·11域逐域详解',file:'资料/03_机构免费资料/free_11知识领域详解_搜狐.html',t:'精读',m:45,p:'P2'},
+  notes:{name:'⭐ 11域备考笔记.md',file:'资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md',t:'精读',m:60,p:'P1'},
+  oval:{name:'OvalEdge·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架详解_OvalEdge.html',t:'浏览',m:10,p:'P2'},
+  sogeti:{name:'Sogeti·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架_Sogeti.html',t:'浏览',m:10,p:'P2'},
+  damaPdf:{name:'DAMA·DMBOK框架一页纸(PDF)',file:'资料/03_机构免费资料/dama-dmbok-overview.pdf',t:'背诵',m:5,p:'P1'},
+  dgiPdf:{name:'DGI·数据治理框架(PDF)',file:'资料/03_机构免费资料/dgi-data-governance-overview.pdf',t:'浏览',m:8,p:'P3'}
 };
 const RES_ORDER=['sohu','notes','oval','sogeti','damaPdf','dgiPdf'];
 const TERMS={
@@ -2625,32 +2651,32 @@ const DAY_ROLES=[
   {t:'案例 / 画图练习',h:'画一张图或写一张案例卡（血缘 / 分层 / 模型）'},
   {t:'自测 + 错题整理',h:'从自测题抽 1–2 题写出答案与理由，归错题本'}
 ];const WEEKS=[
- {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'看 Ch1《数据管理》全片（18min）+ 6h 速成版前 1h（概览）',vWeekend:'看 cv11《认证介绍+17章大纲》（30min）+ 经验分享 exp（12min）',videos:[['Ch1 数据管理',U.c1],['⭐ 6h 速成（概览）',U.whole],['cv11 大纲',U.cv11],['一次过经验',U.exp]]},
- {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'Ch1 数据管理 二刷（每天 30min）；Ch2 数据处理伦理（9min）',vWeekend:'#9 数语《数据行业职业发展》(40min) + cv11 大纲再读',videos:[['Ch1 数据管理',U.c1],['Ch2 数据伦理',U.c2],['#9 职业发展',U.b9],['cv11 大纲',U.cv11]]},
- {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch3 数据治理（24min，分两天看完）',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷',videos:[['Ch3 数据治理',U.c3],['#3 数语·数据治理',U.b3]]},
- {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'Ch13 数据质量（22min）+ Ch12 元数据管理（15min）',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + Ch13/12 二刷',videos:[['Ch13 数据质量',U.c13],['Ch12 元数据',U.c12],['#2 尚硅谷·元数据',U.b2],['#6 资产目录',U.b6]]},
- {w:5,start:'2026-09-12',end:'2026-09-18',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'Ch11 数据仓库（18min）+ Ch10 主数据（19min）',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + cv12/cv13 专栏',videos:[['Ch11 数据仓库',U.c11],['Ch10 参考主数据',U.c10],['#1 哈喽鹏程·数仓',U.b1],['cv12 数仓+质量',U.cv12]]},
- {w:6,start:'2026-09-19',end:'2026-09-25',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'Ch5 数据建模与设计（29min，分两天）+ Ch4 数据架构（18min）',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',videos:[['Ch5 数据建模',U.c5],['Ch4 数据架构',U.c4],['#5 数语·数据模型',U.b5],['#4 数语·数据标准',U.b4]]},
- {w:7,start:'2026-09-26',end:'2026-10-02',stage:'通读',focus:'安全/大数据/成熟度/低分域',domains:['八、数据安全','九、大数据和数据科学','十、成熟度评估','十三、其余低分域'],milestone:'🏁 通读两遍+术语表成型；17 域名称全过一遍',vWork:'Ch7 数据安全 + Ch14 大数据 + Ch15 成熟度（合计约 60min）',vWeekend:'#4 数语《数据标准》补看 + 思维导图 v2 补全',videos:[['Ch7 数据安全',U.c7],['Ch14 大数据',U.c14],['Ch15 成熟度',U.c15],['#4 数语·数据标准',U.b4]]},
- {w:8,start:'2026-10-03',end:'2026-10-09',stage:'高分精学',focus:'数据治理(精)',domains:['一、数据治理'],milestone:'案例卡完成，章节题≥70%',vWork:'Ch3 数据治理 二刷（24min）',vWeekend:'#3 数语《数据治理》二刷 + 案例卡整理',videos:[['Ch3 数据治理',U.c3],['#3 数语·数据治理',U.b3]]},
- {w:9,start:'2026-10-10',end:'2026-10-16',stage:'高分精学',focus:'数据质量(精)',domains:['二、数据质量'],milestone:'能给场景判维度',vWork:'Ch13 数据质量 二刷（22min）',vWeekend:'cv12《数仓+质量》精读 + 质量六维度笔记',videos:[['Ch13 数据质量',U.c13],['cv12 数仓+质量',U.cv12]]},
- {w:10,start:'2026-10-17',end:'2026-10-23',stage:'高分精学',focus:'元数据(精)',domains:['三、元数据管理'],milestone:'血缘图完成',vWork:'Ch12 元数据管理 二刷（15min）',vWeekend:'#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图',videos:[['Ch12 元数据',U.c12],['#2 尚硅谷·元数据',U.b2]]},
- {w:11,start:'2026-10-24',end:'2026-10-30',stage:'高分精学',focus:'数仓BI(精)',domains:['四、数据仓库与BI'],milestone:'说清 ETL/ELT 区别',vWork:'Ch11 数据仓库 二刷（18min）',vWeekend:'#1 数仓课二刷（ETL vs ELT 章）+ cv13 专栏',videos:[['Ch11 数据仓库',U.c11],['#1 哈喽鹏程·数仓',U.b1],['cv13 数仓建设',U.cv13]]},
- {w:12,start:'2026-10-31',end:'2026-11-06',stage:'高分精学',focus:'参考/主数据(精)',domains:['五、参考数据和主数据'],milestone:'主数据案例卡完成',vWork:'Ch10 参考数据和主数据 二刷（19min）',vWeekend:'#6 资产目录二刷 + 户号↔合同 mapping 案例',videos:[['Ch10 主数据',U.c10],['#6 资产目录',U.b6]]},
- {w:13,start:'2026-11-07',end:'2026-11-13',stage:'高分精学',focus:'数据建模(精)',domains:['六、数据建模与设计'],milestone:'🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析',vWork:'Ch5 数据建模与设计 二刷（29min）',vWeekend:'#5 数据模型二刷 + 维度 vs 范式辨析笔记',videos:[['Ch5 数据建模',U.c5],['#5 数语·数据模型',U.b5]]},
- {w:14,start:'2026-11-14',end:'2026-11-20',stage:'高分精学',focus:'高分域复盘',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'高分域正确率≥75%',vWork:'回看错题章（Ch3/13/12/11/10/5 选薄弱）',vWeekend:'高分域视频三刷 + 章节题（目标 ≥75%）',videos:[['Ch3 治理',U.c3],['Ch13 质量',U.c13],['Ch12 元数据',U.c12],['Ch11 数仓',U.c11],['Ch10 主数据',U.c10],['Ch5 建模',U.c5]]},
- {w:15,start:'2026-11-21',end:'2026-11-27',stage:'中分精学',focus:'数据架构(精)',domains:['七、数据架构'],milestone:'能画数据流图',vWork:'Ch4 数据架构 二刷（18min）',vWeekend:'#4 数语《数据标准》+ 企业数据模型笔记',videos:[['Ch4 数据架构',U.c4],['#4 数语·数据标准',U.b4]]},
- {w:16,start:'2026-11-28',end:'2026-12-04',stage:'中分精学',focus:'数据安全(精)',domains:['八、数据安全'],milestone:'说清分类分级步骤',vWork:'Ch7 数据安全 二刷（精看 4A+E / 脱敏 / RACI）',vWeekend:'安全分类分级 + 个保法/等保 笔记',videos:[['Ch7 数据安全',U.c7]]},
- {w:17,start:'2026-12-05',end:'2026-12-11',stage:'中分精学',focus:'大数据/数据科学(精)',domains:['九、大数据和数据科学'],milestone:'说出大数据特征',vWork:'Ch14 大数据和数据科学 二刷',vWeekend:'大数据 6V 特征 + 电网 15min 账单案例',videos:[['Ch14 大数据',U.c14]]},
- {w:18,start:'2026-12-12',end:'2026-12-18',stage:'中分精学',focus:'成熟度评估(精)',domains:['十、成熟度评估'],milestone:'说出 2 个成熟度模型',vWork:'Ch15 数据管理成熟度评估 二刷',vWeekend:'成熟度模型笔记（说清 CMMI / DAMA-DMM）',videos:[['Ch15 成熟度',U.c15]]},
- {w:19,start:'2026-12-19',end:'2026-12-25',stage:'低分精学',focus:'概述/伦理/文件/组织角色',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域概念全覆盖',vWork:'Ch1 概述 + Ch2 伦理 + Ch9 文档 + Ch16 角色（共约 50min）',vWeekend:'4 域速记卡（概述/伦理/文件/角色）',videos:[['Ch1 概述',U.c1],['Ch2 伦理',U.c2],['Ch9 文档内容',U.c9],['Ch16 角色期望',U.c16]]},
- {w:20,start:'2026-12-26',end:'2027-01-01',stage:'低分精学',focus:'存储/集成/变革管理',domains:['十三、其余低分域'],milestone:'🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区',vWork:'Ch6 存储 + Ch8 集成 + Ch17 变革（共约 33min）',vWeekend:'3 域速记 + 思维导图 v3 全量回顾',videos:[['Ch6 存储运营',U.c6],['Ch8 集成互操作',U.c8],['Ch17 变革管理',U.c17]]},
- {w:21,start:'2027-01-02',end:'2027-01-08',stage:'刷题',focus:'高分域题库',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'错题本启动，正确率统计',vWork:'错题对应章节视频回看（Ch3/13/12/11/10/5）',vWeekend:'高分域视频错题章回看',videos:[['Ch3 治理',U.c3],['Ch13 质量',U.c13],['Ch12 元数据',U.c12]]},
- {w:22,start:'2027-01-09',end:'2027-01-15',stage:'刷题',focus:'中分域题库',domains:['七、数据架构','八、数据安全','九、大数据和数据科学','十、成熟度评估'],milestone:'中分域正确率≥70%',vWork:'对应错题章节视频回看（Ch4/7/14/15）',vWeekend:'中分域视频错题章回看',videos:[['Ch4 架构',U.c4],['Ch7 安全',U.c7],['Ch14 大数据',U.c14],['Ch15 成熟度',U.c15]]},
- {w:23,start:'2027-01-16',end:'2027-01-22',stage:'刷题',focus:'低分域题库',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域正确率≥60%',vWork:'对应错题章节视频回看（Ch1/2/6/8/9/16/17）',vWeekend:'低分域视频错题章回看',videos:[['Ch1 概述',U.c1],['Ch6 存储',U.c6],['Ch16 角色',U.c16],['Ch17 变革',U.c17]]},
- {w:24,start:'2027-01-23',end:'2027-01-29',stage:'刷题',focus:'全量+回炉',domains:['all'],milestone:'🏁 题库正确率≥70%且错题本成型；全局正确率≥75%',vWork:'正确率<70% 域回看对应章节视频',vWeekend:'全 17 章速过 + 一次过经验 exp',videos:[['⭐ 6h 速成（总复盘）',U.whole],['一次过经验',U.exp],['Ch3 治理',U.c3],['Ch13 质量',U.c13]]},
- {w:25,start:'2027-01-30',end:'2027-02-05',stage:'冲刺',focus:'模拟考1',domains:['all'],milestone:'模拟1 ≥75 分',vWork:'只回看薄弱章视频',vWeekend:'限时模拟考 + 失分域视频补救',videos:[['薄弱章视频（按错题定）',search]]},
- {w:26,start:'2027-02-06',end:'2027-02-12',stage:'冲刺',focus:'模拟考2+查漏',domains:['all'],milestone:'模拟2 ≥75 分；临考清单就绪',vWork:'只看错题本 + 术语表',vWeekend:'模拟考2 + 临考清单（视频停看，保状态）',videos:[['（冲刺保状态，停看视频）',search]]}
+ {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'看 Ch1《数据管理》全片（18min）+ 6h 速成版前 1h（概览）',vWeekend:'看 cv11《认证介绍+17章大纲》（30min）+ 经验分享 exp（12min）',videos:[['Ch1 数据管理',U.c1,'精读',18,'P1'],['⭐ 6h 速成（概览）',U.whole,'浏览',60,'P3'],['cv11 大纲',U.cv11,'精读',30,'P1'],['一次过经验',U.exp,'浏览',12,'P3']]},
+ {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'Ch1 数据管理 二刷（每天 30min）；Ch2 数据处理伦理（9min）',vWeekend:'#9 数语《数据行业职业发展》(40min) + cv11 大纲再读',videos:[['Ch1 数据管理',U.c1,'精读',30,'P1'],['Ch2 数据伦理',U.c2,'精读',9,'P1'],['#9 职业发展',U.b9,'浏览',40,'P3'],['cv11 大纲',U.cv11,'浏览',30,'P2']]},
+ {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch3 数据治理（24min，分两天看完）',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷',videos:[['Ch3 数据治理',U.c3,'精读',24,'P1'],['#3 数语·数据治理',U.b3,'精读',150,'P2']]},
+ {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'Ch13 数据质量（22min）+ Ch12 元数据管理（15min）',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + Ch13/12 二刷',videos:[['Ch13 数据质量',U.c13,'精读',22,'P1'],['Ch12 元数据',U.c12,'精读',15,'P1'],['#2 尚硅谷·元数据',U.b2,'精读',150,'P2'],['#6 资产目录',U.b6,'浏览',60,'P3']]},
+ {w:5,start:'2026-09-12',end:'2026-09-18',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'Ch11 数据仓库（18min）+ Ch10 主数据（19min）',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + cv12/cv13 专栏',videos:[['Ch11 数据仓库',U.c11,'精读',18,'P1'],['Ch10 参考主数据',U.c10,'精读',19,'P1'],['#1 哈喽鹏程·数仓',U.b1,'浏览',120,'P3'],['cv12 数仓+质量',U.cv12,'浏览',30,'P3']]},
+ {w:6,start:'2026-09-19',end:'2026-09-25',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'Ch5 数据建模与设计（29min，分两天）+ Ch4 数据架构（18min）',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',videos:[['Ch5 数据建模',U.c5,'精读',29,'P1'],['Ch4 数据架构',U.c4,'精读',18,'P1'],['#5 数语·数据模型',U.b5,'精读',90,'P2'],['#4 数语·数据标准',U.b4,'浏览',60,'P3']]},
+ {w:7,start:'2026-09-26',end:'2026-10-02',stage:'通读',focus:'安全/大数据/成熟度/低分域',domains:['八、数据安全','九、大数据和数据科学','十、成熟度评估','十三、其余低分域'],milestone:'🏁 通读两遍+术语表成型；17 域名称全过一遍',vWork:'Ch7 数据安全 + Ch14 大数据 + Ch15 成熟度（合计约 60min）',vWeekend:'#4 数语《数据标准》补看 + 思维导图 v2 补全',videos:[['Ch7 数据安全',U.c7,'精读',18,'P1'],['Ch14 大数据',U.c14,'精读',22,'P1'],['Ch15 成熟度',U.c15,'精读',12,'P1'],['#4 数语·数据标准',U.b4,'浏览',60,'P3']]},
+ {w:8,start:'2026-10-03',end:'2026-10-09',stage:'高分精学',focus:'数据治理(精)',domains:['一、数据治理'],milestone:'案例卡完成，章节题≥70%',vWork:'Ch3 数据治理 二刷（24min）',vWeekend:'#3 数语《数据治理》二刷 + 案例卡整理',videos:[['Ch3 数据治理', U.c3, '精读', 60, 'P1'],['#3 数语·数据治理', U.b3, '精读', 90, 'P1']]},
+ {w:9,start:'2026-10-10',end:'2026-10-16',stage:'高分精学',focus:'数据质量(精)',domains:['二、数据质量'],milestone:'能给场景判维度',vWork:'Ch13 数据质量 二刷（22min）',vWeekend:'cv12《数仓+质量》精读 + 质量六维度笔记',videos:[['Ch13 数据质量', U.c13, '精读', 20, 'P1'],['cv12 数仓+质量', U.cv12, '精读', 20, 'P1']]},
+ {w:10,start:'2026-10-17',end:'2026-10-23',stage:'高分精学',focus:'元数据(精)',domains:['三、元数据管理'],milestone:'血缘图完成',vWork:'Ch12 元数据管理 二刷（15min）',vWeekend:'#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图',videos:[['Ch12 元数据', U.c12, '精读', 60, 'P1'],['#2 尚硅谷·元数据', U.b2, '精读', 90, 'P1']]},
+ {w:11,start:'2026-10-24',end:'2026-10-30',stage:'高分精学',focus:'数仓BI(精)',domains:['四、数据仓库与BI'],milestone:'说清 ETL/ELT 区别',vWork:'Ch11 数据仓库 二刷（18min）',vWeekend:'#1 数仓课二刷（ETL vs ELT 章）+ cv13 专栏',videos:[['Ch11 数据仓库', U.c11, '精读', 20, 'P1'],['#1 哈喽鹏程·数仓', U.b1, '精读', 90, 'P1'],['cv13 数仓建设', U.cv13, '精读', 20, 'P1']]},
+ {w:12,start:'2026-10-31',end:'2026-11-06',stage:'高分精学',focus:'参考/主数据(精)',domains:['五、参考数据和主数据'],milestone:'主数据案例卡完成',vWork:'Ch10 参考数据和主数据 二刷（19min）',vWeekend:'#6 资产目录二刷 + 户号↔合同 mapping 案例',videos:[['Ch10 主数据', U.c10, '精读', 20, 'P1'],['#6 资产目录', U.b6, '精读', 20, 'P1']]},
+ {w:13,start:'2026-11-07',end:'2026-11-13',stage:'高分精学',focus:'数据建模(精)',domains:['六、数据建模与设计'],milestone:'🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析',vWork:'Ch5 数据建模与设计 二刷（29min）',vWeekend:'#5 数据模型二刷 + 维度 vs 范式辨析笔记',videos:[['Ch5 数据建模', U.c5, '精读', 20, 'P1'],['#5 数语·数据模型', U.b5, '精读', 90, 'P1']]},
+ {w:14,start:'2026-11-14',end:'2026-11-20',stage:'高分精学',focus:'高分域复盘',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'高分域正确率≥75%',vWork:'回看错题章（Ch3/13/12/11/10/5 选薄弱）',vWeekend:'高分域视频三刷 + 章节题（目标 ≥75%）',videos:[['Ch3 治理', U.c3, '精读', 20, 'P1'],['Ch13 质量', U.c13, '精读', 20, 'P1'],['Ch12 元数据', U.c12, '精读', 60, 'P1'],['Ch11 数仓', U.c11, '精读', 60, 'P1'],['Ch10 主数据', U.c10, '精读', 20, 'P1'],['Ch5 建模', U.c5, '精读', 20, 'P1']]},
+ {w:15,start:'2026-11-21',end:'2026-11-27',stage:'中分精学',focus:'数据架构(精)',domains:['七、数据架构'],milestone:'能画数据流图',vWork:'Ch4 数据架构 二刷（18min）',vWeekend:'#4 数语《数据标准》+ 企业数据模型笔记',videos:[['Ch4 数据架构', U.c4, '精读', 20, 'P1'],['#4 数语·数据标准', U.b4, '精读', 90, 'P1']]},
+ {w:16,start:'2026-11-28',end:'2026-12-04',stage:'中分精学',focus:'数据安全(精)',domains:['八、数据安全'],milestone:'说清分类分级步骤',vWork:'Ch7 数据安全 二刷（精看 4A+E / 脱敏 / RACI）',vWeekend:'安全分类分级 + 个保法/等保 笔记',videos:[['Ch7 数据安全', U.c7, '精读', 20, 'P1']]},
+ {w:17,start:'2026-12-05',end:'2026-12-11',stage:'中分精学',focus:'大数据/数据科学(精)',domains:['九、大数据和数据科学'],milestone:'说出大数据特征',vWork:'Ch14 大数据和数据科学 二刷',vWeekend:'大数据 6V 特征 + 电网 15min 账单案例',videos:[['Ch14 大数据', U.c14, '精读', 20, 'P1']]},
+ {w:18,start:'2026-12-12',end:'2026-12-18',stage:'中分精学',focus:'成熟度评估(精)',domains:['十、成熟度评估'],milestone:'说出 2 个成熟度模型',vWork:'Ch15 数据管理成熟度评估 二刷',vWeekend:'成熟度模型笔记（说清 CMMI / DAMA-DMM）',videos:[['Ch15 成熟度', U.c15, '精读', 20, 'P1']]},
+ {w:19,start:'2026-12-19',end:'2026-12-25',stage:'低分精学',focus:'概述/伦理/文件/组织角色',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域概念全覆盖',vWork:'Ch1 概述 + Ch2 伦理 + Ch9 文档 + Ch16 角色（共约 50min）',vWeekend:'4 域速记卡（概述/伦理/文件/角色）',videos:[['Ch1 概述', U.c1, '精读', 20, 'P1'],['Ch2 伦理', U.c2, '精读', 20, 'P1'],['Ch9 文档内容', U.c9, '精读', 20, 'P1'],['Ch16 角色期望', U.c16, '精读', 20, 'P1']]},
+ {w:20,start:'2026-12-26',end:'2027-01-01',stage:'低分精学',focus:'存储/集成/变革管理',domains:['十三、其余低分域'],milestone:'🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区',vWork:'Ch6 存储 + Ch8 集成 + Ch17 变革（共约 33min）',vWeekend:'3 域速记 + 思维导图 v3 全量回顾',videos:[['Ch6 存储运营', U.c6, '精读', 20, 'P1'],['Ch8 集成互操作', U.c8, '精读', 20, 'P1'],['Ch17 变革管理', U.c17, '精读', 20, 'P1']]},
+ {w:21,start:'2027-01-02',end:'2027-01-08',stage:'刷题',focus:'高分域题库',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'错题本启动，正确率统计',vWork:'错题对应章节视频回看（Ch3/13/12/11/10/5）',vWeekend:'高分域视频错题章回看',videos:[['Ch3 治理', U.c3, '精读', 20, 'P1'],['Ch13 质量', U.c13, '精读', 20, 'P1'],['Ch12 元数据', U.c12, '精读', 60, 'P1']]},
+ {w:22,start:'2027-01-09',end:'2027-01-15',stage:'刷题',focus:'中分域题库',domains:['七、数据架构','八、数据安全','九、大数据和数据科学','十、成熟度评估'],milestone:'中分域正确率≥70%',vWork:'对应错题章节视频回看（Ch4/7/14/15）',vWeekend:'中分域视频错题章回看',videos:[['Ch4 架构', U.c4, '精读', 20, 'P1'],['Ch7 安全', U.c7, '精读', 20, 'P1'],['Ch14 大数据', U.c14, '精读', 20, 'P1'],['Ch15 成熟度', U.c15, '精读', 20, 'P1']]},
+ {w:23,start:'2027-01-16',end:'2027-01-22',stage:'刷题',focus:'低分域题库',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域正确率≥60%',vWork:'对应错题章节视频回看（Ch1/2/6/8/9/16/17）',vWeekend:'低分域视频错题章回看',videos:[['Ch1 概述', U.c1, '精读', 20, 'P1'],['Ch6 存储', U.c6, '精读', 20, 'P1'],['Ch16 角色', U.c16, '精读', 20, 'P1'],['Ch17 变革', U.c17, '精读', 20, 'P1']]},
+ {w:24,start:'2027-01-23',end:'2027-01-29',stage:'刷题',focus:'全量+回炉',domains:['all'],milestone:'🏁 题库正确率≥70%且错题本成型；全局正确率≥75%',vWork:'正确率<70% 域回看对应章节视频',vWeekend:'全 17 章速过 + 一次过经验 exp',videos:[['⭐ 6h 速成（总复盘）', U.whole, '浏览', 60, 'P3'],['一次过经验', U.exp, '浏览', 12, 'P3'],['Ch3 治理', U.c3, '精读', 20, 'P1'],['Ch13 质量', U.c13, '精读', 20, 'P1']]},
+ {w:25,start:'2027-01-30',end:'2027-02-05',stage:'冲刺',focus:'模拟考1',domains:['all'],milestone:'模拟1 ≥75 分',vWork:'只回看薄弱章视频',vWeekend:'限时模拟考 + 失分域视频补救',videos:[['薄弱章视频（按错题定）', search, '浏览', 30, 'P3']]},
+ {w:26,start:'2027-02-06',end:'2027-02-12',stage:'冲刺',focus:'模拟考2+查漏',domains:['all'],milestone:'模拟2 ≥75 分；临考清单就绪',vWork:'只看错题本 + 术语表',vWeekend:'模拟考2 + 临考清单（视频停看，保状态）',videos:[['（冲刺保状态，停看视频）', search, '浏览', 30, 'P3']]}
 ];
 function buildDaily(){
   const out=[]; let day=0;
@@ -2852,6 +2878,58 @@ function dueReviewItems(dates, checks){
   return due;
 }
 
+// ===== 治疗标签 + 估时 + 优先级 (2026-08-15) =====
+const TREAT_DEFAULT='精读', PRIO_DEFAULT='P2', MIN_DEFAULT=15;
+const TREAT_COLOR={ '浏览':'#5a6478', '精读':'#1e7a3a', '背诵':'#a93226', '实操':'#5e35b1' };
+function _t(t){ return t || TREAT_DEFAULT; }
+function _p(p){ return p || PRIO_DEFAULT; }
+function _m(m){ const n=parseInt(m,10); return isNaN(n)?MIN_DEFAULT:n; }
+function treatmentBadge(t){ return `<span class="dc-tag-treat t-${_t(t)}">${_t(t)}</span>`; }
+function priorityBadge(p){ return `<span class="dc-tag-prio p-${_p(p)}">${_p(p)}</span>`; }
+function minutesTag(m){ const mm=_m(m); return `<span class="dc-mini">·${mm}min</span>`; }
+// 视频元组：默认兼容旧格式 [title,url]
+function videoMeta(v){
+  const title=v[0], url=v[1];
+  const treatment=v.length>=3?v[2]:TREAT_DEFAULT;
+  const minutes=v.length>=4?v[3]:MIN_DEFAULT;
+  const prio=v.length>=5?v[4]:'P2';
+  return {title,url,treatment,minutes,p:prio};
+}
+function renderVideoLinks(videos){
+  if(!videos||!videos.length) return '<span class="dc-meta">（冲刺期以做题为主，视频仅查漏）</span>';
+  const linkOf=(m)=>`<a class="dc-link" href="${m.url}" target="_blank" rel="noopener">▶ ${escH(m.title)}${treatmentBadge(m.treatment)}${minutesTag(m.minutes)}${priorityBadge(m.p)}</a>`;
+  return renderFoldGroup(videos.map(videoMeta), linkOf);
+}
+function renderResChips(order){
+  const items=order.map(k=>{const r=RES[k]; return r?{k,...r}:null;}).filter(Boolean);
+  const chipOf=(it)=>`<span class="dc-reschip" data-res="${it.k}">${escH(it.name)}${treatmentBadge(it.t)}${minutesTag(it.m)}${priorityBadge(it.p)}</span>`;
+  return renderFoldGroup(items, chipOf);
+}
+// 按 P1 / (P2+P3) 分组：P1 总是展开，P2+P3 默认折叠，点击展开
+function renderFoldGroup(items, renderItem){
+  if(!items.length) return '';
+  const p1=items.filter(it=>_p(it.p)==='P1');
+  const pp=items.filter(it=>_p(it.p)!=='P1');
+  const head=p1.map(renderItem).join('');
+  if(!pp.length) return head;
+  const id='fold_'+Math.random().toString(36).slice(2,8);
+  const ppHtml=pp.map(renderItem).join('');
+  const p2c=pp.filter(it=>_p(it.p)==='P2').length;
+  const p3c=pp.filter(it=>_p(it.p)==='P3').length;
+  let label;
+  if(pp.length===1) label='1 项本周内可选';
+  else if(p2c&&!p3c) label=`${pp.length} 项本周内可学`;
+  else if(p3c&&!p2c) label=`${pp.length} 项选学（可点开）`;
+  else label=`${pp.length} 项本周内/选学（可点开）`;
+  return `${head}<button class="dc-fold-toggle" data-fold="${id}" type="button">🔽 ${label}</button><div class="dc-fold-block" id="${id}">${ppHtml}</div>`;
+}
+// 汇总一项的 P1/P2/P3 + 总分钟
+function summarizePlan(items){
+  const t={P1:0,P2:0,P3:0}; let total=0;
+  for(const it of items){ t[_p(it.p)]++; total+=_m(it.m); }
+  return {counts:t,total,P1:t.P1,P2:t.P2,P3:t.P3};
+}
+
 function renderDay(iso){
   let d=DAILY_BY_ISO[iso];
   if(!d){ iso = iso < '2026-08-15' ? '2026-08-15' : '2027-02-12'; d=DAILY_BY_ISO[iso]; dayDate.value=iso; }
@@ -2860,7 +2938,7 @@ function renderDay(iso){
   const termDom = dom[0]==='all' ? '十一、数据管理概述' : dom[0];
   const terms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
   const videoTask = d.isWeekend ? d.vWeekend : d.vWork;
-  const links=(d.videos||[]).map(v=>`<a class="dc-link" href="${v[1]}" target="_blank" rel="noopener">▶ ${v[0]}</a>`).join('');
+  const links=renderVideoLinks(d.videos);
   const quizBtns=(function(){
     // 已答数：先按域筛选，再统计 practice.answers 中已作答且非空
     const answered = (filter)=>{
@@ -2894,7 +2972,7 @@ function renderDay(iso){
     if(earlyStage) out.push(tipEarly); else out.push(tipFull);
     return out.join('');
   })();
-  const resChips=RES_ORDER.map(k=>`<span class="dc-reschip" data-res="${k}">${RES[k].name}</span>`).join('');
+  const resChips=renderResChips(RES_ORDER);
   const done=!!dailyChecks[iso];
   const dayChips=DAILY.filter(x=>x.w===d.w).map(x=>{
     const c=dailyChecks[x.iso]?'done':''; const a=x.iso===iso?'active':'';
@@ -2942,8 +3020,9 @@ function renderDay(iso){
         <span class="dc-art-date">${art.date}</span>
         ${artRead?'<span class="news-badge" style="background:var(--green);color:#fff">✅ 已读</span>':'<span class="news-badge">🆕 未读</span>'}
       </div>
-      <div class="dc-art-title">${art.title}</div>
+      <div class="dc-art-title">${escH(art.title)}</div>
       <div class="news-tags">${(art.tags||[]).map(t=>`<span class="news-tag">${t}</span>`).join('')}</div>
+      <div class="dc-art-treat">${treatmentBadge(art.t)}${minutesTag(art.m)}${priorityBadge(art.p)}</div>
       <div class="dc-art-body">
         <div class="news-label">🔑 重要信息提取</div>
         <ul class="news-points">${(art.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
@@ -2955,6 +3034,25 @@ function renderDay(iso){
         <button class="news-read news-search" data-url="${art.url}" data-title="${art.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${art.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
       </div>
     </div>` : '<div class="dc-meta">暂无可读推文，去「📰 公众号推文精选」看看。</div>';
+  // ===== 每日用量汇总 (2026-08-15) =====
+  const summaryItems=[
+    ...(d.videos||[]).map(v=>{const m=videoMeta(v); return {t:m.treatment,m:m.minutes,p:m.p};}),
+    ...RES_ORDER.map(k=>{const r=RES[k]; return r?{t:r.t,m:r.m,p:r.p}:null;}).filter(Boolean),
+    ...(art?[{t:art.t,m:art.m,p:art.p}]:[])
+  ];
+  const sum=summarizePlan(summaryItems);
+  const h=Math.floor(sum.total/60), mm=sum.total%60;
+  const timeStr=h?(mm?`${h}h${mm}m`:`${h}h`):`${mm}m`;
+  const timeCls=sum.total>180?'over':(sum.total>120?'warn':'');
+  const tipOver=sum.total>180?' 🔥今日任务较重，建议优先 P1 项':(sum.total>120?' ⚠️超过 2h，结合精力分配':'');
+  const summaryHTML=`
+    <div class="dc-summary" title="总项数与总时长 = 视频 + 阅读 PDF + 今日推文">
+      <span class="dc-summary-item">📦 共 <b>${summaryItems.length}</b> 项</span>
+      <span class="dc-summary-item">⏱ 总 <b class="dc-summary-time ${timeCls}">${timeStr}</b>${tipOver}</span>
+      <span class="dc-summary-item"><span class="dc-tag-prio p-P1">P1</span> <b>${sum.P1}</b> 必做</span>
+      <span class="dc-summary-item"><span class="dc-tag-prio p-P2">P2</span> ${sum.P2} 本周内</span>
+      <span class="dc-summary-item"><span class="dc-tag-prio p-P3">P3</span> ${sum.P3} 选学</span>
+    </div>`;
   dayCard.innerHTML=`
     <div class="dc-head">
      <div>
@@ -2965,6 +3063,7 @@ function renderDay(iso){
    </div>
    ${reviewHTML}
    ${weekHTML}
+   ${summaryHTML}
    <h2 class="dc-goal">🎯 今日目标</h2>
    <p class="dc-goal-text">${d.focus} —— <b>${role.t}</b>：${role.h}</p>
    <p class="dc-meta">本周重点：${d.focus} ｜ 阶段：${d.stage}${d.milestone?' ｜ 🏁 本周末自检：'+d.milestone:''}</p>
@@ -3003,6 +3102,20 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  // 折叠：P2/P3 组
+  dayCard.querySelectorAll('[data-fold]').forEach(btn=>{
+    btn.onclick=()=>{
+      const id=btn.dataset.fold;
+      const blk=document.getElementById(id);
+      if(!blk) return;
+      const open=blk.classList.toggle('open');
+      btn.innerHTML=open?'🔼 收起可选内容':'🔽 '+btn.dataset.origLabel;
+    };
+  });
+  // 折叠标签原值保留
+  dayCard.querySelectorAll('[data-fold]').forEach(b=>{
+    if(!b.dataset.origLabel) b.dataset.origLabel=b.textContent.replace(/^🔽\s*/, '');
+  });
   // 主动投递:关键概念勾选 → 同步到清单(并记 mastered_at)
   dayCard.querySelectorAll('[data-cidx]').forEach(cb=>{
     cb.onchange=e=>{
