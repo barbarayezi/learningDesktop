@@ -634,8 +634,12 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 .news-points{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
 .news-points li{font-size:13.5px;line-height:1.6;color:var(--text)}
 .news-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;padding-top:12px;border-top:1px dashed var(--border)}
-.news-read{font-size:13px;font-weight:600;color:#fff;background:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;white-space:nowrap}
-.news-read:hover{opacity:.9}
+.news-read{font-size:13px;font-weight:600;color:#fff;background:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
+.news-read.news-copy{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.news-read:hover{opacity:.9;transform:translateY(-1px)}
+.news-foot{flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--surface,#fff);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .news-note{font-size:11px;color:var(--muted)}
 .news-empty{padding:40px;text-align:center;color:var(--muted);grid-column:1/-1}
 .news-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin:6px 0 4px}
@@ -2736,6 +2740,46 @@ function gotoDay(n){
 }
 
 /* ---------- 主动投递:本周主题 + spaced repetition 复习提醒 ---------- */
+/* ---------- 文章外链降级：微信内搜 + 复制链接（替代常过期的原始 URL） ---------- */
+function showToast(msg){
+  let el=document.getElementById('toast');
+  if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); }
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>el.classList.remove('show'), 2200);
+}
+document.addEventListener('click', e=>{
+  const sBtn=e.target.closest('.news-search');
+  if(sBtn){
+    const q=(sBtn.dataset.title||'').trim();
+    if(!q) return;
+    const url='https://weixin.sogou.com/weixin?type=2&ie=utf8&query='+encodeURIComponent(q);
+    window.open(url,'_blank','noopener');
+    return;
+  }
+  const cBtn=e.target.closest('.news-copy');
+  if(cBtn){
+    const u=cBtn.dataset.url||'';
+    if(!u){ showToast('原文链接缺失'); return; }
+    const ok=()=>showToast('✓ 链接已复制（可能仍失效，粘贴到微信/浏览器试）');
+    const fail=()=>{
+      // fallback path for file:// where navigator.clipboard is blocked
+      const ta=document.createElement('textarea');
+      ta.value=u; ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){ showToast('复制失败，请长按按钮手动复制'); }
+      document.body.removeChild(ta);
+    };
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(u).then(ok,fail);
+    }else{
+      fail();
+    }
+    return;
+  }
+});
+
 // 周次 → 本周重点知识域 (1-17 对应 DAMA 17 域，11-17 是低分7域)
 const WEEK_DOMAINS = {
   1:[], 2:[11], 3:[1], 4:[2,3], 5:[4,5], 6:[6,7],
@@ -2877,7 +2921,7 @@ function renderDay(iso){
       <div class="dc-art-foot">
         <button class="news-expand" id="dcExpand">📖 展开全文</button>
         <button class="news-mark" id="dcMark">${artRead?'↺ 标为未读':'✅ 标记已读'}</button>
-        <a class="news-read" href="${art.url}" target="_blank" rel="noopener">阅读原文 ↗</a>
+        <button class="news-read news-search" data-url="${art.url}" data-title="${art.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${art.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
       </div>
     </div>` : '<div class="dc-meta">暂无可读推文，去「📰 公众号推文精选」看看。</div>';
   dayCard.innerHTML=`
@@ -3186,7 +3230,7 @@ function renderNews(){
       <div class="news-foot">
         <button class="news-expand" data-id="${a.id}">📖 展开全文</button>
         <button class="news-mark" data-id="${a.id}">${unread?'✅ 标记已读':'↺ 标为未读'}</button>
-        <a class="news-read" href="${a.url}" target="_blank" rel="noopener">阅读原文 ↗</a>
+        <button class="news-read news-search" data-url="${a.url}" data-title="${a.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${a.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
       </div>
     </article>`;
   }).join('');
