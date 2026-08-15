@@ -2379,19 +2379,43 @@ window.showPage=function(id){
    每日学习中心：日期驱动，合并 计划 + 阅读(PDF/笔记) + 做题 + 视频
    ============================================================ */
 const U={
-  b1:'https://www.bilibili.com/video/BV1qv411y7Wv/',
-  b2:'https://www.bilibili.com/video/BV1jA411F76d',
-  b3:'https://www.bilibili.com/video/BV1XZ4y1v7jR',
-  b4:'https://www.bilibili.com/video/BV1gN4y137pj',
-  b5:'https://www.bilibili.com/video/BV1aF411c7Rh',
-  b6:'https://www.bilibili.com/video/BV1xf4y1f7Ro',
-  b8:'https://www.bilibili.com/video/BV1J3411u72E',
-  b9:'https://www.bilibili.com/video/BV1Ef4y1f7DG',
-  cv11:'https://www.bilibili.com/read/cv40292820',
-  cv12:'https://www.bilibili.com/read/cv43715687',
+  // 长视频（已验证可用）
+  b1:'https://www.bilibili.com/video/BV1qv411y7Wv/',   // 哈喽鹏程数仓课
+  b2:'https://www.bilibili.com/video/BV1jA411F76d',   // 尚硅谷 Atlas 元数据
+  b3:'https://www.bilibili.com/video/BV1XZ4y1v7jR',   // 数语·数据治理与数据中台架构
+  b4:'https://www.bilibili.com/video/BV1gN4y137pj',   // 数语·数据标准
+  b5:'https://www.bilibili.com/video/BV1aF411c7Rh',   // 数语·数据模型
+  b6:'https://www.bilibili.com/video/BV1xf4y1f7Ro',   // 资产目录上
+  b8:'https://www.bilibili.com/video/BV1J3411u72E',   // 资产目录下
+  b9:'https://www.bilibili.com/video/BV1Ef4y1f7DG',   // 数语·数据行业职业发展
+  cv11:'https://www.bilibili.com/read/cv40292820',     // DAMA认证介绍+17章大纲
+  cv12:'https://www.bilibili.com/read/cv43715687',     // 怎么用数仓进行数据治理
   cv13:'https://www.bilibili.com/read/mobile?id=36785416',
-  search:'https://search.bilibili.com/all?keyword=DAMA视频系列'
+  // 17 章 CDGA 精讲（北大青鸟总部 · 2025 修订版，每章 7-30min）
+  c1:'https://www.bilibili.com/video/BV1rxS5BvEbZ/', // Ch1 数据管理 (18:39)
+  c2:'https://www.bilibili.com/video/BV1RxS7BAEzK/', // Ch2 (09:25)
+  c3:'https://www.bilibili.com/video/BV1LWS7BeETP/', // Ch3 数据治理 (24:12)
+  c4:'https://www.bilibili.com/video/BV1CiSCBHE7Q/', // Ch4 数据架构 (18:32)
+  c5:'https://www.bilibili.com/video/BV1AeSCBXEZm/', // Ch5 数据建模与设计 (29:20)
+  c6:'https://www.bilibili.com/video/BV1MDSWBgEsm/', // Ch6 数据存储和运营 (12:16)
+  c7:'https://www.bilibili.com/video/BV1GkSWB1Es8/', // Ch7 数据安全
+  c8:'https://www.bilibili.com/video/BV1sLSWBPEBU/', // Ch8 数据集成和互操作 (13:28)
+  c9:'https://www.bilibili.com/video/BV1WESWBwEhB/', // Ch9 文档和内容管理 (12:03)
+  c10:'https://www.bilibili.com/video/BV1viSWBSEmj/',// Ch10 参考数据和主数据 (19:32)
+  c11:'https://www.bilibili.com/video/BV1AVmEBVEfn/',// Ch11 数据仓库和商务智能 (18:56)
+  c12:'https://www.bilibili.com/video/BV1p5mEBkESv/',// Ch12 元数据管理 (15:51)
+  c13:'https://www.bilibili.com/video/BV1hZm7BWET9/',// Ch13 数据质量管理 (22:54)
+  c14:'https://www.bilibili.com/video/BV1Q7mkBoEdk/',// Ch14 大数据和数据科学
+  c15:'https://www.bilibili.com/video/BV1qtmrBwEbm/',// Ch15 数据管理成熟度评估
+  c16:'https://www.bilibili.com/video/BV1Rdbpz5EaX/',// Ch16 数据管理组织与角色期望 (mydama)
+  c17:'https://www.bilibili.com/video/BV1nJmrBqEhk/',// Ch17 数据管理和组织变革 (7:46)
+  // 全集备份 & 经验
+  whole:'https://www.bilibili.com/video/BV1tFcWzeEra/',     // 6 小时超快速学完 CDGA (2026 新版)
+  whole2:'https://www.bilibili.com/video/BV1Yf5X6CEAU/',    // 2026 CDGA 15h 完整版
+  exp:'https://www.bilibili.com/video/BV1vJ4m1j79C/'        // 一次过 CDGA+CDGP 经验分享 (54k 播放)
 };
+// 兼容保留 search（极少数周次兜底用）
+const search='https://search.bilibili.com/all?keyword=CDGA+%E5%8C%97%E5%A4%A7%E9%9D%92%E9%B8%9F';
 const RES={
   sohu:{name:'搜狐·11域逐域详解',file:'资料/03_机构免费资料/free_11知识领域详解_搜狐.html'},
   notes:{name:'⭐ 11域备考笔记.md',file:'资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md'},
@@ -2424,34 +2448,33 @@ const DAY_ROLES=[
   {t:'术语卡 + 易混对比',h:'今天新记 1–2 个易混词（写定义 + 区别）'},
   {t:'案例 / 画图练习',h:'画一张图或写一张案例卡（血缘 / 分层 / 模型）'},
   {t:'自测 + 错题整理',h:'从自测题抽 1–2 题写出答案与理由，归错题本'}
-];
-const WEEKS=[
- {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'搜「DAMA视频系列」关注，看前 5 集（DAMA 是什么 / 12 原则）',vWeekend:'看 #11 专栏《认证介绍+17章大纲》（30min）；定下收藏夹',videos:[['#11 专栏·认证介绍',U.cv11],['DAMA视频系列(搜)',U.search]]},
- {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'DAMA视频系列「第1章 数据管理」短集（每天 2 集）',vWeekend:'#9 数语《数据行业职业发展》(40min) + #11 大纲再读',videos:[['#9 职业发展',U.b9],['#11 大纲',U.cv11],['DAMA视频系列',U.search]]},
- {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'DAMA视频系列「数据治理」短集',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h)',videos:[['#3 数语·数据治理',U.b3],['DAMA视频系列·治理',U.search]]},
- {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'DAMA视频系列「质量/元数据」短集',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + #6/#7/#8 资产目录上中下',videos:[['#2 尚硅谷·元数据',U.b2],['#6/#7/#8 资产目录',U.b6],['DAMA视频系列',U.search]]},
- {w:5,start:'2026-09-12',end:'2026-09-18',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'DAMA视频系列「数仓/主数据」短集',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + #12/#13 专栏',videos:[['#1 哈喽鹏程·数仓',U.b1],['#12 专栏·数仓+质量',U.cv12],['#13 专栏·数仓建设',U.cv13]]},
- {w:6,start:'2026-09-19',end:'2026-09-25',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'DAMA视频系列「建模/架构」短集',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',videos:[['#5 数语·数据模型',U.b5],['#4 数语·数据标准',U.b4],['DAMA视频系列',U.search]]},
- {w:7,start:'2026-09-26',end:'2026-10-02',stage:'通读',focus:'安全/大数据/成熟度/低分域',domains:['八、数据安全','九、大数据和数据科学','十、成熟度评估','十三、其余低分域'],milestone:'🏁 通读两遍+术语表成型；17 域名称全过一遍',vWork:'DAMA视频系列「安全/大数据/成熟度」短集',vWeekend:'#4 数语《数据标准》补看 + 思维导图 v2 补全',videos:[['#4 数语·数据标准',U.b4],['DAMA视频系列',U.search]]},
- {w:8,start:'2026-10-03',end:'2026-10-09',stage:'高分精学',focus:'数据治理(精)',domains:['一、数据治理'],milestone:'案例卡完成，章节题≥70%',vWork:'回看 #3 + DAMA视频系列治理短集',vWeekend:'#3 数语《数据治理》二刷 + 案例卡整理',videos:[['#3 数语·数据治理',U.b3],['DAMA视频系列·治理',U.search]]},
- {w:9,start:'2026-10-10',end:'2026-10-16',stage:'高分精学',focus:'数据质量(精)',domains:['二、数据质量'],milestone:'能给场景判维度',vWork:'回看 DAMA视频系列质量短集',vWeekend:'#12 专栏《数仓+质量》精读 + 质量六维度笔记',videos:[['#12 专栏·数仓+质量',U.cv12],['DAMA视频系列·质量',U.search]]},
- {w:10,start:'2026-10-17',end:'2026-10-23',stage:'高分精学',focus:'元数据(精)',domains:['三、元数据管理'],milestone:'血缘图完成',vWork:'回看 #2 尚硅谷 Atlas 片段',vWeekend:'#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图',videos:[['#2 尚硅谷·元数据',U.b2],['DAMA视频系列·元数据',U.search]]},
- {w:11,start:'2026-10-24',end:'2026-10-30',stage:'高分精学',focus:'数仓BI(精)',domains:['四、数据仓库与BI'],milestone:'说清 ETL/ELT 区别',vWork:'回看 #1 数仓课片段',vWeekend:'#1 数仓课二刷（ETL vs ELT 章）+ #13 专栏',videos:[['#1 哈喽鹏程·数仓',U.b1],['#13 专栏·数仓建设',U.cv13],['DAMA视频系列·数仓',U.search]]},
- {w:12,start:'2026-10-31',end:'2026-11-06',stage:'高分精学',focus:'参考/主数据(精)',domains:['五、参考数据和主数据'],milestone:'主数据案例卡完成',vWork:'回看 #6/#7/#8 资产目录片段',vWeekend:'#6/#7/#8 资产目录三集二刷 + 户号↔合同 mapping 案例',videos:[['#6/#7/#8 资产目录',U.b6],['DAMA视频系列·主数据',U.search]]},
- {w:13,start:'2026-11-07',end:'2026-11-13',stage:'高分精学',focus:'数据建模(精)',domains:['六、数据建模与设计'],milestone:'🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析',vWork:'回看 #5 数语《数据模型》片段',vWeekend:'#5 数据模型二刷 + 维度 vs 范式辨析笔记',videos:[['#5 数语·数据模型',U.b5],['DAMA视频系列·建模',U.search]]},
- {w:14,start:'2026-11-14',end:'2026-11-20',stage:'高分精学',focus:'高分域复盘',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'高分域正确率≥75%',vWork:'高分域 DAMA视频系列错题相关短集',vWeekend:'高分域视频三刷 + 章节题（目标 ≥75%）',videos:[['DAMA视频系列·错题',U.search]]},
- {w:15,start:'2026-11-21',end:'2026-11-27',stage:'中分精学',focus:'数据架构(精)',domains:['七、数据架构'],milestone:'能画数据流图',vWork:'DAMA视频系列架构短集',vWeekend:'#4 数语《数据标准》+ 企业数据模型笔记',videos:[['#4 数语·数据标准',U.b4],['DAMA视频系列·架构',U.search]]},
- {w:16,start:'2026-11-28',end:'2026-12-04',stage:'中分精学',focus:'数据安全(精)',domains:['八、数据安全'],milestone:'说清分类分级步骤',vWork:'DAMA视频系列安全短集',vWeekend:'安全分类分级 + 个保法/等保 笔记',videos:[['安全分类分级视频',U.search],['DAMA视频系列·安全',U.search]]},
- {w:17,start:'2026-12-05',end:'2026-12-11',stage:'中分精学',focus:'大数据/数据科学(精)',domains:['九、大数据和数据科学'],milestone:'说出大数据特征',vWork:'DAMA视频系列大数据短集',vWeekend:'大数据 6V 特征 + 电网 15min 账单案例',videos:[['大数据 6V 视频',U.search],['DAMA视频系列·大数据',U.search]]},
- {w:18,start:'2026-12-12',end:'2026-12-18',stage:'中分精学',focus:'成熟度评估(精)',domains:['十、成熟度评估'],milestone:'说出 2 个成熟度模型',vWork:'DAMA视频系列成熟度短集',vWeekend:'成熟度模型笔记（说清 2 个模型）',videos:[['成熟度模型视频',U.search],['DAMA视频系列·成熟度',U.search]]},
- {w:19,start:'2026-12-19',end:'2026-12-25',stage:'低分精学',focus:'概述/伦理/文件/组织角色',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域概念全覆盖',vWork:'DAMA视频系列低分域短集（碎片补足）',vWeekend:'4 域速记卡',videos:[['低分域短集',U.search],['DAMA视频系列·低分域',U.search]]},
- {w:20,start:'2026-12-26',end:'2027-01-01',stage:'低分精学',focus:'存储/集成/变革管理',domains:['十三、其余低分域'],milestone:'🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区',vWork:'DAMA视频系列低分域短集',vWeekend:'3 域速记 + 思维导图 v3 全量回顾',videos:[['低分域短集',U.search],['DAMA视频系列·低分域',U.search]]},
- {w:21,start:'2027-01-02',end:'2027-01-08',stage:'刷题',focus:'高分域题库',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'错题本启动，正确率统计',vWork:'错题对应 DAMA视频系列短集回看',vWeekend:'高分域视频错题章回看',videos:[['错题章回看',U.search]]},
- {w:22,start:'2027-01-09',end:'2027-01-15',stage:'刷题',focus:'中分域题库',domains:['七、数据架构','八、数据安全','九、大数据和数据科学','十、成熟度评估'],milestone:'中分域正确率≥70%',vWork:'对应错题 DAMA视频系列短集回看',vWeekend:'中分域视频错题章回看',videos:[['中分域错题回看',U.search]]},
- {w:23,start:'2027-01-16',end:'2027-01-22',stage:'刷题',focus:'低分域题库',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域正确率≥60%',vWork:'对应错题 DAMA视频系列短集回看',vWeekend:'低分域视频错题章回看',videos:[['低分域错题回看',U.search]]},
- {w:24,start:'2027-01-23',end:'2027-01-29',stage:'刷题',focus:'全量+回炉',domains:['all'],milestone:'🏁 题库正确率≥70%且错题本成型；全局正确率≥75%',vWork:'正确率<70% 域回看对应视频',vWeekend:'全局视频查漏',videos:[['全局视频查漏',U.search]]},
- {w:25,start:'2027-01-30',end:'2027-02-05',stage:'冲刺',focus:'模拟考1',domains:['all'],milestone:'模拟1 ≥75 分',vWork:'只回看薄弱章短视频',vWeekend:'限时模拟考 + 失分域视频补救',videos:[['薄弱章短视频',U.search]]},
- {w:26,start:'2027-02-06',end:'2027-02-12',stage:'冲刺',focus:'模拟考2+查漏',domains:['all'],milestone:'模拟2 ≥75 分；临考清单就绪',vWork:'只看错题本 + 术语表',vWeekend:'模拟考2 + 临考清单（视频停看，保状态）',videos:[['（冲刺保状态，停看视频）',U.search]]}
+];const WEEKS=[
+ {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'看 Ch1《数据管理》全片（18min）+ 6h 速成版前 1h（概览）',vWeekend:'看 cv11《认证介绍+17章大纲》（30min）+ 经验分享 exp（12min）',videos:[['Ch1 数据管理',U.c1],['⭐ 6h 速成（概览）',U.whole],['cv11 大纲',U.cv11],['一次过经验',U.exp]]},
+ {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'Ch1 数据管理 二刷（每天 30min）；Ch2 数据处理伦理（9min）',vWeekend:'#9 数语《数据行业职业发展》(40min) + cv11 大纲再读',videos:[['Ch1 数据管理',U.c1],['Ch2 数据伦理',U.c2],['#9 职业发展',U.b9],['cv11 大纲',U.cv11]]},
+ {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch3 数据治理（24min，分两天看完）',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷',videos:[['Ch3 数据治理',U.c3],['#3 数语·数据治理',U.b3]]},
+ {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'Ch13 数据质量（22min）+ Ch12 元数据管理（15min）',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + Ch13/12 二刷',videos:[['Ch13 数据质量',U.c13],['Ch12 元数据',U.c12],['#2 尚硅谷·元数据',U.b2],['#6 资产目录',U.b6]]},
+ {w:5,start:'2026-09-12',end:'2026-09-18',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'Ch11 数据仓库（18min）+ Ch10 主数据（19min）',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + cv12/cv13 专栏',videos:[['Ch11 数据仓库',U.c11],['Ch10 参考主数据',U.c10],['#1 哈喽鹏程·数仓',U.b1],['cv12 数仓+质量',U.cv12]]},
+ {w:6,start:'2026-09-19',end:'2026-09-25',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'Ch5 数据建模与设计（29min，分两天）+ Ch4 数据架构（18min）',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',videos:[['Ch5 数据建模',U.c5],['Ch4 数据架构',U.c4],['#5 数语·数据模型',U.b5],['#4 数语·数据标准',U.b4]]},
+ {w:7,start:'2026-09-26',end:'2026-10-02',stage:'通读',focus:'安全/大数据/成熟度/低分域',domains:['八、数据安全','九、大数据和数据科学','十、成熟度评估','十三、其余低分域'],milestone:'🏁 通读两遍+术语表成型；17 域名称全过一遍',vWork:'Ch7 数据安全 + Ch14 大数据 + Ch15 成熟度（合计约 60min）',vWeekend:'#4 数语《数据标准》补看 + 思维导图 v2 补全',videos:[['Ch7 数据安全',U.c7],['Ch14 大数据',U.c14],['Ch15 成熟度',U.c15],['#4 数语·数据标准',U.b4]]},
+ {w:8,start:'2026-10-03',end:'2026-10-09',stage:'高分精学',focus:'数据治理(精)',domains:['一、数据治理'],milestone:'案例卡完成，章节题≥70%',vWork:'Ch3 数据治理 二刷（24min）',vWeekend:'#3 数语《数据治理》二刷 + 案例卡整理',videos:[['Ch3 数据治理',U.c3],['#3 数语·数据治理',U.b3]]},
+ {w:9,start:'2026-10-10',end:'2026-10-16',stage:'高分精学',focus:'数据质量(精)',domains:['二、数据质量'],milestone:'能给场景判维度',vWork:'Ch13 数据质量 二刷（22min）',vWeekend:'cv12《数仓+质量》精读 + 质量六维度笔记',videos:[['Ch13 数据质量',U.c13],['cv12 数仓+质量',U.cv12]]},
+ {w:10,start:'2026-10-17',end:'2026-10-23',stage:'高分精学',focus:'元数据(精)',domains:['三、元数据管理'],milestone:'血缘图完成',vWork:'Ch12 元数据管理 二刷（15min）',vWeekend:'#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图',videos:[['Ch12 元数据',U.c12],['#2 尚硅谷·元数据',U.b2]]},
+ {w:11,start:'2026-10-24',end:'2026-10-30',stage:'高分精学',focus:'数仓BI(精)',domains:['四、数据仓库与BI'],milestone:'说清 ETL/ELT 区别',vWork:'Ch11 数据仓库 二刷（18min）',vWeekend:'#1 数仓课二刷（ETL vs ELT 章）+ cv13 专栏',videos:[['Ch11 数据仓库',U.c11],['#1 哈喽鹏程·数仓',U.b1],['cv13 数仓建设',U.cv13]]},
+ {w:12,start:'2026-10-31',end:'2026-11-06',stage:'高分精学',focus:'参考/主数据(精)',domains:['五、参考数据和主数据'],milestone:'主数据案例卡完成',vWork:'Ch10 参考数据和主数据 二刷（19min）',vWeekend:'#6 资产目录二刷 + 户号↔合同 mapping 案例',videos:[['Ch10 主数据',U.c10],['#6 资产目录',U.b6]]},
+ {w:13,start:'2026-11-07',end:'2026-11-13',stage:'高分精学',focus:'数据建模(精)',domains:['六、数据建模与设计'],milestone:'🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析',vWork:'Ch5 数据建模与设计 二刷（29min）',vWeekend:'#5 数据模型二刷 + 维度 vs 范式辨析笔记',videos:[['Ch5 数据建模',U.c5],['#5 数语·数据模型',U.b5]]},
+ {w:14,start:'2026-11-14',end:'2026-11-20',stage:'高分精学',focus:'高分域复盘',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'高分域正确率≥75%',vWork:'回看错题章（Ch3/13/12/11/10/5 选薄弱）',vWeekend:'高分域视频三刷 + 章节题（目标 ≥75%）',videos:[['Ch3 治理',U.c3],['Ch13 质量',U.c13],['Ch12 元数据',U.c12],['Ch11 数仓',U.c11],['Ch10 主数据',U.c10],['Ch5 建模',U.c5]]},
+ {w:15,start:'2026-11-21',end:'2026-11-27',stage:'中分精学',focus:'数据架构(精)',domains:['七、数据架构'],milestone:'能画数据流图',vWork:'Ch4 数据架构 二刷（18min）',vWeekend:'#4 数语《数据标准》+ 企业数据模型笔记',videos:[['Ch4 数据架构',U.c4],['#4 数语·数据标准',U.b4]]},
+ {w:16,start:'2026-11-28',end:'2026-12-04',stage:'中分精学',focus:'数据安全(精)',domains:['八、数据安全'],milestone:'说清分类分级步骤',vWork:'Ch7 数据安全 二刷（精看 4A+E / 脱敏 / RACI）',vWeekend:'安全分类分级 + 个保法/等保 笔记',videos:[['Ch7 数据安全',U.c7]]},
+ {w:17,start:'2026-12-05',end:'2026-12-11',stage:'中分精学',focus:'大数据/数据科学(精)',domains:['九、大数据和数据科学'],milestone:'说出大数据特征',vWork:'Ch14 大数据和数据科学 二刷',vWeekend:'大数据 6V 特征 + 电网 15min 账单案例',videos:[['Ch14 大数据',U.c14]]},
+ {w:18,start:'2026-12-12',end:'2026-12-18',stage:'中分精学',focus:'成熟度评估(精)',domains:['十、成熟度评估'],milestone:'说出 2 个成熟度模型',vWork:'Ch15 数据管理成熟度评估 二刷',vWeekend:'成熟度模型笔记（说清 CMMI / DAMA-DMM）',videos:[['Ch15 成熟度',U.c15]]},
+ {w:19,start:'2026-12-19',end:'2026-12-25',stage:'低分精学',focus:'概述/伦理/文件/组织角色',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域概念全覆盖',vWork:'Ch1 概述 + Ch2 伦理 + Ch9 文档 + Ch16 角色（共约 50min）',vWeekend:'4 域速记卡（概述/伦理/文件/角色）',videos:[['Ch1 概述',U.c1],['Ch2 伦理',U.c2],['Ch9 文档内容',U.c9],['Ch16 角色期望',U.c16]]},
+ {w:20,start:'2026-12-26',end:'2027-01-01',stage:'低分精学',focus:'存储/集成/变革管理',domains:['十三、其余低分域'],milestone:'🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区',vWork:'Ch6 存储 + Ch8 集成 + Ch17 变革（共约 33min）',vWeekend:'3 域速记 + 思维导图 v3 全量回顾',videos:[['Ch6 存储运营',U.c6],['Ch8 集成互操作',U.c8],['Ch17 变革管理',U.c17]]},
+ {w:21,start:'2027-01-02',end:'2027-01-08',stage:'刷题',focus:'高分域题库',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'错题本启动，正确率统计',vWork:'错题对应章节视频回看（Ch3/13/12/11/10/5）',vWeekend:'高分域视频错题章回看',videos:[['Ch3 治理',U.c3],['Ch13 质量',U.c13],['Ch12 元数据',U.c12]]},
+ {w:22,start:'2027-01-09',end:'2027-01-15',stage:'刷题',focus:'中分域题库',domains:['七、数据架构','八、数据安全','九、大数据和数据科学','十、成熟度评估'],milestone:'中分域正确率≥70%',vWork:'对应错题章节视频回看（Ch4/7/14/15）',vWeekend:'中分域视频错题章回看',videos:[['Ch4 架构',U.c4],['Ch7 安全',U.c7],['Ch14 大数据',U.c14],['Ch15 成熟度',U.c15]]},
+ {w:23,start:'2027-01-16',end:'2027-01-22',stage:'刷题',focus:'低分域题库',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域正确率≥60%',vWork:'对应错题章节视频回看（Ch1/2/6/8/9/16/17）',vWeekend:'低分域视频错题章回看',videos:[['Ch1 概述',U.c1],['Ch6 存储',U.c6],['Ch16 角色',U.c16],['Ch17 变革',U.c17]]},
+ {w:24,start:'2027-01-23',end:'2027-01-29',stage:'刷题',focus:'全量+回炉',domains:['all'],milestone:'🏁 题库正确率≥70%且错题本成型；全局正确率≥75%',vWork:'正确率<70% 域回看对应章节视频',vWeekend:'全 17 章速过 + 一次过经验 exp',videos:[['⭐ 6h 速成（总复盘）',U.whole],['一次过经验',U.exp],['Ch3 治理',U.c3],['Ch13 质量',U.c13]]},
+ {w:25,start:'2027-01-30',end:'2027-02-05',stage:'冲刺',focus:'模拟考1',domains:['all'],milestone:'模拟1 ≥75 分',vWork:'只回看薄弱章视频',vWeekend:'限时模拟考 + 失分域视频补救',videos:[['薄弱章视频（按错题定）',search]]},
+ {w:26,start:'2027-02-06',end:'2027-02-12',stage:'冲刺',focus:'模拟考2+查漏',domains:['all'],milestone:'模拟2 ≥75 分；临考清单就绪',vWork:'只看错题本 + 术语表',vWeekend:'模拟考2 + 临考清单（视频停看，保状态）',videos:[['（冲刺保状态，停看视频）',search]]}
 ];
 function buildDaily(){
   const out=[]; let day=0;
