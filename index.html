@@ -180,15 +180,21 @@ pre code{background:none;padding:0}
 
 /* Quiz */
 .quiz-domain{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:22px 0 8px}
-details.q{padding:13px 16px;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--surface)}
-details.q summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;gap:8px}
-details.q summary::-webkit-details-marker{display:none}
-details.q summary .qn{color:var(--accent);font-weight:700;flex:0 0 auto}
-details.q .opts{margin:10px 0 0;padding-left:26px}
-details.q .opts div{margin:4px 0;font-size:13.5px}
-details.q .ans{margin-top:12px;padding-top:11px;border-top:1px dashed var(--border);font-size:13px;color:var(--text-2)}
-details.q .ans b{color:var(--green)}
-details.q[open] summary{margin-bottom:4px}
+.q{padding:13px 16px;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--surface)}
+.q-head{display:flex;gap:8px;font-weight:600;font-size:14px;line-height:1.5}
+.q-head .qn{color:var(--accent);font-weight:700;flex:0 0 auto}
+.q-head .q-text{flex:1}
+.q-opts{margin:10px 0 6px;padding-left:26px}
+.q-opts .opt{margin:4px 0;font-size:13.5px;line-height:1.55}
+.q-opts .opt.correct{color:var(--green);font-weight:600}
+.q-opts .opt.correct::before{content:"✓ ";margin-right:2px}
+.ans-toggle{margin-top:4px;background:transparent;border:1px dashed var(--border);color:var(--text-2);font-size:12.5px;padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.ans-toggle:hover{border-style:solid;border-color:var(--accent);color:var(--accent);background:var(--surface-2)}
+.ans-toggle.open{border-style:solid;border-color:var(--accent);color:var(--accent);background:var(--surface-2);font-weight:600}
+.ans[hidden]{display:none}
+.ans{margin-top:10px;padding:11px 12px;border:1px solid var(--green);border-radius:8px;background:var(--surface-2);font-size:13px;color:var(--text-2);line-height:1.55}
+.ans b{color:var(--green)}
+.ans[hidden]{display:none}
 
 /* ---------- Quiz: Mode Switcher + Practice Mode ---------- */
 .mode-toggle{
@@ -2275,18 +2281,55 @@ const QUIZ_STORE='cdga-quiz-progress-v1';
 // 当前模式（持久化）
 let quizMode=localStorage.getItem('cdga-quiz-mode')||'study';
 
-// 学习模式（保留折叠展开的原有体验）
+// 学习模式（题目+选项完整可见，仅答案+解析可折叠，状态持久化）
+const ANS_OPEN_KEY='cdga-quiz-ans-open';
+function loadAnsOpen(){ try{ return JSON.parse(localStorage.getItem(ANS_OPEN_KEY))||{}; }catch(e){ return {}; } }
+function saveAnsOpen(idx,open){
+  const m=loadAnsOpen();
+  if(open) m[idx]=1; else delete m[idx];
+  try{ localStorage.setItem(ANS_OPEN_KEY, JSON.stringify(m)); }catch(e){}
+}
 function renderStudyMode(){
   const box=document.getElementById('quiz-list');if(!box)return;
+  const openMap=loadAnsOpen();
   let html='',cur='';
   QUIZ.forEach((it,i)=>{
     if(it.d!==cur){cur=it.d;html+=`<div class="quiz-domain">${cur}</div>`;}
-    const opts=it.o.map((o,k)=>`<div>${'ABCD'[k]}．${o}</div>`).join('');
-    html+=`<details class="q"><summary><span class="qn">${i+1}.</span><span>${it.q}</span></summary>`+
-          `<div class="opts">${opts}</div>`+
-          `<div class="ans"><b>答案：${it.a}</b> ｜ ${it.e}</div></details>`;
+    const idx=i+1;
+    const open=!!openMap[idx];
+    const opts=it.o.map((o,k)=>{
+      const L='ABCD'[k];
+      const cls='opt'+(open && L===it.a ? ' correct':'');
+      return `<div class="${cls}" data-opt="${L}">${L}．${o}</div>`;
+    }).join('');
+    html+=`<div class="q" data-idx="${idx}">`+
+          `<div class="q-head"><span class="qn">${idx}.</span><span class="q-text">${it.q}</span></div>`+
+          `<div class="q-opts">${opts}</div>`+
+          `<button class="ans-toggle ${open?'open':''}" data-idx="${idx}" data-act="toggle" type="button">${open?'▾ 收起答案 · 已看':'▸ 查看答案与解析'}</button>`+
+          `<div class="ans"${open?'':' hidden'}><b>答案：${it.a}</b> ｜ ${it.e}</div>`+
+          `</div>`;
   });
   box.innerHTML=html;
+  // 事件委托（幂等）
+  if(!box._ansBound){
+    box._ansBound=true;
+    box.addEventListener('click',e=>{
+      const btn=e.target.closest('.ans-toggle');if(!btn)return;
+      const idx=+btn.dataset.idx;
+      const card=box.querySelector(`.q[data-idx="${idx}"]`);if(!card)return;
+      const body=card.querySelector('.ans');
+      const willOpen=!!body.hidden;
+      body.hidden=!willOpen;
+      btn.classList.toggle('open',willOpen);
+      btn.textContent=willOpen?'▾ 收起答案 · 已看':'▸ 查看答案与解析';
+      if(willOpen){
+        const L=QUIZ[idx-1].a;
+        const opt=card.querySelector(`.opt[data-opt="${L}"]`);
+        if(opt) opt.classList.add('correct');
+      }
+      saveAnsOpen(idx,willOpen);
+    });
+  }
 }
 
 // 刷题模式状态
