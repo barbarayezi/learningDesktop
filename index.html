@@ -148,6 +148,32 @@ pre code{background:none;padding:0}
 .tbl-wrap table tr.vdone td{background:var(--surface-2)}
 .chk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 6px}
 .chk-head h3{margin:0}
+
+/* ---------- 每日学习中心 · 主动投递(本周主题/关键概念/复习提醒) ---------- */
+.dc-week{background:linear-gradient(135deg,var(--accent-soft),transparent 60%);border:1px solid var(--accent);border-radius:14px;padding:14px 18px;margin:14px 0}
+.dc-week h4{margin:0 0 6px;color:var(--accent);font-size:15px}
+.dc-week-meta{color:var(--text-2);font-size:13px;margin:0 0 10px}
+.dc-concepts{display:flex;flex-direction:column;gap:6px}
+.dc-concept{display:flex;align-items:flex-start;gap:9px;padding:7px 10px;border-radius:8px;background:var(--surface);cursor:pointer;font-size:14px;line-height:1.5;transition:background .12s}
+.dc-concept:hover{background:var(--surface-2)}
+.dc-concept input{margin-top:4px;width:16px;height:16px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
+.dc-concept.done span{color:var(--text-3);text-decoration:line-through}
+.dc-empty{color:var(--text-3);font-size:13px;padding:6px 4px}
+
+.dc-review{background:rgba(255,193,7,.08);border:1px solid var(--yellow);border-radius:14px;padding:14px 18px;margin:14px 0}
+.dc-review h4{margin:0 0 10px;color:var(--yellow);font-size:15px}
+.dc-review-list{display:flex;flex-direction:column;gap:8px}
+.dc-review-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:9px;font-size:13.5px;line-height:1.45}
+.dc-cycle-tag{display:inline-block;padding:2px 8px;border-radius:11px;color:#fff;font-size:11px;font-weight:600;flex:0 0 auto;min-width:36px;text-align:center}
+.dc-cycle-tag.c3{background:var(--green)}
+.dc-cycle-tag.c7{background:var(--accent)}
+.dc-cycle-tag.c14{background:var(--yellow);color:#333}
+.dc-cycle-tag.c30{background:var(--red)}
+.dc-review-text{flex:1;min-width:0}
+.dc-review-btns{display:flex;gap:5px;flex:0 0 auto}
+.dc-review-btns button{padding:4px 9px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);cursor:pointer;font-size:12px;font-family:inherit}
+.dc-review-btns button.ok{background:var(--green);color:#fff;border-color:var(--green)}
+.dc-review-btns button.bad{background:var(--red);color:#fff;border-color:var(--red)}
 .progress{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:6px 0 14px}
 .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width .3s}
 .progress-label{font-size:12px;color:var(--text-3)}
@@ -658,7 +684,6 @@ html[data-theme="dark"] .reader-frame{background:#0f1117}
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot red"></span>📚 备考 CDGA</div>
       <div class="nav-item" data-page="cdga-plan">🗺️ 半年复习规划</div>
-      <div class="nav-item" data-page="cdga-weekly">🗓️ 26 周学习计划</div>
       <div class="nav-item" data-page="cdga-check">✅ 知识点自查清单</div>
       <div class="nav-item" data-page="cdga-quiz">📝 原创自测练习题</div>
     </div>
@@ -858,17 +883,54 @@ html[data-theme="dark"] .reader-frame{background:#0f1117}
             <span><i style="background:var(--red)"></i>冲刺</span>
           </div>
         </div>
+        <div class="callout tip">若想提前到 <b>2026 年 12 月</b>场次，把阶段 2/3 压缩 1/3 即可（已有实战底子，压缩可行）。下方 4.1 是「26 周逐周明细」，配套每日中心自动按本周主题推送关键概念。</div>
+
+        <h2>4.1 逐周明细（26 周 · W1–W26）</h2>
         <div class="tbl-wrap"><table>
-          <thead><tr><th>阶段</th><th>时间窗</th><th>目标</th><th>关键产出</th></tr></thead>
+          <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>重点知识域</th><th>周末自检</th></tr></thead>
           <tbody>
-            <tr><td>阶段 0</td><td>第 1–2 周</td><td>锁定场次、备齐资料</td><td>教材到手、报名意向、复习主页建好</td></tr>
-            <tr><td>阶段 1</td><td>第 3–7 周</td><td>通读全书，建 17 域框架</td><td>知识域思维导图、术语表</td></tr>
-            <tr><td>阶段 2</td><td>第 8–20 周</td><td>分域精学，高分域优先</td><td>每域笔记 + 实战映射卡</td></tr>
-            <tr><td>阶段 3</td><td>第 21–24 周</td><td>刷题库、建错题本</td><td>错题本、薄弱域清单</td></tr>
-            <tr><td>阶段 4</td><td>第 25–26 周</td><td>模拟考、查漏补缺</td><td>2 套模拟成绩 ≥75、冲刺笔记</td></tr>
+            <tr><td>W1</td><td>8/15–8/21</td><td>0</td><td>—</td><td>教材已下单；场次已定；仓库已建</td></tr>
+            <tr><td>W2</td><td>8/22–8/28</td><td>0</td><td>数据管理(概述)</td><td>🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词</td></tr>
+            <tr><td>W3</td><td>8/29–9/4</td><td>1</td><td>数据治理</td><td>能口述治理框架要素</td></tr>
+            <tr><td>W4</td><td>9/5–9/11</td><td>1</td><td>数据质量、元数据</td><td>说出质量六维度名称</td></tr>
+            <tr><td>W5</td><td>9/12–9/18</td><td>1</td><td>数仓与BI、参考/主数据</td><td>说出 ODS/DWS 分层含义</td></tr>
+            <tr><td>W6</td><td>9/19–9/25</td><td>1</td><td>数据建模、数据架构</td><td>区分概念/逻辑/物理模型</td></tr>
+            <tr><td>W7</td><td>9/26–10/2</td><td>1</td><td>安全/大数据/成熟度/低分域</td><td>🏁 通读两遍+术语表成型；17 域名称全过一遍</td></tr>
+            <tr><td>W8</td><td>10/3–10/9</td><td>2 高分</td><td>数据治理(精)</td><td>案例卡完成，章节题≥70%</td></tr>
+            <tr><td>W9</td><td>10/10–10/16</td><td>2 高分</td><td>数据质量(精)</td><td>能给场景判维度</td></tr>
+            <tr><td>W10</td><td>10/17–10/23</td><td>2 高分</td><td>元数据管理(精)</td><td>血缘图完成</td></tr>
+            <tr><td>W11</td><td>10/24–10/30</td><td>2 高分</td><td>数仓与BI(精)</td><td>说清 ETL/ELT 区别</td></tr>
+            <tr><td>W12</td><td>10/31–11/6</td><td>2 高分</td><td>参考/主数据(精)</td><td>主数据案例卡完成</td></tr>
+            <tr><td>W13</td><td>11/7–11/13</td><td>2 高分</td><td>数据建模与设计(精)</td><td>🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析</td></tr>
+            <tr><td>W14</td><td>11/14–11/20</td><td>2 高分</td><td>高分域复盘</td><td>高分域正确率≥75%</td></tr>
+            <tr><td>W15</td><td>11/21–11/27</td><td>2 中分</td><td>数据架构(精)</td><td>能画数据流图</td></tr>
+            <tr><td>W16</td><td>11/28–12/4</td><td>2 中分</td><td>数据安全(精)</td><td>说清分类分级步骤</td></tr>
+            <tr><td>W17</td><td>12/5–12/11</td><td>2 中分</td><td>大数据和数据科学(精)</td><td>说出大数据特征</td></tr>
+            <tr><td>W18</td><td>12/12–12/18</td><td>2 中分</td><td>成熟度评估(精)</td><td>说出 2 个成熟度模型</td></tr>
+            <tr><td>W19</td><td>12/19–12/25</td><td>2 低分</td><td>概述/伦理/文件/组织角色</td><td>低分域概念全覆盖</td></tr>
+            <tr><td>W20</td><td>12/26–1/1</td><td>2 低分</td><td>存储/集成/变革管理</td><td>🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区</td></tr>
+            <tr><td>W21</td><td>1/2–1/8</td><td>3 刷题</td><td>高分域题库</td><td>错题本启动，正确率统计</td></tr>
+            <tr><td>W22</td><td>1/9–1/15</td><td>3 刷题</td><td>中分域题库</td><td>中分域正确率≥70%</td></tr>
+            <tr><td>W23</td><td>1/16–1/22</td><td>3 刷题</td><td>低分域题库</td><td>低分域正确率≥60%</td></tr>
+            <tr><td>W24</td><td>1/23–1/29</td><td>3 刷题</td><td>全量+回炉</td><td>🏁 题库正确率≥70%且错题本成型；全局正确率≥75%</td></tr>
+            <tr><td>W25</td><td>1/30–2/5</td><td>4 冲刺</td><td>模拟考1</td><td>模拟1 ≥75 分</td></tr>
+            <tr><td>W26</td><td>2/6–2/12</td><td>4 冲刺</td><td>模拟考2+查漏</td><td>模拟2 ≥75 分；临考清单就绪</td></tr>
           </tbody>
         </table></div>
-        <div class="callout tip">若想提前到 <b>2026 年 12 月</b>场次，把阶段 2/3 压缩 1/3 即可（已有实战底子，压缩可行）。</div>
+
+        <h2>4.2 课程观看策略（B站用法）</h2>
+        <ul>
+          <li><b>定位</b>：阶段 1/2 用「先看课再读书」降低挫败感；冲刺期用短视频速记。</li>
+          <li><b>B站关键词</b>：<code>CDGA</code>、<code>数据治理工程师</code>、<code>DAMA DMBOK</code>、<code>数据质量 六维度</code>、<code>主数据管理</code>、<code>元数据 血缘</code>。</li>
+          <li><b>可看（合法免费）</b>：UP 主自制入门课、章节串讲、思维导图讲解。</li>
+          <li><b>⚠️ 盗版预警</b>：标「网盘分享教材 PDF」「搬运官方付费课完整版」的资源不要看。</li>
+        </ul>
+
+        <h2>4.3 每日节奏模板</h2>
+        <ul>
+          <li><b>工作日（约 1–1.5h）</b>：看课 25min + 阅读/笔记 35min + 术语/自测 20min + 打卡。</li>
+          <li><b>周末（约 2.5–3h）</b>：模块串讲课 50min + 1.5h 精学/刷题 + 1h 复盘 + 0.5h 更新导图/错题本。</li>
+        </ul>
 
         <h2>五、分月执行计划</h2>
         <ul>
@@ -1046,72 +1108,6 @@ html[data-theme="dark"] .reader-frame{background:#0f1117}
         <div id="quiz-practice" hidden></div>
       </section>
 
-      <!-- CDGA WEEKLY -->
-      <section class="page" id="cdga-weekly">
-        <h1 class="doc-title">🗓️ CDGA 26 周学习计划（细化到每周）</h1>
-        <div class="doc-sub">目标场次：2027 年 3 月（可前移至 2026 年 12 月）。起始 2026-08-15（周六）为 Day 1，工作日每天 1–1.5h，周末 2–3h，周合计 8–10h。表格中 🏁 = 关键里程碑（对应复习规划第九节自检）。</div>
-
-        <h2>阶段与周次总览</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>阶段</th><th>周次</th><th>主题</th><th>核心动作</th></tr></thead>
-          <tbody>
-            <tr><td>0 准备</td><td>W1–W2</td><td>资料与报名</td><td>买教材、定场次、建复习主页、术语表 v1</td></tr>
-            <tr><td>1 通读</td><td>W3–W7</td><td>建框架</td><td>通读 17 域，思维导图 v2</td></tr>
-            <tr><td>2 精学</td><td>W8–W14</td><td>高分域</td><td>治理/质量/元数据/数仓/主数据/建模 精学+案例卡</td></tr>
-            <tr><td>2 精学</td><td>W15–W18</td><td>中分域</td><td>架构/安全/大数据/成熟度 精学</td></tr>
-            <tr><td>2 精学</td><td>W19–W20</td><td>低分域</td><td>7 个低分域速记 + 全量回顾</td></tr>
-            <tr><td>3 刷题</td><td>W21–W24</td><td>题库+错题</td><td>分域刷题、建错题本、薄弱域回炉</td></tr>
-            <tr><td>4 冲刺</td><td>W25–W26</td><td>模拟+查漏</td><td>2 套模拟考、冲刺笔记、临考复盘</td></tr>
-          </tbody>
-        </table></div>
-
-        <h2>📺 课程观看策略（含 B站用法）</h2>
-        <ul>
-          <li><b>定位</b>：阶段 1/2 用「先看课再读书」降低挫败感；冲刺期用短视频速记。</li>
-          <li><b>B站关键词</b>：<code>CDGA</code>、<code>数据治理工程师</code>、<code>DAMA DMBOK</code>、<code>数据质量 六维度</code>、<code>主数据管理</code>、<code>元数据 血缘</code>。</li>
-          <li><b>可看（合法免费）</b>：UP 主自制入门课、章节串讲、思维导图讲解。</li>
-          <li><b>⚠️ 盗版预警</b>：标「网盘分享教材 PDF」「搬运官方付费课完整版」的资源不要看。</li>
-        </ul>
-
-        <h2>逐周计划表</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>重点知识域</th><th>周末自检</th></tr></thead>
-          <tbody>
-            <tr><td>W1</td><td>8/15–8/21</td><td>0</td><td>—</td><td>教材已下单；场次已定；仓库已建</td></tr>
-            <tr><td>W2</td><td>8/22–8/28</td><td>0</td><td>数据管理(概述)</td><td>🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词</td></tr>
-            <tr><td>W3</td><td>8/29–9/4</td><td>1</td><td>数据治理</td><td>能口述治理框架要素</td></tr>
-            <tr><td>W4</td><td>9/5–9/11</td><td>1</td><td>数据质量、元数据</td><td>说出质量六维度名称</td></tr>
-            <tr><td>W5</td><td>9/12–9/18</td><td>1</td><td>数仓与BI、参考/主数据</td><td>说出 ODS/DWS 分层含义</td></tr>
-            <tr><td>W6</td><td>9/19–9/25</td><td>1</td><td>数据建模、数据架构</td><td>区分概念/逻辑/物理模型</td></tr>
-            <tr><td>W7</td><td>9/26–10/2</td><td>1</td><td>安全/大数据/成熟度/低分域</td><td>🏁 通读两遍+术语表成型；17 域名称全过一遍</td></tr>
-            <tr><td>W8</td><td>10/3–10/9</td><td>2 高分</td><td>数据治理(精)</td><td>案例卡完成，章节题≥70%</td></tr>
-            <tr><td>W9</td><td>10/10–10/16</td><td>2 高分</td><td>数据质量(精)</td><td>能给场景判维度</td></tr>
-            <tr><td>W10</td><td>10/17–10/23</td><td>2 高分</td><td>元数据管理(精)</td><td>血缘图完成</td></tr>
-            <tr><td>W11</td><td>10/24–10/30</td><td>2 高分</td><td>数仓与BI(精)</td><td>说清 ETL/ELT 区别</td></tr>
-            <tr><td>W12</td><td>10/31–11/6</td><td>2 高分</td><td>参考/主数据(精)</td><td>主数据案例卡完成</td></tr>
-            <tr><td>W13</td><td>11/7–11/13</td><td>2 高分</td><td>数据建模与设计(精)</td><td>🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析</td></tr>
-            <tr><td>W14</td><td>11/14–11/20</td><td>2 高分</td><td>高分域复盘</td><td>高分域正确率≥75%</td></tr>
-            <tr><td>W15</td><td>11/21–11/27</td><td>2 中分</td><td>数据架构(精)</td><td>能画数据流图</td></tr>
-            <tr><td>W16</td><td>11/28–12/4</td><td>2 中分</td><td>数据安全(精)</td><td>说清分类分级步骤</td></tr>
-            <tr><td>W17</td><td>12/5–12/11</td><td>2 中分</td><td>大数据和数据科学(精)</td><td>说出大数据特征</td></tr>
-            <tr><td>W18</td><td>12/12–12/18</td><td>2 中分</td><td>成熟度评估(精)</td><td>说出 2 个成熟度模型</td></tr>
-            <tr><td>W19</td><td>12/19–12/25</td><td>2 低分</td><td>概述/伦理/文件/组织角色</td><td>低分域概念全覆盖</td></tr>
-            <tr><td>W20</td><td>12/26–1/1</td><td>2 低分</td><td>存储/集成/变革管理</td><td>🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区</td></tr>
-            <tr><td>W21</td><td>1/2–1/8</td><td>3 刷题</td><td>高分域题库</td><td>错题本启动，正确率统计</td></tr>
-            <tr><td>W22</td><td>1/9–1/15</td><td>3 刷题</td><td>中分域题库</td><td>中分域正确率≥70%</td></tr>
-            <tr><td>W23</td><td>1/16–1/22</td><td>3 刷题</td><td>低分域题库</td><td>低分域正确率≥60%</td></tr>
-            <tr><td>W24</td><td>1/23–1/29</td><td>3 刷题</td><td>全量+回炉</td><td>🏁 题库正确率≥70%且错题本成型；全局正确率≥75%</td></tr>
-            <tr><td>W25</td><td>1/30–2/5</td><td>4 冲刺</td><td>模拟考1</td><td>模拟1 ≥75 分</td></tr>
-            <tr><td>W26</td><td>2/6–2/12</td><td>4 冲刺</td><td>模拟考2+查漏</td><td>模拟2 ≥75 分；临考清单就绪</td></tr>
-          </tbody>
-        </table></div>
-        <div class="callout tip">弹性：W26（止于 2027-02-12）后到考试（暂定 2027-03-27 末周末）还有约 6 周缓冲；<b>考前 2 周 ≈ 2027-03-13 ~ 03-19</b>，专做 2 套模拟 + 只看错题本/术语表/冲刺笔记。可加 W27–W28 做最后查漏与状态调整。</div>
-        <h2>每日节奏模板</h2>
-        <ul>
-          <li><b>工作日（约 1–1.5h）</b>：看课 25min + 阅读/笔记 35min + 术语/自测 20min + 打卡。</li>
-          <li><b>周末（约 2.5–3h）</b>：模块串讲课 50min + 1.5h 精学/刷题 + 1h 复盘 + 0.5h 更新导图/错题本。</li>
-        </ul>
-      </section>
 
       <!-- CDGA DAILY · 每日学习中心（选日期） -->
       <section class="page active" id="cdga-daily">
@@ -1838,8 +1834,8 @@ document.getElementById('themeBtn').onclick=()=>{
 
 /* ---------- Nav ---------- */
 const crumbs=document.getElementById('crumbs');
-const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','cdga-weekly':'26 周学习计划','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','cdga-ladder':'三级进阶总规划','phd-plan':'申请计划','phd-reco':'推荐信格式与模板','phd-urls':'申请网址汇总','my-progress':'我的进度'};
-const GROUP={'cdga-daily':'今日','my-progress':'今日','cdga-plan':'备考 CDGA','cdga-weekly':'备考 CDGA','cdga-check':'备考 CDGA','cdga-quiz':'备考 CDGA','cdga-res':'资料','cdga-news':'资讯','cdga-sources':'资讯','cdga-ladder':'进阶考证','phd-plan':'读博 交大','phd-reco':'读博 交大','phd-urls':'读博 交大',home:'关于本站'};
+const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','cdga-ladder':'三级进阶总规划','phd-plan':'申请计划','phd-reco':'推荐信格式与模板','phd-urls':'申请网址汇总','my-progress':'我的进度'};
+const GROUP={'cdga-daily':'今日','my-progress':'今日','cdga-plan':'备考 CDGA','cdga-check':'备考 CDGA','cdga-quiz':'备考 CDGA','cdga-res':'资料','cdga-news':'资讯','cdga-sources':'资讯','cdga-ladder':'进阶考证','phd-plan':'读博 交大','phd-reco':'读博 交大','phd-urls':'读博 交大',home:'关于本站'};
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el=document.getElementById(id); if(el)el.classList.add('active');
@@ -1872,10 +1868,14 @@ document.getElementById('search').addEventListener('input',function(){
   });
 });
 
-/* ---------- Checklist persistence ---------- */
+/* ---------- Checklist persistence (with mastered_at for spaced repetition) ---------- */
 const KEY='bb-cdga-check';
+const DKEY='bb-cdga-check-dates';   // {i: ISO-date} 记录每个概念"已掌握"的时间
 function loadChecks(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}}
 function saveChecks(o){localStorage.setItem(KEY,JSON.stringify(o))}
+function loadDates(){try{return JSON.parse(localStorage.getItem(DKEY))||{}}catch(e){return{}}}
+function saveDates(o){localStorage.setItem(DKEY,JSON.stringify(o))}
+function todayISO(){return new Date().toISOString().slice(0,10)}
 function updateProgress(){
   const all=document.querySelectorAll('#cdga-check .chk');
   if(!all.length)return;
@@ -1883,15 +1883,21 @@ function updateProgress(){
   document.getElementById('chkBar').style.width=(done/all.length*100)+'%';
   document.getElementById('chkLabel').textContent='已掌握 '+done+' / '+all.length;
 }
+function setCheckState(i, checked){
+  const s=loadChecks(); s[i]=checked; saveChecks(s);
+  const d=loadDates();
+  if(checked){ d[i]=todayISO(); } else { delete d[i]; }
+  saveDates(d);
+  // 同步到主页面的 checkbox（如有）
+  const cb=document.querySelector('#cdga-check .chk:nth-of-type('+(i+1)+')');
+  if(cb){ cb.checked=checked; cb.closest('.chk-row')&&cb.closest('.chk-row').classList.toggle('done',checked); }
+  updateProgress();
+}
 (function initChecks(){
   const state=loadChecks();
   document.querySelectorAll('#cdga-check .chk').forEach((c,i)=>{
     c.checked=!!state[i];
-    c.addEventListener('change',()=>{
-      const s=loadChecks();s[i]=c.checked;saveChecks(s);
-      c.closest('.chk-row').classList.toggle('done',c.checked);
-      updateProgress();
-    });
+    c.addEventListener('change',()=>setCheckState(i, c.checked));
     c.closest('.chk-row').classList.toggle('done',c.checked);
   });
   updateProgress();
@@ -2505,6 +2511,76 @@ function gotoDay(n){
   n=Math.max(1,Math.min(DAILY.length,n));
   const iso=DAILY[n-1].iso; dayDate.value=iso; renderDay(iso);
 }
+
+/* ---------- 主动投递:本周主题 + spaced repetition 复习提醒 ---------- */
+// 周次 → 本周重点知识域 (1-17 对应 DAMA 17 域，11-17 是低分7域)
+const WEEK_DOMAINS = {
+  1:[], 2:[11], 3:[1], 4:[2,3], 5:[4,5], 6:[6,7],
+  7:[8,9,10,11,12,13,14,15,16,17],
+  8:[1], 9:[2], 10:[3], 11:[4], 12:[5], 13:[6], 14:[1,2,3,4,5,6],
+  15:[7], 16:[8], 17:[9], 18:[10],
+  19:[11,12,13,16], 20:[14,15,17],
+  21:[1,2,3,4,5,6], 22:[7,8,9,10], 23:[11,12,13,14,15,16,17],
+  24:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], 25:[], 26:[]
+};
+// 知识域 ID → 知识点清单 checkbox 索引范围（与 cdga-check 页 checkbox 顺序对应）
+const DOMAIN_IDX = {
+  1:[0,1,2,3,4], 2:[5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16,17,18],
+  5:[19,20,21,22,23], 6:[24,25,26,27], 7:[28,29,30], 8:[31,32,33],
+  9:[34,35], 10:[36,37], 11:[38], 12:[39], 13:[40], 14:[41],
+  15:[42], 16:[43], 17:[44]
+};
+const WEEK_META = {
+  1:'W1 · 准备', 2:'W2 · 数据管理概述', 3:'W3 · 数据治理', 4:'W4 · 数据质量+元数据',
+  5:'W5 · 数仓BI+主数据', 6:'W6 · 建模+架构', 7:'W7 · 中低分通读',
+  8:'W8 · 高分-数据治理', 9:'W9 · 高分-数据质量', 10:'W10 · 高分-元数据',
+  11:'W11 · 高分-数仓BI', 12:'W12 · 高分-主数据', 13:'W13 · 高分-建模',
+  14:'W14 · 高分域复盘', 15:'W15 · 中分-架构', 16:'W16 · 中分-安全',
+  17:'W17 · 中分-大数据', 18:'W18 · 中分-成熟度',
+  19:'W19 · 低分-概述/伦理/文件/组织', 20:'W20 · 低分-存储/集成/变革',
+  21:'W21 · 刷题高分域', 22:'W22 · 刷题中分域', 23:'W23 · 刷题低分域',
+  24:'W24 · 全量回炉', 25:'W25 · 模拟考1', 26:'W26 · 模拟考2+查漏'
+};
+function escH(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function conceptText(i){
+  const cb = document.querySelectorAll('#cdga-check .chk')[i];
+  if(cb){
+    const span = cb.closest('.chk-row')&&cb.closest('.chk-row').querySelector('span');
+    if(span) return span.textContent.trim();
+  }
+  return '概念 '+(i+1);
+}
+// 给定周次，返回"未掌握"的关键概念索引（最多 n 个），按域顺序
+function weekKeyConcepts(w, checks, n){
+  n = n||3;
+  const ds = WEEK_DOMAINS[w] || [];
+  const out = [];
+  for(const dId of ds){
+    for(const idx of (DOMAIN_IDX[dId]||[])){
+      if(!checks[idx]){ out.push(idx); if(out.length>=n) return out; }
+    }
+  }
+  return out;
+}
+// spaced repetition: 找出今天到期的复习项（3/7/14/30 天后提醒，30天后每月再提醒）
+function dueReviewItems(dates, checks){
+  if(!dates) return [];
+  const today = new Date(todayISO()+'T00:00:00');
+  const cycles = [3,7,14,30,60,90];
+  const due = [];
+  Object.keys(dates).forEach(k=>{
+    if(checks[k] !== true) return; // 仅对已掌握项提醒
+    const past = new Date(dates[k]+'T00:00:00');
+    const days = Math.floor((today-past)/86400000);
+    if(days<0) return;
+    let cyc = null;
+    for(const c of cycles){ if(days>=c-1 && days<=c+1){ cyc=c; break; } }
+    if(cyc!==null) due.push({i:Number(k), days, cycle:cyc});
+  });
+  due.sort((a,b)=> a.cycle-b.cycle || a.days-b.days);
+  return due;
+}
+
 function renderDay(iso){
   let d=DAILY_BY_ISO[iso];
   if(!d){ iso = iso < '2026-08-15' ? '2026-08-15' : '2027-02-12'; d=DAILY_BY_ISO[iso]; dayDate.value=iso; }
@@ -2526,6 +2602,34 @@ function renderDay(iso){
     const c=dailyChecks[x.iso]?'done':''; const a=x.iso===iso?'active':'';
     return `<span class="dc-daychip ${a} ${c}" data-iso="${x.iso}">${x.wd.slice(1)}</span>`;
   }).join('');
+  // —— 主动投递:复习提醒 + 本周主题/关键概念 ——
+  const checks=loadChecks();
+  const dates=loadDates();
+  const due=dueReviewItems(dates, checks).slice(0,6);
+  const reviewHTML = due.length ? `
+    <div class="dc-review">
+      <h4>🔁 复习提醒 (${due.length} 条) — 学过的东西,按 3/7/14/30 天循环考你</h4>
+      <div class="dc-review-list">${due.map(({i,days,cycle})=>`
+        <div class="dc-review-item">
+          <span class="dc-cycle-tag c${cycle<=30?cycle:30}">+${cycle}d</span>
+          <span class="dc-review-text">${escH(conceptText(i))}</span>
+          <div class="dc-review-btns">
+            <button class="ok"  data-ridx="${i}" data-act="ok">✓ 仍掌握</button>
+            <button class="bad" data-ridx="${i}" data-act="bad">× 忘了</button>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>` : '';
+  const concepts=weekKeyConcepts(d.w, checks, 3);
+  const conceptsHTML = concepts.length
+    ? concepts.map(idx=>`<label class="dc-concept ${checks[idx]?'done':''}"><input type="checkbox" data-cidx="${idx}" ${checks[idx]?'checked':''}><span>${escH(conceptText(idx))}</span></label>`).join('')
+    : (WEEK_DOMAINS[d.w]&&WEEK_DOMAINS[d.w].length ? '<div class="dc-empty">本周这些域都已勾完,可去「✅ 知识点清单」手动复习其他概念</div>' : '<div class="dc-empty">本周以刷题/模拟为主,无新概念</div>');
+  const weekHTML = `
+    <div class="dc-week">
+      <h4>🎯 本周 ${escH(WEEK_META[d.w]||('W'+d.w))}</h4>
+      <div class="dc-week-meta">${escH(d.focus)}${d.milestone?' · 🏁 周末自检：'+escH(d.milestone):''}</div>
+      <div class="dc-concepts">${conceptsHTML}</div>
+    </div>`;
   // 今日推文：考证 / 考博 交替混排，按天序号取一篇（保证两类都能稳定轮到）
   const DAPOOL = (window.ARTICLES && window.ARTICLES.length) ? DAILY_ARTICLES : [];
   const art = DAPOOL.length ? DAPOOL[(d.day-1) % DAPOOL.length] : null;
@@ -2561,6 +2665,8 @@ function renderDay(iso){
      </div>
      <label class="dc-check"><input type="checkbox" id="dayCheck" ${done?'checked':''}> 今日完成打卡</label>
    </div>
+   ${reviewHTML}
+   ${weekHTML}
    <h2 class="dc-goal">🎯 今日目标</h2>
    <p class="dc-goal-text">${d.focus} —— <b>${role.t}</b>：${role.h}</p>
    <p class="dc-meta">本周重点：${d.focus} ｜ 阶段：${d.stage}${d.milestone?' ｜ 🏁 本周末自检：'+d.milestone:''}</p>
@@ -2599,6 +2705,27 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  // 主动投递:关键概念勾选 → 同步到清单(并记 mastered_at)
+  dayCard.querySelectorAll('[data-cidx]').forEach(cb=>{
+    cb.onchange=e=>{
+      const idx=Number(cb.dataset.cidx);
+      setCheckState(idx, cb.checked);
+      cb.closest('.dc-concept').classList.toggle('done', cb.checked);
+    };
+  });
+  // 复习提醒按钮: ✓ 仍掌握 → 重置 mastered_at 为今天(进入下一周期); × 忘了 → 取消勾选(进入本周主题再学)
+  dayCard.querySelectorAll('[data-ridx]').forEach(btn=>{
+    btn.onclick=()=>{
+      const idx=Number(btn.dataset.ridx);
+      const act=btn.dataset.act;
+      if(act==='ok'){
+        const d=loadDates(); d[idx]=todayISO(); saveDates(d);
+      } else {
+        setCheckState(idx, false);
+      }
+      renderDay(iso);
+    };
+  });
   document.getElementById('dcPrev').onclick=()=>gotoDay(d.day-1);
   document.getElementById('dcNext').onclick=()=>gotoDay(d.day+1);
   dayCard.querySelectorAll('[data-iso]').forEach(c=>c.onclick=()=>{dayDate.value=c.dataset.iso;renderDay(c.dataset.iso);});
