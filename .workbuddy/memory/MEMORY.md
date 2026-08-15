@@ -27,13 +27,21 @@
   遇到推文卡片设计需求，按此模式，别再直接给 `<a>` 跳外链。
 
 ## 资料阅读器 · Markdown 渲染
-- `.md` 文件**不能**直接做 `iframe.src`（浏览器当纯文本显示，可读性差）。
-- 必须走 **`fetch + mdRender`** 链路：检测 `.md` 扩展名 → fetch → `mdRender()` → 注入 `#mdHost`。
-- 渲染器：`mdEsc(s) / mdInline(s) / mdRender(md)`，自实现约 50 行无外部依赖，支持 GFM 表格/代码块/列表/引用/链接/粗斜体。失败自动 fallback 到 iframe。
-- 样式全跟主题走，加载中/失败都有视觉反馈（`.md-loading` 旋转动画 + `.md-err`）。
 - **⚠️ file:// fetch 陷阱**：Chrome 默认禁止 `file:// → file://` 的 `fetch()`（file origin 为 null）。这导致 `fetch(r.file)` 必然失败 → catch 走 iframe → 用户看到原始文本。
 - **修复模式（单文件 SPA、file:// 部署）**：把要阅读的 `.md` 内容**内嵌**为 `<template id="mdSrc-{key}">…</template>`，`openReader` 优先读 `tpl.content.textContent` → `mdRender`，找不到再回退 fetch（保留 http/https 兼容路径）。新增 .md 资源时同步加 template。
 - **Patch script 自检纪律**：用 Node 脚本 `s.replace()` 改文件后，**立刻** `node --check <extracted_script>`，不要相信肉眼。手抖错一个字符（典型：`()=>{` 写成 `()>{`）Node 报错位置往往指错行，bisect 反推 bug 行号不可靠；直接重写 diff 范围或 hex-diff 两个版本最快。
+
+## 每日中心 · 学什么/学多久标签系统（2026-08-15）
+- **绝对不要**给用户「一堆文章/视频」而不分层。**每项材料必须贴 3 个 chip**：治疗标签（浏览/精读/背诵/实操）+ 估时（分钟数）+ 优先级（P1/P2/P3）。
+- **每日顶部必须有用量汇总卡**：共 N 项 / 总 XhYm（>3h 红色+🔥，>2h 黄色+⚠️）/ P1/P2/P3 数量。直接回答「你觉得让我一天看这么许多文章合适吗」。
+- **P2/P3 默认折叠**：避免一屏看到 6 个 PDF 让用户觉得要全做完。智能 label（纯 P2 "本周内可学"，纯 P3 "选学"，混合 "本周内/选学"）。
+- **schema 字段名要统一**：`{t, m, p}` 贯穿所有数据源（`videoMeta` 返回的也要 normalize 成这 3 个 key）。字段名错位（`prio` vs `p`）会导致所有视频被算成默认值后折叠。
+- **数据源**：
+  - 视频元组：`[title, url, treatment, minutes, priority]`（兼容旧 2 元素）
+  - PDF: `RES[k].{t, m, p}`
+  - 推文: `article.{t, m, p}`
+- **批量脚本边界 regex 必须 lazy + 限定 `}`**：跨对象匹配会把"已加"误判成"未加"，导致数据写漏。典型坑：`[\s\S]*?"t"\s*:\s*"` 会跨过下一个 `{...}`。
+- **CSS 类**: `.dc-tag-treat.t-{浏览|精读|背诵|实操}` / `.dc-tag-prio.p-{P1|P2|P3}` / `.dc-summary` / `.dc-fold-toggle` / `.dc-mini`
 
 ## 每日中心 · 今日目标 quiz 按钮
 - **不要**在早阶段（`准备 / 通读 / 高分精学 / 中分精学 / 低分精学`）渲染高亮的 `🎯 全量刷题 92 题` 主按钮——视觉欺骗 + 数字吓人，会被截屏「这是啥意思，让我一天答完吗」。
