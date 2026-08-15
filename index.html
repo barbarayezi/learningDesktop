@@ -568,6 +568,30 @@ details.q[open] summary{margin-bottom:4px}
 .dc-daychip.done{background:#2f9e6b;color:#fff;border-color:#2f9e6b}
 .dc-daychip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
+/* ===== 视频系列分组 + 已看勾选 (2026-08-15) ===== */
+.dc-series{margin:9px 0;padding:9px 11px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.dc-series-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.dc-series-name{font-size:13px;font-weight:700;color:var(--text)}
+.dc-series-prog{font-size:11.5px;color:var(--text-3);background:var(--surface-2);padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dc-video{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:4px 0;font-size:12.5px}
+.dc-video input.dc-vchk{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex:none}
+.dc-video.done .dc-link{opacity:.5;text-decoration:line-through}
+.dc-video.done .dc-ord,.dc-video.done .dc-mini{opacity:.5}
+.dc-ord{font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:1px 7px;border-radius:5px;flex:none;white-space:nowrap}
+/* ===== 今日手记 + 笔记 (2026-08-15) ===== */
+.dc-note{width:100%;box-sizing:border-box;margin-top:6px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;line-height:1.6;font-family:inherit;resize:vertical;transition:.15s}
+.dc-note:focus{outline:none;border-color:var(--accent);background:var(--bg)}
+.dc-daynote{margin:14px 0;padding:12px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
+.dc-daynote-head{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:baseline;gap:8px}
+.dc-daynote-sub{font-size:11.5px;font-weight:400;color:var(--text-3)}
+.dc-daynote-art{margin-top:8px;font-size:12.5px;color:var(--text-2)}
+.dc-daynote-art b{color:var(--text)}
+.dc-jump{background:none;border:none;color:var(--accent);cursor:pointer;font-size:12.5px;padding:0 2px;text-decoration:underline}
+.dc-art-note{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.dc-art-note-head,.news-note-head{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:baseline;gap:8px;margin-bottom:2px}
+.dc-art-note-sub,.news-note-sub{font-size:11px;font-weight:400;color:var(--text-3)}
+.news-note-wrap{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+
 /* Heatmap calendar */
 .heat-wrap{margin:18px 0 6px;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
 .heat-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -2878,6 +2902,44 @@ function dueReviewItems(dates, checks){
   return due;
 }
 
+// ===== 本地存储：文章笔记 / 今日手记 / 视频已看 (2026-08-15) =====
+const NOTES_KEY='cdga-notes-v1';
+function loadNotes(){ try{ return JSON.parse(localStorage.getItem(NOTES_KEY))||{}; }catch(e){ return {}; } }
+function saveNotes(){ try{ localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); }catch(e){} }
+let notes=loadNotes();
+const DAYNOTES_KEY='cdga-daynotes-v1';
+function loadDayNotes(){ try{ return JSON.parse(localStorage.getItem(DAYNOTES_KEY))||{}; }catch(e){ return {}; } }
+function saveDayNotes(){ try{ localStorage.setItem(DAYNOTES_KEY, JSON.stringify(daynotes)); }catch(e){} }
+let daynotes=loadDayNotes();
+const VWATCH_KEY='cdga-video-watched-v1';
+function loadVideoWatched(){ try{ return JSON.parse(localStorage.getItem(VWATCH_KEY))||{}; }catch(e){ return {}; } }
+function saveVideoWatched(){ try{ localStorage.setItem(VWATCH_KEY, JSON.stringify(videoWatched)); }catch(e){} }
+let videoWatched=loadVideoWatched();
+function setVideoWatched(url,on){ if(on) videoWatched[url]=todayISO(); else delete videoWatched[url]; saveVideoWatched(); }
+
+// ===== 视频系列目录：把每个视频 URL 映射到 {系列, 第几讲, 总集数} (2026-08-15) =====
+// 目的：解决「今天看这个明天看那个没连贯性」——每支视频标明所属系列 + 第几讲 + 看到什么程度(已看勾选)
+const VIDEO_SERIES=[
+  {key:'cdga17', name:'北大青鸟·CDGA 17章精讲', items:[
+    {url:U.c1,idx:1},{url:U.c2,idx:2},{url:U.c3,idx:3},{url:U.c4,idx:4},
+    {url:U.c5,idx:5},{url:U.c6,idx:6},{url:U.c7,idx:7},{url:U.c8,idx:8},
+    {url:U.c9,idx:9},{url:U.c10,idx:10},{url:U.c11,idx:11},{url:U.c12,idx:12},
+    {url:U.c13,idx:13},{url:U.c14,idx:14},{url:U.c15,idx:15},{url:U.c16,idx:16},
+    {url:U.c17,idx:17}
+  ]},
+  {key:'shuyu', name:'数语·数据治理系列长课', items:[
+    {url:U.b3,idx:1},{url:U.b4,idx:2},{url:U.b5,idx:3},{url:U.b9,idx:4}
+  ]},
+  {key:'crash', name:'CDGA 速成 & 经验分享', items:[
+    {url:U.whole,idx:1},{url:U.whole2,idx:2},{url:U.exp,idx:3}
+  ]},
+  {key:'cv', name:'考纲专栏（cv11/12/13）', items:[
+    {url:U.cv11,idx:1},{url:U.cv12,idx:2},{url:U.cv13,idx:3}
+  ]}
+];
+const SERIES_BY_KEY={}; VIDEO_SERIES.forEach(s=>{ s.total=s.items.length; SERIES_BY_KEY[s.key]=s; });
+const URL_TO_SERIES=(()=>{ const m={}; VIDEO_SERIES.forEach(s=>s.items.forEach(it=>{ m[it.url]={key:s.key,name:s.name,total:s.total,idx:it.idx}; })); return m; })();
+
 // ===== 治疗标签 + 估时 + 优先级 (2026-08-15) =====
 const TREAT_DEFAULT='精读', PRIO_DEFAULT='P2', MIN_DEFAULT=15;
 const TREAT_COLOR={ '浏览':'#5a6478', '精读':'#1e7a3a', '背诵':'#a93226', '实操':'#5e35b1' };
@@ -2897,8 +2959,33 @@ function videoMeta(v){
 }
 function renderVideoLinks(videos){
   if(!videos||!videos.length) return '<span class="dc-meta">（冲刺期以做题为主，视频仅查漏）</span>';
-  const linkOf=(m)=>`<a class="dc-link" href="${m.url}" target="_blank" rel="noopener">▶ ${escH(m.title)}${treatmentBadge(m.treatment)}${minutesTag(m.minutes)}${priorityBadge(m.p)}</a>`;
-  return renderFoldGroup(videos.map(videoMeta), linkOf);
+  const metas=videos.map(videoMeta);
+  const groups={}; const loose=[];
+  metas.forEach(m=>{ const s=URL_TO_SERIES[m.url]; if(s){ (groups[s.key]||(groups[s.key]={series:s,items:[]})).items.push(m); } else loose.push(m); });
+  const videoRow=(m)=>{
+    const s=URL_TO_SERIES[m.url];
+    const ord = s&&s.total>1 ? `<span class="dc-ord">第${s.idx}讲</span>` : '';
+    const watched = !!videoWatched[m.url];
+    const checked = watched?'checked':'';
+    const done = watched?'done':'';
+    return `<label class="dc-video ${done}" data-vurl="${m.url.replace(/"/g,'&quot;')}">
+      <input type="checkbox" class="dc-vchk" ${checked}>
+      <a class="dc-link" href="${m.url}" target="_blank" rel="noopener">▶ ${escH(m.title)}</a>
+      ${ord}${treatmentBadge(m.treatment)}${minutesTag(m.minutes)}${priorityBadge(m.p)}
+    </label>`;
+  };
+  let html='';
+  Object.values(groups).forEach(g=>{
+    g.items.sort((a,b)=>URL_TO_SERIES[a.url].idx-URL_TO_SERIES[b.url].idx);
+    const fullSeries=SERIES_BY_KEY[g.series.key];
+    const doneCount=fullSeries.items.filter(it=>videoWatched[it.url]).length;
+    html+=`<div class="dc-series" data-skey="${g.series.key}">
+      <div class="dc-series-head"><span class="dc-series-name">📺 ${escH(g.series.name)}</span><span class="dc-series-prog">已看 ${doneCount}/${g.series.total}</span></div>
+      ${g.items.map(videoRow).join('')}
+    </div>`;
+  });
+  if(loose.length) html+=`<div class="dc-series"><div class="dc-series-head"><span class="dc-series-name">📎 其它视频</span></div>${loose.map(videoRow).join('')}</div>`;
+  return html;
 }
 function renderResChips(order){
   const items=order.map(k=>{const r=RES[k]; return r?{k,...r}:null;}).filter(Boolean);
@@ -3033,6 +3120,10 @@ function renderDay(iso){
         <button class="news-mark" id="dcMark">${artRead?'↺ 标为未读':'✅ 标记已读'}</button>
         <button class="news-read news-search" data-url="${art.url}" data-title="${art.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${art.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
       </div>
+      <div class="dc-art-note">
+        <div class="dc-art-note-head">📝 我的笔记<span class="dc-art-note-sub">看完这篇写两句，自动保存</span></div>
+        <textarea id="dcArtNote" class="dc-note" data-id="${art.id}" placeholder="这篇讲了啥、哪点能用在备考里、有啥疑问…（自动保存到本地）" rows="2">${escH(notes[art.id]||'')}</textarea>
+      </div>
     </div>` : '<div class="dc-meta">暂无可读推文，去「📰 公众号推文精选」看看。</div>';
   // ===== 每日用量汇总 (2026-08-15) =====
   const summaryItems=[
@@ -3053,6 +3144,13 @@ function renderDay(iso){
       <span class="dc-summary-item"><span class="dc-tag-prio p-P2">P2</span> ${sum.P2} 本周内</span>
       <span class="dc-summary-item"><span class="dc-tag-prio p-P3">P3</span> ${sum.P3} 选学</span>
     </div>`;
+  const artNoteLen = art && (notes[art.id]||'').trim().length;
+  const dayNoteHTML=`
+    <div class="dc-daynote" id="dcDayNoteCard">
+      <div class="dc-daynote-head">📔 今日手记 <span class="dc-daynote-sub">写给自己 · 自动保存</span></div>
+      <textarea id="dcDayNote" class="dc-note" placeholder="今天卡在哪、哪个概念还含糊、明天想先啃哪块…（自动保存到本地）" rows="2">${escH(daynotes[iso]||'')}</textarea>
+      ${artNoteLen?`<div class="dc-daynote-art">📝 今日推文笔记已写 <b>${artNoteLen}</b> 字 · <button type="button" class="dc-jump">去补充 ↧</button></div>`:''}
+    </div>`;
   dayCard.innerHTML=`
     <div class="dc-head">
      <div>
@@ -3064,6 +3162,7 @@ function renderDay(iso){
    ${reviewHTML}
    ${weekHTML}
    ${summaryHTML}
+   ${dayNoteHTML}
    <h2 class="dc-goal">🎯 今日目标</h2>
    <p class="dc-goal-text">${d.focus} —— <b>${role.t}</b>：${role.h}</p>
    <p class="dc-meta">本周重点：${d.focus} ｜ 阶段：${d.stage}${d.milestone?' ｜ 🏁 本周末自检：'+d.milestone:''}</p>
@@ -3144,6 +3243,25 @@ function renderDay(iso){
   if(dcExpand) dcExpand.onclick=()=>{const el=document.getElementById('dcFull');if(el){const open=!el.hidden;el.hidden=open;dcExpand.textContent=open?'📖 展开全文':'📕 收起全文';}};
   const dcMark=document.getElementById('dcMark');
   if(dcMark) dcMark.onclick=()=>{const s=_seen;if(s.has(art.id))s.delete(art.id);else s.add(art.id);localStorage.setItem('cdga-news-seen',JSON.stringify([...s]));renderDay(iso);};
+  // 今日手记 + 文章笔记 + 视频已看勾选（仅写本地存储，不重渲染以免丢焦点）
+  const artNoteTA=document.getElementById('dcArtNote');
+  if(artNoteTA) artNoteTA.addEventListener('input',()=>{ notes[artNoteTA.dataset.id]=artNoteTA.value; saveNotes(); });
+  const dayNoteTA=document.getElementById('dcDayNote');
+  if(dayNoteTA) dayNoteTA.addEventListener('input',()=>{ daynotes[iso]=dayNoteTA.value; saveDayNotes(); });
+  const jumpBtn=dayCard.querySelector('.dc-jump');
+  if(jumpBtn) jumpBtn.onclick=()=>{ const t=document.getElementById('dcArtNote'); if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); t.focus(); } };
+  dayCard.querySelectorAll('.dc-vchk').forEach(cb=>{
+    cb.onchange=()=>{
+      const url=cb.dataset.vurl;
+      setVideoWatched(url, cb.checked);
+      cb.closest('.dc-video').classList.toggle('done', cb.checked);
+      const seriesEl=cb.closest('.dc-series');
+      if(seriesEl && seriesEl.dataset.skey){
+        const s=SERIES_BY_KEY[seriesEl.dataset.skey];
+        if(s){ const done=s.items.filter(it=>videoWatched[it.url]).length; const prog=seriesEl.querySelector('.dc-series-prog'); if(prog) prog.textContent='已看 '+done+'/'+s.total; }
+      }
+    };
+  });
   renderWeekStrip(d.w);
   refreshHeat();
 }
@@ -3376,6 +3494,10 @@ function renderNews(){
         <button class="news-mark" data-id="${a.id}">${unread?'✅ 标记已读':'↺ 标为未读'}</button>
         <button class="news-read news-search" data-url="${a.url}" data-title="${a.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${a.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
       </div>
+      <div class="news-note-wrap">
+        <div class="news-note-head">📝 我的笔记<span class="news-note-sub">自动保存</span></div>
+        <textarea class="dc-note js-note" data-id="${a.id}" placeholder="这篇的要点 / 疑问 / 能用在备考的地方…" rows="2">${escH(notes[a.id]||'')}</textarea>
+      </div>
     </article>`;
   }).join('');
 }
@@ -3393,6 +3515,7 @@ function renderNews(){
     const mk=e.target.closest('.news-mark');
     if(mk){ const id=mk.dataset.id; const seen=newsGetSeen(); if(seen.has(id)) seen.delete(id); else seen.add(id); localStorage.setItem(NEWS_SEEN_KEY, JSON.stringify([...seen])); renderNews(); }
   }); }
+  if(list){ list.addEventListener('input',e=>{ const ta=e.target.closest('.js-note'); if(ta){ notes[ta.dataset.id]=ta.value; saveNotes(); } }); }
   renderNews();
 })();
 /* ---------- 关注源 ---------- */
