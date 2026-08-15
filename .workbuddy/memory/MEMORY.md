@@ -12,3 +12,11 @@
 - 自动更新：macOS launchd `com.barbara.dama-news.plist`，**每天 2 次（09:00 + 20:00）**。
 - 全文：搜狗反爬，AI/WebFetch 逐字补（说「刷新全文」即补）；批量>2 篇易触发验证码。
 - 关注源页「📡 关注源」展示 20 个被命中账号（考证10/考博10）。
+- **GitHub**: `git@github.com:barbarayezi/learningDesktop.git` (main)。本机 `.gitignore` 排除 `.DS_Store / *.bak / __pycache__`。
+
+## CDGA 学习站 · 信息架构原则
+- **核心痛点**：用户说"东西太多，看了就忘"——captured ≠ surfaced ≠ reinforced。信息"放在那里"不等于被吸收。
+- **去重**: 三页合一：`cdga-plan` 战略层 + 26 周明细(并入为 4.1/4.2/4.3 节) + `cdga-check` 原子清单。删独立 `cdga-weekly` 页（导航 / titles / GROUP 同步清理）。
+- **主动投递**: 每日学习中心是每日唯一入口。每日展示「本周主题 + 3 个关键概念（按 WEEK_DOMAINS 映射到清单 checkbox）+ 复习提醒（spaced repetition 3/7/14/30/60/90 天）」。
+- **清单设计**: `bb-cdga-check` = `{i: bool}`（兼容旧 schema）；新增 `bb-cdga-check-dates` = `{i: ISO-date}`（mastered_at）。勾选时记录，取消时删除。`setCheckState(i, checked)` 统一入口同步主页 checkbox + mastered_at。概念文本从 `#cdga-check` DOM 抽取，单一来源免维护。
+- **新页面/导航**: 半年复习规划 + 知识点自查清单 + 每日学习中心 + 我的进度。**无**独立的 26 周页面。
