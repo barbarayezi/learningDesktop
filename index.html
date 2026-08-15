@@ -525,6 +525,10 @@ details.q[open] summary{margin-bottom:4px}
 .dc-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 13px;border-radius:9px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-weight:600;transition:.15s;margin:3px 0}
 .dc-btn:hover{opacity:.9}
 .dc-btn.ghost{background:var(--surface);color:var(--accent)}
+.dc-prog{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em}
+.dc-btn.ghost .dc-prog{background:var(--bg-2);color:var(--text-2)}
+.dc-tip{font-size:12.5px;color:var(--text-3);line-height:1.6;margin:10px 0 0;padding:9px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid var(--accent)}
+.dc-tip b{color:var(--text)}
 .dc-reslist{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .dc-reschip{font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:.15s}
 .dc-reschip:hover{border-color:var(--accent);color:var(--accent)}
@@ -2857,12 +2861,39 @@ function renderDay(iso){
   const terms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
   const videoTask = d.isWeekend ? d.vWeekend : d.vWork;
   const links=(d.videos||[]).map(v=>`<a class="dc-link" href="${v[1]}" target="_blank" rel="noopener">▶ ${v[0]}</a>`).join('');
-  const quizBtns=dom.map(k=>{
-    if(k==='all') return `<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题 <span style="opacity:.7;font-weight:400">${QUIZ_TOTAL}题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`;
-    const cnt=QUIZ.filter(q=>q.d===k).length;
-    const name=k.replace(/^[^、]+、/,'');
-    return `<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span style="opacity:.7;font-weight:400">${cnt}题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`;
-  }).join('');
+  const quizBtns=(function(){
+    // 已答数：先按域筛选，再统计 practice.answers 中已作答且非空
+    const answered = (filter)=>{
+      if(filter==='all'){
+        return Object.keys(practice.answers||{}).filter(i=>practice.answers[i]).length;
+      }
+      return QUIZ.map((q,i)=>({q,i}))
+        .filter(({q})=>q.d===filter)
+        .filter(({i})=>practice.answers[i]).length;
+    };
+    const _earlySet={准备:1,通读:1,'高分精学':1,'中分精学':1,'低分精学':1};
+    const earlyStage = !!_earlySet[d.stage];
+    const tipEarly = '<div class="dc-tip">📘 <b>当前阶段无需强行作答</b>。点击「📖 看全部题」过一遍，建立题感即可。真正练习从「刷题」阶段开始（W21）。</div>';
+    const tipFull  = '<div class="dc-tip">🎯 <b>冲刺/全量阶段</b>，按进度作答，不必一天全答完；进度自动保存。</div>';
+    const out = [];
+    dom.forEach(k=>{
+      if(k==='all'){
+        if(earlyStage){
+          out.push(`<button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题（建立题感）</button>`);
+        } else {
+          const done=answered('all');
+          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题 <span class="dc-prog">${done} / ${QUIZ_TOTAL} 题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
+        }
+      } else {
+        const cnt=QUIZ.filter(q=>q.d===k).length;
+        const done=answered(k);
+        const name=k.replace(/^[^、]+、/,'');
+        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+      }
+    });
+    if(earlyStage) out.push(tipEarly); else out.push(tipFull);
+    return out.join('');
+  })();
   const resChips=RES_ORDER.map(k=>`<span class="dc-reschip" data-res="${k}">${RES[k].name}</span>`).join('');
   const done=!!dailyChecks[iso];
   const dayChips=DAILY.filter(x=>x.w===d.w).map(x=>{
