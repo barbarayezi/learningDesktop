@@ -20,9 +20,17 @@
 - **主动投递**: 每日学习中心是每日唯一入口。每日展示「本周主题 + 3 个关键概念（按 WEEK_DOMAINS 映射到清单 checkbox）+ 复习提醒（spaced repetition 3/7/14/30/60/90 天）」。
 - **清单设计**: `bb-cdga-check` = `{i: bool}`（兼容旧 schema）；新增 `bb-cdga-check-dates` = `{i: ISO-date}`（mastered_at）。勾选时记录，取消时删除。`setCheckState(i, checked)` 统一入口同步主页 checkbox + mastered_at。概念文本从 `#cdga-check` DOM 抽取，单一来源免维护。
 - **新页面/导航**: 半年复习规划 + 知识点自查清单 + 每日学习中心 + 我的进度。**无**独立的 26 周页面。
+- **视频资源偏好**：每日中心的视频必须**由 AI 预先筛选成具体可点的 BV 链接**（按周/章节对应），**绝不能用"去 B站自己搜"的搜索链接糊弄**。用户原话："让我自己搜索选择视频吗？我还指望你帮我筛选呢"。兜底仅限冲刺周(W25/W26)的 `search` 链接。
+- **微信公众号外链偏好（commit c65176c）**：文章卡片底部的「阅读原文」按钮**绝不能**直接指向 `weixin.sogou.com/link?url=...` 这类搜狗中转 URL——几天到几周就 404 显示「链接已过期」。必须改造为两条**确定可用**的路径：
+  1. **「🔍 微信内搜」按钮**：`window.open('https://weixin.sogou.com/weixin?type=2&ie=utf8&query=' + encodeURIComponent(title))`，搜狗搜索 URL 本身永不过期。
+  2. **「📋 复制出处」按钮**：`navigator.clipboard.writeText(url)` + 底部 toast。`file://` 下要兜底 `document.execCommand('copy')`。
+  遇到推文卡片设计需求，按此模式，别再直接给 `<a>` 跳外链。
 
 ## 资料阅读器 · Markdown 渲染
 - `.md` 文件**不能**直接做 `iframe.src`（浏览器当纯文本显示，可读性差）。
 - 必须走 **`fetch + mdRender`** 链路：检测 `.md` 扩展名 → fetch → `mdRender()` → 注入 `#mdHost`。
 - 渲染器：`mdEsc(s) / mdInline(s) / mdRender(md)`，自实现约 50 行无外部依赖，支持 GFM 表格/代码块/列表/引用/链接/粗斜体。失败自动 fallback 到 iframe。
 - 样式全跟主题走，加载中/失败都有视觉反馈（`.md-loading` 旋转动画 + `.md-err`）。
+- **⚠️ file:// fetch 陷阱**：Chrome 默认禁止 `file:// → file://` 的 `fetch()`（file origin 为 null）。这导致 `fetch(r.file)` 必然失败 → catch 走 iframe → 用户看到原始文本。
+- **修复模式（单文件 SPA、file:// 部署）**：把要阅读的 `.md` 内容**内嵌**为 `<template id="mdSrc-{key}">…</template>`，`openReader` 优先读 `tpl.content.textContent` → `mdRender`，找不到再回退 fetch（保留 http/https 兼容路径）。新增 .md 资源时同步加 template。
+- **Patch script 自检纪律**：用 Node 脚本 `s.replace()` 改文件后，**立刻** `node --check <extracted_script>`，不要相信肉眼。手抖错一个字符（典型：`()=>{` 写成 `()>{`）Node 报错位置往往指错行，bisect 反推 bug 行号不可靠；直接重写 diff 范围或 hex-diff 两个版本最快。
