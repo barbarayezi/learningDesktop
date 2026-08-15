@@ -34,3 +34,11 @@
 - **⚠️ file:// fetch 陷阱**：Chrome 默认禁止 `file:// → file://` 的 `fetch()`（file origin 为 null）。这导致 `fetch(r.file)` 必然失败 → catch 走 iframe → 用户看到原始文本。
 - **修复模式（单文件 SPA、file:// 部署）**：把要阅读的 `.md` 内容**内嵌**为 `<template id="mdSrc-{key}">…</template>`，`openReader` 优先读 `tpl.content.textContent` → `mdRender`，找不到再回退 fetch（保留 http/https 兼容路径）。新增 .md 资源时同步加 template。
 - **Patch script 自检纪律**：用 Node 脚本 `s.replace()` 改文件后，**立刻** `node --check <extracted_script>`，不要相信肉眼。手抖错一个字符（典型：`()=>{` 写成 `()>{`）Node 报错位置往往指错行，bisect 反推 bug 行号不可靠；直接重写 diff 范围或 hex-diff 两个版本最快。
+
+## 每日中心 · 今日目标 quiz 按钮
+- **不要**在早阶段（`准备 / 通读 / 高分精学 / 中分精学 / 低分精学`）渲染高亮的 `🎯 全量刷题 92 题` 主按钮——视觉欺骗 + 数字吓人，会被截屏「这是啥意思，让我一天答完吗」。
+- **正确模式**：早阶段只渲染 ghost 样式的「📖 看全部题（建立题感）」按钮 + `.dc-tip` 蓝色提示卡解释「本阶段无需强行作答，真正练习从 W21 开始」。
+- 后期阶段（`刷题 / 冲刺`）才允许 practice 主按钮，**必须**叠加进度徽章 `[已答/总数]`，让用户知道这是多日累计。
+- 进度数据源：`practice.answers`（localStorage key `cdga-quiz-progress-v1`）。统计 `Object.keys(answers).filter(k=>answers[k]).length`；单域按 `QUIZ.filter(q=>q.d===k)` 二次过滤。
+- **数据-UI 失配警示**：同一 `domains:['all']` 字段在 W1/W24/W26 三个不同 stage 共用，UI **必须**按 stage 分流，不能一刀切。
+- **自检纪律**：涉及 stage/分支判断的 patch，写完必须模拟 ≥3 种 stage 的真实数据验证，不能只看 `node --check` 语法 OK（commit 31c7ae4 第一次写反了 `!`，只能靠真数据抓出来）。
