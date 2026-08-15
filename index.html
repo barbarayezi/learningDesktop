@@ -574,6 +574,37 @@ details.q[open] summary{margin-bottom:4px}
 .reader-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .reader-frame{flex:1;border:none;width:100%;background:#fff}
 html[data-theme="dark"] .reader-frame{background:#0f1117}
+/* Markdown 渲染区（替代 iframe 用于 .md 文件，融入本站主题） */
+.md-host{display:none;flex:1;overflow:auto;padding:28px 36px 60px;background:var(--surface);color:var(--text);line-height:1.7;font-size:14.5px}
+.md-host[data-on="1"]{display:block}
+.md-host h1{font-size:22px;font-weight:700;margin:18px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--text)}
+.md-host h2{font-size:18px;font-weight:700;margin:22px 0 12px;color:var(--text);position:relative;padding-left:10px}
+.md-host h2::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--accent);border-radius:2px}
+.md-host h3{font-size:15.5px;font-weight:600;margin:16px 0 8px;color:var(--text)}
+.md-host h4{font-size:14px;font-weight:600;margin:12px 0 6px;color:var(--text-2)}
+.md-host p{margin:8px 0;color:var(--text-1)}
+.md-host strong{color:var(--accent);font-weight:600}
+.md-host em{color:var(--text-2);font-style:italic}
+.md-host code{background:var(--surface-2);padding:1.5px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#c0392b;border:1px solid var(--border)}
+html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
+.md-host pre{background:var(--surface-2);padding:14px 16px;border-radius:8px;overflow-x:auto;margin:12px 0;border:1px solid var(--border)}
+.md-host pre code{background:none;border:none;padding:0;color:var(--text);font-size:13px}
+.md-host blockquote{margin:12px 0;padding:10px 14px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;color:var(--text-1)}
+.md-host blockquote p{margin:4px 0}
+.md-host ul,.md-host ol{margin:8px 0;padding-left:22px}
+.md-host li{margin:4px 0}
+.md-host ul li::marker{color:var(--accent)}
+.md-host hr{border:none;height:1px;background:var(--border);margin:20px 0}
+.md-host table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.md-host th,.md-host td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+.md-host th{background:var(--surface-2);font-weight:600;color:var(--text)}
+.md-host a{color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent)}
+.md-host a:hover{border-bottom-style:solid}
+.md-host h1:first-child,.md-host h2:first-child{margin-top:6px}
+.md-host .md-loading{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-3);font-size:13px}
+.md-host .md-loading::before{content:"";width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;margin-right:10px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.md-host .md-err{padding:20px;background:var(--surface-2);border-radius:8px;color:var(--text-2);font-size:13.5px;text-align:center;border:1px dashed var(--red)}
 .prog-banner{display:flex;gap:18px;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-soft),var(--surface-2));border:1px solid var(--border);border-radius:14px;padding:16px 22px;margin-top:18px}
 .prog-banner>div{display:flex;flex-direction:column}
 .pb-num{font-size:22px;font-weight:700;color:var(--accent);line-height:1.1}
@@ -1165,6 +1196,7 @@ html[data-theme="dark"] .reader-frame{background:#0f1117}
           </div>
           <div class="reader-tabs" id="readerTabs"></div>
           <iframe id="readerFrame" class="reader-frame" title="资料阅读"></iframe>
+          <div id="mdHost" class="md-host"></div>
         </div>
       </div>
 
@@ -2739,13 +2771,116 @@ function renderDay(iso){
 function openReader(k){
   const r=RES[k]; if(!r) return;
   document.getElementById('readerTitle').textContent='📖 '+r.name;
-  document.getElementById('readerFrame').src=r.file;
   document.getElementById('readerExt').href=r.file;
+  const ext=(r.file.split('.').pop()||'').toLowerCase();
+  const frame=document.getElementById('readerFrame');
+  const host=document.getElementById('mdHost');
   document.getElementById('readerTabs').innerHTML=RES_ORDER.map(x=>`<span class="reader-tab ${x===k?'active':''}" data-res="${x}">${RES[x].name}</span>`).join('');
   document.getElementById('readerTabs').querySelectorAll('.reader-tab').forEach(t=>t.onclick=()=>openReader(t.dataset.res));
   document.getElementById('readerMask').hidden=false;
+  if(ext==='md'){
+    // Markdown → 渲染为 HTML 并嵌入主题容器（iframe 会当纯文本显示，不可用）
+    frame.style.display='none';
+    host.setAttribute('data-on','1');
+    host.innerHTML='<div class="md-loading">正在加载并渲染 Markdown…</div>';
+    fetch(r.file).then(resp=>{
+      if(!resp.ok) throw new Error('HTTP '+resp.status);
+      return resp.text();
+    }).then(md=>{
+      host.innerHTML=mdRender(md);
+    }).catch(err=>{
+      // 失败兜底：用 iframe 直接打开（最差情况回到纯文本）
+      host.removeAttribute('data-on');
+      host.innerHTML='';
+      frame.style.display='';
+      frame.src=r.file;
+      console.warn('md fetch 失败，已回退到 iframe:', err);
+    });
+  } else {
+    // HTML / PDF 仍走 iframe
+    host.removeAttribute('data-on');
+    host.innerHTML='';
+    frame.style.display='';
+    frame.src=r.file;
+  }
 }
-function closeReader(){document.getElementById('readerMask').hidden=true;document.getElementById('readerFrame').src='';}
+function closeReader(){
+  document.getElementById('readerMask').hidden=true;
+  document.getElementById('readerFrame').src='';
+  const h=document.getElementById('mdHost'); if(h){h.removeAttribute('data-on');h.innerHTML='';}
+  const f=document.getElementById('readerFrame'); if(f)f.style.display='';
+}
+/* ---------- 轻量 Markdown 渲染器（自实现，无外部依赖） ----------
+   支持：#-###### 标题 / **加粗** / *斜体* / `行内代码` / ```代码块``` / > 引用 /
+        - 无序列表 / 1. 有序列表 / --- 分隔线 / [text](url) 链接 / GFM 表格
+   故意不支持：图片（图床+版权风险，本笔记场景不需要） */
+function mdEsc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function mdInline(s){
+  s=mdEsc(s);
+  const codeStash=[];
+  s=s.replace(/`([^`\n]+)`/g,(m,c)=>{codeStash.push(c);return '\x01C'+(codeStash.length-1)+'\x01'});
+  s=s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/g,(m,t,u,title)=>'<a href="'+u+'"'+(title?' title="'+title+'"':'')+' target="_blank" rel="noopener">'+t+'</a>');
+  s=s.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/(^|[^*])\*([^*\n]+)\*([^*]|$)/g,'$1<em>$2</em>$3');
+  s=s.replace(/\x01C(\d+)\x01/g,(m,i)=>'<code>'+codeStash[+i]+'</code>');
+  return s;
+}
+function mdRender(md){
+  const lines=md.replace(/\r\n?/g,'\n').split('\n');
+  const out=[]; let i=0;
+  while(i<lines.length){
+    const line=lines[i];
+    if(/^```/.test(line)){
+      const lang=line.slice(3).trim();
+      const buf=[]; i++;
+      while(i<lines.length && !/^```/.test(lines[i])){buf.push(lines[i]);i++;}
+      i++;
+      out.push('<pre><code'+(lang?' class="lang-'+mdEsc(lang)+'"':'')+'>'+mdEsc(buf.join('\n'))+'</code></pre>');
+      continue;
+    }
+    if(/^---+\s*$/.test(line)){out.push('<hr>');i++;continue;}
+    if(/\|/.test(line) && i+1<lines.length && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(lines[i+1])){
+      const head=line.split('|').map(c=>c.trim()).filter((c,idx,arr)=>!(idx===0&&c==='')&&!(idx===arr.length-1&&c===''));
+      i+=2;
+      const rows=[];
+      while(i<lines.length && /\|/.test(lines[i]) && lines[i].trim()!==''){
+        const r=lines[i].split('|').map(c=>c.trim()).filter((c,idx,arr)=>!(idx===0&&c==='')&&!(idx===arr.length-1&&c===''));
+        if(r.length)rows.push(r);
+        i++;
+      }
+      out.push('<table><thead><tr>'+head.map(c=>'<th>'+mdInline(c)+'</th>').join('')+'</tr></thead><tbody>'
+        +rows.map(r=>'<tr>'+r.map(c=>'<td>'+mdInline(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>');
+      continue;
+    }
+    const h=line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+    if(h){out.push('<h'+h[1].length+'>'+mdInline(h[2])+'</h'+h[1].length+'>');i++;continue;}
+    if(/^>\s?/.test(line)){
+      const buf=[];
+      while(i<lines.length && /^>\s?/.test(lines[i])){buf.push(lines[i].replace(/^>\s?/,''));i++;}
+      out.push('<blockquote>'+buf.map(b=>mdInline(b)).join('<br>')+'</blockquote>');
+      continue;
+    }
+    if(/^\s*[-*+]\s+/.test(line)){
+      const buf=[];
+      while(i<lines.length && /^\s*[-*+]\s+/.test(lines[i])){buf.push(lines[i].replace(/^\s*[-*+]\s+/,''));i++;}
+      out.push('<ul>'+buf.map(b=>'<li>'+mdInline(b)+'</li>').join('')+'</ul>');
+      continue;
+    }
+    if(/^\s*\d+\.\s+/.test(line)){
+      const buf=[];
+      while(i<lines.length && /^\s*\d+\.\s+/.test(lines[i])){buf.push(lines[i].replace(/^\s*\d+\.\s+/,''));i++;}
+      out.push('<ol>'+buf.map(b=>'<li>'+mdInline(b)+'</li>').join('')+'</ol>');
+      continue;
+    }
+    if(line.trim()===''){i++;continue;}
+    const buf=[];
+    while(i<lines.length && lines[i].trim()!=='' && !/^(#{1,6}\s|>\s?|```|--+\s*$|\s*[-*+]\s+|\s*\d+\.\s+)/.test(lines[i])){
+      buf.push(lines[i]);i++;
+    }
+    if(buf.length) out.push('<p>'+buf.join(' ')+'</p>');
+  }
+  return out.join('\n');
+}
 document.getElementById('readerClose').onclick=closeReader;
 document.getElementById('readerMask').onclick=e=>{if(e.target.id==='readerMask')closeReader();};
 function openQuiz(domain,mode){
