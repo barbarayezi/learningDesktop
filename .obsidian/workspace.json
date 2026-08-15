@@ -1,0 +1,209 @@
+{
+  "main": {
+    "id": "fb46725da1b6cb27",
+    "type": "split",
+    "children": [
+      {
+        "id": "634e1109c87bf950",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3a8faec4576dc645",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_考证/CDGA_每周学习计划_26周.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CDGA_每周学习计划_26周"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "52795782ccbc8e60",
+    "type": "split",
+    "children": [
+      {
+        "id": "ac85f16f1bb5d092",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ee92abf7ebf2e9b4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "078d28ea7a6ea19c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "4f883700f9e60127",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9a2cf78f68818541",
+    "type": "split",
+    "children": [
+      {
+        "id": "7a6cdac31e9a0238",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ce47c10b7ced4f49",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01_考证/CDGA_每周学习计划_26周.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "CDGA_每周学习计划_26周 的反向链接列表"
+            }
+          },
+          {
+            "id": "9afbfe2358f76d8d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01_考证/CDGA_每周学习计划_26周.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "CDGA_每周学习计划_26周 的出链列表"
+            }
+          },
+          {
+            "id": "f3cb88f2b7342997",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "197c95685c09264a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "9f5bdba682292496",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01_考证/CDGA_每周学习计划_26周.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "CDGA_每周学习计划_26周 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "3a8faec4576dc645",
+  "lastOpenFiles": [
+    "资料/articles.js.bak3",
+    "资料/articles.js.bak2",
+    "资料/articles.js.bak",
+    "资料/README_公众号监控.md",
+    "资料/harvest_articles.py",
+    "资料/articles.js",
+    "资料/B站视频学习日程.md",
+    "资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md",
+    "资料/03_机构免费资料/_raw_sogeti.txt",
+    "资料/03_机构免费资料/_raw_oval.txt",
+    "资料/03_机构免费资料/_raw_sohu.txt",
+    "资料/免费备考路径.md",
+    "资料/03_机构免费资料/free_DMBOK框架_Sogeti.html",
+    "资料/03_机构免费资料/free_DMBOK框架详解_OvalEdge.html",
+    "资料/03_机构免费资料/free_11知识领域详解_搜狐.html",
+    "资料/README.md",
+    "01_考证/DAMA_三级进阶规划_CDGA_CDGP_CDGE.md",
+    "02_读博/申请网址汇总.md",
+    "02_读博/推荐信格式与模板.md",
+    "01_考证/CDGA_每日学习材料_模板与第1周.md"
+  ]
+}

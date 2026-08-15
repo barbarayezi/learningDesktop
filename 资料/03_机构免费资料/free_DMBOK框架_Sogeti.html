@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8" />
+	<script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"></script><script id="usercentrics-cmp" data-settings-id="BYl80Gy1ddjYM8" data-usercentrics="Usercentrics Consent Management Platform" src="https://web.cmp.usercentrics.eu/ui/loader.js" async></script><script type="text/javascript">
+	window.dataLayer = window.dataLayer || [];
+
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+
+	gtag("consent", "default", {
+		ad_personalization: "denied",
+		ad_storage: "denied",
+		ad_user_data: "denied",
+		analytics_storage: "denied",
+		functionality_storage: "denied",
+		personalization_storage: "denied",
+		security_storage: "granted",
+		wait_for_update: 500,
+	});
+	gtag("set", "ads_data_redaction", true);
+	</script>
+<script type="text/javascript">
+		(function (w, d, s, l, i) {
+		w[l] = w[l] || [];
+		w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+		var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l !== 'dataLayer' ? '&l=' + l : '';
+		j.async = true;
+		j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+		f.parentNode.insertBefore(j, f);
+	})(
+		window,
+		document,
+		'script',
+		'dataLayer',
+		'GTM-K73MM79S'
+	);
+</script>
+
+<script>
+
+window.dataLayer = window.dataLayer || [];
+
+const UC_CATEGORY_MAP = {
+analytics: "customcategory-8aa7420f-c94e-4705-b19e-2af91f1ccfe9",
+marketing: "marketing",
+functional: "functional"
+};
+
+function hasConsent(categories, key) {
+const ucKey = UC_CATEGORY_MAP[key];
+return categories?.[ucKey] === true;
+}
+
+window.addEventListener("ucEvent", function (e) {
+
+if (!e.detail || !e.detail.type || e.detail.type.toLowerCase() !== "explicit") return;
+
+const c = e.detail.ucCategory;
+if (!c) return;
+
+const consentUpdate = {
+
+ad_storage: hasConsent(c,"marketing") ? "granted" : "denied",
+ad_user_data: hasConsent(c,"marketing") ? "granted" : "denied",
+ad_personalization: hasConsent(c,"marketing") ? "granted" : "denied",
+analytics_storage: hasConsent(c,"analytics") ? "granted" : "denied",
+functionality_storage: hasConsent(c,"functional") ? "granted" : "denied",
+personalization_storage: hasConsent(c,"functional") ? "granted" : "denied"
+
+};
+
+if (typeof gtag === "function") {
+gtag("consent","update",consentUpdate);
+}
+
+window.dataLayer.push({
+event: "consent_updated",
+consent: consentUpdate
+});
+
+});
+
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<!-- Jetpack Site Verification Tags -->
+<meta name="google-site-verification" content="EZRfpKV5OKzSfts22aXLcfOV0vGkxBTjHeaEg9DjLHA">
+
+	<!-- This site is optimized with the Yoast SEO plugin v27.4 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<meta name="description" content="The DAMA DMBoK is a globally recognized framework that provides best practices for data management and governance. It outlines the core functions, roles, and processes necessary to manage data effectively throughout its lifecycle." />
+	<link rel="canonical" href="https://www.sogeti.be/featured-articles/data-governance-frameworks-the-dama-dmbok/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Data Governance Frameworks – The DAMA DMBoK - Sogeti Belgium" />
+	<meta property="og:description" content="The DAMA DMBoK is a globally recognized framework that provides best practices for data management and governance. It outlines the core functions, roles, and processes necessary to manage data effectively throughout its lifecycle." />
+	<meta property="og:url" content="https://www.sogeti.be/featured-articles/data-governance-frameworks-the-dama-dmbok/" />
+	<meta property="og:site_name" content="Sogeti Belgium" />
+	<meta property="article:published_time" content="2025-02-27T12:31:27+00:00" />
+	<meta property="article:modified_time" content="2025-05-23T11:25:17+00:00" />
+	<meta property="og:image" content="https://www.sogeti.be/wp-content/uploads/sites/13/2025/05/dama.jpeg" />
+	<meta property="og:image:width" content="400" />
+	<meta property="og:image:height" content="266" />
+	<meta property="og:image:type" content="image/jpeg" />
+	<meta name="author" content="gawadeprachi" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:label1" content="Written by" />
+	<meta name="twitter:data1" content="gawadeprachi" />
+	<meta name="twitter:label2" content="Est. reading time" />
+	<meta name="twitter:data2" content="5 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#article","isPartOf":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/"},"author":{"name":"gawadeprachi","@id":"https:\/\/www.sogeti.be\/#\/schema\/person\/0bc8b305d63032e7e727a5d439fff86e"},"headline":"Data Governance Frameworks – The DAMA DMBoK","datePublished":"2025-02-27T12:31:27+00:00","dateModified":"2025-05-23T11:25:17+00:00","mainEntityOfPage":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/"},"wordCount":851,"commentCount":0,"image":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#primaryimage"},"thumbnailUrl":"https:\/\/www.sogeti.be\/wp-content\/uploads\/sites\/13\/2025\/05\/dama.jpeg","articleSection":["Data &amp; AI"],"inLanguage":"en-US","potentialAction":[{"@type":"CommentAction","name":"Comment","target":["https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#respond"]}]},{"@type":"WebPage","@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/","url":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/","name":"Data Governance Frameworks – The DAMA DMBoK - Sogeti Belgium","isPartOf":{"@id":"https:\/\/www.sogeti.be\/#website"},"primaryImageOfPage":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#primaryimage"},"image":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#primaryimage"},"thumbnailUrl":"https:\/\/www.sogeti.be\/wp-content\/uploads\/sites\/13\/2025\/05\/dama.jpeg","datePublished":"2025-02-27T12:31:27+00:00","dateModified":"2025-05-23T11:25:17+00:00","author":{"@id":"https:\/\/www.sogeti.be\/#\/schema\/person\/0bc8b305d63032e7e727a5d439fff86e"},"description":"The DAMA DMBoK is a globally recognized framework that provides best practices for data management and governance. It outlines the core functions, roles, and processes necessary to manage data effectively throughout its lifecycle.","breadcrumb":{"@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/"]}]},{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#primaryimage","url":"https:\/\/www.sogeti.be\/wp-content\/uploads\/sites\/13\/2025\/05\/dama.jpeg","contentUrl":"https:\/\/www.sogeti.be\/wp-content\/uploads\/sites\/13\/2025\/05\/dama.jpeg","width":400,"height":266},{"@type":"BreadcrumbList","@id":"https:\/\/www.sogeti.be\/featured-articles\/data-governance-frameworks-the-dama-dmbok\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/www.sogeti.be\/"},{"@type":"ListItem","position":2,"name":"Data Governance Frameworks – The DAMA DMBoK"}]},{"@type":"WebSite","@id":"https:\/\/www.sogeti.be\/#website","url":"https:\/\/www.sogeti.be\/","name":"Sogeti Belgium","description":"Sogeti Belgium","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/www.sogeti.be\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Person","@id":"https:\/\/www.sogeti.be\/#\/schema\/person\/0bc8b305d63032e7e727a5d439fff86e","name":"gawadeprachi","url":"https:\/\/www.sogeti.be\/featured-articles\/author\/gawadeprachi\/"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<title>Data Governance Frameworks – The DAMA DMBoK - Sogeti Belgium</title>
+<link rel='dns-prefetch' href='//static.elfsight.com' />
+<link rel="alternate" type="application/rss+xml" title="Sogeti Belgium &raquo; Feed" href="https://www.sogeti.be/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Sogeti Belgium &raquo; Comments Feed" href="https://www.sogeti.be/comments/feed/" />
+<link rel="preload" href="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/js/gsap-3.12.5/gsap.min.js?ver=3.12.5" as="script" fetchpriority="high" />
+<link rel="preload" href="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/js/gsap-3.12.5/ScrollTrigger.min.js?ver=3.12.5" as="script" fetchpriority="high" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.sogeti.be/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sogeti.be%2Ffeatured-articles%2Fdata-governance-frameworks-the-dama-dmbok%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.sogeti.be/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sogeti.be%2Ffeatured-articles%2Fdata-governance-frameworks-the-dama-dmbok%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-block-group-inline-css'>
+.wp-block-group{box-sizing:border-box}:where(.wp-block-group.wp-block-group-is-layout-constrained){position:relative}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/group/style.min.css */
+</style>
+<link rel='stylesheet' id='all-css-8' href='https://www.sogeti.be/wp-content/plugins/cg-block-hero-bleed-banner-s/build/style-index.css?m=1777894071g' type='text/css' media='all' />
+<style id='wp-block-spacer-inline-css'>
+.wp-block-spacer{clear:both}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/spacer/style.min.css */
+</style>
+<style id='wp-block-paragraph-inline-css'>
+.is-small-text{font-size:.875em}.is-regular-text{font-size:1em}.is-large-text{font-size:2.25em}.is-larger-text{font-size:3em}.has-drop-cap:not(:focus):first-letter{float:left;font-size:8.4em;font-style:normal;font-weight:100;line-height:.68;margin:.05em .1em 0 0;text-transform:uppercase}body.rtl .has-drop-cap:not(:focus):first-letter{float:none;margin-left:.1em}p.has-drop-cap.has-background{overflow:hidden}:root :where(p.has-background){padding:1.25em 2.375em}:where(p.has-text-color:not(.has-link-color)) a{color:inherit}p.has-text-align-left[style*="writing-mode:vertical-lr"],p.has-text-align-right[style*="writing-mode:vertical-rl"]{rotate:180deg}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/paragraph/style.min.css */
+</style>
+<style id='wp-block-heading-inline-css'>
+h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-background,h3:where(.wp-block-heading).has-background,h4:where(.wp-block-heading).has-background,h5:where(.wp-block-heading).has-background,h6:where(.wp-block-heading).has-background{padding:1.25em 2.375em}h1.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h1.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h2.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h2.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h3.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h3.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h4.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h4.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h5.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h5.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h6.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h6.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]){rotate:180deg}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/heading/style.min.css */
+</style>
+<style id='wp-block-list-inline-css'>
+ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:1.25em 2.375em}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/list/style.min.css */
+</style>
+<style id='cg-blocks-cg-block-spaced-article-style-inline-css'>
+.wp-block-cg-blocks-cg-block-spaced-article{margin-bottom:0;margin-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save{padding-bottom:2.25rem}.wp-block-cg-blocks-cg-block-spaced-article .save.fade-in-up-content:has(.wp-block-cg-blocks-cg-block-custom-button){transform:none!important}.wp-block-cg-blocks-cg-block-spaced-article .save.no-bottom-spacing{padding-bottom:0}@media(min-width:1200px){.wp-block-cg-blocks-cg-block-spaced-article .save{display:grid;grid-template-columns:repeat(8,1fr);padding-bottom:4rem;grid-gap:24px}.wp-block-cg-blocks-cg-block-spaced-article .save.no-bottom-spacing{padding-bottom:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content{grid-column:2/9}}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-heading,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h1,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h2{font-family:Ubuntu,sans-serif;font-size:1rem;font-weight:400;letter-spacing:.1px;line-height:26px;margin-bottom:0;margin-top:0;padding-bottom:1rem;padding-top:.5rem}@media(min-width:1200px){.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-heading,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h1,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h2{font-family:Ubuntu,sans-serif;font-size:1.25rem;font-weight:400;letter-spacing:.2px;letter-spacing:.4px;line-height:28px;padding-bottom:1.5rem;padding-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-heading:not(:first-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h1:not(:first-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h2:not(:first-child){padding-bottom:1rem;padding-top:1rem}}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h3,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h4,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h5,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h6{font-family:Ubuntu,sans-serif;font-size:1rem;font-weight:400;letter-spacing:.1px;line-height:26px;margin-bottom:0;margin-top:0;padding-bottom:1rem;padding-top:.5rem}@media(min-width:1200px){.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h3,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h4,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h5,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h6{font-family:Ubuntu,sans-serif;font-size:1.125rem;font-weight:500;letter-spacing:.1px;letter-spacing:.4px;line-height:28px;padding-bottom:1.5rem;padding-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h3:not(:first-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h4:not(:first-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h5:not(:first-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content h6:not(:first-child){padding-bottom:1rem;padding-top:1rem}}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-paragraph,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content p{font-family:Ubuntu,sans-serif;font-size:1rem;font-weight:300;letter-spacing:.1px;line-height:26px;margin-bottom:0;margin-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-paragraph:not(:last-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content p:not(:last-child){padding-bottom:20px}@media(min-width:1200px){.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content .spaced-article-paragraph,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content p{font-family:Ubuntu,sans-serif;font-size:1.125rem;font-weight:300;letter-spacing:.1px;line-height:30px}}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content p+:has(+figure){padding-bottom:0!important}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content figure{margin:0;padding-bottom:3rem;padding-top:3rem}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content figure figcaption{margin-bottom:0;margin-top:1rem;padding-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ol li,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ul li{font-family:Ubuntu,sans-serif;font-size:1rem;font-weight:300;letter-spacing:.1px;line-height:26px;margin-bottom:0;margin-top:0}.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ol li:not(:last-child),.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ul li:not(:last-child){padding-bottom:20px}@media(min-width:1200px){.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ol li,.wp-block-cg-blocks-cg-block-spaced-article .save .spaced-article-content ul li{font-family:Ubuntu,sans-serif;font-size:1.125rem;font-weight:300;letter-spacing:.1px;line-height:30px}}@media(max-width:575.98px){.wp-block-cg-blocks-cg-block-spaced-article .spaced-article-content{padding-inline:.75rem}}.academy .wp-block-cg-blocks-cg-block-spaced-article li{padding-bottom:12px!important}.academy .wp-block-cg-blocks-cg-block-spaced-article li ul.wp-block-list{padding-top:12px!important}
+
+/*# sourceURL=https://www.sogeti.be/wp-content/plugins/cg-block-spaced-article/build/style-index.css */
+</style>
+<style id='cg-blocks-cg-block-author-list-style-inline-css'>
+.author-list{width:100%}@media(max-width:767.98px){.author-list{margin-top:1.5rem}}.author-list .author-information{display:grid;grid-template-columns:repeat(4,1fr);margin-left:1.5rem}@media(max-width:991.98px){.author-list .author-information{display:block;margin-left:0;padding:unset}}@media(max-width:767.98px){.author-list .author-information{padding-inline:1.5rem}}.author-list .profile-details{align-items:flex-start;display:flex;flex-direction:column;margin-left:1rem;width:calc(100% - 96px)}.author-list .profile-details h3,.author-list .profile-details p{color:var(--sogeti-bs-cool-grey-800);font-family:Ubuntu Mono,monospace;font-size:1rem;font-weight:400;letter-spacing:.1px;letter-spacing:.4px;line-height:1.375rem;margin-bottom:unset}@media(max-width:767.98px){.author-list .profile-details h3,.author-list .profile-details p{width:80%}}.author-list .profile-details .profile-info{margin-bottom:.5rem}.author-list .profile-card{align-items:flex-start;border-bottom:.5px solid #c6c6c7;display:flex;grid-column:2/5;padding:1.5rem 0;position:relative}@media(max-width:767.98px){.author-list .profile-card{padding:1rem 0}.author-list .profile-card:first-child{border-top:.5px solid #c6c6c7;padding-top:1rem!important}}.author-list .profile-card:first-child{padding-top:0}.author-list .box-author-list-image{flex-shrink:0;height:64px;width:64px}.author-list .box-author-list-image img{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}.author-list ul.social-nav{display:block;justify-content:flex-start;list-style:none;margin-bottom:0;margin-top:auto;padding:0}.author-list ul.social-nav span{display:none}.author-list ul.social-nav li{align-items:center;display:flex;gap:8px;margin-inline-end:10px;margin:.5rem 0;padding-inline-end:10px}.author-list ul.social-nav li:last-child{margin-inline-end:0;margin-bottom:0;padding-inline-end:0}.author-list ul.social-nav a.icon-wrapper{overflow:hidden;position:relative;text-decoration:none}@media(min-width:992px){.author-list ul.social-nav a.icon-wrapper{align-items:center;background-color:transparent;border:none;border-radius:50px;color:#000;cursor:pointer;display:inline-flex;font-size:1.5rem;height:40px;height:24px;justify-content:center;justify-content:flex-start!important;line-height:1.5rem;padding:0;text-decoration:none;width:40px;width:24px}.author-list ul.social-nav a.icon-wrapper:hover{color:#0070ad}.author-list ul.social-nav a.icon-wrapper:active,.author-list ul.social-nav a.icon-wrapper:focus{color:#39393a}}.author-list ul.social-nav a.icon-wrapper.icon-mail:before{content:"";font-family:tabler-icons;font-size:22px;height:22px;width:22px}.author-list ul.social-nav a.icon-wrapper.icon-linkedin:before{content:"";font-family:tabler-icons;font-size:22px;height:22px;width:22px}.author-list ul.social-nav a.icon-wrapper.icon-phone:before{content:"";font-family:tabler-icons;font-size:22px;height:22px;width:22px}.author-list ul.social-nav span{color:#4b4b4d;display:block;font-family:Ubuntu,sans-serif;font-size:.875rem;font-weight:400;letter-spacing:.4px;letter-spacing:.2px;line-height:1.375rem}.author-list .collapse{display:none}.author-list .collapse.show{display:block}.author-list .collapse-arrow{color:var(--sogeti-bs-cool-grey-900);cursor:pointer;font-size:24px}.author-list .profile-info{display:flex;flex-direction:column;width:100%}@media(max-width:991.98px){.author-list .profile-info{align-items:flex-start;flex-direction:column;justify-content:space-around}.author-list .hide-arrow{display:none}.author-list .collapse-arrow-container{margin-right:1rem;position:absolute;right:0}.author-list .social-nav{height:0;margin:0;margin-top:0!important;opacity:0;overflow:hidden;transition:height .5s ease-in-out,opacity .5s ease-in-out}.author-list .social-nav.show{flex-direction:column!important;height:auto;max-height:200px;opacity:1}.author-list .social-nav.show li{align-items:center;display:flex}.author-list .social-nav.show a.icon-wrapper{align-items:center;background-color:transparent;border:none;border-radius:50px;color:#000;cursor:pointer;display:inline-flex;font-size:1.5rem;height:40px;height:unset;justify-content:center;justify-content:flex-start!important;line-height:1.5rem;padding:.5rem 0;text-decoration:none;width:40px;width:unset}.author-list .social-nav.show a.icon-wrapper:hover{color:#0070ad}.author-list .social-nav.show a.icon-wrapper:active,.author-list .social-nav.show a.icon-wrapper:focus{color:#39393a}.author-list .social-nav.show span{color:#4b4b4d;display:block;font-family:Ubuntu,sans-serif;font-size:.875rem;font-weight:400;letter-spacing:.4px;letter-spacing:.2px;line-height:1.375rem}.author-list .collapse-arrow{cursor:pointer}}@media(min-width:768px){.author-list .collapse-arrow-container,.author-list .icon-wrapper span{display:none}.author-list .mb-4{margin-bottom:.5rem!important}}.author-information.is-left-align,.wp-block-cg-blocks-cg-block-author-list.is-left-align .author-list .author-information{display:block}@media(max-width:767.98px){.event-template-default .author-list .author-information .profile-card:first-child{border-top:none;padding-top:0!important}}
+
+/*# sourceURL=https://www.sogeti.be/wp-content/plugins/cg-block-author-list/build/style-index.css */
+</style>
+<style id='wp-block-columns-inline-css'>
+.wp-block-columns{box-sizing:border-box;display:flex;flex-wrap:wrap!important}@media (min-width:782px){.wp-block-columns{flex-wrap:nowrap!important}}.wp-block-columns{align-items:normal!important}.wp-block-columns.are-vertically-aligned-top{align-items:flex-start}.wp-block-columns.are-vertically-aligned-center{align-items:center}.wp-block-columns.are-vertically-aligned-bottom{align-items:flex-end}@media (max-width:781px){.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column{flex-basis:100%!important}}@media (min-width:782px){.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column{flex-basis:0;flex-grow:1}.wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column[style*=flex-basis]{flex-grow:0}}.wp-block-columns.is-not-stacked-on-mobile{flex-wrap:nowrap!important}.wp-block-columns.is-not-stacked-on-mobile>.wp-block-column{flex-basis:0;flex-grow:1}.wp-block-columns.is-not-stacked-on-mobile>.wp-block-column[style*=flex-basis]{flex-grow:0}:where(.wp-block-columns){margin-bottom:1.75em}:where(.wp-block-columns.has-background){padding:1.25em 2.375em}.wp-block-column{flex-grow:1;min-width:0;overflow-wrap:break-word;word-break:break-word}.wp-block-column.is-vertically-aligned-top{align-self:flex-start}.wp-block-column.is-vertically-aligned-center{align-self:center}.wp-block-column.is-vertically-aligned-bottom{align-self:flex-end}.wp-block-column.is-vertically-aligned-stretch{align-self:stretch}.wp-block-column.is-vertically-aligned-bottom,.wp-block-column.is-vertically-aligned-center,.wp-block-column.is-vertically-aligned-top{width:100%}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/columns/style.min.css */
+</style>
+<style id='wp-block-post-content-inline-css'>
+.wp-block-post-content{display:flow-root}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/post-content/style.min.css */
+</style>
+<style id='wp-block-image-inline-css'>
+.wp-block-image>a,.wp-block-image>figure>a{display:inline-block}.wp-block-image img{box-sizing:border-box;height:auto;max-width:100%;vertical-align:bottom}@media not (prefers-reduced-motion){.wp-block-image img.hide{visibility:hidden}.wp-block-image img.show{animation:show-content-image .4s}}.wp-block-image[style*=border-radius] img,.wp-block-image[style*=border-radius]>a{border-radius:inherit}.wp-block-image.has-custom-border img{box-sizing:border-box}.wp-block-image.aligncenter{text-align:center}.wp-block-image.alignfull>a,.wp-block-image.alignwide>a{width:100%}.wp-block-image.alignfull img,.wp-block-image.alignwide img{height:auto;width:100%}.wp-block-image .aligncenter,.wp-block-image .alignleft,.wp-block-image .alignright,.wp-block-image.aligncenter,.wp-block-image.alignleft,.wp-block-image.alignright{display:table}.wp-block-image .aligncenter>figcaption,.wp-block-image .alignleft>figcaption,.wp-block-image .alignright>figcaption,.wp-block-image.aligncenter>figcaption,.wp-block-image.alignleft>figcaption,.wp-block-image.alignright>figcaption{caption-side:bottom;display:table-caption}.wp-block-image .alignleft{float:left;margin:.5em 1em .5em 0}.wp-block-image .alignright{float:right;margin:.5em 0 .5em 1em}.wp-block-image .aligncenter{margin-left:auto;margin-right:auto}.wp-block-image :where(figcaption){margin-bottom:1em;margin-top:.5em}.wp-block-image.is-style-circle-mask img{border-radius:9999px}@supports ((-webkit-mask-image:none) or (mask-image:none)) or (-webkit-mask-image:none){.wp-block-image.is-style-circle-mask img{border-radius:0;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-mode:alpha;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain}}:root :where(.wp-block-image.is-style-rounded img,.wp-block-image .is-style-rounded img){border-radius:9999px}.wp-block-image figure{margin:0}.wp-lightbox-container{display:flex;flex-direction:column;position:relative}.wp-lightbox-container img{cursor:zoom-in}.wp-lightbox-container img:hover+button{opacity:1}.wp-lightbox-container button{align-items:center;backdrop-filter:blur(16px) saturate(180%);background-color:#5a5a5a40;border:none;border-radius:4px;cursor:zoom-in;display:flex;height:20px;justify-content:center;opacity:0;padding:0;position:absolute;right:16px;text-align:center;top:16px;width:20px;z-index:100}@media not (prefers-reduced-motion){.wp-lightbox-container button{transition:opacity .2s ease}}.wp-lightbox-container button:focus-visible{outline:3px auto #5a5a5a40;outline:3px auto -webkit-focus-ring-color;outline-offset:3px}.wp-lightbox-container button:hover{cursor:pointer;opacity:1}.wp-lightbox-container button:focus{opacity:1}.wp-lightbox-container button:focus,.wp-lightbox-container button:hover,.wp-lightbox-container button:not(:hover):not(:active):not(.has-background){background-color:#5a5a5a40;border:none}.wp-lightbox-overlay{box-sizing:border-box;cursor:zoom-out;height:100vh;left:0;overflow:hidden;position:fixed;top:0;visibility:hidden;width:100%;z-index:100000}.wp-lightbox-overlay .close-button{align-items:center;cursor:pointer;display:flex;justify-content:center;min-height:40px;min-width:40px;padding:0;position:absolute;right:calc(env(safe-area-inset-right) + 16px);top:calc(env(safe-area-inset-top) + 16px);z-index:5000000}.wp-lightbox-overlay .close-button:focus,.wp-lightbox-overlay .close-button:hover,.wp-lightbox-overlay .close-button:not(:hover):not(:active):not(.has-background){background:none;border:none}.wp-lightbox-overlay .lightbox-image-container{height:var(--wp--lightbox-container-height);left:50%;overflow:hidden;position:absolute;top:50%;transform:translate(-50%,-50%);transform-origin:top left;width:var(--wp--lightbox-container-width);z-index:9999999999}.wp-lightbox-overlay .wp-block-image{align-items:center;box-sizing:border-box;display:flex;height:100%;justify-content:center;margin:0;position:relative;transform-origin:0 0;width:100%;z-index:3000000}.wp-lightbox-overlay .wp-block-image img{height:var(--wp--lightbox-image-height);min-height:var(--wp--lightbox-image-height);min-width:var(--wp--lightbox-image-width);width:var(--wp--lightbox-image-width)}.wp-lightbox-overlay .wp-block-image figcaption{display:none}.wp-lightbox-overlay button{background:none;border:none}.wp-lightbox-overlay .scrim{background-color:#fff;height:100%;opacity:.9;position:absolute;width:100%;z-index:2000000}.wp-lightbox-overlay.active{visibility:visible}@media not (prefers-reduced-motion){.wp-lightbox-overlay.active{animation:turn-on-visibility .25s both}.wp-lightbox-overlay.active img{animation:turn-on-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active){animation:turn-off-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active) img{animation:turn-off-visibility .25s both}.wp-lightbox-overlay.zoom.active{animation:none;opacity:1;visibility:visible}.wp-lightbox-overlay.zoom.active .lightbox-image-container{animation:lightbox-zoom-in .4s}.wp-lightbox-overlay.zoom.active .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.active .scrim{animation:turn-on-visibility .4s forwards}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active){animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container{animation:lightbox-zoom-out .4s}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .scrim{animation:turn-off-visibility .4s forwards}}@keyframes show-content-image{0%{visibility:hidden}99%{visibility:hidden}to{visibility:visible}}@keyframes turn-on-visibility{0%{opacity:0}to{opacity:1}}@keyframes turn-off-visibility{0%{opacity:1;visibility:visible}99%{opacity:0;visibility:visible}to{opacity:0;visibility:hidden}}@keyframes lightbox-zoom-in{0%{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale))}to{transform:translate(-50%,-50%) scale(1)}}@keyframes lightbox-zoom-out{0%{transform:translate(-50%,-50%) scale(1);visibility:visible}99%{visibility:visible}to{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale));visibility:hidden}}
+/*# sourceURL=https://www.sogeti.be/wp-includes/blocks/image/style.min.css */
+</style>
+<link rel='stylesheet' id='all-css-30' href='https://www.sogeti.be/wp-content/themes/sogeti2024/assets/css/bootstrap.min.css?m=1765369540g' type='text/css' media='all' />
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+<style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--primary: ##FF2F4B;--wp--preset--color--contrast: #202020;--wp--preset--color--blue-primary: #0070AD;--wp--preset--color--blue-secondary: #12ABDB;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.469), 20px);--wp--preset--font-size--large: clamp(22.041px, 1.378rem + ((1vw - 3.2px) * 1.091), 36px);--wp--preset--font-size--x-large: clamp(25.014px, 1.563rem + ((1vw - 3.2px) * 1.327), 42px);--wp--preset--font-size--label: 0.75rem;--wp--preset--font-size--xxxs: 0.875rem;--wp--preset--font-size--xxs-2: 1.125rem;--wp--preset--font-size--xxs-1: 1rem;--wp--preset--font-size--xs: 1.25rem;--wp--preset--font-size--s: 1.5rem;--wp--preset--font-size--m: 1.75rem;--wp--preset--font-size--l: 2rem;--wp--preset--font-size--xl: 2.5rem;--wp--preset--font-size--xxl: 3.125rem;--wp--preset--font-family--body: "Ubuntu", sans-serif;--wp--preset--font-family--heading: "Ubuntu", sans-serif;--wp--preset--font-family--heading-mono: "Ubuntu Mono", monospace;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button .wp-block-button__link{--wp--preset--color--primary: #FF2F4B;--wp--preset--color--contrast: var(--sogeti-bs-blue-capgemini);--wp--preset--color--blue-primary: var(--sogeti-bs-blue-vibrant);--wp--preset--color--blue-secondary: var(--sogeti-bs-blue-vibrant);--wp--preset--color--blue-capgemini-900: var(--sogeti-bs-blue-capgemini-900);--wp--preset--color--blue-capgemini-800: var(--sogeti-bs-blue-capgemini-800);--wp--preset--color--blue-capgemini-600: var(--sogeti-bs-blue-capgemini-600);--wp--preset--color--blue-capgemini-300: var(--sogeti-bs-blue-capgemini-300);--wp--preset--color--blue-capgemini-200: var(--sogeti-bs-blue-capgemini-200);--wp--preset--color--blue-capgemini-100: var(--sogeti-bs-blue-capgemini-100);--wp--preset--color--blue-capgemini-50: var(--sogeti-bs-blue-capgemini-50);--wp--preset--color--blue-vubrant-100: var(--sogeti-bs-blue-vibrant-100);--wp--preset--color--blue-vubrant-200: var(--sogeti-bs-blue-vibrant-200);--wp--preset--color--blue-vubrant-300: var(--sogeti-bs-blue-vibrant-300);--wp--preset--color--blue-vubrant-500: var(--sogeti-bs-blue-vibrant-500);--wp--preset--color--blue-vubrant-800: var(--sogeti-bs-blue-vibrant-800);--wp--preset--color--cool-tech-red: var(--sogeti-bs-cool-tech-red);--wp--preset--color--cool-tech-red-50: var(--sogeti-bs-cool-tech-red-50);--wp--preset--color--cool-tech-red-100: var(--sogeti-bs-cool-tech-red-100);--wp--preset--color--cool-tech-red-200: var(--sogeti-bs-cool-tech-red-200);--wp--preset--color--cool-tech-red-300: var(--sogeti-bs-cool-tech-red-300);--wp--preset--color--cool-tech-red-400: var(--sogeti-bs-cool-tech-red-400);--wp--preset--color--cool-tech-red-500: var(--sogeti-bs-cool-tech-red-500);--wp--preset--color--cool-tech-red-800: var(--sogeti-bs-cool-tech-red-800);--wp--preset--color--cool-tech-red-900: var(--sogeti-bs-cool-tech-red-900);--wp--preset--color--sogeti-red-900: var(--sogeti-bs-sogeti-red-900);--wp--preset--color--sogeti-red-50: var(--sogeti-bs-sogeti-red-50);--wp--preset--color--sogeti-red-100: var(--sogeti-bs-sogeti-red-100);--wp--preset--color--sogeti-red-200: var(--sogeti-bs-sogeti-red-200);--wp--preset--color--sogeti-red-300: var(--sogeti-bs-sogeti-red-300);--wp--preset--color--sogeti-red-500: var(--sogeti-bs-sogeti-red-500);--wp--preset--color--sogeti-red-800: var(--sogeti-bs-sogeti-red-800);--wp--preset--color--cool-grey: var(--sogeti-bs-cool-grey);--wp--preset--color--cool-grey-50: var(--sogeti-bs-cool-grey-50);--wp--preset--color--cool-grey-100: var(--sogeti-bs-cool-grey-100);--wp--preset--color--cool-grey-200: var(--sogeti-bs-cool-grey-200);--wp--preset--color--cool-grey-300: var(--sogeti-bs-cool-grey-300);--wp--preset--color--cool-grey-800: var(--sogeti-bs-cool-grey-800);--wp--preset--color--cool-grey-900: var(--sogeti-bs-cool-grey-900);}.wp-block-details{--wp--preset--color--primary: #FF2F4B;--wp--preset--color--contrast: var(--sogeti-bs-blue-capgemini);--wp--preset--color--blue-primary: var(--sogeti-bs-blue-vibrant);--wp--preset--color--blue-secondary: var(--sogeti-bs-blue-vibrant);--wp--preset--color--blue-capgemini-900: var(--sogeti-bs-blue-capgemini-900);--wp--preset--color--blue-capgemini-800: var(--sogeti-bs-blue-capgemini-800);--wp--preset--color--blue-capgemini-600: var(--sogeti-bs-blue-capgemini-600);--wp--preset--color--blue-capgemini-300: var(--sogeti-bs-blue-capgemini-300);--wp--preset--color--blue-capgemini-200: var(--sogeti-bs-blue-capgemini-200);--wp--preset--color--blue-capgemini-100: var(--sogeti-bs-blue-capgemini-100);--wp--preset--color--blue-capgemini-50: var(--sogeti-bs-blue-capgemini-50);--wp--preset--color--blue-vubrant-100: var(--sogeti-bs-blue-vibrant-100);--wp--preset--color--blue-vubrant-200: var(--sogeti-bs-blue-vibrant-200);--wp--preset--color--blue-vubrant-300: var(--sogeti-bs-blue-vibrant-300);--wp--preset--color--blue-vubrant-500: var(--sogeti-bs-blue-vibrant-500);--wp--preset--color--blue-vubrant-800: var(--sogeti-bs-blue-vibrant-800);--wp--preset--color--cool-tech-red: var(--sogeti-bs-cool-tech-red);--wp--preset--color--cool-tech-red-50: var(--sogeti-bs-cool-tech-red-50);--wp--preset--color--cool-tech-red-100: var(--sogeti-bs-cool-tech-red-100);--wp--preset--color--cool-tech-red-200: var(--sogeti-bs-cool-tech-red-200);--wp--preset--color--cool-tech-red-300: var(--sogeti-bs-cool-tech-red-300);--wp--preset--color--cool-tech-red-400: var(--sogeti-bs-cool-tech-red-400);--wp--preset--color--cool-tech-red-500: var(--sogeti-bs-cool-tech-red-500);--wp--preset--color--cool-tech-red-800: var(--sogeti-bs-cool-tech-red-800);--wp--preset--color--cool-tech-red-900: var(--sogeti-bs-cool-tech-red-900);--wp--preset--color--sogeti-red-900: var(--sogeti-bs-sogeti-red-900);--wp--preset--color--sogeti-red-50: var(--sogeti-bs-sogeti-red-50);--wp--preset--color--sogeti-red-100: var(--sogeti-bs-sogeti-red-100);--wp--preset--color--sogeti-red-200: var(--sogeti-bs-sogeti-red-200);--wp--preset--color--sogeti-red-300: var(--sogeti-bs-sogeti-red-300);--wp--preset--color--sogeti-red-500: var(--sogeti-bs-sogeti-red-500);--wp--preset--color--sogeti-red-800: var(--sogeti-bs-sogeti-red-800);--wp--preset--color--cool-grey: var(--sogeti-bs-cool-grey);--wp--preset--color--cool-grey-50: var(--sogeti-bs-cool-grey-50);--wp--preset--color--cool-grey-100: var(--sogeti-bs-cool-grey-100);--wp--preset--color--cool-grey-200: var(--sogeti-bs-cool-grey-200);--wp--preset--color--cool-grey-300: var(--sogeti-bs-cool-grey-300);--wp--preset--color--cool-grey-800: var(--sogeti-bs-cool-grey-800);--wp--preset--color--cool-grey-900: var(--sogeti-bs-cool-grey-900);}.wp-block-cover{--wp--preset--color--primary: ##FF2F4B;--wp--preset--color--contrast: #202020;--wp--preset--color--blue-primary: #0070AD;--wp--preset--color--blue-secondary: #12ABDB;}.wp-block-cg-blocks-cg-block-hero-small{--wp--preset--color--capgemini-blue: var(--sogeti-bs-blue-capgemini-600);--wp--preset--color--red: var(--sogeti-bs-cool-tech-red-500);}.wp-block-cg-blocks-cg-block-split-hero{--wp--preset--color--capgemini-blue: var(--sogeti-bs-blue-capgemini-600);--wp--preset--color--red: var(--sogeti-bs-cool-tech-red-500);--wp--preset--color--graphite: var(--sogeti-bs-body-color);--wp--preset--color--grey: var(--sogeti-bs-cool-grey-50);}.wp-block-create-block-cg-block-hero-card{--wp--preset--color--capgemini-blue: var(--sogeti-bs-blue-capgemini-600);--wp--preset--color--red: var(--sogeti-bs-cool-tech-red-500);--wp--preset--color--graphite: var(--sogeti-bs-body-color);--wp--preset--color--grey: var(--sogeti-bs-cool-grey-50);}:root { --wp--style--global--content-size: var(--sogeti-bs-container-width-current);--wp--style--global--wide-size: 100%; }:where(body) { margin: 0; }.wp-site-blocks { padding-top: var(--wp--style--root--padding-top); padding-bottom: var(--wp--style--root--padding-bottom); }.has-global-padding { padding-right: var(--wp--style--root--padding-right); padding-left: var(--wp--style--root--padding-left); }.has-global-padding > .alignfull { margin-right: calc(var(--wp--style--root--padding-right) * -1); margin-left: calc(var(--wp--style--root--padding-left) * -1); }.has-global-padding :where(:not(.alignfull.is-layout-flow) > .has-global-padding:not(.wp-block-block, .alignfull)) { padding-right: 0; padding-left: 0; }.has-global-padding :where(:not(.alignfull.is-layout-flow) > .has-global-padding:not(.wp-block-block, .alignfull)) > .alignfull { margin-left: 0; margin-right: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.wp-site-blocks) > * { margin-block-start: 0; margin-block-end: 0; }:where(.wp-site-blocks) > :first-child { margin-block-start: 0; }:where(.wp-site-blocks) > :last-child { margin-block-end: 0; }:root { --wp--style--block-gap: 0; }:root :where(.is-layout-flow) > :first-child{margin-block-start: 0;}:root :where(.is-layout-flow) > :last-child{margin-block-end: 0;}:root :where(.is-layout-flow) > *{margin-block-start: 0;margin-block-end: 0;}:root :where(.is-layout-constrained) > :first-child{margin-block-start: 0;}:root :where(.is-layout-constrained) > :last-child{margin-block-end: 0;}:root :where(.is-layout-constrained) > *{margin-block-start: 0;margin-block-end: 0;}:root :where(.is-layout-flex){gap: 0;}:root :where(.is-layout-grid){gap: 0;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{background-color: #ffffff;color: #121212;font-family: var(--wp--preset--font-family--body);font-size: var(--wp--preset--font-size--xxs1);font-style: normal;font-weight: 400;line-height: 1.625;--wp--style--root--padding-top: 0px;--wp--style--root--padding-right: 0px;--wp--style--root--padding-bottom: 0px;--wp--style--root--padding-left: 0px;}a:where(:not(.wp-element-button)){text-decoration: underline;}h1{font-family: var(--wp--preset--font-family--heading);font-size: var(--wp--preset--font-size--xl);font-style: normal;font-weight: 500;letter-spacing: 0.12px;line-height: 3.5;}h2{font-family: var(--wp--preset--font-family--heading);font-size: var(--wp--preset--font-size--l);font-style: normal;font-weight: 400;letter-spacing: 0.12px;line-height: 2.75;}h3{font-family: var(--wp--preset--font-family--heading);font-size: var(--wp--preset--font-size--m);font-style: normal;font-weight: 400;letter-spacing: 0.12px;line-height: 2.5;}h4{font-family: var(--wp--preset--font-family--heading);font-size: var(--wp--preset--font-size--s);font-style: normal;font-weight: 400;letter-spacing: 0.1px;line-height: 2.125;}h5{font-family: var(--wp--preset--font-family--heading);font-size: var(--wp--preset--font-size--xs);font-style: normal;font-weight: 400;letter-spacing: 0.2px;line-height: 2;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #FF2F4B;border-width: 0;color: #ffffff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-color{color: var(--wp--preset--color--primary) !important;}.has-contrast-color{color: var(--wp--preset--color--contrast) !important;}.has-blue-primary-color{color: var(--wp--preset--color--blue-primary) !important;}.has-blue-secondary-color{color: var(--wp--preset--color--blue-secondary) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.has-contrast-background-color{background-color: var(--wp--preset--color--contrast) !important;}.has-blue-primary-background-color{background-color: var(--wp--preset--color--blue-primary) !important;}.has-blue-secondary-background-color{background-color: var(--wp--preset--color--blue-secondary) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.has-contrast-border-color{border-color: var(--wp--preset--color--contrast) !important;}.has-blue-primary-border-color{border-color: var(--wp--preset--color--blue-primary) !important;}.has-blue-secondary-border-color{border-color: var(--wp--preset--color--blue-secondary) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-label-font-size{font-size: var(--wp--preset--font-size--label) !important;}.has-xxxs-font-size{font-size: var(--wp--preset--font-size--xxxs) !important;}.has-xxs-2-font-size{font-size: var(--wp--preset--font-size--xxs-2) !important;}.has-xxs-1-font-size{font-size: var(--wp--preset--font-size--xxs-1) !important;}.has-xs-font-size{font-size: var(--wp--preset--font-size--xs) !important;}.has-s-font-size{font-size: var(--wp--preset--font-size--s) !important;}.has-m-font-size{font-size: var(--wp--preset--font-size--m) !important;}.has-l-font-size{font-size: var(--wp--preset--font-size--l) !important;}.has-xl-font-size{font-size: var(--wp--preset--font-size--xl) !important;}.has-xxl-font-size{font-size: var(--wp--preset--font-size--xxl) !important;}.has-body-font-family{font-family: var(--wp--preset--font-family--body) !important;}.has-heading-font-family{font-family: var(--wp--preset--font-family--heading) !important;}.has-heading-mono-font-family{font-family: var(--wp--preset--font-family--heading-mono) !important;}.wp-block-button .wp-block-button__link.has-primary-color{color: var(--wp--preset--color--primary) !important;}.wp-block-button .wp-block-button__link.has-contrast-color{color: var(--wp--preset--color--contrast) !important;}.wp-block-button .wp-block-button__link.has-blue-primary-color{color: var(--wp--preset--color--blue-primary) !important;}.wp-block-button .wp-block-button__link.has-blue-secondary-color{color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-900-color{color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-800-color{color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-600-color{color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-300-color{color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-200-color{color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-100-color{color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-50-color{color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-100-color{color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-200-color{color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-300-color{color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-500-color{color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-800-color{color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-color{color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-50-color{color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-100-color{color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-200-color{color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-300-color{color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-400-color{color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-500-color{color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-800-color{color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-900-color{color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-900-color{color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-50-color{color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-100-color{color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-200-color{color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-300-color{color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-500-color{color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-800-color{color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-color{color: var(--wp--preset--color--cool-grey) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-50-color{color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-100-color{color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-200-color{color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-300-color{color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-800-color{color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-900-color{color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-button .wp-block-button__link.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.wp-block-button .wp-block-button__link.has-contrast-background-color{background-color: var(--wp--preset--color--contrast) !important;}.wp-block-button .wp-block-button__link.has-blue-primary-background-color{background-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-button .wp-block-button__link.has-blue-secondary-background-color{background-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-900-background-color{background-color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-800-background-color{background-color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-600-background-color{background-color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-300-background-color{background-color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-200-background-color{background-color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-100-background-color{background-color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-50-background-color{background-color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-100-background-color{background-color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-200-background-color{background-color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-300-background-color{background-color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-500-background-color{background-color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-800-background-color{background-color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-background-color{background-color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-50-background-color{background-color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-100-background-color{background-color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-200-background-color{background-color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-300-background-color{background-color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-400-background-color{background-color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-500-background-color{background-color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-800-background-color{background-color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-900-background-color{background-color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-900-background-color{background-color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-50-background-color{background-color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-100-background-color{background-color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-200-background-color{background-color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-300-background-color{background-color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-500-background-color{background-color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-800-background-color{background-color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-background-color{background-color: var(--wp--preset--color--cool-grey) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-50-background-color{background-color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-100-background-color{background-color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-200-background-color{background-color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-300-background-color{background-color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-800-background-color{background-color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-900-background-color{background-color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-button .wp-block-button__link.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.wp-block-button .wp-block-button__link.has-contrast-border-color{border-color: var(--wp--preset--color--contrast) !important;}.wp-block-button .wp-block-button__link.has-blue-primary-border-color{border-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-button .wp-block-button__link.has-blue-secondary-border-color{border-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-900-border-color{border-color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-800-border-color{border-color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-600-border-color{border-color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-300-border-color{border-color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-200-border-color{border-color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-100-border-color{border-color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-button .wp-block-button__link.has-blue-capgemini-50-border-color{border-color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-100-border-color{border-color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-200-border-color{border-color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-300-border-color{border-color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-500-border-color{border-color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-button .wp-block-button__link.has-blue-vubrant-800-border-color{border-color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-border-color{border-color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-50-border-color{border-color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-100-border-color{border-color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-200-border-color{border-color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-300-border-color{border-color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-400-border-color{border-color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-500-border-color{border-color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-800-border-color{border-color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-tech-red-900-border-color{border-color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-900-border-color{border-color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-50-border-color{border-color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-100-border-color{border-color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-200-border-color{border-color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-300-border-color{border-color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-500-border-color{border-color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-button .wp-block-button__link.has-sogeti-red-800-border-color{border-color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-border-color{border-color: var(--wp--preset--color--cool-grey) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-50-border-color{border-color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-100-border-color{border-color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-200-border-color{border-color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-300-border-color{border-color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-800-border-color{border-color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-button .wp-block-button__link.has-cool-grey-900-border-color{border-color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-details.has-primary-color{color: var(--wp--preset--color--primary) !important;}.wp-block-details.has-contrast-color{color: var(--wp--preset--color--contrast) !important;}.wp-block-details.has-blue-primary-color{color: var(--wp--preset--color--blue-primary) !important;}.wp-block-details.has-blue-secondary-color{color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-details.has-blue-capgemini-900-color{color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-details.has-blue-capgemini-800-color{color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-details.has-blue-capgemini-600-color{color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-details.has-blue-capgemini-300-color{color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-details.has-blue-capgemini-200-color{color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-details.has-blue-capgemini-100-color{color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-details.has-blue-capgemini-50-color{color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-details.has-blue-vubrant-100-color{color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-details.has-blue-vubrant-200-color{color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-details.has-blue-vubrant-300-color{color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-details.has-blue-vubrant-500-color{color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-details.has-blue-vubrant-800-color{color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-details.has-cool-tech-red-color{color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-details.has-cool-tech-red-50-color{color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-details.has-cool-tech-red-100-color{color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-details.has-cool-tech-red-200-color{color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-details.has-cool-tech-red-300-color{color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-details.has-cool-tech-red-400-color{color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-details.has-cool-tech-red-500-color{color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-details.has-cool-tech-red-800-color{color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-details.has-cool-tech-red-900-color{color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-details.has-sogeti-red-900-color{color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-details.has-sogeti-red-50-color{color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-details.has-sogeti-red-100-color{color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-details.has-sogeti-red-200-color{color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-details.has-sogeti-red-300-color{color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-details.has-sogeti-red-500-color{color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-details.has-sogeti-red-800-color{color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-details.has-cool-grey-color{color: var(--wp--preset--color--cool-grey) !important;}.wp-block-details.has-cool-grey-50-color{color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-details.has-cool-grey-100-color{color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-details.has-cool-grey-200-color{color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-details.has-cool-grey-300-color{color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-details.has-cool-grey-800-color{color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-details.has-cool-grey-900-color{color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-details.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.wp-block-details.has-contrast-background-color{background-color: var(--wp--preset--color--contrast) !important;}.wp-block-details.has-blue-primary-background-color{background-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-details.has-blue-secondary-background-color{background-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-details.has-blue-capgemini-900-background-color{background-color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-details.has-blue-capgemini-800-background-color{background-color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-details.has-blue-capgemini-600-background-color{background-color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-details.has-blue-capgemini-300-background-color{background-color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-details.has-blue-capgemini-200-background-color{background-color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-details.has-blue-capgemini-100-background-color{background-color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-details.has-blue-capgemini-50-background-color{background-color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-details.has-blue-vubrant-100-background-color{background-color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-details.has-blue-vubrant-200-background-color{background-color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-details.has-blue-vubrant-300-background-color{background-color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-details.has-blue-vubrant-500-background-color{background-color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-details.has-blue-vubrant-800-background-color{background-color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-details.has-cool-tech-red-background-color{background-color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-details.has-cool-tech-red-50-background-color{background-color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-details.has-cool-tech-red-100-background-color{background-color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-details.has-cool-tech-red-200-background-color{background-color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-details.has-cool-tech-red-300-background-color{background-color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-details.has-cool-tech-red-400-background-color{background-color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-details.has-cool-tech-red-500-background-color{background-color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-details.has-cool-tech-red-800-background-color{background-color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-details.has-cool-tech-red-900-background-color{background-color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-details.has-sogeti-red-900-background-color{background-color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-details.has-sogeti-red-50-background-color{background-color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-details.has-sogeti-red-100-background-color{background-color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-details.has-sogeti-red-200-background-color{background-color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-details.has-sogeti-red-300-background-color{background-color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-details.has-sogeti-red-500-background-color{background-color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-details.has-sogeti-red-800-background-color{background-color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-details.has-cool-grey-background-color{background-color: var(--wp--preset--color--cool-grey) !important;}.wp-block-details.has-cool-grey-50-background-color{background-color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-details.has-cool-grey-100-background-color{background-color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-details.has-cool-grey-200-background-color{background-color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-details.has-cool-grey-300-background-color{background-color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-details.has-cool-grey-800-background-color{background-color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-details.has-cool-grey-900-background-color{background-color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-details.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.wp-block-details.has-contrast-border-color{border-color: var(--wp--preset--color--contrast) !important;}.wp-block-details.has-blue-primary-border-color{border-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-details.has-blue-secondary-border-color{border-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-details.has-blue-capgemini-900-border-color{border-color: var(--wp--preset--color--blue-capgemini-900) !important;}.wp-block-details.has-blue-capgemini-800-border-color{border-color: var(--wp--preset--color--blue-capgemini-800) !important;}.wp-block-details.has-blue-capgemini-600-border-color{border-color: var(--wp--preset--color--blue-capgemini-600) !important;}.wp-block-details.has-blue-capgemini-300-border-color{border-color: var(--wp--preset--color--blue-capgemini-300) !important;}.wp-block-details.has-blue-capgemini-200-border-color{border-color: var(--wp--preset--color--blue-capgemini-200) !important;}.wp-block-details.has-blue-capgemini-100-border-color{border-color: var(--wp--preset--color--blue-capgemini-100) !important;}.wp-block-details.has-blue-capgemini-50-border-color{border-color: var(--wp--preset--color--blue-capgemini-50) !important;}.wp-block-details.has-blue-vubrant-100-border-color{border-color: var(--wp--preset--color--blue-vubrant-100) !important;}.wp-block-details.has-blue-vubrant-200-border-color{border-color: var(--wp--preset--color--blue-vubrant-200) !important;}.wp-block-details.has-blue-vubrant-300-border-color{border-color: var(--wp--preset--color--blue-vubrant-300) !important;}.wp-block-details.has-blue-vubrant-500-border-color{border-color: var(--wp--preset--color--blue-vubrant-500) !important;}.wp-block-details.has-blue-vubrant-800-border-color{border-color: var(--wp--preset--color--blue-vubrant-800) !important;}.wp-block-details.has-cool-tech-red-border-color{border-color: var(--wp--preset--color--cool-tech-red) !important;}.wp-block-details.has-cool-tech-red-50-border-color{border-color: var(--wp--preset--color--cool-tech-red-50) !important;}.wp-block-details.has-cool-tech-red-100-border-color{border-color: var(--wp--preset--color--cool-tech-red-100) !important;}.wp-block-details.has-cool-tech-red-200-border-color{border-color: var(--wp--preset--color--cool-tech-red-200) !important;}.wp-block-details.has-cool-tech-red-300-border-color{border-color: var(--wp--preset--color--cool-tech-red-300) !important;}.wp-block-details.has-cool-tech-red-400-border-color{border-color: var(--wp--preset--color--cool-tech-red-400) !important;}.wp-block-details.has-cool-tech-red-500-border-color{border-color: var(--wp--preset--color--cool-tech-red-500) !important;}.wp-block-details.has-cool-tech-red-800-border-color{border-color: var(--wp--preset--color--cool-tech-red-800) !important;}.wp-block-details.has-cool-tech-red-900-border-color{border-color: var(--wp--preset--color--cool-tech-red-900) !important;}.wp-block-details.has-sogeti-red-900-border-color{border-color: var(--wp--preset--color--sogeti-red-900) !important;}.wp-block-details.has-sogeti-red-50-border-color{border-color: var(--wp--preset--color--sogeti-red-50) !important;}.wp-block-details.has-sogeti-red-100-border-color{border-color: var(--wp--preset--color--sogeti-red-100) !important;}.wp-block-details.has-sogeti-red-200-border-color{border-color: var(--wp--preset--color--sogeti-red-200) !important;}.wp-block-details.has-sogeti-red-300-border-color{border-color: var(--wp--preset--color--sogeti-red-300) !important;}.wp-block-details.has-sogeti-red-500-border-color{border-color: var(--wp--preset--color--sogeti-red-500) !important;}.wp-block-details.has-sogeti-red-800-border-color{border-color: var(--wp--preset--color--sogeti-red-800) !important;}.wp-block-details.has-cool-grey-border-color{border-color: var(--wp--preset--color--cool-grey) !important;}.wp-block-details.has-cool-grey-50-border-color{border-color: var(--wp--preset--color--cool-grey-50) !important;}.wp-block-details.has-cool-grey-100-border-color{border-color: var(--wp--preset--color--cool-grey-100) !important;}.wp-block-details.has-cool-grey-200-border-color{border-color: var(--wp--preset--color--cool-grey-200) !important;}.wp-block-details.has-cool-grey-300-border-color{border-color: var(--wp--preset--color--cool-grey-300) !important;}.wp-block-details.has-cool-grey-800-border-color{border-color: var(--wp--preset--color--cool-grey-800) !important;}.wp-block-details.has-cool-grey-900-border-color{border-color: var(--wp--preset--color--cool-grey-900) !important;}.wp-block-cover.has-primary-color{color: var(--wp--preset--color--primary) !important;}.wp-block-cover.has-contrast-color{color: var(--wp--preset--color--contrast) !important;}.wp-block-cover.has-blue-primary-color{color: var(--wp--preset--color--blue-primary) !important;}.wp-block-cover.has-blue-secondary-color{color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-cover.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.wp-block-cover.has-contrast-background-color{background-color: var(--wp--preset--color--contrast) !important;}.wp-block-cover.has-blue-primary-background-color{background-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-cover.has-blue-secondary-background-color{background-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-cover.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.wp-block-cover.has-contrast-border-color{border-color: var(--wp--preset--color--contrast) !important;}.wp-block-cover.has-blue-primary-border-color{border-color: var(--wp--preset--color--blue-primary) !important;}.wp-block-cover.has-blue-secondary-border-color{border-color: var(--wp--preset--color--blue-secondary) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-capgemini-blue-color{color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-red-color{color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-capgemini-blue-background-color{background-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-red-background-color{background-color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-capgemini-blue-border-color{border-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-hero-small.has-red-border-color{border-color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-capgemini-blue-color{color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-red-color{color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-graphite-color{color: var(--wp--preset--color--graphite) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-grey-color{color: var(--wp--preset--color--grey) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-capgemini-blue-background-color{background-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-red-background-color{background-color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-graphite-background-color{background-color: var(--wp--preset--color--graphite) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-grey-background-color{background-color: var(--wp--preset--color--grey) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-capgemini-blue-border-color{border-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-red-border-color{border-color: var(--wp--preset--color--red) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-graphite-border-color{border-color: var(--wp--preset--color--graphite) !important;}.wp-block-cg-blocks-cg-block-split-hero.has-grey-border-color{border-color: var(--wp--preset--color--grey) !important;}.wp-block-create-block-cg-block-hero-card.has-capgemini-blue-color{color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-create-block-cg-block-hero-card.has-red-color{color: var(--wp--preset--color--red) !important;}.wp-block-create-block-cg-block-hero-card.has-graphite-color{color: var(--wp--preset--color--graphite) !important;}.wp-block-create-block-cg-block-hero-card.has-grey-color{color: var(--wp--preset--color--grey) !important;}.wp-block-create-block-cg-block-hero-card.has-capgemini-blue-background-color{background-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-create-block-cg-block-hero-card.has-red-background-color{background-color: var(--wp--preset--color--red) !important;}.wp-block-create-block-cg-block-hero-card.has-graphite-background-color{background-color: var(--wp--preset--color--graphite) !important;}.wp-block-create-block-cg-block-hero-card.has-grey-background-color{background-color: var(--wp--preset--color--grey) !important;}.wp-block-create-block-cg-block-hero-card.has-capgemini-blue-border-color{border-color: var(--wp--preset--color--capgemini-blue) !important;}.wp-block-create-block-cg-block-hero-card.has-red-border-color{border-color: var(--wp--preset--color--red) !important;}.wp-block-create-block-cg-block-hero-card.has-graphite-border-color{border-color: var(--wp--preset--color--graphite) !important;}.wp-block-create-block-cg-block-hero-card.has-grey-border-color{border-color: var(--wp--preset--color--grey) !important;}
+:root :where(p){font-family: var(--wp--preset--font-family--body);font-size: var(--wp--preset--font-size--xxs1);font-style: normal;font-weight: 400;line-height: 1.625;}
+:root :where(p h1){line-height: 1.15;}
+:root :where(.wp-block-group){margin-top: var(--sogeti-bs-spacing-0);margin-right: auto;margin-bottom: var(--sogeti-bs-spacing-0);margin-left: auto;padding-top: 0;padding-right: calc(var(--sogeti-bs-gutter-x) * .5);padding-bottom: 0;padding-left: calc(var(--sogeti-bs-gutter-x) * .5);}:root :where(.wp-block-group-is-layout-flow) > :first-child{margin-block-start: 0;}:root :where(.wp-block-group-is-layout-flow) > :last-child{margin-block-end: 0;}:root :where(.wp-block-group-is-layout-flow) > *{margin-block-start: 0;margin-block-end: 0;}:root :where(.wp-block-group-is-layout-constrained) > :first-child{margin-block-start: 0;}:root :where(.wp-block-group-is-layout-constrained) > :last-child{margin-block-end: 0;}:root :where(.wp-block-group-is-layout-constrained) > *{margin-block-start: 0;margin-block-end: 0;}:root :where(.wp-block-group-is-layout-flex){gap: 0;}:root :where(.wp-block-group-is-layout-grid){gap: 0;}
+:root :where(.wp-block-image){padding-top: var(--sogeti-bs-spacing-7);padding-bottom: var(--sogeti-bs-spacing-7);}
+:root :where(.wp-block-image .wp-element-caption,.wp-block-image  .wp-block-audio figcaption,.wp-block-image  .wp-block-embed figcaption,.wp-block-image  .wp-block-gallery figcaption,.wp-block-image  .wp-block-image figcaption,.wp-block-image  .wp-block-table figcaption,.wp-block-image  .wp-block-video figcaption){padding-top: var(--sogeti-bs-spacing-3);}
+:root :where(.wp-block-cg-blocks-cg-block-split-hero){background-color: var(--sogeti-bs-blue-capgemini-600);}
+:root :where(.wp-block-cg-blocks-cg-block-hero-small){background-color: var(--sogeti-bs-cool-tech-red-500);}
+:root :where(.wp-block-create-block-cg-block-hero-card){background-color: var(--sogeti-bs-blue-capgemini-600);color: var(--sogeti-bs-white);}
+/*# sourceURL=global-styles-inline-css */
+</style>
+<style id='core-block-supports-inline-css'>
+.wp-container-core-columns-is-layout-28f84493{flex-wrap:nowrap;}.wp-elements-d470a0f1622793c0a776163f42d690a3 a:where(:not(.wp-element-button)){color:var(--wp--preset--color--contrast);}
+/*# sourceURL=core-block-supports-inline-css */
+</style>
+<style id='wp-block-template-skip-link-inline-css'>
+
+		.skip-link.screen-reader-text {
+			border: 0;
+			clip-path: inset(50%);
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute !important;
+			width: 1px;
+			word-wrap: normal !important;
+		}
+
+		.skip-link.screen-reader-text:focus {
+			background-color: #eee;
+			clip-path: none;
+			color: #444;
+			display: block;
+			font-size: 1em;
+			height: auto;
+			left: 5px;
+			line-height: normal;
+			padding: 15px 23px 14px;
+			text-decoration: none;
+			top: 5px;
+			width: auto;
+			z-index: 100000;
+		}
+/*# sourceURL=wp-block-template-skip-link-inline-css */
+</style>
+<link rel='stylesheet' id='all-css-40' href='https://www.sogeti.be/_static/??-eJytVO1WwjAMfSFDgXlEf3h8lq4LI9i1tcng8PZmDBBUZIB/9pH23t7cJjHrBC4GwSAm+bamwMbVUPro3sFbQRYIuGZTtuQrw7LxOHLMD+Z3YI0xY0UZnRjLjKJR5ss4m92CVgi8iFlcrNBwdsZ56vZ1n0s2nkqz/Ggxb6AlmIwmxaj4CvzF3qfjrPcgEawTimFoRntsrgabcAzptLMn/ddnhbm3owvczwCywGaIErGQYqIA85ib67LY1QBLzIRXOuBjHSFTWarb9/gwjGeoGxwdWQ+Nlqm9Lp91tilh7u4F9UVhpdv2Ov6P6R6rbiS+4F1jHUNGbRxYxpINBSXCrmeNHndI3Qq5LWdjKZwlSxiTx50EGFZS3zE3WDSc4oIZx/Wj80qN3kLnWfedBbXZ97ON5hsdZIKmIpY+69PVHxRbNd2xNQpNx9NHk9pSdfYM6v/ZQzW0vbmu6/l4HJ8swEH5W/M6mT0/zcaz4qX4BHe+STE=' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.sogeti.be/_static/??-eJyVy80KwjAQBOAXcrsK1vYiPkuaLOnGZBPzY/HtzaFHUYSBmcN8uCXQUSpJxeSbZSmoLSw+6juslGOfRAYWJUIZCi6NvcEn0za4csBvvCSlO1W5svb0j1StrjGD51I/MBbtm6GCrufRKL/2GgLLzxMEtllV2s+3cD1N82U8z+N0dG+2MGPJ" ></script><script src="https://www.sogeti.be/wp-includes/js/dist/vendor/lodash.min.js?ver=4.17.21" id="lodash-js"></script>
+<script id="lodash-js-after">
+(function attachLodashAlias(attempt){if(window.lodash){return;}if(typeof window._!=="undefined"&&window._){if(typeof window._.noConflict==="function"){window.lodash=window._.noConflict();return;}window.lodash=window._;return;}if((attempt||0)<40){setTimeout(function(){attachLodashAlias((attempt||0)+1);},50);}})(0);
+//# sourceURL=lodash-js-after
+</script>
+<script src="https://www.sogeti.be/wp-includes/js/dist/vendor/react.min.js?ver=18.3.1.1" id="react-js"></script>
+<script src="https://www.sogeti.be/wp-includes/js/dist/vendor/react-dom.min.js?ver=18.3.1.1" id="react-dom-js"></script>
+<script type="text/javascript" src="https://www.sogeti.be/_static/??-eJzTLy/QzcxLzilNSS3WzyrWT8ksLtFPLU5OLEjVzSjJzdHLzczTyyrW0ceqLic1NzWvBK+ajPz87GKoCvtcW0NzCzNTEwtTM8ssAPTAK8c=" ></script><script src="https://www.sogeti.be/wp-includes/js/dist/i18n.min.js?ver=c26c3dc7bed366793375" id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script src="https://www.sogeti.be/wp-includes/js/dist/vendor/moment.min.js?ver=2.30.1" id="moment-js"></script>
+<script id="moment-js-after">
+moment.updateLocale( 'en_US', {"months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"week":{"dow":1},"longDateFormat":{"LT":"g:i a","LTS":null,"L":null,"LL":"F j, Y","LLL":"F j, Y g:i a","LLLL":null}} );
+//# sourceURL=moment-js-after
+</script>
+<script type="text/javascript" src="https://www.sogeti.be/wp-includes/js/dist/deprecated.min.js?m=1786548569g" ></script><script src="https://www.sogeti.be/wp-includes/js/dist/date.min.js?ver=795a56839718d3ff7eae" id="wp-date-js"></script>
+<script id="wp-date-js-after">
+wp.date.setSettings( {"l10n":{"locale":"en_US","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthsShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"weekdaysShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"meridiem":{"am":"am","pm":"pm","AM":"AM","PM":"PM"},"relative":{"future":"%s from now","past":"%s ago","s":"a second","ss":"%d seconds","m":"a minute","mm":"%d minutes","h":"an hour","hh":"%d hours","d":"a day","dd":"%d days","M":"a month","MM":"%d months","y":"a year","yy":"%d years"},"startOfWeek":1},"formats":{"time":"g:i a","date":"F j, Y","datetime":"F j, Y g:i a","datetimeAbbreviated":"M j, Y g:i a"},"timezone":{"offset":0,"offsetFormatted":"0","string":"","abbr":""}} );
+//# sourceURL=wp-date-js-after
+</script>
+<script id="jobs_search-js-extra">
+var get_column_selections = ["job_name","location","contract_type"];
+var get_filter_data = ["location","contract_type"];
+var es_var = {"pathName":"","country_codes_param":"BE,en-be,be-en","shortcode_defaults":[]};
+//# sourceURL=jobs_search-js-extra
+</script>
+<script src="https://www.sogeti.be/wp-content/plugins/macs-react-jobs/inc/search/app/build/static/js/main.js?ver=0.1.15" id="jobs_search-js" defer data-wp-strategy="defer"></script>
+<script id="jobs_single-js-extra">
+var singlejob_desc_setting = ["ref_code","posted_on","contract_type","location","business_units","department","experience_level","country_name","professional_communities"];
+//# sourceURL=jobs_single-js-extra
+</script>
+<script src="https://www.sogeti.be/wp-content/plugins/macs-react-jobs/inc/single/app/build/static/js/main.js?ver=0.1.15" id="jobs_single-js" defer data-wp-strategy="defer"></script>
+<script id="url-shortify-js-extra">
+var usParams = {"ajaxurl":"https://www.sogeti.be/wp-admin/admin-ajax.php"};
+//# sourceURL=url-shortify-js-extra
+</script>
+<script type="text/javascript" src="https://www.sogeti.be/_static/??-eJydj0sOwjAMBS9EY/qFDeIQcIE0NamrNLFiR4jbU8EGdojdk0Yz0oM7Vy5FxajAoXiKAiWHSuaUlW4PCKQIE4mCuEys39gssoOPhM64ooAkj0rNvunAiuAmLQJeLFetqRvTv7ZZKf7rX1xOIVwzeY/5txCXMZB7X7HMZiwUpk07r6f6cBz6th/qbnkCC+xgjA==" ></script><script async src="https://static.elfsight.com/platform/platform.js" id="elfsight-platform-js"></script>
+<link rel="https://api.w.org/" href="https://www.sogeti.be/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://www.sogeti.be/wp-json/wp/v2/posts/842997" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.sogeti.be/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.7" />
+<link rel='shortlink' href='https://www.sogeti.be/zz5h' />
+	<style>img#wpstats{display:none}</style>
+		<style class='wp-fonts-local'>
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:300;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Light.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:300;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-LightItalic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:400;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Regular.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:400;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Italic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:500;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Medium.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:500;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-MediumItalic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:300;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Light.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:300;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-LightItalic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:400;font-display:swap;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Regular.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:400;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Italic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:normal;font-weight:500;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-Medium.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:Ubuntu;font-style:italic;font-weight:500;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu/Ubuntu-MediumItalic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:"Ubuntu Mono";font-style:normal;font-weight:400;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu-mono/UbuntuMono-Regular.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:"Ubuntu Mono";font-style:italic;font-weight:400;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu-mono/UbuntuMono-Italic.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:"Ubuntu Mono";font-style:normal;font-weight:700;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu-mono/UbuntuMono-Bold.ttf') format('truetype');font-stretch:normal;}
+@font-face{font-family:"Ubuntu Mono";font-style:italic;font-weight:700;font-display:fallback;src:url('https://www.sogeti.be/wp-content/themes/sogeti2024/assets/fonts/ubuntu-mono/UbuntuMono-Italic.ttf') format('truetype');font-stretch:normal;}
+</style>
+<link rel="icon" href="https://www.sogeti.be/wp-content/uploads/sites/13/2026/02/cropped-Sogeti-Favicon.png?w=32" sizes="32x32" />
+<link rel="icon" href="https://www.sogeti.be/wp-content/uploads/sites/13/2026/02/cropped-Sogeti-Favicon.png?w=192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://www.sogeti.be/wp-content/uploads/sites/13/2026/02/cropped-Sogeti-Favicon.png?w=180" />
+<meta name="msapplication-TileImage" content="https://www.sogeti.be/wp-content/uploads/sites/13/2026/02/cropped-Sogeti-Favicon.png?w=270" />
+<style>.shorten_url { 
+	   padding: 10px 10px 10px 10px ; 
+	   border: 1px solid #AAAAAA ; 
+	   background-color: #EEEEEE ;
+}</style></head>
+
+<body class="wp-singular post-template-default single single-post postid-842997 single-format-standard wp-embed-responsive wp-theme-sogeti2024">
+<script id='jetpack-search-theme-token-sampler'>(function(){try{var c=getComputedStyle(document.body),r=document.documentElement,ink=c.color,bg=c.backgroundColor;if(ink){r.style.setProperty('--jp-search-page-ink',ink);}if(bg&&bg!==ink&&bg!=='rgba(0, 0, 0, 0)'&&bg!=='transparent'){r.style.setProperty('--jp-search-page-surface',bg);}}catch(e){}})();</script>
+<div class="wp-site-blocks">
+<div class="wp-block-group header-wrapper is-layout-flow wp-block-group-is-layout-flow">
+	<header class="wp-block-template-part">
+<div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
+	<div class="header-wrapper header-desktop" role="banner">
+		<div class="header-bottom ">
+			
+						<div class="logo">
+				<a role="link" href="https://www.sogeti.be">
+					<img loading="eager"
+						class="blue-logo"
+						src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/sogeti-blue-new.svg"
+						alt="Sogeti blue logo">
+
+					<img loading="eager"
+						class="white-logo"
+						src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/sogeti-white-new.svg"
+						alt="Sogeti white logo">
+				</a>
+			</div>
+				
+			<nav class="header-nav" aria-label="Menu">
+
+				<ul id="menu-main-desktop" class="menu"><li aria-label="Services Submenu" class="t1-menu-li"><a aria-label="Services menu" href="https://www.sogeti.be/services/"><span><span>Services</span></span></a><button role="button" class="menu-arrow-down" aria-label="submenu" aria-expanded="false"><i class="ti ti-chevron-down"></i></button> <div class="menu-submenu"><div class="menu-submenu-inner"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title">Services</span><p>Innovative solutions driving your business forward.</p></div>
+<nav aria-label="Services SubMenu" class="menu-submenu-nav"><ul class="menu-l1">
+	<li aria-label="AI Submenu" class="t1-menu-li menu-parent"><a aria-label="AI menu" href="https://www.sogeti.be/services/ai/"><span><span>AI</span></span></a>
+	<nav aria-label="AI SubMenu" class="menu-submenu-nav"><ul class="menu-l2">
+		<li aria-label="Gen AI Submenu" class="t1-menu-li"><a aria-label="Gen AI menu" href="https://www.sogeti.be/services/ai/gen-ai/"><span><span>Gen AI</span></span></a></li>
+		<li aria-label="Agentic AI Submenu" class="t1-menu-li"><a aria-label="Agentic AI menu" href="https://www.sogeti.be/services/ai/agentic-ai/"><span><span>Agentic AI</span></span></a></li>
+	
+</ul></nav>
+</li>
+	<li aria-label="Cloud Submenu" class="t1-menu-li"><a aria-label="Cloud menu" href="https://www.sogeti.be/services/cloud/"><span><span>Cloud</span></span></a></li>
+	<li aria-label="Data Submenu" class="t1-menu-li"><a aria-label="Data menu" href="https://www.sogeti.be/services/data/"><span><span>Data</span></span></a></li>
+	<li aria-label="Intelligent Apps Submenu" class="t1-menu-li"><a aria-label="Intelligent Apps menu" href="https://www.sogeti.be/services/intelligent-apps/"><span><span>Intelligent Apps</span></span></a></li>
+	<li aria-label="Modern Work Submenu" class="t1-menu-li"><a aria-label="Modern Work menu" href="https://www.sogeti.be/services/modern-work/"><span><span>Modern Work</span></span></a></li>
+	<li aria-label="Quality Engineering Submenu" class="t1-menu-li"><a aria-label="Quality Engineering menu" href="https://www.sogeti.be/services/quality-engineering/"><span><span>Quality Engineering</span></span></a></li>
+	<li aria-label="&lt;strong&gt;End-to-End Solutions&lt;/strong&gt; Submenu" class="t1-menu-li menu-parent"><a aria-label="&lt;strong&gt;End-to-End Solutions&lt;/strong&gt; menu" href="https://www.sogeti.be/end-to-end-solutions/"><span><span><strong>End-to-End Solutions</strong></span></span></a>
+	<nav aria-label="&lt;strong&gt;End-to-End Solutions&lt;/strong&gt; SubMenu" class="menu-submenu-nav"><ul class="menu-l2">
+		<li aria-label="AI Enabled Business Submenu" class="t1-menu-li"><a aria-label="AI Enabled Business menu" href="https://www.sogeti.be/end-to-end-solutions/ai-enabled-business/"><span><span>AI Enabled Business</span></span></a></li>
+		<li aria-label="Future-Ready Apps Portfolio Submenu" class="t1-menu-li"><a aria-label="Future-Ready Apps Portfolio menu" href="https://www.sogeti.be/end-to-end-solutions/future-ready-apps-portfolio/"><span><span>Future-Ready Apps Portfolio</span></span></a></li>
+		<li aria-label="Gen AI Augmented Software House Submenu" class="t1-menu-li"><a aria-label="Gen AI Augmented Software House menu" href="https://www.sogeti.be/end-to-end-solutions/gen-ai-enabled-software-house/"><span><span>Gen AI Augmented Software House</span></span></a></li>
+		<li aria-label="Next-Gen Workplace Automation Submenu" class="t1-menu-li"><a aria-label="Next-Gen Workplace Automation menu" href="https://www.sogeti.be/end-to-end-solutions/next-gen-workplace-automation/"><span><span>Next-Gen Workplace Automation</span></span></a></li>
+		<li aria-label="Smart Quality at Speed Submenu" class="t1-menu-li"><a aria-label="Smart Quality at Speed menu" href="https://www.sogeti.be/end-to-end-solutions/smart-quality-at-speed/"><span><span>Smart Quality at Speed</span></span></a></li>
+		<li aria-label="Supercharging your ERP Quality Submenu" class="t1-menu-li"><a aria-label="Supercharging your ERP Quality menu" href="https://www.sogeti.be/end-to-end-solutions/supercharge-your-erp-quality/"><span><span>Supercharging your ERP Quality</span></span></a></li>
+		<li aria-label="GreenFinOps Cloud Optimization Submenu" class="t1-menu-li"><a aria-label="GreenFinOps Cloud Optimization menu" href="https://www.sogeti.be/end-to-end-solutions/optimized-cloud-cost-and-sustainability-with-greenfinops/"><span><span>GreenFinOps Cloud Optimization</span></span></a></li>
+	
+</ul></nav>
+</li>
+
+</ul></nav><div class="advertImageWrapper"><div class="imgSection"><a title="Discover our end-to-end solutions" href="https://www.sogeti.be/end-to-end-solutions/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/End-to-End-Solutions-Nav-promo-1.png?w=424&#038;quality=90"/></div></a><div class="advertImgInfo"><div class="advertContentWrapper"><strong><a title="Discover our end-to-end solutions" href="https://www.sogeti.be/end-to-end-solutions/">Discover our end-to-end solutions</a></strong></div></div></div></div>
+</li>
+<li aria-label="Client stories Submenu" class="t1-menu-li"><a aria-label="Client stories menu" href="https://www.sogeti.be/client-stories/"><span><span>Client stories</span></span></a></li>
+<li aria-label="Insights Submenu" class="t1-menu-li"><a aria-label="Insights menu" href="https://www.sogeti.be/insights/"><span><span>Insights</span></span></a><button role="button" class="menu-arrow-down" aria-label="submenu" aria-expanded="false"><i class="ti ti-chevron-down"></i></button> <div class="menu-submenu"><div class="menu-submenu-inner"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title">Insights</span><p>Discover our insights &#038; resources.</p></div>
+<nav aria-label="Insights SubMenu" class="menu-submenu-nav"><ul class="menu-l1">
+	<li aria-label="Reports Submenu" class="t1-menu-li"><a aria-label="Reports menu" href="https://www.sogeti.be/insights/reports/"><span><span>Reports</span></span></a></li>
+	<li aria-label="Expert Videos Submenu" class="t1-menu-li"><a aria-label="Expert Videos menu" href="https://www.sogeti.be/insights/expert-videos/"><span><span>Expert Videos</span></span></a></li>
+	<li aria-label="Featured articles Submenu" class="t1-menu-li"><a aria-label="Featured articles menu" href="https://www.sogeti.be/insights/featured-articles/"><span><span>Featured articles</span></span></a></li>
+	<li aria-label="Newsroom Submenu" class="t1-menu-li"><a aria-label="Newsroom menu" href="https://www.sogeti.be/insights/newsroom/"><span><span>Newsroom</span></span></a></li>
+	<li aria-label="Events Submenu" class="t1-menu-li menu-parent"><a aria-label="Events menu" href="https://www.sogeti.be/insights/events/"><span><span>Events</span></span></a>
+	<nav aria-label="Events SubMenu" class="menu-submenu-nav"><ul class="menu-l2">
+		<li aria-label="Executive summits Submenu" class="t1-menu-li"><a aria-label="Executive summits menu" href="https://www.sogeti.be/insights/executive-summits/"><span><span>Executive summits</span></span></a></li>
+	
+</ul></nav>
+</li>
+
+</ul></nav><div class="advertImageWrapper"><div class="imgSection"><a title="Worldwide Business Assurance for SAP solutions – 2026" href="https://www.sogeti.be/research-and-insight/business-assurance-for-sap-solutions/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/05/00702-SAP2026-Nav-promo.jpg?w=424&#038;quality=90"/></div></a><div class="advertImgInfo"><div class="advertContentWrapper"><strong><a title="Worldwide Business Assurance for SAP solutions – 2026" href="https://www.sogeti.be/research-and-insight/business-assurance-for-sap-solutions/">Worldwide Business Assurance for SAP solutions – 2026</a></strong></div></div></div></div>
+</li>
+<li aria-label="Careers Submenu" class="t1-menu-li"><a aria-label="Careers menu" href="https://www.sogeti.be/careers/"><span><span>Careers</span></span></a><button role="button" class="menu-arrow-down" aria-label="submenu" aria-expanded="false"><i class="ti ti-chevron-down"></i></button> <div class="menu-submenu"><div class="menu-submenu-inner"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title">Careers</span><p>Explore your career opportunities.</p></div>
+<nav aria-label="Careers SubMenu" class="menu-submenu-nav"><ul class="menu-l1">
+	<li aria-label="Career paths Submenu" class="t1-menu-li"><a aria-label="Career paths menu" href="https://www.sogeti.be/careers/career-paths/"><span><span>Career paths</span></span></a></li>
+	<li aria-label="Join us Submenu" class="t1-menu-li"><a aria-label="Join us menu" href="https://www.sogeti.be/careers/job-search/"><span><span>Join us</span></span></a></li>
+
+</ul></nav><div class="advertImageWrapper"><div class="imgSection"><a title="Join our team" href="https://www.sogeti.be/careers/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/Careers-banner-Nav-promo1.png?w=424&#038;quality=90"/></div></a><div class="advertImgInfo"><div class="advertContentWrapper"><strong><a title="Join our team" href="https://www.sogeti.be/careers/">Join our team</a></strong></div></div></div></div>
+</li>
+<li aria-label="About Us Submenu" class="t1-menu-li"><a aria-label="About Us menu" href="https://www.sogeti.be/about-us/"><span><span>About Us</span></span></a><button role="button" class="menu-arrow-down" aria-label="submenu" aria-expanded="false"><i class="ti ti-chevron-down"></i></button> <div class="menu-submenu"><div class="menu-submenu-inner"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title">About Us</span><p>Learn more about Sogeti.</p></div>
+<nav aria-label="About Us SubMenu" class="menu-submenu-nav"><ul class="menu-l1">
+	<li aria-label="Our story Submenu" class="t1-menu-li"><a aria-label="Our story menu" href="https://www.sogeti.be/about-us/our-story/"><span><span>Our story</span></span></a></li>
+	<li aria-label="Meet Geti Submenu" class="t1-menu-li"><a aria-label="Meet Geti menu" href="https://www.sogeti.be/about-us/meet-geti/"><span><span>Meet Geti</span></span></a></li>
+	<li aria-label="SogetiLabs Submenu" class="t1-menu-li"><a aria-label="SogetiLabs menu" href="https://www.sogeti.be/about-us/sogetilabs/"><span><span>SogetiLabs</span></span></a></li>
+	<li aria-label="Our technology partners Submenu" class="t1-menu-li menu-parent"><a aria-label="Our technology partners menu" href="https://www.sogeti.be/about-us/our-technology-partners/"><span><span>Our technology partners</span></span></a>
+	<nav aria-label="Our technology partners SubMenu" class="menu-submenu-nav"><ul class="menu-l2">
+		<li aria-label="AWS Submenu" class="t1-menu-li"><a aria-label="AWS menu" href="https://www.sogeti.be/about-us/our-technology-partners/aws/"><span><span>AWS</span></span></a></li>
+		<li aria-label="Microsoft Submenu" class="t1-menu-li"><a aria-label="Microsoft menu" href="https://www.sogeti.be/about-us/our-technology-partners/microsoft/"><span><span>Microsoft</span></span></a></li>
+		<li aria-label="OpenText Submenu" class="t1-menu-li"><a aria-label="OpenText menu" href="https://www.sogeti.be/about-us/our-technology-partners/opentext/"><span><span>OpenText</span></span></a></li>
+		<li aria-label="Tricentis Submenu" class="t1-menu-li"><a aria-label="Tricentis menu" href="https://www.sogeti.be/about-us/our-technology-partners/tricentis/"><span><span>Tricentis</span></span></a></li>
+		<li aria-label="Leapwork Submenu" class="t1-menu-li"><a aria-label="Leapwork menu" href="https://www.sogeti.be/about-us/our-technology-partners/leapwork/"><span><span>Leapwork</span></span></a></li>
+	
+</ul></nav>
+</li>
+	<li aria-label="TMAP® Submenu" class="t1-menu-li"><a aria-label="TMAP® menu" href="https://www.sogeti.be/about-us/tmap/"><span><span>TMAP®</span></span></a></li>
+	<li aria-label="Responsible business  Submenu" class="t1-menu-li"><a aria-label="Responsible business  menu" href="https://www.sogeti.be/about-us/responsible-business/"><span><span>Responsible business </span></span></a></li>
+	<li aria-label="Passion for sport Submenu" class="t1-menu-li"><a aria-label="Passion for sport menu" href="https://www.sogeti.be/about-us/passion-for-sport/"><span><span>Passion for sport</span></span></a></li>
+	<li aria-label="Locations Submenu" class="t1-menu-li"><a aria-label="Locations menu" href="https://www.sogeti.be/about-us/locations/"><span><span>Locations</span></span></a></li>
+
+</ul></nav><div class="advertImageWrapper"><div class="imgSection"><a title="Explore our technology partners" href="https://www.sogeti.be/about-us/our-technology-partners/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/Banner-Partners-Nav-promo-1.png?w=424&#038;quality=90"/></div></a><div class="advertImgInfo"><div class="advertContentWrapper"><strong><a title="Explore our technology partners" href="https://www.sogeti.be/about-us/our-technology-partners/">Explore our technology partners</a></strong></div></div></div></div>
+</li>
+</ul>
+			</nav>
+		</div>
+		<div class="header-topbar">
+			<div class="header-top">
+				<nav class="header-nav">
+					<ul>
+						<li class="icon-investors">
+														<a href="/contact-us/" target="_self"
+									title="Opens in the same window">
+									<span class="outer">
+										<span class="inner">Contact us</span>
+									</span>
+								</a>
+								
+						</li>
+												<li class="header-lang-open">
+							<a href="#">
+								<span class="outer lang-current">
+									<span class="inner">
+										Belgium | BE										<i aria-label="Select Country Website"></i>
+									</span>
+																	<img loading="lazy" alt="Belgium"
+										src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-belgium.svg"
+										class="language-icon"
+										width="14px" />
+																</span>
+							</a>
+						</li>
+											</ul>
+				</nav>
+				<div class="header-search-button header-search-open" tabindex="0" role="button" aria-label="Open search">
+					Search					<i class="ti ti-search"></i>
+				</div>
+			</div>
+			<div class="header-lang-wrapper-desktop">
+				<!-- Header language -->
+				<div class="header-lang header_lang_menu" role="navigation" aria-label="Location Search">
+					<div class="header-lang-inner">
+						<div class="header-lang-top">
+							<span>All countries</span>
+							<button class="header-lang-close" aria-label="Close language menu">
+								Close								<i class="ti ti-x" aria-label="close icon"></i></button>
+						</div>
+						<!--					<div class="header-lang-middle">-->
+						<!--						<span class="lang-current">-->
+						<!--							<img decoding="async" loading="lazy" src="--><!--"-->
+						<!--								 alt=""></img>-->
+						<!--							-->						<!--						</span>-->
+						<!--						<div class="lang-search">-->
+						<!--							<input id="search-location-input" type="text"-->
+						<!--								   aria-label="--><!--" name="location"-->
+						<!--								   placeholder="--><!--">-->
+						<!--						</div>-->
+						<!--					</div>-->
+						<div class="lang-list">
+							<ul id="menu-location-menu" class="menu"><li class=" "><a href= " https://www.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-global-purple.svg  " alt=" English | EN  "/><span class="inner location-span">Global | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.be/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-belgium.svg  " alt=" Belgium  "/><span class="inner location-span">Belgium | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.fi " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-finland.svg  " alt=" Finland  "/><span class="inner location-span">Finland | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.fr.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-france.svg  " alt=" France  "/><span class="inner location-span">France | FR<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.de/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-germany.svg  " alt=" Germany  "/><span class="inner location-span">Germany | DE<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.ie/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-ireland.svg  " alt=" Ireland  "/><span class="inner location-span">Ireland | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.lu/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-luxemburg.svg  " alt=" Luxemburg  "/><span class="inner location-span">Luxembourg | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.nl " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-netherlands.svg  " alt=" Netherlands  "/><span class="inner location-span">Netherlands | NL<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.no/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-norway.svg  " alt=" Norway  "/><span class="inner location-span">Norway | NO<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.es/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-spain.svg  " alt=" Spain  "/><span class="inner location-span">Spain | ES<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.se/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-sweden.svg  " alt=" Sweden  "/><span class="inner location-span">Sweden | SV<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.uk.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-united-kingdom.svg  " alt=" UK  "/><span class="inner location-span">UK | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.us.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-united-states.svg  " alt=" United States  "/><span class="inner location-span">USA | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+</ul>						</div>
+					</div>
+				</div>
+				<!-- / Header Language -->
+			</div>
+		</div>
+	</div>
+
+	<div class="header-mobile" role="navigation" aria-label="mobileNavigation">
+
+		<div class="header-mobile-bar">
+						<a role="link" class="logo" href="https://www.sogeti.be">
+				<img decoding="async" loading="lazy" class="blue-logo" src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/sogeti-blue-new.svg" alt="Sogeti">
+				<img decoding="async" loading="lazy" class="white-logo" src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/sogeti-white-new.svg" alt="Sogeti">
+			</a>
+							<div>
+			</div>
+
+			<div class="header-mobile-right">
+				<button class="mobile-search-button header-search-open" aria-label="Search">
+					<!--					<i class="ti ti-search"></i>-->
+				</button>
+				<button class="mobile-search-button header-search-close" aria-label="close">
+					<!--					<i class="ti ti-x"></i>-->
+				</button>
+				<button class="mobile-nav-button" aria-label="open navigation">
+					<!--					<i class="ti ti-menu-2"></i>-->
+				</button>
+
+			</div>
+		</div>
+
+		<div class="mobile-nav">
+			<div class="mobile-nav-inner">
+				<div class="mobile-menu-window">
+					<ul id="menu-main-mobile" class="mobile-menu menu-l0"><li aria-label="Services Submenu" class="menu-parent"><a href="https://www.sogeti.be/services/"><span>Services</span></a> <div class="menu-submenu menu-l1"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back" aria-label="Services Submenu" title="submenu">Back</button><a href="https://www.sogeti.be/services/">Services</a></span><p>Innovative solutions driving your business forward.</p><a aria-label="Services learn more" class="more4" href="https://www.sogeti.be/services/">Learn more</a></div>
+<ul class="">
+	<li aria-label="AI Submenu" class="menu-parent"><a href="https://www.sogeti.be/services/ai/"><span>AI</span></a>
+	<ul class="menu-submenu menu-l2"><li class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back">Back</button><a href="https://www.sogeti.be/services/ai/"><span>AI</span></a></span></li>
+		<li aria-label="Gen AI Submenu" class=""><a href="https://www.sogeti.be/services/ai/gen-ai/"><span>Gen AI</span></a></li>
+		<li aria-label="Agentic AI Submenu" class=""><a href="https://www.sogeti.be/services/ai/agentic-ai/"><span>Agentic AI</span></a></li>
+	
+</ul>
+</li>
+	<li aria-label="Cloud Submenu" class=""><a href="https://www.sogeti.be/services/cloud/"><span>Cloud</span></a></li>
+	<li aria-label="Data Submenu" class=""><a href="https://www.sogeti.be/services/data/"><span>Data</span></a></li>
+	<li aria-label="Intelligent Apps Submenu" class=""><a href="https://www.sogeti.be/services/intelligent-apps/"><span>Intelligent Apps</span></a></li>
+	<li aria-label="Modern Work Submenu" class=""><a href="https://www.sogeti.be/services/modern-work/"><span>Modern Work</span></a></li>
+	<li aria-label="Quality Engineering Submenu" class=""><a href="https://www.sogeti.be/services/quality-engineering/"><span>Quality Engineering</span></a></li>
+	<li aria-label="&lt;strong&gt;End-to-End Solutions&lt;/strong&gt; Submenu" class="menu-parent"><a href="https://www.sogeti.be/end-to-end-solutions/"><span><strong>End-to-End Solutions</strong></span></a>
+	<ul class="menu-submenu menu-l2"><li class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back">Back</button><a href="https://www.sogeti.be/end-to-end-solutions/"><span><strong>End-to-End Solutions</strong></span></a></span></li>
+		<li aria-label="AI Enabled Business Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/ai-enabled-business/"><span>AI Enabled Business</span></a></li>
+		<li aria-label="Future-Ready Apps Portfolio Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/future-ready-apps-portfolio/"><span>Future-Ready Apps Portfolio</span></a></li>
+		<li aria-label="Gen AI Augmented Software House Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/gen-ai-enabled-software-house/"><span>Gen AI Augmented Software House</span></a></li>
+		<li aria-label="Next-Gen Workplace Automation Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/next-gen-workplace-automation/"><span>Next-Gen Workplace Automation</span></a></li>
+		<li aria-label="Smart Quality at Speed Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/smart-quality-at-speed/"><span>Smart Quality at Speed</span></a></li>
+		<li aria-label="Supercharging your ERP Quality Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/supercharge-your-erp-quality/"><span>Supercharging your ERP Quality</span></a></li>
+		<li aria-label="GreenFinOps Cloud Optimization Submenu" class=""><a href="https://www.sogeti.be/end-to-end-solutions/optimized-cloud-cost-and-sustainability-with-greenfinops/"><span>GreenFinOps Cloud Optimization</span></a></li>
+	
+</ul>
+</li>
+
+</ul>
+</li>
+<li aria-label="Client stories Submenu" class=""><a href="https://www.sogeti.be/client-stories/"><span>Client stories</span></a></li>
+<li aria-label="Insights Submenu" class="menu-parent"><a href="https://www.sogeti.be/insights/"><span>Insights</span></a> <div class="menu-submenu menu-l1"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back" aria-label="Insights Submenu" title="submenu">Back</button><a href="https://www.sogeti.be/insights/">Insights</a></span><p>Discover our insights &#038; resources.</p><a aria-label="Insights learn more" class="more4" href="https://www.sogeti.be/insights/">Learn more</a></div>
+<ul class="">
+	<li aria-label="Reports Submenu" class=""><a href="https://www.sogeti.be/insights/reports/"><span>Reports</span></a></li>
+	<li aria-label="Expert Videos Submenu" class=""><a href="https://www.sogeti.be/insights/expert-videos/"><span>Expert Videos</span></a></li>
+	<li aria-label="Featured articles Submenu" class=""><a href="https://www.sogeti.be/insights/featured-articles/"><span>Featured articles</span></a></li>
+	<li aria-label="Newsroom Submenu" class=""><a href="https://www.sogeti.be/insights/newsroom/"><span>Newsroom</span></a></li>
+	<li aria-label="Events Submenu" class="menu-parent"><a href="https://www.sogeti.be/insights/events/"><span>Events</span></a>
+	<ul class="menu-submenu menu-l2"><li class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back">Back</button><a href="https://www.sogeti.be/insights/events/"><span>Events</span></a></span></li>
+		<li aria-label="Executive summits Submenu" class=""><a href="https://www.sogeti.be/insights/executive-summits/"><span>Executive summits</span></a></li>
+	
+</ul>
+</li>
+
+</ul>
+</li>
+<li aria-label="Careers Submenu" class="menu-parent"><a href="https://www.sogeti.be/careers/"><span>Careers</span></a> <div class="menu-submenu menu-l1"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back" aria-label="Careers Submenu" title="submenu">Back</button><a href="https://www.sogeti.be/careers/">Careers</a></span><p>Explore your career opportunities.</p><a aria-label="Careers learn more" class="more4" href="https://www.sogeti.be/careers/">Learn more</a></div>
+<ul class="">
+	<li aria-label="Career paths Submenu" class=""><a href="https://www.sogeti.be/careers/career-paths/"><span>Career paths</span></a></li>
+	<li aria-label="Join us Submenu" class=""><a href="https://www.sogeti.be/careers/job-search/"><span>Join us</span></a></li>
+
+</ul><div class="advertImageWrapper"><div class="imgSection"><a title="Join our team" href="https://www.sogeti.be/careers/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/Careers-banner-Nav-promo1.png?w=300&#038;quality=90"/></div></a></div><div class="advertImgInfo"><div style="transform: translateY(50%);"><strong><a title="Join our team" href="https://www.sogeti.be/careers/">Join our team</a></strong><a title="Join our team" href="https://www.sogeti.be/careers/"></a></div></div></div>
+</li>
+<li aria-label="About Us Submenu" class="menu-parent"><a href="https://www.sogeti.be/about-us/"><span>About Us</span></a> <div class="menu-submenu menu-l1"><div class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back" aria-label="About Us Submenu" title="submenu">Back</button><a href="https://www.sogeti.be/about-us/">About Us</a></span><p>Learn more about Sogeti.</p><a aria-label="About Us learn more" class="more4" href="https://www.sogeti.be/about-us/">Learn more</a></div>
+<ul class="">
+	<li aria-label="Our story Submenu" class=""><a href="https://www.sogeti.be/about-us/our-story/"><span>Our story</span></a></li>
+	<li aria-label="Meet Geti Submenu" class=""><a href="https://www.sogeti.be/about-us/meet-geti/"><span>Meet Geti</span></a></li>
+	<li aria-label="SogetiLabs Submenu" class=""><a href="https://www.sogeti.be/about-us/sogetilabs/"><span>SogetiLabs</span></a></li>
+	<li aria-label="Our technology partners Submenu" class="menu-parent"><a href="https://www.sogeti.be/about-us/our-technology-partners/"><span>Our technology partners</span></a>
+	<ul class="menu-submenu menu-l2"><li class="menu-submenu-title-wrapper"><span class="menu-submenu-title"><button class="menu-submenu-back">Back</button><a href="https://www.sogeti.be/about-us/our-technology-partners/"><span>Our technology partners</span></a></span></li>
+		<li aria-label="AWS Submenu" class=""><a href="https://www.sogeti.be/about-us/our-technology-partners/aws/"><span>AWS</span></a></li>
+		<li aria-label="Microsoft Submenu" class=""><a href="https://www.sogeti.be/about-us/our-technology-partners/microsoft/"><span>Microsoft</span></a></li>
+		<li aria-label="OpenText Submenu" class=""><a href="https://www.sogeti.be/about-us/our-technology-partners/opentext/"><span>OpenText</span></a></li>
+		<li aria-label="Tricentis Submenu" class=""><a href="https://www.sogeti.be/about-us/our-technology-partners/tricentis/"><span>Tricentis</span></a></li>
+		<li aria-label="Leapwork Submenu" class=""><a href="https://www.sogeti.be/about-us/our-technology-partners/leapwork/"><span>Leapwork</span></a></li>
+	
+</ul>
+</li>
+	<li aria-label="TMAP® Submenu" class=""><a href="https://www.sogeti.be/about-us/tmap/"><span>TMAP®</span></a></li>
+	<li aria-label="Responsible business  Submenu" class=""><a href="https://www.sogeti.be/about-us/responsible-business/"><span>Responsible business </span></a></li>
+	<li aria-label="Passion for sport Submenu" class=""><a href="https://www.sogeti.be/about-us/passion-for-sport/"><span>Passion for sport</span></a></li>
+	<li aria-label="Locations Submenu" class=""><a href="https://www.sogeti.be/about-us/locations/"><span>Locations</span></a></li>
+
+</ul><div class="advertImageWrapper"><div class="imgSection"><a title="Explore our technology partners" href="https://www.sogeti.be/about-us/our-technology-partners/"><div class="advertImg"><img decoding="async" loading="lazy" alt="Advert image" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/Banner-Partners-Nav-promo-1.png?w=300&#038;quality=90"/></div></a></div><div class="advertImgInfo"><div style="transform: translateY(50%);"><strong><a title="Explore our technology partners" href="https://www.sogeti.be/about-us/our-technology-partners/">Explore our technology partners</a></strong><a title="Explore our technology partners" href="https://www.sogeti.be/about-us/our-technology-partners/"></a></div></div></div>
+</li>
+</ul>				</div>
+
+				<div class="mobile-nav-bottom">
+					<div class="mobile-nav-contact">
+												<a href="/contact-us/" target="_self" class="btn-link-investors"><span class="text">Contact Us</span></a>
+						
+											</div>
+										<div class="lang-current">
+
+						<span>
+							Belgium | BE						</span>
+						<img decoding="async" loading="lazy" class="lang-icon" src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-belgium.svg" alt="Belgium">
+					</div>
+										<!--					<button class="header-lang-open">--><!--</button>-->
+				</div>
+			</div>
+		</div>
+
+		<!--			 Header language Mobile -->
+		<div class="header-lang-wrapper">
+			<div class="header-lang header_lang_menu_mobile" role="navigation" aria-label="Location Search">
+				<div class="header-lang-inner">
+					<div class="header-lang-top">
+						<span>All countries</span>
+						<button class="header-lang-close" aria-label="Close language menu"><i class="ti ti-x"></i></button>
+					</div>
+					<div class="header-lang-middle">
+						<span class="lang-current">
+							<img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-belgium.svg" alt="Belgium" class="" />
+							BelgiumBE
+						</span>
+					</div>
+					<div class="lang-list">
+						<ul id="menu-location-menu-1" class="menu"><li class=" "><a href= " https://www.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-global-purple.svg  " alt=" English | EN  "/><span class="inner location-span">Global | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.be/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-belgium.svg  " alt=" Belgium  "/><span class="inner location-span">Belgium | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.fi " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-finland.svg  " alt=" Finland  "/><span class="inner location-span">Finland | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.fr.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-france.svg  " alt=" France  "/><span class="inner location-span">France | FR<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.de/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-germany.svg  " alt=" Germany  "/><span class="inner location-span">Germany | DE<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.ie/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-ireland.svg  " alt=" Ireland  "/><span class="inner location-span">Ireland | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.lu/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-luxemburg.svg  " alt=" Luxemburg  "/><span class="inner location-span">Luxembourg | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.nl " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-netherlands.svg  " alt=" Netherlands  "/><span class="inner location-span">Netherlands | NL<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.no/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-norway.svg  " alt=" Norway  "/><span class="inner location-span">Norway | NO<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.es/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-spain.svg  " alt=" Spain  "/><span class="inner location-span">Spain | ES<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.sogeti.se/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-sweden.svg  " alt=" Sweden  "/><span class="inner location-span">Sweden | SV<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.uk.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-united-kingdom.svg  " alt=" UK  "/><span class="inner location-span">UK | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+<li class=" "><a href= " https://www.us.sogeti.com/ " ><img decoding="async" class="flag" loading="lazy" src=" https://www.sogeti.be/wp-content/themes/sogeti2024/assets/images/fl/flags-united-states.svg  " alt=" United States  "/><span class="inner location-span">USA | EN<span class="make-default" role="button">Make Default</span></span></a></li></li>
+</ul>					</div>
+				</div>
+			</div>
+		</div>
+		<!--				 Header Language Mobile-->
+
+	</div>
+
+</div>
+<!-- Header Search  -->
+<div class="header-search">
+
+	<div class="header-search-inner">
+		<div class="header-search-top">
+			<div class="search-title">Search</div>
+			<div class="searchCloseWrapper">
+				<button class="header-search-close">Close <span class="closeIcon">X</span></button>
+				<form class="form--oneliner js-search-form search" id="searchform" method="get" action="https://www.sogeti.be" role="search">
+					<div class="form-block">
+						<input type="text" onkeyup="fetch_search_result()" autocomplete="off" id="keyword" aria-label="Search the site"
+							value="" name="s" placeholder="Start typing" class="archive_phrase_search noeffect-input common-top-search-input">
+							<p id="search-instructions" class="visually-hidden">Start typing keywords to search the site. Press enter to submit.</p>
+							<div class="search-icon"> </div>
+						<button class="search-button-global common-top-search-button" onclick="document.forms['searchform'].submit()">Search</button>
+					</div>
+				</form>
+			</div>
+		</div>
+					<div class="header-search-bottom">
+				<span class="header-search-label">Most searched:</span>
+				<a href="https://www.sogeti.be?s=Generative AI" aria-label="Generative AI">
+					<p class="h5">Generative AI</p>
+				</a>
+				<a href="https://www.sogeti.be?s=Cloud" aria-label="Cloud">
+					<p class="h5">Cloud</p>
+				</a>
+				<a href="https://www.sogeti.be?s=Testing" aria-label="Testing">
+					<p class="h5">Testing</p>
+				</a>
+				<a href="https://www.sogeti.be?s=Artificial intelligence" aria-label="Artificial intelligence">
+					<p class="h5">Artificial intelligence</p>
+				</a>
+				<a href="https://www.sogeti.be?s=Security" aria-label="Security">
+					<p class="h5">Security</p>
+				</a>
+			</div>
+				<div class="header-search-results">
+			<div class="header-search-results-inner" id="search_result">
+
+			</div>
+
+			<div class="header-search-results-bottom">
+				<a class="more2" href="javascript:void(0)" onClick="document.forms['searchform'].submit()">Show all results</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- / Header Search -->
+
+
+<!-- Breadcrumbs -->
+<div class="sub-navigation-wrapper" role="navigation"><div class="sub-navigation "><ul class="sub-navigation__list"><li><a href="https://www.sogeti.be"><span class="mobile-home">Home</span></a></li><li class="menu-parent"><a href="https://www.sogeti.be/insights/"><span>Insights</span></a></li><li><a href="https://www.sogeti.be/insights/featured-articles/" class="active"><span>Featured articles</span></a></li><li><a href="/featured-articles/data-governance-frameworks-the-dama-dmbok/" class="active"><span>Data Governance Frameworks – The DAMA DMBoK</span></a></li></ul></div></div><!-- / Breadcrumbs -->
+
+</header>
+</div>
+
+
+
+<main class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
+	<div class="entry-content wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">
+<div class="wp-block-cg-blocks-cg-block-hero-bleed-banner-s"><div class="hero-bleed-banner-s-save has-no-header-overlay no-bottom-spacing hero-picture-card-s Sogeti"><div class="media-bg"><div class="overlay" style="opacity:0.6"></div><picture><source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/data-mastery-2021-1980x660-1.jpg?w=1920&amp;quality=70 1x, https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/data-mastery-2021-1980x660-1.jpg?w=3840&amp;quality=70 2x" media="(min-width: 1500px)"/><source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/data-mastery-2021-1980x660-1.jpg?w=1440&amp;quality=70 1x, https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/data-mastery-2021-1980x660-1.jpg?w=2880&amp;quality=70 2x" media="(min-width: 992px)"/><img decoding="async" class="d-none d-lg-block" style="object-position:50% 50%" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/data-mastery-2021-1980x660-1.jpg?w=1920&amp;quality=70" alt="Hero image"/></picture></div><div class="container h-100"><div class="banner-content fade-in-up-content "><div class="banner-content-inset"><span class="banner-tag">Data &amp; AI</span><div class="banner-title"><h1>Data Governance Frameworks – The DAMA DMBoK</h1></div></div></div></div></div></div>
+
+
+
+<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-28f84493 wp-block-columns-is-layout-flex">
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:66.66%">
+<div class="wp-block-cg-blocks-cg-block-spaced-article"><div class="save fade-in-up-content no-bottom-spacing"><div class="spaced-article-content">
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+
+<p id="ember49">This is week 1 in a 4-week series on the data governance frameworks and how they are structured as well as a comparison of the frameworks. We will be taking a 4 week walk through how Data Governance Frameworks can be applied within your organization.</p>
+
+
+
+<p id="ember50">In an era where data is a strategic asset, effective governance is essential for organizations to harness its full potential. The&nbsp;<strong>DAMA Data Management Body of Knowledge (DMBoK)</strong>&nbsp;framework, developed by the&nbsp;<strong>Data Management Association International (DAMA)</strong>, offers a comprehensive guide to managing data as an organizational resource. This article explores the key components of the DMBoK framework, its governance principles, and how it drives organizational efficacy.</p>
+
+
+
+<h2 class="wp-block-heading">What is the DAMA DMBoK Framework?</h2>
+
+
+
+<p>The DAMA DMBoK is a globally recognized framework that provides best practices for data management and governance. It outlines the core functions, roles, and processes necessary to manage data effectively throughout its lifecycle. The framework is organized into 11 knowledge areas, with data governance serving as the foundation that supports all other functions.</p>
+
+
+
+<h2 class="wp-block-heading">Core Knowledge Areas in the DAMA DMBoK</h2>
+
+
+
+<ol class="wp-block-list">
+<li><strong>Data Governance</strong>: Establishing policies, procedures, and responsibilities for managing data as an asset.</li>
+
+
+
+<li><strong>Data Architecture</strong>: Designing and maintaining the structural framework for data.</li>
+
+
+
+<li><strong>Data Modeling and Design</strong>: Developing data models to support business operations and analytics.</li>
+
+
+
+<li><strong>Data Storage and Operations</strong>: Managing data storage systems and operations.</li>
+
+
+
+<li><strong>Data Security</strong>: Protecting data from unauthorized access and breaches.</li>
+
+
+
+<li><strong>Data Integration and Interoperability</strong>: Ensuring seamless data flow across systems.</li>
+
+
+
+<li><strong>Data Quality Management</strong>: Ensuring data is accurate, complete, and reliable.</li>
+
+
+
+<li><strong>Reference and Master Data</strong>: Managing consistent and authoritative data.</li>
+
+
+
+<li><strong>Data Warehousing and Business Intelligence</strong>: Supporting analytics and reporting.</li>
+
+
+
+<li><strong>Metadata Management</strong>: Managing data about data for improved discoverability and lineage.</li>
+
+
+
+<li><strong>Data Lifecycle Management</strong>: Managing data from creation to retirement.</li>
+</ol>
+
+
+
+<h2 class="wp-block-heading">Data Governance within the DAMA DMBoK</h2>
+
+
+
+<p id="ember56">Data governance is the cornerstone of the DMBoK framework, emphasizing:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Accountability</strong>: Assigning roles and responsibilities for data ownership and stewardship.</li>
+
+
+
+<li><strong>Policies and Standards</strong>: Defining rules for data management to ensure compliance and consistency.</li>
+
+
+
+<li><strong>Decision Rights</strong>: Establishing authority for decision-making related to data assets.</li>
+
+
+
+<li><strong>Performance Metrics</strong>: Measuring governance effectiveness and its impact on organizational goals.</li>
+</ul>
+
+
+
+<h2 class="wp-block-heading">Efficacy of the DAMA DMBoK Framework</h2>
+
+
+
+<p>The DAMA DMBoK framework is widely lauded for its structured approach to data governance and management. Here are key aspects of its efficacy:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Comprehensive and Scalable </strong>The DMBoK framework covers all facets of data management, making it adaptable to organizations of varying sizes and industries. Its modular nature allows organizations to tailor governance efforts to specific needs, such as compliance, analytics, or operational efficiency.</li>
+
+
+
+<li><strong>Alignment with Business Goals </strong>By emphasizing the strategic value of data, DMBoK ensures governance initiatives align with business objectives, driving innovation and competitive advantage.</li>
+
+
+
+<li><strong>Standardization and Consistency </strong>The framework promotes consistent data practices across departments, reducing redundancies, and enabling seamless integration of data assets.</li>
+
+
+
+<li><strong>Risk Mitigation </strong>Through robust policies for security, quality, and compliance, DMBoK helps organizations mitigate risks associated with data breaches, regulatory violations, and poor decision-making.</li>
+
+
+
+<li><strong>Improved Decision-Making </strong>High-quality, well-governed data ensures that insights derived from analytics are accurate and actionable, empowering better decision-making.</li>
+
+
+
+<li><strong>Continuous Improvement </strong>The DAMA DMBoK promotes ongoing monitoring and enhancement of data quality and management practices. This continuous improvement approach helps organizations stay ahead of evolving data challenges and opportunities.</li>
+
+
+
+<li><strong>Flexibility and Adaptability </strong>The framework is adaptable to meet the unique needs of different industries and organizations. This flexibility allows organizations to tailor the DAMA DMBoK to their specific goals and requirement.</li>
+</ul>
+
+
+
+<p>DAMA DMBoK has proven to be an effective framework for organizations of all sizes. By adopting this framework, organizations can:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Improve Data Quality:</strong> By implementing robust data quality management practices, organizations can ensure that their data is accurate, complete, and reliable.</li>
+
+
+
+<li><strong>Enhance Data Security:</strong> By establishing strong security measures and controls, organizations can protect their sensitive data from cyber threats.</li>
+
+
+
+<li><strong>Optimize Data Integration:</strong> By using effective integration techniques, organizations can streamline their data processes and reduce data silos.</li>
+
+
+
+<li><strong>Facilitate Data-Driven Decision Making:</strong> By providing access to high-quality, integrated data, organizations can make informed decisions.</li>
+
+
+
+<li><strong>Comply with Regulations:</strong> By adhering to data privacy and security regulations, organizations can avoid costly penalties and reputational damage.</li>
+</ul>
+
+
+
+<h2 class="wp-block-heading">Challenges and Limitations</h2>
+
+
+
+<p id="ember64">While the DMBoK framework is robust, its implementation is not without challenges:</p>
+
+
+
+<ul class="wp-block-list">
+<li><strong>Complexity</strong>: The comprehensive nature of DMBoK can be overwhelming for organizations new to data governance.</li>
+
+
+
+<li><strong>Resource Intensive</strong>: Implementing the framework requires skilled personnel, time, and financial investment.</li>
+
+
+
+<li><strong>Change Management</strong>: Shifting organizational culture to prioritize data governance can be difficult.</li>
+</ul>
+
+
+
+<p id="ember66">Organizations can overcome these challenges through phased implementation, stakeholder buy-in and leveraging technology to streamline processes.</p>
+
+
+
+<p id="ember67">The DAMA DMBoK framework provides a solid foundation for organizations seeking to manage data effectively and derive value from it. By integrating best practices for governance and management, it ensures that data is treated as a critical asset. While its implementation requires effort, the long-term benefits of improved compliance, risk mitigation, and strategic decision-making make it a worthwhile investment.</p>
+
+
+
+<p id="ember68">In a world increasingly reliant on data-driven insights, the DAMA DMBoK framework is not just a guideline—it is a roadmap to sustainable data excellence.</p>
+</div></div></div>
+</div>
+
+
+
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:33.33%">
+<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
+
+
+<section class="author-list fade-in-up-content">
+    <div class="author-information "><div class="profile-card">
+            <div class="box-author-list-image">
+                <img decoding="async" src="https://www.sogeti.be/wp-content/uploads/sites/13/2025/03/fred-krimmelbein.jpg?w=150&#038;h=150&#038;crop=1" alt="Fred Krimmelbein" class="rounded-circle" />
+            </div>
+            <div class="profile-details">
+                <div class="profile-info">
+                    <h3>Fred Krimmelbein</h3>
+                    <div class="collapse-arrow-container" role="button" aria-expanded="true" tabindex="0" aria-label="Toggle details" aria-pressed="true">
+                        <i class="ti ti-chevron-up collapse-arrow up" style="display: none;"></i>
+                        <i class="ti ti-chevron-down collapse-arrow down" style="display: inline;"></i>
+                    </div>
+                    <p>Director, Data Governance – Privacy | USA</p>
+                </div>
+
+                <ul class="social-nav list-inline" aria-label="Social media links"><li class="list-inline-item">
+                            <a class="icon-wrapper icon-linkedin" aria-label="LinkedIn profile of Fred Krimmelbein" href="https://www.linkedin.com/in/fred-krimmelbein/" target="_blank" rel="noopener noreferrer">
+                            </a>
+                            <span>Connect</span>
+                        </li></ul>
+            </div>
+        </div>
+    
+    </div>
+</section></div>
+
+
+
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow"></div>
+
+
+
+<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow"></div>
+</div>
+</div>
+
+
+
+<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"></div>
+
+
+<section class="section cardBlocks" style="background-color: transparent;"><div class="save"><div class="container"><div class="contentTitle fade-in-up-content"><h2>Read more articles</h2></div><div class="slider-container fade-in-up-content"><div class="slider row"><div class="col-md-4">
+					<div class="storyBox ">
+
+						<a href="https://www.sogeti.be/featured-articles/sap-transformation-success-why-quality-assurance-is-the-missing-piece/" tabindex="-1"><div class="imageWrapper focused-image-container">
+
+														<picture>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00702-JuhaVaitilo-WebCard.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 992px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00702-JuhaVaitilo-WebCard.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 768px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00702-JuhaVaitilo-WebCard.jpg?w=1024?w=500&#038;quality=70"
+																				media="(min-width: 0)"/>
+																<img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00702-JuhaVaitilo-WebCard.jpg?w=1024" alt="SAP Transformation Success: Why Quality Assurance is the mis..." style="object-position: 50% 50%; object-fit: cover;" class="focused-image" />
+														</picture>
+
+												</div></a>
+
+						<div class="storyInfo   small-padding">
+							
+
+								<a href=https://www.sogeti.be/featured-articles/sap-transformation-success-why-quality-assurance-is-the-missing-piece/ tabindex="-1"><h3 class="storyTitle small-card-title">SAP Transformation Success: Why Quality Assurance is the mis&#8230;</h3></a>
+
+							<p>SAP transformations often fail during execution, not strategy. Learn how lifecycle Quality Assurance helps organizations&#8230;</p>
+
+							<a class="arrow-link cta-right" href="https://www.sogeti.be/featured-articles/sap-transformation-success-why-quality-assurance-is-the-missing-piece/" aria-label="Read more aboutSAP Transformation Success: Why Quality Assurance is the mis...">
+
+									</a>
+
+							<div class="author-info">
+											<div class="col">
+												<div class="our-team">
+													<div class="pic">
+														<img decoding="async" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/10/Juha-Vaitilo.png" alt="Juha Vaitilo">
+													</div>
+													<div class="text-container">
+														<h3 class="title">14 Jul, 2026</h3>
+														<span class="post">Juha Vaitilo</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+							</div>
+
+							<div class="hover-content hover-removed" style= "background:">
+								<p>SAP transformations often fail during execution, not strategy. Learn how lifecycle Quality Assurance helps organizations&#8230;</p>
+
+								<a role="button" href="https://www.sogeti.be/featured-articles/sap-transformation-success-why-quality-assurance-is-the-missing-piece/"  class="banner-cta card-cta" aria-label="Read more aboutSAP Transformation Success: Why Quality Assurance is the mis..." tabindex="0" aria-hidden="false" role="region">
+
+									Read more
+
+							</a>
+							</div>
+						</div>
+					</div><div class="col-md-4">
+					<div class="storyBox ">
+
+						<a href="https://www.sogeti.be/featured-articles/transforming-enterprise-software-delivery-through-agentic-ai/" tabindex="-1"><div class="imageWrapper focused-image-container">
+
+														<picture>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00619-90-Web-Card.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 992px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00619-90-Web-Card.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 768px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00619-90-Web-Card.jpg?w=1024?w=500&#038;quality=70"
+																				media="(min-width: 0)"/>
+																<img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/00619-90-Web-Card.jpg?w=1024" alt="Transforming enterprise software delivery through agentic AI" style="object-position: 50% 50%; object-fit: cover;" class="focused-image" />
+														</picture>
+
+												</div></a>
+
+						<div class="storyInfo   small-padding">
+							
+
+								<a href=https://www.sogeti.be/featured-articles/transforming-enterprise-software-delivery-through-agentic-ai/ tabindex="-1"><h3 class="storyTitle small-card-title">Transforming enterprise software delivery through agentic AI</h3></a>
+
+							<p>Learn how Agentic Software Engineering transforms software delivery by combining AI agents, governance, and modern devel&#8230;</p>
+
+							<a class="arrow-link cta-right" href="https://www.sogeti.be/featured-articles/transforming-enterprise-software-delivery-through-agentic-ai/" aria-label="Read more aboutTransforming enterprise software delivery through agentic AI">
+
+									</a>
+
+							<div class="author-info">
+											<div class="col">
+												<div class="our-team">
+													<div class="pic">
+														<img decoding="async" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/07/Kevin-Benner.png" alt="Kevin Benner">
+													</div>
+													<div class="text-container">
+														<h3 class="title">9 Jul, 2026</h3>
+														<span class="post">Kevin Benner</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+							</div>
+
+							<div class="hover-content hover-removed" style= "background:">
+								<p>Learn how Agentic Software Engineering transforms software delivery by combining AI agents, governance, and modern devel&#8230;</p>
+
+								<a role="button" href="https://www.sogeti.be/featured-articles/transforming-enterprise-software-delivery-through-agentic-ai/"  class="banner-cta card-cta" aria-label="Read more aboutTransforming enterprise software delivery through agentic AI" tabindex="0" aria-hidden="false" role="region">
+
+									Read more
+
+							</a>
+							</div>
+						</div>
+					</div><div class="col-md-4">
+					<div class="storyBox ">
+
+						<a href="https://www.sogeti.be/featured-articles/ai-data-readiness-the-missing-link-between-ambition-and-impact/" tabindex="-1"><div class="imageWrapper focused-image-container">
+
+														<picture>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/06/00619-78-Web-Card-1.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 992px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/06/00619-78-Web-Card-1.jpg?w=1024?w=1024&#038;quality=70"
+																				media="(min-width: 768px)"/>
+																<source srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2026/06/00619-78-Web-Card-1.jpg?w=1024?w=500&#038;quality=70"
+																				media="(min-width: 0)"/>
+																<img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/06/00619-78-Web-Card-1.jpg?w=1024" alt="AI Data Readiness: The missing link between ambition and imp..." style="object-position: 50% 50%; object-fit: cover;" class="focused-image" />
+														</picture>
+
+												</div></a>
+
+						<div class="storyInfo   small-padding">
+							
+
+								<a href=https://www.sogeti.be/featured-articles/ai-data-readiness-the-missing-link-between-ambition-and-impact/ tabindex="-1"><h3 class="storyTitle small-card-title">AI Data Readiness: The missing link between ambition and imp&#8230;</h3></a>
+
+							<p>AI is only as effective as the data behind it. Explore how fragmented systems, inconsistent data, and lack of governance&#8230;</p>
+
+							<a class="arrow-link cta-right" href="https://www.sogeti.be/featured-articles/ai-data-readiness-the-missing-link-between-ambition-and-impact/" aria-label="Read more aboutAI Data Readiness: The missing link between ambition and imp...">
+
+									</a>
+
+							<div class="author-info">
+											<div class="col">
+												<div class="our-team">
+													<div class="pic">
+														<img decoding="async" src="https://www.sogeti.com/wp-content/uploads/sites/3/2024/10/Joakim-Wahlqvist_ee9d9a.png" alt="Joakim Wahlqvist">
+													</div>
+													<div class="text-container">
+														<h3 class="title">18 Jun, 2026</h3>
+														<span class="post">Joakim Wahlqvist</span>
+													</div>
+												</div>
+											</div>
+										</div>
+
+							</div>
+
+							<div class="hover-content hover-removed" style= "background:">
+								<p>AI is only as effective as the data behind it. Explore how fragmented systems, inconsistent data, and lack of governance&#8230;</p>
+
+								<a role="button" href="https://www.sogeti.be/featured-articles/ai-data-readiness-the-missing-link-between-ambition-and-impact/"  class="banner-cta card-cta" aria-label="Read more aboutAI Data Readiness: The missing link between ambition and imp..." tabindex="0" aria-hidden="false" role="region">
+
+									Read more
+
+							</a>
+							</div>
+						</div>
+					</div></div></div></div><div class="progress-bar-container"><div class="progress-bar"></div></div></div></section>
+
+
+<p></p>
+</div>
+</main>
+
+
+
+
+<div class="wp-block-group footer is-layout-flow wp-block-group-is-layout-flow">
+<footer class="wp-block-template-part">
+<div class="wp-block-group footer has-white-color has-text-color has-link-color has-small-font-size wp-elements-d470a0f1622793c0a776163f42d690a3 is-layout-flow wp-block-group-is-layout-flow">
+<div class="wp-block-group footer-spacing has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"><div class="wp-block-template-part">
+<div class="wp-block-columns footer-columns has-white-color has-black-background-color has-text-color has-background has-link-color is-layout-flex wp-container-core-columns-is-layout-28f84493 wp-block-columns-is-layout-flex">
+<div class="wp-block-column first-footer-column is-layout-flow wp-block-column-is-layout-flow">
+<figure class="wp-block-image size-full is-resized"><img loading="lazy" decoding="async" width="281" height="147" src="https://www.sogeti.be/wp-content/uploads/sites/13/2026/02/Logo-2026-Sogeti-white-footer.png" alt="Sogeti Part of Capgemini" class="wp-image-844744" style="width:158px;height:auto"/></figure>
+
+
+
+<div class="wp-block-group mobile-group is-layout-flow wp-block-group-is-layout-flow">
+<p class="has-text-align-left"><strong>Explore Capgemini</strong></p>
+
+
+
+<figure class="wp-block-image size-full is-resized"><a href="https://www.capgemini.com/"><img loading="lazy" decoding="async" width="218" height="50" src="https://www.sogeti.com/wp-content/uploads/sites/3/2024/09/capgemini-logo.png" alt="Capgemini" class="wp-image-827894" style="width:87px;height:auto"/></a></figure>
+
+
+
+<figure class="wp-block-image size-full is-resized"><a href="https://www.capgemini.com/about-us/who-we-are/our-brands/capgemini-engineering/"><img loading="lazy" decoding="async" width="410" height="49" src="https://www.sogeti.com/wp-content/uploads/sites/3/2024/09/capgemini-engineering.png" alt="Capgemini engineering" class="wp-image-827896" style="width:177px;height:auto" srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/capgemini-engineering.png 410w, https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/capgemini-engineering.png?resize=300,36 300w" sizes="auto, (max-width: 410px) 100vw, 410px" /></a></figure>
+
+
+
+<figure class="wp-block-image size-full is-resized"><a href="https://www.capgemini.com/about-us/who-we-are/our-brands/capgemini-invent/"><img loading="lazy" decoding="async" width="317" height="49" src="https://www.sogeti.com/wp-content/uploads/sites/3/2024/09/capgemini-invent.png" alt="Capgemini invent" class="wp-image-827897" style="width:133px;height:auto" srcset="https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/capgemini-invent.png 317w, https://www.sogeti.be/wp-content/uploads/sites/13/2024/09/capgemini-invent.png?resize=300,46 300w" sizes="auto, (max-width: 317px) 100vw, 317px" /></a></figure>
+
+
+
+<figure class="wp-block-image size-full is-resized"><a href="https://www.capgemini.com/about-us/who-we-are/our-brands/frog/" target="_blank" rel=" noreferrer noopener"><img loading="lazy" decoding="async" width="150" height="36" src="https://www.sogeti.be/wp-content/uploads/sites/13/2025/01/svgviewer-png-output.png" alt="" class="wp-image-844682" style="width:100px"/></a></figure>
+</div>
+</div>
+
+
+
+<div class="wp-block-column menu-footer is-layout-flow wp-block-column-is-layout-flow">
+<ul class="wp-block-list">
+<li><a href="https://www.sogeti.be/services/">Services</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/client-stories/">Client stories</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/insights/">Insights</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/careers/">Careers</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/about-us/">About Us</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/contact-us/" target="_blank" rel="noreferrer noopener">Contact Us</a></li>
+</ul>
+</div>
+
+
+
+<div class="wp-block-column menu-footer is-layout-flow wp-block-column-is-layout-flow">
+<ul class="wp-block-list">
+<li><a href="https://www.sogeti.be/accessibility/" data-type="link" data-id="https://www.sogeti.be/accessibility/">Accessibility</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/cookie-policy/" data-type="link" data-id="https://www.sogeti.be/cookie-policy/">Cookie policy</a></li>
+
+
+
+<li><a href="javascript: UC_UI.showSecondLayer()">Cookie settings</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/privacy-notice/" data-type="link" data-id="https://www.sogeti.be/privacy-notice/">Privacy notice</a></li>
+
+
+
+<li><a href="https://www.sogeti.be/terms-of-use/" data-type="link" data-id="https://www.sogeti.be/terms-of-use/">Terms of use</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div class="wp-block-group footer-social-copyright has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+<div class="wp-block-columns is-layout-flex wp-container-core-columns-is-layout-28f84493 wp-block-columns-is-layout-flex">
+<div class="wp-block-column copyright-footer is-layout-flow wp-block-column-is-layout-flow">
+<p class="copyright">© 2026 Sogeti. All rights reserved.</p>
+</div>
+
+
+
+<div class="wp-block-column is-vertically-aligned-top social-nav-wrapper is-layout-flow wp-block-column-is-layout-flow">
+<ul class="wp-block-list footer-social-nav">
+<li>
+                            <a href="https://www.linkedin.com/company/sogeti" target="_blank" title="Opens in a new window" rel="noopener">
+                                <img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/11/Linkedin.png?w=48&amp;h=48&amp;crop=1" class="social-icon-footer" alt="Linkedin">
+                                
+                            </a>                        
+                        </li>
+
+
+
+<li>
+                            <a href="https://www.youtube.com/@SogetiWorldwide" target="_blank" title="Opens in a new window" rel="noopener">
+                                <img decoding="async" loading="lazy" src="https://www.sogeti.be/wp-content/uploads/sites/13/2024/11/YouTube.png?w=48&amp;h=48&amp;crop=1" class="social-icon-footer" alt="Youtube">
+                                
+                            </a>                        
+                        </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+</div>
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/sites/13/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/sogeti2024/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+        <!-- Inzynk -->
+        <script type="text/javascript">
+            var inzynk_tag_uid = 'nyztf69v';
+            (function () {
+                var s = document.createElement('script');
+                s.async = true;
+                s.src = 'https://tags.inzynk.io/' + inzynk_tag_uid + '/iztag.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+            })();
+        </script>
+        <!-- End Inzynk -->
+        	<script type="text/javascript">
+		var entityMap = {
+			'&': '&',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": "'",
+			'/': '&#x2F;',
+			'`': '&#x60;',
+			'=': '&#x3D;'
+		};
+
+		function escapeHtmlHeader(string) {
+			return String(string).replace(/[&<>"'`=\/]/g, function(s) {
+				return entityMap[s];
+			});
+		}
+		var noresult = '<h3><b>No results found</b></h3>';
+
+		function fetch_search_result() {
+			let paged = 1;
+			if (escapeHtmlHeader(jQuery('#searchform input:text').val())) {
+				jQuery('#searchform input:text').val(escapeHtmlHeader(jQuery('#searchform input:text').val()));
+				jQuery.ajax({
+					url: 'https://www.sogeti.be/wp-json/wp/v2/search?allow_search_function',
+					type: 'GET',
+					data: {
+						search: escapeHtmlHeader(jQuery('#searchform input:text').val()),
+						paged: paged,
+						postperpage: 6
+					},
+					success: function(success) {
+						var html = "";
+						if (success.length > 0) {
+							success.forEach((data, index) => {
+								if (index < 5) {
+									var dateHtml = "";
+									// if (data.post_type_name !== "People") {
+									//  dateHtml = '<span class="box-date">'+data.formatted_date+'</span>';
+									// }
+									html += '<div class="box"><h5 class="box-tag">' + data.post_type_name + '</h5><a  href="' + data.post_link + '" class="box-title"><h4>' + data.title + '</h4></a>' + dateHtml + '</div>';
+								}
+							});
+						} else {
+							html += '<div class="box">' + noresult + '</div>';
+						}
+						jQuery('#search_result').html(html);
+					},
+					error: function(error) {
+						jQuery('#search_result').html("No results found");
+					}
+				});
+			}
+
+		}
+	</script>
+
+		<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function() {
+			if (typeof Cookiebot !== 'undefined' && Cookiebot.consent && !Cookiebot.consent.marketing) {
+				document.querySelectorAll("iframe").forEach(function(iframe) {
+					let src = iframe.getAttribute("src") || iframe.getAttribute("data-cookieblock-src");
+					if (src && (src.includes("youtube.com") || src.includes("vimeo.com"))) {
+						let messageDiv = document.createElement("div");
+						messageDiv.className = "cookieconsent-optout";
+						messageDiv.innerHTML = 'Please <a href="javascript:Cookiebot.renew()">accept cookies</a> to watch this video.';
+						iframe.insertAdjacentElement("afterend", messageDiv);
+					}
+				});
+			}
+		});
+	</script>
+	<script type="text/javascript">
+		function printVideoEmbeds(type) {
+			var selector = '';
+			if (type === 'soundcloud') {
+				selector = '.embed_placeholder_soundcloud';
+			} else if (type === 'youtube') {
+				selector = '.embed_placeholder_youtube';
+			} else {
+				// If no specific type is provided, default to updating all embeds
+				selector = '.embed_placeholder';
+			}
+			jQuery(selector).each(function() {
+				var url = jQuery(this).data('url');
+				var iframeH = jQuery(this).data('height');
+				var iframeW = jQuery(this).data('width');
+				var fieldIdInput = jQuery('<iframe />', {
+					'class': 'embed_new_' + type,
+					'src': url,
+					'height': iframeH,
+					'width': iframeW,
+					'frameborder': '0',
+					'allow': 'autoplay; encrypted-media',
+					'allowfullscreen': 'allowfullscreen'
+				});
+				jQuery(this).replaceWith(fieldIdInput);
+			});
+		}
+
+		function hideVideoEmbeds(type) {
+			var expsnd = new RegExp(/(snd\.sc|soundcloud\.com|w\.soundcloud\.com)/);
+			var expyt = new RegExp(/(youtu\.be|youtube\.com)/);
+
+			if (type === 'soundcloud') {
+				jQuery('iframe').each(function() {
+					var $this = jQuery(this);
+					var src = $this.attr('src');
+
+					if (expsnd.test(src)) {
+						var sndbUrl = src;
+						var sndbH = $this.attr('height');
+						var sndbW = $this.attr('width');
+
+						var placeholder = jQuery('<div />', {
+							'class': 'embed_placeholder_soundcloud embed_placeholder',
+							'data-url': sndbUrl,
+							'data-height': sndbH,
+							'data-width': sndbW,
+						});
+
+						placeholder.html('<a href="#" onclick = "ta_click();">Please allow statistical cookies to see this Soundcloud embed</a>');
+						$this.replaceWith(placeholder);
+					}
+				});
+			} else if (type === 'youtube') {
+				jQuery('iframe').each(function() {
+					var $this = jQuery(this);
+					var src = $this.attr('src');
+
+					if (expyt.test(src)) {
+						var ytbUrl = src;
+						var ytbH = $this.attr('height');
+						var ytbW = $this.attr('width');
+
+						var placeholder = jQuery('<div />', {
+							'class': 'embed_placeholder_youtube embed_placeholder',
+							'data-url': ytbUrl,
+							'data-height': ytbH,
+							'data-width': ytbW,
+						});
+
+						placeholder.html('<a href="#" onclick="window.UC_UI.showSecondLayer();">Please allow advertising cookies to see this Youtube embed</a>');
+						$this.replaceWith(placeholder);
+					}
+				});
+			}
+		}
+
+		function handleUsercentricsConsent() {
+			const jsonString = localStorage.getItem("ucData");
+			// Parse the JSON string into an object
+			const parsedData = JSON.parse(jsonString);
+
+			// Find the "YouTube Video" item
+			const services = parsedData.consent.services;
+			const youtubeVideoItem = Object.values(services).find(service => service.name === "YouTube Video");
+
+			// Get the "consent" value of the "YouTube Video" item
+			const youtubeConsent = youtubeVideoItem ? youtubeVideoItem.consent : null;
+
+			if (youtubeConsent) {
+				printVideoEmbeds('youtube');
+			} else {
+				hideVideoEmbeds('youtube');
+			}
+		}
+		document.addEventListener("DOMContentLoaded", function() {
+			handleUsercentricsConsent();
+		});
+
+		window.addEventListener('UC_UI_CMP_EVENT', (data) => {
+			if (data.detail.type === 'ACCEPT_ALL' || data.detail.type === 'SAVE') {
+				handleUsercentricsConsent();
+			}
+		});
+	</script>
+<link rel='stylesheet' id='all-css-0' href='https://www.sogeti.be/wp-content/plugins/404page/assets/css/404page-ui.css?m=1786535614g' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.sogeti.be/wp-content/themes/sogeti2024/assets/js/bootstrap.bundle.min.js?m=1765369540g" ></script><script id="wp-block-template-skip-link-js-after">
+	( function() {
+		var skipLinkTarget = document.querySelector( 'main' ),
+			sibling,
+			skipLinkTargetID,
+			skipLink;
+
+		// Early exit if a skip-link target can't be located.
+		if ( ! skipLinkTarget ) {
+			return;
+		}
+
+		/*
+		 * Get the site wrapper.
+		 * The skip-link will be injected in the beginning of it.
+		 */
+		sibling = document.querySelector( '.wp-site-blocks' );
+
+		// Early exit if the root element was not found.
+		if ( ! sibling ) {
+			return;
+		}
+
+		// Get the skip-link target's ID, and generate one if it doesn't exist.
+		skipLinkTargetID = skipLinkTarget.id;
+		if ( ! skipLinkTargetID ) {
+			skipLinkTargetID = 'wp--skip-link--target';
+			skipLinkTarget.id = skipLinkTargetID;
+		}
+
+		// Create the skip link.
+		skipLink = document.createElement( 'a' );
+		skipLink.classList.add( 'skip-link', 'screen-reader-text' );
+		skipLink.id = 'wp-skip-link';
+		skipLink.href = '#' + skipLinkTargetID;
+		skipLink.innerText = 'Skip to content';
+
+		// Inject the skip link.
+		sibling.parentElement.insertBefore( skipLink, sibling );
+	}() );
+	
+//# sourceURL=wp-block-template-skip-link-js-after
+</script>
+<script type="text/javascript" src="https://www.sogeti.be/wp-content/plugins/cg-archive-shortcode/src/client/src/js/lib/jquery-ui-1.13.3/jquery-ui.js?m=1765369538g" ></script><script id="cg-archive-shortcode-frontend-js-js-extra">
+var archive_var = {"pathName":"https://www.sogeti.be","translationStrings":{"severalLocations":"Several locations"}};
+//# sourceURL=cg-archive-shortcode-frontend-js-js-extra
+</script>
+<script id="cg-archive-shortcode-frontend-js-js-before">
+window.archive_var = window.archive_var || {};(function(defaults){window.archive_var.pathName = (typeof window.archive_var.pathName === "string" && window.archive_var.pathName !== "") ? window.archive_var.pathName : defaults.pathName;window.archive_var.translationStrings = Object.assign({}, defaults.translationStrings, window.archive_var.translationStrings || {});}({"pathName":"https:\/\/www.sogeti.be","translationStrings":{"severalLocations":"Several locations"}}));
+//# sourceURL=cg-archive-shortcode-frontend-js-js-before
+</script>
+<script src="https://www.sogeti.be/wp-content/plugins/cg-archive-shortcode/src/client/build/app-cg-archive-shortcode-frontend.production.bundle.min.js?ver=2.0.1" id="cg-archive-shortcode-frontend-js-js"></script>
+<script type="text/javascript" src="https://www.sogeti.be/_static/??-eJytkUtSwzAMhi+E4jJDaTcMZ3FsNSg4tpFsOty+iiGbThoYYGNbr0+/ZHPO4FIsGIvJoQ4UxbgB+pDcKzgbApQE1hVK0fSVgjc2a8V6Bpy4oXyXOfnafF1fow/YTRS7Ue7Mdj/2st5GA/9DF3ZGAqmtp0c2o3zaP2Lgu7pBn7Ykbizr/bwAXYQqs/wt4cw6GfKsBvWi2IhfWlZG38r/60Y2tdxcFAiWQnGQW/yMKQdcNC4f2loKXAV/OYIkRzbAhJ4syIvqn+U11lJC0YXqUebA+FaRP0wl4xIv4Ofp6f5wfNw/HPeH3XgBiHkiyg==" ></script><script src="https://www.sogeti.be/wp-includes/js/jquery/ui/datepicker.min.js?ver=1.13.3" id="jquery-ui-datepicker-js"></script>
+<script id="jquery-ui-datepicker-js-after">
+jQuery(function(jQuery){jQuery.datepicker.setDefaults({"closeText":"Close","currentText":"Today","monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"nextText":"Next","prevText":"Previous","dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["S","M","T","W","T","F","S"],"dateFormat":"MM d, yy","firstDay":1,"isRTL":false});});
+//# sourceURL=jquery-ui-datepicker-js-after
+</script>
+<script type="text/javascript" src="https://www.sogeti.be/wp-content/plugins/wp-macs-forms/assets/js/country-dial-codes.js?m=1783585303g" ></script><script id="wp-macs-forms-js-extra">
+var MF = {"ajaxURL":"https://www.sogeti.be/wp-admin/admin-ajax.php","ajaxNonce":"35be408663","mfCountryFlagsBaseUrl":"https://www.sogeti.be/wp-content/plugins/wp-macs-forms/assets/img/flags/","strings":{"remove_file":"Remove File","select_file":"Select File","uploading":"uploading...","file_selected":"File selected","default_error":"","required_error":"","email_error":"","date_format_error":"Please enter date in valid format!"}};
+//# sourceURL=wp-macs-forms-js-extra
+</script>
+<script src="https://www.sogeti.be/wp-content/plugins/wp-macs-forms/assets/js/wp-macs-forms-front.js?ver=1.0.1" id="wp-macs-forms-js"></script>
+<script id="jetpack-stats-js-before">
+_stq = window._stq || [];
+_stq.push([ "view", {"v":"ext","blog":"234861007","post":"842997","tz":"0","srv":"www.sogeti.be","hp":"vip","j":"1:16.0.1"} ]);
+_stq.push([ "clickTrackerInit", "234861007", "842997" ]);
+//# sourceURL=jetpack-stats-js-before
+</script>
+<script src="https://stats.wp.com/e-202633.js" id="jetpack-stats-js" defer data-wp-strategy="defer" fetchpriority="low"></script>
+<script id="cg-mf-training-js-js-extra">
+var MFTraining = {"trainingId":null,"sessionDate":"","sessionId":null};
+//# sourceURL=cg-mf-training-js-js-extra
+</script>
+<script type="text/javascript" src="https://www.sogeti.be/_static/??-eJyNjNEKwjAMAH/ILgrO7UX8ltjVktKktWkY/r3TNwVBuKfjOFirI/HZlqCQNu4W2gOMgItpGJhkSLqDn9nSMEa85r/SUut36ov0IB1qtkiiL8Xo1d1KYwVUDf29+fCuNyQhidvlwufDNJ/G4zxO+/QEsCxMNw==" ></script><script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www.sogeti.be/wp-includes/js/wp-emoji-release.min.js?ver=6.9.7"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://www.sogeti.be/wp-includes/js/wp-emoji-loader.min.js
+</script>
+</body>
+</html>

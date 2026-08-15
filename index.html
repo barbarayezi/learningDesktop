@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>备考资料中心 · CDGA & 上海交大在职博士</title>
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f1f3f9; --border:#e6e9f0;
+  --text:#1f2433; --text-2:#5b6378; --text-3:#8a91a6;
+  --accent:#4f6ef7; --accent-soft:#eef1fe; --accent-2:#0fb5a6;
+  --red:#e5484d; --red-soft:#fdecec; --yellow:#f5a623; --yellow-soft:#fdf3e0;
+  --green:#30a46c; --green-soft:#e7f6ee; --code-bg:#f3f4f8;
+  --shadow:0 1px 2px rgba(20,30,60,.04),0 8px 24px rgba(20,30,60,.06);
+  --radius:14px; --radius-sm:9px;
+  --sidebar-w:268px;
+}
+html[data-theme="dark"]{
+  --bg:#0f1117; --surface:#171a22; --surface-2:#1d212b; --border:#262b36;
+  --text:#e7eaf0; --text-2:#aab1c2; --text-3:#727a8c;
+  --accent:#6b86ff; --accent-soft:#1b2140; --accent-2:#1ec8b8;
+  --red:#ff6166; --red-soft:#3a1f22; --yellow:#ffb648; --yellow-soft:#362b16;
+  --green:#3fd08a; --green-soft:#163023; --code-bg:#1b1f29;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.7;
+  -webkit-font-smoothing:antialiased; font-size:15px;
+}
+a{color:var(--accent);text-decoration:none}
+.app{display:flex;min-height:100vh}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:var(--sidebar-w); flex:0 0 var(--sidebar-w);
+  background:var(--surface); border-right:1px solid var(--border);
+  position:sticky; top:0; height:100vh; overflow-y:auto; padding:18px 14px 40px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;padding:6px 8px 14px}
+.brand .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-size:16px}
+.search{position:relative;margin-bottom:14px}
+.search input{
+  width:100%;padding:9px 12px 9px 32px;border:1px solid var(--border);
+  background:var(--surface-2);border-radius:10px;color:var(--text);font-size:13.5px;outline:none;
+}
+.search input:focus{border-color:var(--accent);background:var(--surface)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-3)}
+.nav-group{margin-bottom:14px}
+.nav-group-title{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);padding:6px 10px;display:flex;align-items:center;gap:7px;
+}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.red{background:var(--red)} .dot.blue{background:var(--accent)}
+.nav-item{
+  display:block;padding:8px 11px;border-radius:9px;color:var(--text-2);
+  font-size:13.5px;cursor:pointer;margin:1px 0;border:1px solid transparent;
+  transition:background .12s,color .12s;
+}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:600;border-color:rgba(79,110,247,.25)}
+.nav-item .tag{font-size:10.5px;color:var(--text-3);float:right;margin-top:2px}
+
+/* ---------- Main ---------- */
+.content{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;
+  padding:12px 26px;background:color-mix(in srgb,var(--surface) 86%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
+}
+.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:0 4px}
+.crumbs{font-size:13px;color:var(--text-3);flex:1}
+.crumbs b{color:var(--text)}
+.icon-btn{
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);
+  width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:16px;display:grid;place-items:center;
+}
+.icon-btn:hover{color:var(--accent)}
+.page-wrap{padding:30px 26px 80px;max-width:920px;margin:0 auto;width:100%}
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Home ---------- */
+.hero{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;
+  border-radius:18px;padding:30px 30px;margin-bottom:24px;box-shadow:var(--shadow);
+}
+.hero h1{margin:0 0 8px;font-size:26px}
+.hero p{margin:0;opacity:.92;font-size:14.5px;max-width:620px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cat-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);
+}
+.cat-card:hover{transform:translateY(-3px)}
+.cat-card .ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:20px;margin-bottom:12px}
+.cat-card h3{margin:0 0 4px;font-size:17px}
+.cat-card p{margin:0;color:var(--text-2);font-size:13px}
+.cat-card .meta{margin-top:12px;font-size:12px;color:var(--text-3)}
+.home-note{margin-top:22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;font-size:13.5px;color:var(--text-2)}
+.home-note b{color:var(--text)}
+
+/* ---------- Content typography ---------- */
+h1.doc-title{font-size:24px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+.doc-sub{color:var(--text-3);font-size:13px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.page h2{font-size:19px;margin:30px 0 12px;padding-left:11px;border-left:3px solid var(--accent)}
+.page h3{font-size:16px;margin:22px 0 9px;color:var(--text)}
+.page h4{font-size:14.5px;margin:16px 0 7px}
+.page p{margin:11px 0}
+.page ul,.page ol{margin:10px 0;padding-left:22px}
+.page li{margin:5px 0}
+.page strong{color:var(--text);font-weight:700}
+
+/* Callouts */
+.callout{border-radius:var(--radius-sm);padding:13px 16px;margin:16px 0;font-size:13.5px;border:1px solid var(--border)}
+.callout .ct{font-weight:700;display:block;margin-bottom:3px}
+.callout.info{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 25%,transparent)}
+.callout.warn{background:var(--yellow-soft);border-color:color-mix(in srgb,var(--yellow) 35%,transparent)}
+.callout.danger{background:var(--red-soft);border-color:color-mix(in srgb,var(--red) 30%,transparent)}
+.callout.tip{background:var(--green-soft);border-color:color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;margin:16px 0;border-radius:var(--radius-sm);border:1px solid var(--border)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+thead th{background:var(--surface-2);font-weight:700;color:var(--text);white-space:nowrap;position:sticky;top:0}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:600}
+
+/* Code */
+code{background:var(--code-bg);padding:2px 6px;border-radius:5px;font-size:12.5px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;overflow-x:auto;font-size:12.5px;line-height:1.6}
+pre code{background:none;padding:0}
+.kbd{font-family:monospace;background:var(--surface-2);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12px}
+
+/* Checklist */
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:9px;cursor:pointer;transition:background .1s}
+.chk-row:hover{background:var(--surface-2)}
+.chk-row input{margin-top:5px;width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex:0 0 auto}
+.chk-row.done span{color:var(--text-3);text-decoration:line-through}
+.vcell{text-align:center;width:46px;vertical-align:middle}
+.vcell input{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
+.tbl-wrap table tr.vdone td{background:var(--surface-2)}
+.chk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 6px}
+.chk-head h3{margin:0}
+.progress{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width .3s}
+.progress-label{font-size:12px;color:var(--text-3)}
+
+/* Quiz */
+.quiz-domain{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:22px 0 8px}
+details.q{padding:13px 16px;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--surface)}
+details.q summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;gap:8px}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .qn{color:var(--accent);font-weight:700;flex:0 0 auto}
+details.q .opts{margin:10px 0 0;padding-left:26px}
+details.q .opts div{margin:4px 0;font-size:13.5px}
+details.q .ans{margin-top:12px;padding-top:11px;border-top:1px dashed var(--border);font-size:13px;color:var(--text-2)}
+details.q .ans b{color:var(--green)}
+details.q[open] summary{margin-bottom:4px}
+
+/* ---------- Quiz: Mode Switcher + Practice Mode ---------- */
+.mode-toggle{
+  display:inline-flex;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:11px;padding:4px;margin:14px 0 14px;font-size:13.5px;gap:2px;
+}
+.mode-toggle button{
+  border:none;background:transparent;color:var(--text-2);
+  padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:600;
+  transition:background .15s,color .15s;display:inline-flex;align-items:center;gap:6px;
+}
+.mode-toggle button:hover:not(.active){color:var(--text)}
+.mode-toggle button.active{
+  background:var(--surface);color:var(--accent);
+  box-shadow:0 1px 4px rgba(20,30,60,.08);
+}
+.mode-toggle .num{font-size:11px;color:var(--text-3);font-weight:500}
+.mode-toggle button.active .num{color:var(--accent);opacity:.7}
+
+/* Practice HUD */
+.practice-hud{
+  display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
+  padding:12px 16px;background:var(--surface);border:1px solid var(--border);
+  border-radius:11px;margin:6px 0 16px;font-size:13px;
+}
+.practice-hud .stat{display:flex;align-items:center;gap:6px;color:var(--text-2);white-space:nowrap}
+.practice-hud .stat b{color:var(--text);font-weight:700;font-size:15px;margin-left:2px}
+.practice-hud .progress{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;min-width:140px}
+.practice-hud .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .25s}
+.practice-hud .reset{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:12px}
+.practice-hud .reset:hover{color:var(--red)}
+
+/* Domain filter chips */
+.domain-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 18px}
+.domain-chip{
+  font-size:12px;padding:5px 12px;border-radius:99px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text-2);
+  cursor:pointer;transition:all .15s;font-weight:500;
+}
+.domain-chip:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+.domain-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.domain-chip .ct{font-size:10.5px;opacity:.75;margin-left:5px;font-weight:400}
+
+/* Practice card */
+.practice-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:24px 26px;box-shadow:var(--shadow);
+}
+.pc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.pc-head .pc-domain{font-size:11.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.pc-head .pc-num{font-size:12px;color:var(--text-3);font-family:ui-monospace,Menlo,Consolas,monospace}
+.pc-question{font-size:16px;font-weight:600;line-height:1.65;margin:0 0 18px;color:var(--text)}
+
+.pc-options{display:flex;flex-direction:column;gap:9px;margin-bottom:4px}
+.pc-opt{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  border:1.5px solid var(--border);border-radius:10px;cursor:pointer;
+  font-size:14px;background:var(--surface-2);transition:all .15s;text-align:left;
+}
+.pc-opt:hover:not(.locked){border-color:var(--accent);background:var(--surface);transform:translateY(-1px)}
+.pc-opt .letter{
+  width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);
+  display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--text-2);
+  background:var(--surface);flex:0 0 auto;transition:all .15s;
+}
+.pc-opt .text{flex:1;line-height:1.5}
+.pc-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+.pc-opt.selected .letter{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pc-opt.locked{cursor:default;opacity:.85;transform:none}
+.pc-opt.correct{border-color:var(--green);background:var(--green-soft)}
+.pc-opt.correct .letter{background:var(--green);color:#fff;border-color:var(--green)}
+.pc-opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.pc-opt.wrong .letter{background:var(--red);color:#fff;border-color:var(--red)}
+.pc-opt.showright{border-color:var(--green)}
+
+/* ---------- Ladder Page (CDGA → CDGP → CDGE) ---------- */
+.ladder-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;
+}
+.lv-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px 18px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.lv-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent);
+}
+.lv-card.l2::before{background:var(--accent-2)}
+.lv-card.l3::before{background:var(--green)}
+.lv-card.optional::before{background:var(--yellow)}
+.lv-card .lv-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;
+  padding:3px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);
+  text-transform:uppercase;
+}
+.lv-card.l2 .lv-tag{background:rgba(15,181,166,.12);color:var(--accent-2)}
+.lv-card.l3 .lv-tag{background:var(--green-soft);color:var(--green)}
+.lv-card.optional .lv-tag{background:var(--yellow-soft);color:var(--yellow)}
+.lv-card h3{margin:10px 0 4px;font-size:17px;color:var(--text)}
+.lv-card .lv-sub{font-size:12.5px;color:var(--text-3);margin-bottom:10px}
+.lv-card .lv-meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;margin-top:10px}
+.lv-card .lv-meta b{color:var(--text-2);font-weight:600}
+.lv-card .lv-meta span{color:var(--text)}
+.lv-card .lv-price{margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);font-size:12px;color:var(--text-3)}
+.lv-card .lv-price b{color:var(--text);font-size:14px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0 22px}
+.kpi{
+  background:var(--surface);border:1px solid var(--border);border-radius:11px;
+  padding:12px 14px;text-align:center;
+}
+.kpi .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.1;margin-bottom:2px}
+.kpi .l{font-size:11.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em}
+
+.timeline-band{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px 14px;margin:18px 0 8px;box-shadow:var(--shadow);
+}
+.tl-track{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;position:relative;margin-top:8px}
+.tl-step{
+  background:var(--surface-2);border-radius:10px;padding:10px 10px;
+  font-size:12px;border:1px solid var(--border);text-align:center;min-height:78px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.tl-step .ph{font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.04em}
+.tl-step .when{font-size:11px;color:var(--text-3);margin-top:2px}
+.tl-step .what{font-size:12px;color:var(--text);margin-top:4px;line-height:1.4}
+.tl-step.l1{background:var(--accent-soft);border-color:rgba(79,110,247,.25)}
+.tl-step.l1 .ph{color:var(--accent)}
+.tl-step.l2{background:rgba(15,181,166,.10);border-color:rgba(15,181,166,.25)}
+.tl-step.l2 .ph{color:var(--accent-2)}
+.tl-step.l3{background:var(--green-soft);border-color:rgba(48,164,108,.25)}
+.tl-step.l3 .ph{color:var(--green)}
+
+.checklist{
+  display:flex;flex-direction:column;gap:6px;margin:10px 0 18px;
+}
+.checklist label{
+  display:flex;align-items:flex-start;gap:10px;padding:9px 12px;
+  border:1px solid var(--border);border-radius:9px;cursor:pointer;
+  background:var(--surface-2);transition:all .15s;font-size:13.5px;line-height:1.5;
+}
+.checklist label:hover{border-color:var(--accent)}
+.checklist input{margin-top:4px;accent-color:var(--accent);cursor:pointer;flex:0 0 auto}
+.checklist label.checked{background:var(--green-soft);border-color:rgba(48,164,108,.3);color:var(--text)}
+.checklist label.checked b{text-decoration:line-through;color:var(--text-3)}
+
+/* 5-year budget table compact */
+.budget-bar{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0;
+}
+.budget-bar > div{
+  background:var(--surface);border:1px solid var(--border);border-radius:11px;
+  padding:12px 14px;
+}
+.budget-bar .lbl{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em}
+.budget-bar .amt{font-size:20px;font-weight:800;color:var(--accent);margin:4px 0 2px}
+.budget-bar .note{font-size:11.5px;color:var(--text-2)}
+
+.theme-card-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.theme-card{
+  border:1px solid var(--border);border-radius:11px;padding:13px;
+  background:var(--surface-2);
+}
+.theme-card .ix{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.theme-card h4{margin:0 0 4px;font-size:14px}
+.theme-card p{margin:0;font-size:12.5px;color:var(--text-2);line-height:1.5}
+
+.callout.urgent{border-left:4px solid var(--red);background:var(--red-soft)}
+
+@media(max-width:760px){
+  .tl-track{grid-template-columns:repeat(2,1fr)}
+  .lv-card{padding:14px}
+}
+
+/* Feedback after answering */
+.pc-feedback{
+  margin-top:14px;padding:13px 16px;border-radius:10px;font-size:13.5px;
+  border-left:4px solid var(--text-3);background:var(--surface-2);
+  animation:slidein .25s ease;
+}
+@keyframes slidein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pc-feedback.correct{border-left-color:var(--green);background:var(--green-soft)}
+.pc-feedback.wrong{border-left-color:var(--red);background:var(--red-soft)}
+.pc-feedback .label{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.pc-feedback.correct .label{color:var(--green)}
+.pc-feedback.wrong .label{color:var(--red)}
+.pc-feedback .expl{color:var(--text);line-height:1.6}
+
+/* Practice nav */
+.pc-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:12px;flex-wrap:wrap}
+.pc-nav .left,.pc-nav .right{display:flex;gap:8px;flex-wrap:wrap}
+.pc-btn{
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  padding:9px 16px;border-radius:10px;font-size:13px;cursor:pointer;
+  font-weight:600;transition:all .15s;font-family:inherit;
+}
+.pc-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pc-btn:disabled{opacity:.4;cursor:not-allowed}
+.pc-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pc-btn.primary:hover:not(:disabled){background:#3d5be0;color:#fff;border-color:#3d5be0}
+.pc-btn.ghost{background:transparent}
+
+/* Results panel */
+.pc-results{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:32px 28px;text-align:center;box-shadow:var(--shadow);
+}
+.pc-results .trophy{font-size:42px;margin-bottom:6px}
+.pc-results h3{margin:4px 0 6px;font-size:20px;color:var(--text)}
+.pc-results .score{
+  font-size:56px;font-weight:800;line-height:1;margin:14px 0 4px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.pc-results .score-label{color:var(--text-2);font-size:13px}
+.pc-results .breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+.pc-results .breakdown>div{
+  padding:14px 8px;background:var(--surface-2);border-radius:10px;
+}
+.pc-results .breakdown .v{font-size:22px;font-weight:700;color:var(--text)}
+.pc-results .breakdown .v.good{color:var(--green)}
+.pc-results .breakdown .v.bad{color:var(--red)}
+.pc-results .breakdown .l{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.pc-results .review-list{text-align:left;margin-top:24px;border-top:1px solid var(--border);padding-top:20px}
+.pc-results .review-list h4{font-size:12.5px;color:var(--text-2);margin:0 0 10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pc-results .review-item{
+  display:flex;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;
+  font-size:13px;transition:background .12s;align-items:flex-start;
+}
+.pc-results .review-item:hover{background:var(--surface-2)}
+.pc-results .review-item .badge{
+  width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:11px;font-weight:700;color:#fff;flex:0 0 auto;margin-top:1px;
+}
+.pc-results .review-item.right .badge{background:var(--green)}
+.pc-results .review-item.wrong .badge{background:var(--red)}
+.pc-results .review-item .q{color:var(--text);line-height:1.5}
+.pc-results .actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+
+/* Mini nav (jump list) */
+.pc-jump{display:flex;flex-wrap:wrap;gap:5px;margin-top:16px;padding-top:16px;border-top:1px dashed var(--border)}
+.pc-jump-label{font-size:11.5px;color:var(--text-3);margin-right:6px;align-self:center}
+.pc-jump-dot{
+  width:26px;height:26px;border-radius:6px;display:grid;place-items:center;
+  font-size:11.5px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);
+  cursor:pointer;font-weight:600;transition:all .15s;
+}
+.pc-jump-dot:hover{border-color:var(--accent);color:var(--accent)}
+.pc-jump-dot.current{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pc-jump-dot.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.pc-jump-dot.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+
+@media(max-width:640px){
+  .practice-hud{grid-template-columns:1fr 1fr;gap:10px;padding:10px 12px}
+  .practice-hud .progress{grid-column:span 2;order:5}
+  .practice-card{padding:18px 16px}
+  .pc-question{font-size:15px}
+  .pc-results{padding:22px 18px}
+  .pc-results .score{font-size:42px}
+  .pc-results .breakdown{grid-template-columns:repeat(2,1fr)}
+  .mode-toggle{width:100%}
+  .mode-toggle button{flex:1;justify-content:center}
+  .pc-opt{padding:10px 12px}
+  .pc-opt .letter{width:24px;height:24px;font-size:12px}
+}
+
+/* Visuals: Gantt + Timeline */
+.gantt{margin:18px 0;border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;background:var(--surface)}
+.gantt .bar{display:flex;align-items:center;gap:10px;margin:7px 0}
+.gantt .bar .lab{width:120px;flex:0 0 120px;font-size:12.5px;font-weight:600;text-align:right;color:var(--text-2)}
+.gantt .bar .track{flex:1;height:22px;background:var(--surface-2);border-radius:6px;position:relative;overflow:hidden}
+.gantt .bar .fill{height:100%;border-radius:6px;display:grid;place-items:center;font-size:11px;color:#fff;font-weight:600;padding:0 6px;white-space:nowrap}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text-3);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.timeline{margin:18px 0;padding-left:6px}
+.tl-item{position:relative;padding:0 0 20px 28px;border-left:2px solid var(--border)}
+.tl-item:last-child{border-left-color:transparent;padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-8px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 1px var(--accent)}
+.tl-item.done::before{background:var(--green)}
+.tl-item .when{font-size:12px;font-weight:700;color:var(--accent)}
+.tl-item .what{font-weight:600;font-size:14px;margin:2px 0}
+.tl-item .desc{font-size:13px;color:var(--text-2)}
+
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.badge.hi{background:var(--red-soft);color:var(--red)}
+.badge.mid{background:var(--yellow-soft);color:var(--yellow)}
+.badge.lo{background:var(--green-soft);color:var(--green)}
+
+@media(max-width:860px){
+  .sidebar{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .22s;box-shadow:var(--shadow)}
+  .sidebar.open{transform:none}
+  .menu-btn{display:block}
+  .cards{grid-template-columns:1fr}
+  .page-wrap{padding:20px 16px 70px}
+  .topbar{padding:11px 16px}
+  .gantt .bar .lab{width:90px;flex-basis:90px}
+}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:35}
+.scrim.show{display:block}
+/* ===== 每日学习中心（选日期） ===== */
+.day-picker{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.dp-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dp-controls input[type=date]{padding:9px 12px;border:1px solid var(--border);background:var(--surface-2);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit}
+.dp-controls button{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:10px;padding:9px 14px;cursor:pointer;font-size:13.5px;font-weight:600;transition:.15s}
+.dp-controls button:hover{color:var(--accent);border-color:var(--accent)}
+.dp-today{margin-left:auto}
+.week-strip{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.week-chip{font-size:12px;padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s;white-space:nowrap}
+.week-chip:hover{border-color:var(--accent);color:var(--accent)}
+.week-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.week-chip small{opacity:.75;margin-left:5px;font-size:10.5px}
+
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow)}
+.dc-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.dc-date{font-size:20px;font-weight:700}
+.dc-tags{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap}
+.dc-tag{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--surface-2);color:var(--text-2)}
+.dc-tag.stage{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.dc-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-2);cursor:pointer;background:var(--surface-2);padding:9px 14px;border-radius:10px;border:1px solid var(--border)}
+.dc-check input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+.dc-goal{font-size:17px;margin:18px 0 8px}
+.dc-goal-text{font-size:15px;color:var(--text);margin:0 0 6px;line-height:1.7}
+.dc-meta{font-size:13px;color:var(--text-3);margin:0}
+.dc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+@media(max-width:680px){.dc-grid{grid-template-columns:1fr}}
+.dc-block{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--bg)}
+.dc-block h4{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:7px}
+.dc-task{font-size:13.5px;color:var(--text-2);line-height:1.65;margin-bottom:10px}
+.dc-task b{color:var(--text)}
+.dc-links{display:flex;flex-wrap:wrap;gap:7px}
+.dc-link{font-size:12.5px;padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--accent);cursor:pointer;text-decoration:none;transition:.15s}
+.dc-link:hover{border-color:var(--accent);background:var(--accent-soft)}
+.dc-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 13px;border-radius:9px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-weight:600;transition:.15s;margin:3px 0}
+.dc-btn:hover{opacity:.9}
+.dc-btn.ghost{background:var(--surface);color:var(--accent)}
+.dc-reslist{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.dc-reschip{font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:.15s}
+.dc-reschip:hover{border-color:var(--accent);color:var(--accent)}
+.dc-term{font-size:13.5px;color:var(--text-2);line-height:1.75}
+.dc-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.dc-nav button{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.dc-nav button:hover{color:var(--accent);border-color:var(--accent)}
+.dc-daychips{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.dc-daychip{font-size:11.5px;padding:4px 9px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s}
+.dc-daychip:hover{border-color:var(--accent);color:var(--accent)}
+.dc-daychip.done{background:#2f9e6b;color:#fff;border-color:#2f9e6b}
+.dc-daychip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Heatmap calendar */
+.heat-wrap{margin:18px 0 6px;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+.heat-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.heat-title{font-weight:700;font-size:15px;color:var(--text)}
+.heat-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hs{font-size:12px;padding:5px 11px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);white-space:nowrap;transition:.2s}
+.hs.hot{background:var(--yellow-soft);border-color:var(--yellow);color:var(--text)}
+.heat-scroll{overflow-x:auto;padding-bottom:6px}
+.heat-months{display:grid;grid-template-columns:repeat(26,14px);gap:3px;margin:0 0 4px 0;width:max-content}
+.heat-months span{font-size:10px;color:var(--text-3);white-space:nowrap;overflow:visible}
+.heat-grid{display:grid;grid-template-rows:repeat(7,14px);grid-auto-flow:column;gap:3px;width:max-content}
+.hl-cell{width:14px;height:14px;border-radius:3px;display:inline-block;background:#e7ebf2;cursor:pointer;transition:transform .1s}
+.hl-future{background:#eceff5}
+.hl-todo{background:#c7d2e8}
+.hl-done{background:#2f9e6b}
+.hl-today{outline:2px solid var(--accent);outline-offset:1px}
+.hl-now{box-shadow:0 0 0 2px var(--accent) inset}
+.heat-grid .hl-cell:hover{transform:scale(1.4);box-shadow:0 0 0 1px rgba(0,0,0,.18)}
+.heat-legend{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:12px;color:var(--text-3);flex-wrap:wrap}
+.heat-legend .hl-cell{vertical-align:middle;cursor:default}
+.dc-daychip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dc-daychip.done{color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)}
+
+/* 资料阅读器（iframe 弹窗） */
+.reader-mask{position:fixed;inset:0;background:rgba(15,17,23,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;backdrop-filter:blur(3px)}
+.reader-mask[hidden]{display:none}
+.reader-box{background:var(--surface);border-radius:14px;width:min(1000px,94vw);height:min(86vh,900px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.reader-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);font-weight:700}
+.reader-head button{background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer;line-height:1}
+.reader-ext{font-size:12.5px;color:var(--accent);margin-right:12px;text-decoration:none}
+.reader-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.reader-tab{font-size:12px;padding:5px 11px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s}
+.reader-tab:hover{border-color:var(--accent);color:var(--accent)}
+.reader-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.reader-frame{flex:1;border:none;width:100%;background:#fff}
+html[data-theme="dark"] .reader-frame{background:#0f1117}
+.prog-banner{display:flex;gap:18px;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-soft),var(--surface-2));border:1px solid var(--border);border-radius:14px;padding:16px 22px;margin-top:18px}
+.prog-banner>div{display:flex;flex-direction:column}
+.pb-num{font-size:22px;font-weight:700;color:var(--accent);line-height:1.1}
+.pb-lbl{font-size:12px;color:var(--text-3);margin-top:3px}
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:18px}
+.prog-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.prog-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.prog-name{font-size:14.5px;font-weight:600;color:var(--text)}
+.prog-num{font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums}
+.prog-go{margin-top:12px;width:100%;padding:8px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:background .12s}
+.prog-go:hover{background:var(--accent-soft);border-color:rgba(79,110,247,.3)}
+
+.news-filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.nf-chip{font-size:13px;padding:7px 14px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:.15s}
+.nf-chip:hover{border-color:var(--accent);color:var(--accent)}
+.nf-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.news-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:12px;transition:.15s}
+.news-card:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.news-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-2)}
+.news-account{font-weight:600;color:var(--text)}
+.news-date{color:var(--muted)}
+.news-title{font-size:17px;line-height:1.4;margin:2px 0 6px}
+.news-tags{display:flex;flex-wrap:wrap;gap:6px}
+.news-tag{font-size:11px;padding:3px 9px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+.news-label{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.news-points{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
+.news-points li{font-size:13.5px;line-height:1.6;color:var(--text)}
+.news-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;padding-top:12px;border-top:1px dashed var(--border)}
+.news-read{font-size:13px;font-weight:600;color:#fff;background:var(--accent);padding:7px 14px;border-radius:8px;text-decoration:none;white-space:nowrap}
+.news-read:hover{opacity:.9}
+.news-note{font-size:11px;color:var(--muted)}
+.news-empty{padding:40px;text-align:center;color:var(--muted);grid-column:1/-1}
+.news-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin:6px 0 4px}
+.news-stat{display:flex;align-items:baseline;gap:6px}
+.news-stat.grow{flex:1;min-width:140px;justify-content:flex-end}
+.ns-num{font-size:20px;font-weight:700;color:var(--text)}
+.ns-num.unread{color:var(--accent)}
+.ns-lbl{font-size:12px;color:var(--text-2)}
+.ns-time{font-size:13px;color:var(--text);font-weight:600}
+.news-toggle-unread{font-size:13px;font-weight:600;padding:7px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:.15s}
+.news-toggle-unread:hover{border-color:var(--accent);color:var(--accent)}
+.news-toggle-unread.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.news-card.unread{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.news-badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.news-expand,.news-mark{font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:.15s}
+.news-expand:hover,.news-mark:hover{border-color:var(--accent);color:var(--accent)}
+.news-full{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
+.news-full-label{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.news-full-text{white-space:pre-wrap;font-size:13.5px;line-height:1.75;color:var(--text);max-height:none;overflow:auto}
+.news-full[hidden]{display:none}
+/* 每日推文（考证 / 考博 混排阅读） */
+.dc-article{margin-top:14px;border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--bg)}
+.dc-article>h4{margin:0 0 12px;font-size:14px;display:flex;align-items:center;gap:7px}
+.dc-art-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:6px}
+.dc-art-cat{font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
+.cat-考证{background:var(--red-soft);color:var(--red)}
+.cat-考博{background:var(--accent-soft);color:var(--accent)}
+.dc-art-account{font-size:12.5px;color:var(--text-2)}
+.dc-art-date{font-size:12.5px;color:var(--text-3)}
+.dc-art-title{font-size:15px;font-weight:700;margin:4px 0 8px;line-height:1.45}
+.dc-art-body{margin-top:8px}
+.dc-art-foot{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+/* 公众号分轨筛选 */
+.news-cats{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.nf-cat{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s}
+.nf-cat:hover{color:var(--accent);border-color:var(--accent)}
+.nf-cat.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* ===== 关注源 page ===== */
+.src-bar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+.src-cats{display:flex;gap:8px;margin:6px 0 16px;flex-wrap:wrap}
+.src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.src-card{border:1px solid var(--border);border-radius:12px;padding:14px 15px;background:var(--bg-soft);display:flex;flex-direction:column;gap:9px;transition:border-color .15s,box-shadow .15s}
+.src-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.src-card.cat-考证{border-left:3px solid var(--red)}
+.src-card.cat-考博{border-left:3px solid var(--accent)}
+.src-head{display:flex;align-items:center;gap:8px}
+.src-tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.tag-考证{background:var(--red-soft);color:var(--red)}
+.tag-考博{background:var(--accent-soft);color:var(--accent)}
+.src-name{font-weight:700;font-size:15px}
+.src-meta{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.src-latest{display:flex;flex-direction:column;gap:5px;border-top:1px dashed var(--border);padding-top:8px;min-height:8px}
+.src-item{display:flex;gap:8px;font-size:12.5px;cursor:pointer;border-radius:6px;padding:3px 4px;transition:background .12s}
+.src-item:hover{background:var(--bg-hover)}
+.src-item-date{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.src-item-title{color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.src-empty{color:var(--muted);font-size:12px;font-style:italic}
+.src-foot{margin-top:2px}
+.src-all{font-size:12.5px;color:var(--accent);font-weight:600;cursor:pointer}
+.src-all:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="logo">📚</span>备考资料中心</div>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+      <input id="search" placeholder="搜索文档…" autocomplete="off">
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot red"></span>🎯 今日</div>
+      <div class="nav-item active" data-page="cdga-daily">📅 每日学习中心</div>
+      <div class="nav-item" data-page="my-progress">📊 我的进度</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot red"></span>📚 备考 CDGA</div>
+      <div class="nav-item" data-page="cdga-plan">🗺️ 半年复习规划</div>
+      <div class="nav-item" data-page="cdga-weekly">🗓️ 26 周学习计划</div>
+      <div class="nav-item" data-page="cdga-check">✅ 知识点自查清单</div>
+      <div class="nav-item" data-page="cdga-quiz">📝 原创自测练习题</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot blue"></span>🔗 资料</div>
+      <div class="nav-item" data-page="cdga-res">📥 资料获取清单</div>
+    </div>
+      <div class="nav-group">
+        <div class="nav-group-title"><span class="dot blue"></span>📰 资讯</div>
+        <div class="nav-item" data-page="cdga-news">📰 公众号推文精选</div>
+        <div class="nav-item" data-page="cdga-sources">📡 关注源</div>
+      </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot blue"></span>🏆 进阶考证</div>
+      <div class="nav-item" data-page="cdga-ladder">🏆 三级进阶总规划</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot blue"></span>🏛️ 读博 交大</div>
+      <div class="nav-item" data-page="phd-plan">📋 申请计划</div>
+      <div class="nav-item" data-page="phd-reco">✉️ 推荐信格式与模板</div>
+      <div class="nav-item" data-page="phd-urls">🌐 申请网址汇总</div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- Main -->
+  <main class="content">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="crumbs" id="crumbs">备考资料中心 / <b>总览</b></div>
+      <button class="icon-btn" id="themeBtn" title="切换深浅色">🌓</button>
+    </header>
+    <div class="page-wrap">
+
+      <!-- HOME -->
+      <section class="page" id="home">
+        <div class="hero">
+          <h1>备考资料中心</h1>
+          <p>把分散的 markdown 文档整理成一处可检索、可勾选、随时翻看的备考站点。左侧切换「考证 / 读博」两大板块，清单可勾选并自动保存进度。</p>
+        </div>
+        <div class="cards">
+          <div class="cat-card" data-goto="cdga-plan">
+            <div class="ic" style="background:var(--red-soft);color:var(--red)">🎓</div>
+            <h3>考证 · CDGA 数据治理工程师</h3>
+            <p>DAMA 中国认证 · 半年长线复习 · 含规划 / 清单 / 自测 / 周计划</p>
+            <div class="meta">6 份资料 · 目标 2027-03 场次</div>
+          </div>
+          <div class="cat-card" data-goto="phd-plan">
+            <div class="ic" style="background:var(--accent-soft);color:var(--accent)">🏛️</div>
+            <h3>读博 · 上海交大在职博士</h3>
+            <p>非全工程博士 · 数据治理方向 · 申请计划 / 推荐信 / 网址</p>
+            <div class="meta">3 份资料 · 目标 2028-09 入学</div>
+          </div>
+        </div>
+        <div class="callout tip" style="margin-top:22px;cursor:pointer" data-goto="cdga-daily">
+          <b>📅 每日学习中心</b>：选一个日期，直接打开当天要学的「计划 + 看 PDF/笔记 + 做题 + 看视频」，覆盖 W1–W26 共 182 天。点此进入 →
+        </div>
+        <div class="home-note">
+          <b>💡 使用提示</b><br>
+          · 左侧导航按板块分组，点击即可切换文档；顶部搜索可快速过滤文档。<br>
+          · 《知识点自查清单》的勾选项会保存在本机浏览器，下次打开自动恢复进度。<br>
+          · 右上角 🌓 可切换深色 / 浅色模式。<br>
+          · 内容均来自本地原文档，<b>离线可用</b>，双击本文件即可打开。
+        </div>
+      </section>
+
+      <!-- MY PROGRESS -->
+      <section class="page" id="my-progress">
+        <h1 class="doc-title">📊 我的备考进度</h1>
+        <div class="doc-sub">以下数据均来自本机浏览器，自动保存、离线可用；各模块进度互相同步。</div>
+        <div class="prog-banner" id="progBanner"></div>
+        <div class="prog-grid" id="progGrid"></div>
+        <div class="callout tip" style="margin-top:18px">💡 连续打卡天数（🔥当前 / 🏆最长）实时统计见「📅 每日学习中心」顶部热力图，本页「每日打卡」进度与之同步。</div>
+      </section>
+
+      <!-- CDGA NEWS -->
+      <section class="page" id="cdga-news">
+        <h1 class="doc-title">📰 公众号推文精选 · 考证(DAMA) / 考博(交大) 资讯</h1>
+        <div class="doc-sub">文章由「搜狗微信搜索」按关键词检索得到（合法公开来源），已抓取<b>全文</b>内嵌，可<b>一字不落</b>阅读；点「展开全文」看完整正文，点「阅读原文」打开微信原文。覆盖<b>考证（DAMA/数据治理）</b>与<b>考博（上海交大在职博士）</b>两大方向，每天自动检索新文章，<b>🆕 新文章</b>会标出，读完点「标记已读」。这些推文也会按天混排进「📅 每日学习中心」，让你每天读一篇。</div>
+        <div class="callout info"><span class="ct">已统一口径</span>综合多方来源，DAMA 中国证书（CDGA/CDGP/CDGE/CDAM）据光环国际等机构文章为 <b>终身有效、无需年审</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3年+续证"口径），<b>以 MyDAMA 官方最新公告为准</b>。继续教育(PDU)作为<b>自愿提升</b>，不占备考时间。详见「三级进阶总规划」②节。</div>
+        <div class="callout info"><span class="ct">🌏 拓展 · 海外</span>纯国外语境的申博经验（英国/香港博士招生、留服·境外学历认证等）已移出「📅 每日学习中心」核心流，归入「拓展 · 海外」分类，想看时再翻，不打扰交大备考主线。<b>推荐信 / 套磁手艺文因国内外通用，仍保留在核心流</b>——交大「申请-考核制」也要套磁、也要 2 封专家推荐信。</div>
+        <div class="news-bar">
+          <div class="news-stat"><span class="ns-num" id="newsTotal">0</span><span class="ns-lbl">篇文章</span></div>
+          <div class="news-stat"><span class="ns-num unread" id="newsUnread">0</span><span class="ns-lbl">篇未读</span></div>
+          <div class="news-stat grow"><span class="ns-lbl">最后更新</span><span class="ns-time" id="newsUpdated">—</span></div>
+          <button class="news-toggle-unread" id="newsUnreadBtn">只看未读</button>
+        </div>
+        <div class="news-cats" id="newsCats">
+          <button class="nf-cat active" data-cat="all">全部</button>
+          <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+          <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+          <button class="nf-cat" data-cat="overseas">🌏 拓展 · 海外</button>
+        </div>
+        <div class="news-filters" id="newsFilters">
+          <button class="nf-chip active" data-f="all">全部</button>
+          <button class="nf-chip" data-f="考试时间">考试时间</button>
+          <button class="nf-chip" data-f="认证体系">认证体系</button>
+          <button class="nf-chip" data-f="含金量">含金量</button>
+          <button class="nf-chip" data-f="备考经验">备考经验</button>
+          <button class="nf-chip" data-f="考试形式">考试形式</button>
+          <button class="nf-chip" data-f="费用">费用</button>
+          <button class="nf-chip" data-f="有效期">有效期</button>
+        </div>
+        <div class="news-list" id="newsList"></div>
+      </section>
+
+      <!-- CDGA SOURCES -->
+      <section class="page" id="cdga-sources">
+        <h1 class="doc-title">📡 关注源 · 实时跟踪的公众号</h1>
+        <div class="doc-sub">这里是你「持续关注」的公众号清单——<b>官方账号 + 知名有用的第三方</b>。每天 09:00 / 20:00 自动检索它们的最新推文，去重入档并标 🆕 未读；你也可以随时让我「检查最新」。下方按「考证 / 考博」分轨，每张卡片显示该号被收录的文章数与最近一篇日期，点开可见其最新推文（点标题跳到推文页读全文 / 标记已读）。</div>
+        <div class="src-bar">
+          <div class="news-stat"><span class="ns-num" id="srcTotal">0</span><span class="ns-lbl">个关注源</span></div>
+          <div class="news-stat"><span class="ns-num" id="srcKa">0</span><span class="ns-lbl">考证源</span></div>
+          <div class="news-stat"><span class="ns-num" id="srcKb">0</span><span class="ns-lbl">考博源</span></div>
+          <div class="news-stat grow"><span class="ns-lbl">最后抓取</span><span class="ns-time" id="srcUpdated">—</span></div>
+        </div>
+        <div class="src-cats" id="srcCats">
+          <button class="nf-cat active" data-cat="all">全部</button>
+          <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+          <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+        </div>
+        <div class="src-grid" id="srcGrid"></div>
+      </section>
+
+      <!-- CDGA PLAN -->
+      <section class="page" id="cdga-plan">
+        <h1 class="doc-title">📘 DAMA-CDGA 数据治理工程师 · 半年长线复习规划</h1>
+        <div class="doc-sub">结论先行：CDGA 是 DAMA 中国颁发的「数据治理工程师」认证——线下笔试、100 道中文单选、60 分及格、100 分钟。官方教材为《DAMA 数据管理知识体系指南（第二版修订版）》（DMBOK2R）。你的 datalake-etl 项目经验覆盖了考纲近 2/3 知识域，本规划把项目经验当「活案例库」用。</div>
+
+        <div class="callout info"><span class="ct">⚠️ 注意</span>考试时间与细则以 DAMA 中国当年官方通知为准，报名前务必核对最新大纲与教材版本。</div>
+
+        <h2>一、考试全貌（速览）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>项目</th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td>证书全称</td><td>Certified Data Governance Associate（CDGA，数据治理工程师）</td></tr>
+            <tr><td>发证机构</td><td>DAMA 中国</td></tr>
+            <tr><td>考试形式</td><td>线下笔试，全中文</td></tr>
+            <tr><td>题型 / 题量</td><td>100 道单选题，每题 1 分</td></tr>
+            <tr><td>满分 / 及格</td><td>100 分 / <b>60 分</b>及格（另有「各章不低于 40%」的潜规则）</td></tr>
+            <tr><td>考试时长</td><td>100 分钟（平均每题 1 分钟，节奏紧）</td></tr>
+            <tr><td>教材</td><td>《DAMA 数据管理知识体系指南（第二版修订版）》DMBOK2R（2025.6 起启用）</td></tr>
+            <tr><td>报名费</td><td>约 1000 元/人</td></tr>
+            <tr><td>考试频次</td><td>一年 4 次（3 月、6 月、9 月、12 月，多为当月最后一个周末）</td></tr>
+            <tr><td>考点</td><td>北上广深等，单城报名满 25 人开考</td></tr>
+            <tr><td>续证</td><td>每 3 年需累计 60 学分，续证费 200 元</td></tr>
+            <tr><td>报名通道</td><td>DAMA 中国官网 / 「MyDAMA」公众号 / 授权培训机构</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>二、17 个知识领域与分值权重</h2>
+        <p>按「高 / 中 / 低」三档归类，标注建议复习投入占比（合计 100%）。抓高丢低是误区——低分章也要保底到 40%。</p>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>档位</th><th>知识领域</th><th>约占比</th><th>实战关联度</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge hi">高</span></td><td>数据治理</td><td>10%</td><td>★★★ mapping 治理、monitor 覆盖策略</td></tr>
+            <tr><td><span class="badge hi">高</span></td><td>数据质量</td><td>10%</td><td>★★★ 重复合同、源错 1507→48624、ODS 延迟根因</td></tr>
+            <tr><td><span class="badge hi">高</span></td><td>元数据管理</td><td>10%</td><td>★★ 字段释义、血缘（EPK→ODS→DWS）</td></tr>
+            <tr><td><span class="badge hi">高</span></td><td>数据仓库与商务智能</td><td>10%</td><td>★★★ ODS/DWS 分层、DSS 合同客户表</td></tr>
+            <tr><td><span class="badge hi">高</span></td><td>参考数据和主数据管理</td><td>10%</td><td>★★★ 户号↔合同映射本质即主数据管理</td></tr>
+            <tr><td><span class="badge hi">高</span></td><td>数据建模与设计</td><td>8%</td><td>★★★ DWS 层表结构设计、维度建模</td></tr>
+            <tr><td><span class="badge mid">中</span></td><td>数据架构</td><td>6%</td><td>★★ 企业数据模型、数据流</td></tr>
+            <tr><td><span class="badge mid">中</span></td><td>数据安全</td><td>8–10%</td><td>★★ 分类分级、脱敏</td></tr>
+            <tr><td><span class="badge mid">中</span></td><td>大数据和数据科学</td><td>8–9%</td><td>★ 国网 15 分钟账单属时序/大数据</td></tr>
+            <tr><td><span class="badge mid">中</span></td><td>数据管理成熟度评估</td><td>4–6%</td><td>★ 治理成熟度自查</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据管理（概述）</td><td>4%</td><td>★</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据处理伦理</td><td>2%</td><td>★</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据存储与操作</td><td>2%</td><td>★ Doris/MySQL 运维</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据集成与互操作</td><td>2%</td><td>★★★ ETL 同步、ODS 同步延迟</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>文件和内容管理</td><td>2%</td><td>★</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据管理组织与角色期望</td><td>2%</td><td>★ 数据管家/治理委员会</td></tr>
+            <tr><td><span class="badge lo">低</span></td><td>数据管理和组织变革管理</td><td>2%</td><td>★</td></tr>
+          </tbody>
+        </table></div>
+        <p><b>建议投入时间比例</b>：高 55% · 中 30% · 低 15%（低分章用「概念速记」覆盖，不深抠）。</p>
+
+        <h2>三、拿分基本盘（关键发现）</h2>
+        <ol>
+          <li><b>五大高地</b>（合计约 50+ 分）：数据治理、数据质量、元数据管理、数据仓库与 BI、参考/主数据。及格生命线，逐章做笔记+刷题。</li>
+          <li><b>数据质量六维度年年必考</b>：完整性、准确性、一致性、唯一性、及时性、有效性——必须能区分定义与适用场景。</li>
+          <li><b>最高频混淆点</b>：治理 vs 管理（治理⊂管理）；架构 vs 建模（蓝图 vs 图纸）；ETL vs ELT、维度建模 vs 三范式。</li>
+          <li><b>你的实战即答案</b>：场景题直接用项目真实做法反推。</li>
+        </ol>
+
+        <h2>四、半年长线复习路线图（26 周基准，目标 2027-03）</h2>
+        <div class="gantt">
+          <div class="bar"><span class="lab">阶段0 准备</span><div class="track"><div class="fill" style="width:8%;background:var(--text-3)">2w</div></div></div>
+          <div class="bar"><span class="lab">阶段1 通读</span><div class="track"><div class="fill" style="width:20%;background:var(--accent-2)">5w</div></div></div>
+          <div class="bar"><span class="lab">阶段2 精学</span><div class="track"><div class="fill" style="width:48%;background:var(--accent)">13w</div></div></div>
+          <div class="bar"><span class="lab">阶段3 刷题</span><div class="track"><div class="fill" style="width:16%;background:var(--yellow)">4w</div></div></div>
+          <div class="bar"><span class="lab">阶段4 冲刺</span><div class="track"><div class="fill" style="width:12%;background:var(--red)">3w</div></div></div>
+          <div class="legend">
+            <span><i style="background:var(--text-3)"></i>准备</span>
+            <span><i style="background:var(--accent-2)"></i>通读</span>
+            <span><i style="background:var(--accent)"></i>精学</span>
+            <span><i style="background:var(--yellow)"></i>刷题</span>
+            <span><i style="background:var(--red)"></i>冲刺</span>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>阶段</th><th>时间窗</th><th>目标</th><th>关键产出</th></tr></thead>
+          <tbody>
+            <tr><td>阶段 0</td><td>第 1–2 周</td><td>锁定场次、备齐资料</td><td>教材到手、报名意向、复习主页建好</td></tr>
+            <tr><td>阶段 1</td><td>第 3–7 周</td><td>通读全书，建 17 域框架</td><td>知识域思维导图、术语表</td></tr>
+            <tr><td>阶段 2</td><td>第 8–20 周</td><td>分域精学，高分域优先</td><td>每域笔记 + 实战映射卡</td></tr>
+            <tr><td>阶段 3</td><td>第 21–24 周</td><td>刷题库、建错题本</td><td>错题本、薄弱域清单</td></tr>
+            <tr><td>阶段 4</td><td>第 25–26 周</td><td>模拟考、查漏补缺</td><td>2 套模拟成绩 ≥75、冲刺笔记</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip">若想提前到 <b>2026 年 12 月</b>场次，把阶段 2/3 压缩 1/3 即可（已有实战底子，压缩可行）。</div>
+
+        <h2>五、分月执行计划</h2>
+        <ul>
+          <li><b>第 1 月（8 月）启动 + 通读</b>：买 DMBOK2R，关注「MyDAMA」，确定场次；通读 1–2 遍画 17 域思维导图+术语表。</li>
+          <li><b>第 2 月（9 月）高分域第一轮</b>：治理→质量→数仓BI→主数据→元数据→建模；每章输出「核心考点卡」。</li>
+          <li><b>第 3 月（10 月）高分域深化 + 中分域</b>：高分域二刷 + 中分域精学（架构/安全/大数据/成熟度）。</li>
+          <li><b>第 4 月（11 月）低分域速记 + 全量回顾</b>：7 个低分域「概念速记法」。</li>
+          <li><b>第 5 月（12 月）刷题 + 错题本</b>：集中刷真题，正确率<70% 的域回炉。</li>
+          <li><b>第 6 月（次年 1–2 月）冲刺</b>：每周 1 套模拟考（限时 100 分钟，目标≥75），专攻易混点。</li>
+        </ul>
+
+        <h2>六、把你的项目经验变成考点（个性化映射）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>你的实际工作</th><th>对应知识域</th><th>可直接复用的「活案例」</th></tr></thead>
+          <tbody>
+            <tr><td>Doris ODS/DWS 分层、DSS 合同客户表</td><td>数据仓库与 BI、数据架构</td><td>分层架构设计、数据集市/宽表思路</td></tr>
+            <tr><td>户号↔合同 mapping（创力/英豪异常）</td><td>参考数据和主数据管理</td><td>MDM 识别、主数据错误（customer_id 1507→48624）治理</td></tr>
+            <tr><td>重复合同记录分析、源数据错误识别</td><td>数据质量</td><td>六维度（一致性/准确性）实战、根因分析</td></tr>
+            <tr><td>ODS 同步延迟导致创力匹配异常</td><td>数据集成与互操作</td><td>ETL 同步、数据时效性/及时性维度</td></tr>
+            <tr><td>EPK(MySQL)→ODS→DWS 数据流</td><td>元数据管理、数据架构</td><td>血缘分析、企业数据模型、数据流图</td></tr>
+            <tr><td>账户存在性需交叉核对当日与历史</td><td>数据质量（完整性/一致性）</td><td>校验规则设计原则</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>七、资料清单与工具</h2>
+        <p><b>必备</b>：《DAMA 数据管理知识体系指南（第二版修订版）》官方教材；DAMA 中国官方大纲/样题。<br>
+        <b>辅助</b>：各机构题库（甄别，以教材为准绳）、「MyDAMA」公众号、复习主页（GitLab Pages）。<br>
+        <b>笔记法</b>：每域一页「核心考点卡」+ 全局「术语对照表」。</p>
+
+        <h2>八、避坑与高频失分点</h2>
+        <ol>
+          <li>别放弃任何章节——「各章得分不低于 40%」潜规则，低分章也要保底。</li>
+          <li>治理 ⊂ 管理，不是并列。</li>
+          <li>架构是蓝图，建模是图纸。</li>
+          <li>数据质量六维度必须能辨析。</li>
+          <li>新教材已加数据伦理/隐私/AI 伦理（约 10% 新增题）。</li>
+          <li>刷题以教材为锚，遇冲突回 DMBOK2R 原文。</li>
+          <li>时间管理：前 30 分钟做送分题，中间 40 分钟攻分析题，最后 10 分钟填卡+复查。</li>
+        </ol>
+
+        <h2>九、里程碑自检</h2>
+        <ul>
+          <li>☐ <b>第 2 周末（2026-08-28）</b>：思维导图完成，能说出 17 域名字。</li>
+          <li>☐ <b>第 7 周末（2026-10-02）</b>：通读两遍，术语表成型。</li>
+          <li>☐ <b>第 13 周末（2026-11-13）</b>：高分域笔记+案例卡完成。</li>
+          <li>☐ <b>第 20 周末（2027-01-01）</b>：中/低分域过完，无盲区。</li>
+          <li>☐ <b>第 24 周末（2027-01-29）</b>：题库正确率 ≥70%，错题本成型。</li>
+          <li>☐ <b>考前 2 周（≈2027-03-13 ~ 03-19）</b>：2 套模拟 ≥75 分，只看错题+术语+冲刺笔记。</li>
+        </ul>
+
+        <h2>十、本周就做（下一步行动）</h2>
+        <ol>
+          <li>下单 DMBOK2R（第二版修订版）。</li>
+          <li>关注「MyDAMA」，确定报 2027-03（或 2026-12）场次。</li>
+          <li>在 GitLab 建 <code>cdga-review</code> 仓库，把规划+思维导图挂成 Pages。</li>
+          <li>建「17 域术语对照表」第一版。</li>
+          <li>把「户号↔合同 mapping」「ODS 同步延迟」写成第一张案例卡。</li>
+        </ol>
+        <div class="doc-sub" style="border:none;margin-top:24px">文档版本：v1 · 生成日期 2026-08-13 · 基于 DAMA 中国 CDGA 公开考纲与 DMBOK2R 整理。</div>
+      </section>
+
+      <!-- CDGA CHECKLIST -->
+      <section class="page" id="cdga-check">
+        <h1 class="doc-title">✅ CDGA 知识点自查清单（可勾选）</h1>
+        <div class="doc-sub">用法：每学完一个知识域，勾掉对应项；考前一周只扫未勾项。配合《复习规划》使用。勾选状态自动保存在本机。</div>
+        <div class="progress"><i id="chkBar"></i></div>
+        <div class="progress-label" id="chkLabel">已掌握 0 / 0</div>
+
+        <div class="chk-head"><h2 style="margin:0;border:none;padding:0">🔴 高分域（必拿，约 8–10 分/域）</h2></div>
+        <div class="chk-head"><h3>1. 数据治理（10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>能定义数据治理，并说明「治理 ⊂ 管理」</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据治理框架的组成要素（战略/组织/政策/标准/流程）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据治理委员会、数据管家（Data Steward）、CDO 的角色与职责</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据治理与业务战略对齐、价值驱动</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>成熟度评估模型（CMM/CMMI、DAMA-DMM 等）</span></label>
+
+        <div class="chk-head"><h3>2. 数据质量（10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span><b>六大维度</b>：完整性、准确性、一致性、唯一性、及时性、有效性（必考）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据质量问题的根源分析（如源错 1507→48624）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据质量评估方法与指标设计</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据清洗 / 整改流程</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>质量监控机制（如 monitor 覆盖策略）</span></label>
+
+        <div class="chk-head"><h3>3. 元数据管理（10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>三类元数据：业务 / 技术 / 操作元数据</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>元数据存储库（Metadata Repository）建设</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据血缘（Lineage）与影响分析</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>元数据驱动的数据治理（如 EPK→ODS→DWS 血缘）</span></label>
+
+        <div class="chk-head"><h3>4. 数据仓库与商务智能（10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据仓库架构（Inmon/Kimball 范式 vs 维度）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>ETL vs ELT 区别与适用场景</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>ODS/DWS/ADS 分层（对应 Doris 分层实践）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据集市、商务智能应用</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>如项目的 DSS 合同客户表设计</span></label>
+
+        <div class="chk-head"><h3>5. 参考数据和主数据管理（10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>主数据（MDM）识别与定义</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>主数据管理实施模式</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>参考数据 vs 主数据的区别</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>主数据错误治理（如 customer_id 误写根因）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>户号↔合同映射即主数据实践</span></label>
+
+        <div class="chk-head"><h3>6. 数据建模与设计（8 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>概念 / 逻辑 / 物理模型三层及区别</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>实体关系图（ER 图）规范</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>维度建模 vs 三范式建模适用场景</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据字典、质量规则嵌入设计</span></label>
+
+        <div class="chk-head"><h2 style="margin:0;border:none;padding:0">🟡 中分域（6–8 分/域）</h2></div>
+        <div class="chk-head"><h3>7. 数据架构（6 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>企业数据模型、数据流图（DFD）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据架构与业务/应用架构对齐</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据分布与共享</span></label>
+        <div class="chk-head"><h3>8. 数据安全（8–10 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据分类分级、访问控制</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>加密、脱敏方法</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>隐私影响评估（PIA）、合规（个保法/等保）</span></label>
+        <div class="chk-head"><h3>9. 大数据和数据科学（8–9 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>大数据处理框架（如国网 15 分钟账单时序数据）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据挖掘、机器学习基础概念</span></label>
+        <div class="chk-head"><h3>10. 数据管理成熟度评估（4–6 分）</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>能力成熟度模型、评估方法</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>改进路径设计</span></label>
+
+        <div class="chk-head"><h2 style="margin:0;border:none;padding:0">🟢 低分域（保底 40%，2–4 分/域）</h2></div>
+        <div class="chk-head"><h3>11–17. 其余七域</h3></div>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据管理（概述）：数据定义、生命周期、管理原则</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据处理伦理：隐私、合规、AI 伦理（新版新增）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据存储与操作：数据库、备份恢复（Doris/MySQL）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据集成与互操作：ETL、数据交换/共享（ODS 同步延迟即此域）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>文件和内容管理：非结构化数据管理</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据管理组织与角色期望：CDO、数据管家、数据所有者</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据管理和组织变革管理：变革管理、文化培育</span></label>
+
+        <h2>🧠 全局易混词对照（考前必看）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>成对概念</th><th>关键区别</th></tr></thead>
+          <tbody>
+            <tr><td>数据治理 vs 数据管理</td><td>治理=决策监督；管理=执行；治理 ⊂ 管理</td></tr>
+            <tr><td>数据架构 vs 数据建模</td><td>架构=顶层蓝图；建模=具体落地图纸</td></tr>
+            <tr><td>ETL vs ELT</td><td>先转换后加载 / 先加载后转换</td></tr>
+            <tr><td>维度建模 vs 三范式</td><td>分析友好 / 存储无冗余</td></tr>
+            <tr><td>主数据 vs 参考数据</td><td>核心业务实体 / 受控词汇表</td></tr>
+            <tr><td>业务/技术/操作元数据</td><td>业务含义 / 技术结构 / 运行记录</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>✅ 考前 7 天速查</h2>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>五大高地（1–5）笔记完整、错题清零</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据质量六维度能脱口辨析</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>易混词对照表背熟</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>17 域名词全覆盖（低分域至少达 40%）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>2 套模拟 ≥75 分</span></label>
+      </section>
+
+      <!-- CDGA QUIZ -->
+      <section class="page" id="cdga-quiz">
+        <h1 class="doc-title">📝 CDGA 原创自测 / 模拟练习题</h1>
+        <div class="doc-sub">⚠️ 本题库由助手基于 DMBOK2R 公开大纲<b>原创编写</b>，非 DAMA 官方真题。遇与官方冲突一律以教材原文为准。</div>
+
+        <div class="mode-toggle" role="tablist" aria-label="练习模式切换">
+          <button class="active" data-mode="study" role="tab" aria-selected="true">📖 学习模式 <span class="num">看题 · 全部可见</span></button>
+          <button data-mode="practice" role="tab" aria-selected="false">🎯 刷题模式 <span class="num">逐题作答 · 进度保存</span></button>
+        </div>
+
+        <!-- 学习模式：保留原有按域分组 + 折叠展开答案 -->
+        <div id="quiz-study">
+          <div class="callout tip">自测建议：按域抽题，每天从《26 周计划》当周重点域抽 5–10 题；错题归入错题本。正确率目标：高分域≥80%、中分域≥70%、低分域≥60%。</div>
+          <div id="quiz-list"></div>
+          <div class="doc-sub" style="border:none;margin-top:24px">生成日期 2026-08-13 · 共 52 题 · 原创模拟，非官方真题，以 DMBOK2R 为准。</div>
+        </div>
+
+        <!-- 刷题模式：隐藏答案，做题后即时反馈 + 进度持久化 -->
+        <div id="quiz-practice" hidden></div>
+      </section>
+
+      <!-- CDGA WEEKLY -->
+      <section class="page" id="cdga-weekly">
+        <h1 class="doc-title">🗓️ CDGA 26 周学习计划（细化到每周）</h1>
+        <div class="doc-sub">目标场次：2027 年 3 月（可前移至 2026 年 12 月）。起始 2026-08-15（周六）为 Day 1，工作日每天 1–1.5h，周末 2–3h，周合计 8–10h。表格中 🏁 = 关键里程碑（对应复习规划第九节自检）。</div>
+
+        <h2>阶段与周次总览</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>阶段</th><th>周次</th><th>主题</th><th>核心动作</th></tr></thead>
+          <tbody>
+            <tr><td>0 准备</td><td>W1–W2</td><td>资料与报名</td><td>买教材、定场次、建复习主页、术语表 v1</td></tr>
+            <tr><td>1 通读</td><td>W3–W7</td><td>建框架</td><td>通读 17 域，思维导图 v2</td></tr>
+            <tr><td>2 精学</td><td>W8–W14</td><td>高分域</td><td>治理/质量/元数据/数仓/主数据/建模 精学+案例卡</td></tr>
+            <tr><td>2 精学</td><td>W15–W18</td><td>中分域</td><td>架构/安全/大数据/成熟度 精学</td></tr>
+            <tr><td>2 精学</td><td>W19–W20</td><td>低分域</td><td>7 个低分域速记 + 全量回顾</td></tr>
+            <tr><td>3 刷题</td><td>W21–W24</td><td>题库+错题</td><td>分域刷题、建错题本、薄弱域回炉</td></tr>
+            <tr><td>4 冲刺</td><td>W25–W26</td><td>模拟+查漏</td><td>2 套模拟考、冲刺笔记、临考复盘</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>📺 课程观看策略（含 B站用法）</h2>
+        <ul>
+          <li><b>定位</b>：阶段 1/2 用「先看课再读书」降低挫败感；冲刺期用短视频速记。</li>
+          <li><b>B站关键词</b>：<code>CDGA</code>、<code>数据治理工程师</code>、<code>DAMA DMBOK</code>、<code>数据质量 六维度</code>、<code>主数据管理</code>、<code>元数据 血缘</code>。</li>
+          <li><b>可看（合法免费）</b>：UP 主自制入门课、章节串讲、思维导图讲解。</li>
+          <li><b>⚠️ 盗版预警</b>：标「网盘分享教材 PDF」「搬运官方付费课完整版」的资源不要看。</li>
+        </ul>
+
+        <h2>逐周计划表</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>重点知识域</th><th>周末自检</th></tr></thead>
+          <tbody>
+            <tr><td>W1</td><td>8/15–8/21</td><td>0</td><td>—</td><td>教材已下单；场次已定；仓库已建</td></tr>
+            <tr><td>W2</td><td>8/22–8/28</td><td>0</td><td>数据管理(概述)</td><td>🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词</td></tr>
+            <tr><td>W3</td><td>8/29–9/4</td><td>1</td><td>数据治理</td><td>能口述治理框架要素</td></tr>
+            <tr><td>W4</td><td>9/5–9/11</td><td>1</td><td>数据质量、元数据</td><td>说出质量六维度名称</td></tr>
+            <tr><td>W5</td><td>9/12–9/18</td><td>1</td><td>数仓与BI、参考/主数据</td><td>说出 ODS/DWS 分层含义</td></tr>
+            <tr><td>W6</td><td>9/19–9/25</td><td>1</td><td>数据建模、数据架构</td><td>区分概念/逻辑/物理模型</td></tr>
+            <tr><td>W7</td><td>9/26–10/2</td><td>1</td><td>安全/大数据/成熟度/低分域</td><td>🏁 通读两遍+术语表成型；17 域名称全过一遍</td></tr>
+            <tr><td>W8</td><td>10/3–10/9</td><td>2 高分</td><td>数据治理(精)</td><td>案例卡完成，章节题≥70%</td></tr>
+            <tr><td>W9</td><td>10/10–10/16</td><td>2 高分</td><td>数据质量(精)</td><td>能给场景判维度</td></tr>
+            <tr><td>W10</td><td>10/17–10/23</td><td>2 高分</td><td>元数据管理(精)</td><td>血缘图完成</td></tr>
+            <tr><td>W11</td><td>10/24–10/30</td><td>2 高分</td><td>数仓与BI(精)</td><td>说清 ETL/ELT 区别</td></tr>
+            <tr><td>W12</td><td>10/31–11/6</td><td>2 高分</td><td>参考/主数据(精)</td><td>主数据案例卡完成</td></tr>
+            <tr><td>W13</td><td>11/7–11/13</td><td>2 高分</td><td>数据建模与设计(精)</td><td>🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析</td></tr>
+            <tr><td>W14</td><td>11/14–11/20</td><td>2 高分</td><td>高分域复盘</td><td>高分域正确率≥75%</td></tr>
+            <tr><td>W15</td><td>11/21–11/27</td><td>2 中分</td><td>数据架构(精)</td><td>能画数据流图</td></tr>
+            <tr><td>W16</td><td>11/28–12/4</td><td>2 中分</td><td>数据安全(精)</td><td>说清分类分级步骤</td></tr>
+            <tr><td>W17</td><td>12/5–12/11</td><td>2 中分</td><td>大数据和数据科学(精)</td><td>说出大数据特征</td></tr>
+            <tr><td>W18</td><td>12/12–12/18</td><td>2 中分</td><td>成熟度评估(精)</td><td>说出 2 个成熟度模型</td></tr>
+            <tr><td>W19</td><td>12/19–12/25</td><td>2 低分</td><td>概述/伦理/文件/组织角色</td><td>低分域概念全覆盖</td></tr>
+            <tr><td>W20</td><td>12/26–1/1</td><td>2 低分</td><td>存储/集成/变革管理</td><td>🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区</td></tr>
+            <tr><td>W21</td><td>1/2–1/8</td><td>3 刷题</td><td>高分域题库</td><td>错题本启动，正确率统计</td></tr>
+            <tr><td>W22</td><td>1/9–1/15</td><td>3 刷题</td><td>中分域题库</td><td>中分域正确率≥70%</td></tr>
+            <tr><td>W23</td><td>1/16–1/22</td><td>3 刷题</td><td>低分域题库</td><td>低分域正确率≥60%</td></tr>
+            <tr><td>W24</td><td>1/23–1/29</td><td>3 刷题</td><td>全量+回炉</td><td>🏁 题库正确率≥70%且错题本成型；全局正确率≥75%</td></tr>
+            <tr><td>W25</td><td>1/30–2/5</td><td>4 冲刺</td><td>模拟考1</td><td>模拟1 ≥75 分</td></tr>
+            <tr><td>W26</td><td>2/6–2/12</td><td>4 冲刺</td><td>模拟考2+查漏</td><td>模拟2 ≥75 分；临考清单就绪</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip">弹性：W26（止于 2027-02-12）后到考试（暂定 2027-03-27 末周末）还有约 6 周缓冲；<b>考前 2 周 ≈ 2027-03-13 ~ 03-19</b>，专做 2 套模拟 + 只看错题本/术语表/冲刺笔记。可加 W27–W28 做最后查漏与状态调整。</div>
+        <h2>每日节奏模板</h2>
+        <ul>
+          <li><b>工作日（约 1–1.5h）</b>：看课 25min + 阅读/笔记 35min + 术语/自测 20min + 打卡。</li>
+          <li><b>周末（约 2.5–3h）</b>：模块串讲课 50min + 1.5h 精学/刷题 + 1h 复盘 + 0.5h 更新导图/错题本。</li>
+        </ul>
+      </section>
+
+      <!-- CDGA DAILY · 每日学习中心（选日期） -->
+      <section class="page active" id="cdga-daily">
+        <h1 class="doc-title">📅 CDGA 每日学习中心</h1>
+        <div class="doc-sub">选一个日期，直接打开当天要学的内容——把「计划 + 看 PDF/笔记 + 做题 + 看视频」合并到一天。Day 1 = 2026-08-15（周六），覆盖 W1–W26 共 182 天。打卡进度自动保存在本机。<b>每天还会从「公众号推文精选」里挑一篇（考证/考博轮流）放进当日卡片</b>，点开读「重要信息提取 + 全文（一字不落）」，读完点「标记已读」。</div>
+
+        <div class="day-picker">
+          <div class="dp-controls">
+            <button id="dayPrev" title="前一天">← 前一天</button>
+            <input type="date" id="dayDate" min="2026-08-15" max="2027-02-12" value="2026-08-15">
+            <button id="dayNext" title="后一天">后一天 →</button>
+            <button id="dayStart" class="dp-today">⏮ Day1 起点</button>
+          </div>
+          <div class="week-strip" id="weekStrip"></div>
+        </div>
+
+        <div class="heat-wrap" id="heatWrap">
+          <div class="heat-head">
+            <div class="heat-title">📊 打卡日历（182 天 · 点格子跳到那天）</div>
+            <div class="heat-stats">
+              <span class="hs" id="heatDone">已完成 0 / 182 天</span>
+              <span class="hs" id="heatWeek">本周完成 0 / 7</span>
+              <span class="hs" id="heatRate">打卡率 0%</span>
+              <span class="hs" id="heatStreak">🔥 连续 0 天</span>
+              <span class="hs" id="heatBest">🏆 最长 0 天</span>
+            </div>
+          </div>
+          <div class="heat-scroll">
+            <div class="heat-months" id="heatMonths"></div>
+            <div class="heat-grid" id="heatGrid"></div>
+          </div>
+          <div class="heat-legend">
+            <span class="hl-cell hl-future"></span> 未到
+            <span class="hl-cell hl-todo"></span> 待打卡
+            <span class="hl-cell hl-done"></span> 已完成
+            <span class="hl-cell hl-today"></span> 今天
+          </div>
+        </div>
+
+        <div class="day-card" id="dayCard"></div>
+
+        <h2 style="margin-top:26px">📐 每日五步节奏（长期不变）</h2>
+        <div class="callout tip">目标 → 看课 → 阅读 → 术语 → 自测 → 打卡。工作日约 1–1.5h（看课 25 + 阅读 35 + 术语/自测 20 + 打卡）；周末约 2.5–3h（系统课 50 + 精学/刷题 90 + 复盘 40）。某晚只有 1h 就压缩为「看课 20 + 阅读 30 + 自测/打卡 10」。所有免费资料与 52 道原创题已内置在本站，无需打开任何 md。</div>
+      </section>
+
+      <!-- 资料阅读器（iframe 弹窗，站内看 PDF/笔记） -->
+      <div class="reader-mask" id="readerMask" hidden>
+        <div class="reader-box">
+          <div class="reader-head">
+            <span id="readerTitle">📖 资料阅读器</span>
+            <div>
+              <a id="readerExt" target="_blank" rel="noopener" class="reader-ext">↗ 新标签打开</a>
+              <button id="readerClose" title="关闭">✕</button>
+            </div>
+          </div>
+          <div class="reader-tabs" id="readerTabs"></div>
+          <iframe id="readerFrame" class="reader-frame" title="资料阅读"></iframe>
+        </div>
+      </div>
+
+      <!-- CDGA RESOURCES -->
+      <section class="page" id="cdga-res">
+        <h1 class="doc-title">🔗 CDGA 学习资料获取清单（合法渠道）</h1>
+        <div class="doc-sub">⚠️ 版权声明：官方教材与真题受版权保护，本清单不提供任何盗版下载链接。所有资料请通过正版/官方渠道获取。</div>
+
+        <h2>一、官方教材（必买正版）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>资料</th><th>版本</th><th>获取渠道</th></tr></thead>
+          <tbody>
+            <tr><td>《DAMA 数据管理知识体系指南（第二版修订版）》</td><td>DMBOK2R</td><td>人民邮电出版社官方店、京东/当当自营、DAMA 中国官网</td></tr>
+            <tr><td>DAMA 中国官方考试大纲 / 样题</td><td>当年最新</td><td>报名后由 DAMA 中国或授权机构发放</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>二、真题 / 模拟题（合法途径）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>途径</th><th>性质</th><th>获取方式</th></tr></thead>
+          <tbody>
+            <tr><td>DAMA 中国报名包</td><td>官方样题</td><td>MyDAMA 公众号或官网报名后发放</td></tr>
+            <tr><td>授权培训机构题库</td><td>机构自编模拟题</td><td>中培 IT 学院等授权机构课程附赠</td></tr>
+            <tr><td>本仓库原创自测题</td><td>助手编写</td><td>见「原创自测练习题」（按域分类，含解析）</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>三、官方信息源</h2>
+        <ul>
+          <li><b>DAMA 中国官网</b>：考试通知、大纲、授权机构列表</li>
+          <li><b>「MyDAMA」微信公众号</b>：报名入口、准考证、成绩、续证学分</li>
+          <li><b>DAMA 中国社群 / 备考群</b>：答疑、报名满 25 人开考点提醒</li>
+        </ul>
+
+        <h2>四、你已有的「活资料」（最值钱）</h2>
+        <ul>
+          <li>Doris ODS/DWS 分层、DSS 合同客户表 → 数据仓库与 BI、数据架构</li>
+          <li>户号↔合同 mapping → 主数据管理、数据质量</li>
+          <li>重复合同 / 源数据错误 / ODS 同步延迟根因 → 数据质量、数据集成</li>
+          <li>EPK→ODS→DWS 血缘 → 元数据管理</li>
+        </ul>
+
+        <h2>五、建议获取顺序（本周完成）</h2>
+        <ol>
+          <li>下单 DMBOK2R 正版（京东/当当自营）。</li>
+          <li>关注「MyDAMA」，进备考群，确认 2027 年 3 月场次。</li>
+          <li>报名时领取官方大纲/样题，存入 <code>资料/</code> 子目录。</li>
+          <li>建 <code>cdga-review</code> 仓库，把规划+思维导图挂成 Pages。</li>
+          <li>用原创自测练习题做日常自测，不依赖盗版题库。</li>
+        </ol>
+
+        <h2>六、零成本免费备考路径（不买教材也能过）</h2>
+        <div class="callout tip">💡 教材是「更省时间」不是「必须」。CDGA 考的是 DMBOK2R 的 11 大知识领域，这些领域的<b>免费深度解读网上很多</b>，配合本仓库 52 道原创题 + 免费刷题，足以覆盖 60 分线。下面资料均为<b>合法免费</b>来源（官方框架摘要 / 机构公开博客 / 免费试听视频），不碰任何盗版全本。</div>
+
+        <h3>📥 已下载到本地的免费合法资料</h3>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>文件</th><th>类型</th><th>内容</th><th>对应考试范围</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--bg-secondary)"><td><a href="资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md" target="_blank">⭐ DMBOK2R_11知识领域备考笔记.md</a></td><td>整理笔记</td><td><b>由上述免费资料编译、覆盖整本书 11 域 + DAMA 轮 + 治理角色/趋势</b></td><td>全部 11 域（整本覆盖）</td></tr>
+            <tr><td><a href="资料/03_机构免费资料/dama-dmbok-overview.pdf" target="_blank">dama-dmbok-overview.pdf</a></td><td>官方PDF</td><td>DAMA-DMBOK 框架一页纸（职责轮+11域）</td><td>全局框架、数据治理定位</td></tr>
+            <tr><td><a href="资料/03_机构免费资料/dgi-data-governance-overview.pdf" target="_blank">dgi-data-governance-overview.pdf</a></td><td>官方PDF</td><td>DGI 数据治理框架一页纸</td><td>数据治理章补充</td></tr>
+            <tr><td><a href="资料/03_机构免费资料/free_11知识领域详解_搜狐.html" target="_blank">free_11知识领域详解_搜狐.html</a></td><td>网页</td><td><b>11 大知识领域逐域详解</b>（中文，最贴近考试）</td><td>全部 11 域</td></tr>
+            <tr><td><a href="资料/03_机构免费资料/free_DMBOK框架详解_OvalEdge.html" target="_blank">free_DMBOK框架详解_OvalEdge.html</a></td><td>网页</td><td>11 域讲解 + 落地步骤 + 域间依赖</td><td>全部 11 域 + 实施</td></tr>
+            <tr><td><a href="资料/03_机构免费资料/free_DMBOK框架_Sogeti.html" target="_blank">free_DMBOK框架_Sogeti.html</a></td><td>网页</td><td>11 知识领域 + 治理原则</td><td>全部 11 域</td></tr>
+          </tbody>
+        </table></div>
+        <div class="doc-sub">用浏览器打开上述 <code>.html</code> 即可读；<code>.pdf</code> 双击打开。完整学习顺序见 <a href="资料/免费备考路径.md" target="_blank">资料/免费备考路径.md</a>。</div>
+
+        <h2>七、📺 B站视频学习日程（工作日晚上 + 周末）</h2>
+        <div class="doc-sub">把 B站公开免费视频/专栏，按「工作日晚上 1–1.5h（短视频/课程片段）+ 周末 2–3h（系统课/专栏）」排进你的 26 周日历。完整周历（W1–W26 逐周日期）见 <a href="资料/B站视频学习日程.md" target="_blank">资料/B站视频学习日程.md</a>。</div>
+
+        <h3>📋 B站资源总览（先收藏）</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>资源</th><th>类型</th><th>对应章</th><th>链接</th></tr></thead>
+            <tbody>
+              <tr><td>哈喽鹏程《数据仓库原理实战》</td><td>视频课</td><td>Ch11 数仓BI</td><td><a href="https://www.bilibili.com/video/BV1qv411y7Wv/" target="_blank">BV1qv411y7Wv</a></td></tr>
+              <tr><td>尚硅谷《Atlas 数据治理/元数据》</td><td>视频课</td><td>Ch12 元数据</td><td><a href="https://www.bilibili.com/video/BV1jA411F76d" target="_blank">BV1jA411F76d</a></td></tr>
+              <tr><td>数语科技《数据治理与数据中台架构》</td><td>视频</td><td>Ch3 治理</td><td><a href="https://www.bilibili.com/video/BV1XZ4y1v7jR" target="_blank">BV1XZ4y1v7jR</a></td></tr>
+              <tr><td>数语科技《数据标准如何建设》</td><td>视频</td><td>Ch9 标准</td><td><a href="https://www.bilibili.com/video/BV1gN4y137pj" target="_blank">BV1gN4y137pj</a></td></tr>
+              <tr><td>数语科技《数据模型如何建设》</td><td>视频</td><td>Ch5 建模</td><td><a href="https://www.bilibili.com/video/BV1aF411c7Rh" target="_blank">BV1aF411c7Rh</a></td></tr>
+              <tr><td>数语科技《数据资产目录 上中下》</td><td>视频</td><td>Ch10/12 主数据·元数据</td><td><a href="https://www.bilibili.com/video/BV1xf4y1f7Ro" target="_blank">上</a> · <a href="https://www.bilibili.com/video/BV1oN4y137qX" target="_blank">中</a> · <a href="https://www.bilibili.com/video/BV1J3411u72E" target="_blank">下</a></td></tr>
+              <tr><td>数语科技《数据行业职业发展》</td><td>视频</td><td>总览</td><td><a href="https://www.bilibili.com/video/BV1Ef4y1f7DG" target="_blank">BV1Ef4y1f7DG</a></td></tr>
+              <tr><td>DAMA 视频系列（182 集，每集 1–5min）</td><td>短视频</td><td>全部 17 章</td><td>B站搜「DAMA视频系列」/ UP「@AI人工智能」</td></tr>
+              <tr><td>B站专栏《DAMA 认证介绍+17章大纲》</td><td>图文</td><td>总纲</td><td><a href="https://www.bilibili.com/read/cv40292820" target="_blank">cv40292820</a></td></tr>
+              <tr><td>B站专栏《怎么用数仓进行数据治理》</td><td>图文</td><td>Ch11/13</td><td><a href="https://www.bilibili.com/read/cv43715687" target="_blank">cv43715687</a></td></tr>
+              <tr><td>B站专栏《数据仓库怎么建设》</td><td>图文</td><td>Ch11</td><td><a href="https://www.bilibili.com/read/mobile?id=36785416" target="_blank">36785416</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>🗓️ 视频学习周历（W1–W26 全量）</h3>
+        <div class="progress"><i id="videoBar"></i></div>
+        <div class="progress-label" id="videoLabel">已打卡 0 / 26 周</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>工作日晚上（碎片/短视频）</th><th>周末（系统课/专栏）<th>✅ 打卡</th></tr></thead>
+            <tbody>
+              <tr><td>W1</td><td>8/15–8/21</td><td>准备</td><td>搜「DAMA视频系列」关注，看前 5 集（DAMA 是什么/12 原则）</td><td>看 #11 专栏《认证介绍+大纲》（30min）；定收藏夹</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W2</td><td>8/22–8/28</td><td>准备</td><td>DAMA视频系列「第1章 数据管理」短集（每天 2 集）</td><td>#9 数语《数据行业职业发展》(40min) + #11 大纲再读</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W3</td><td>8/29–9/4</td><td>通读</td><td>DAMA视频系列「数据治理」短集</td><td>#3 数语《数据治理与数据中台架构》(2–3h)</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W4</td><td>9/5–9/11</td><td>通读</td><td>DAMA视频系列「质量/元数据」短集</td><td>#2 尚硅谷 Atlas 元数据 + #6/#7/#8 资产目录上中下</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W5</td><td>9/12–9/18</td><td>通读</td><td>DAMA视频系列「数仓/主数据」短集</td><td>#1 哈喽鹏程数仓课挑章 + #12/#13 专栏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W6</td><td>9/19–9/25</td><td>通读</td><td>DAMA视频系列「建模/架构」短集</td><td>#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W7</td><td>9/26–10/2</td><td>通读</td><td>DAMA视频系列「安全/大数据/成熟度」短集</td><td>#4 数语《数据标准》补看 + 思维导图 v2</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W8</td><td>10/3–10/9</td><td>高分精学</td><td>回看 #3 + DAMA视频系列治理短集</td><td>#3 数语《数据治理》二刷 + 案例卡整理</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W9</td><td>10/10–10/16</td><td>高分精学</td><td>回看 DAMA视频系列质量短集</td><td>#12 专栏《数仓+质量》精读 + 质量六维度笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W10</td><td>10/17–10/23</td><td>高分精学</td><td>回看 #2 尚硅谷 Atlas 片段</td><td>#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W11</td><td>10/24–10/30</td><td>高分精学</td><td>回看 #1 数仓课片段</td><td>#1 数仓课二刷（ETL vs ELT 章）+ #13 专栏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W12</td><td>10/31–11/6</td><td>高分精学</td><td>回看 #6/#7/#8 资产目录片段</td><td>#6/#7/#8 资产目录三集二刷 + 户号↔合同 mapping 案例</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W13</td><td>11/7–11/13</td><td>高分精学</td><td>回看 #5 数语《数据模型》片段</td><td>#5 数据模型二刷 + 维度 vs 范式辨析笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W14</td><td>11/14–11/20</td><td>高分精学</td><td>高分域 DAMA视频系列错题相关短集</td><td>高分域视频三刷 + 章节题（目标 ≥75%）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W15</td><td>11/21–11/27</td><td>中分精学</td><td>DAMA视频系列架构短集</td><td>#4 数语《数据标准》+ 企业数据模型笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W16</td><td>11/28–12/4</td><td>中分精学</td><td>DAMA视频系列安全短集</td><td>安全分类分级 + 个保法/等保 笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W17</td><td>12/5–12/11</td><td>中分精学</td><td>DAMA视频系列大数据短集</td><td>大数据 6V 特征 + 电网 15min 账单案例</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W18</td><td>12/12–12/18</td><td>中分精学</td><td>DAMA视频系列成熟度短集</td><td>成熟度模型笔记（说清 2 个模型）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W19</td><td>12/19–12/25</td><td>低分精学</td><td>DAMA视频系列低分域短集（碎片补足）</td><td>4 域速记卡</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W20</td><td>12/26–1/1</td><td>低分精学</td><td>DAMA视频系列低分域短集</td><td>3 域速记 + 思维导图 v3 全量回顾</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W21</td><td>1/2–1/8</td><td>刷题</td><td>错题对应 DAMA视频系列短集回看</td><td>高分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W22</td><td>1/9–1/15</td><td>刷题</td><td>同上</td><td>中分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W23</td><td>1/16–1/22</td><td>刷题</td><td>同上</td><td>低分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W24</td><td>1/23–1/29</td><td>刷题</td><td>正确率&lt;70% 域回看对应视频</td><td>全局视频查漏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W25</td><td>1/30–2/5</td><td>冲刺</td><td>只回看薄弱章短视频</td><td>限时模拟考 + 失分域视频补救</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+              <tr><td>W26</td><td>2/6–2/12</td><td>冲刺</td><td>只看错题本 + 术语表</td><td>模拟考2 + 临考清单（视频停看，保状态）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout tip">心法：短视频（DAMA视频系列）当通勤碎片开胃菜；长课（哈喽鹏程/尚硅谷/数语）留到周末大块时间；专栏当对照表。W8 起进入精学，视频改为回看对应章；W21 起刷题为主，视频仅查漏。</div>
+
+        <h3>🆓 免费合法、但需在浏览器里看/听（无需下载）</h3>
+        <ul>
+          <li><b>希赛网免费视频（免费听）</b>：CDGA 数据治理工程师<b>小白入门课</b>、<b>课程试听视频</b>（1 小时精讲）。打开 <a href="https://www.educity.cn/dama/" target="_blank">educity.cn/dama</a> 搜 "CDGA" → 找"免费试听/免费听"。</li>
+          <li><b>希赛免费 PDF（登录后免费下，2 分钟）</b>：<code>DAMA-CDGA核心考点精练50题</code>、<code>DAMA-CDGA数据治理工程师必背要点汇总</code>、<code>DAMA数据治理网络课程简章</code>。路径：上述页面文末"资料下载"→ 免费注册 → 下载（存 <code>资料/03_机构免费资料/</code>）。</li>
+        </ul>
+
+        <h3>🗺️ 11 大知识领域 → 免费资料对应表</h3>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>#</th><th>知识领域</th><th>必读免费资料</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>数据治理</td><td>搜狐11域 / OvalEdge / DGI PDF</td></tr>
+            <tr><td>2</td><td>数据架构</td><td>搜狐11域 / OvalEdge</td></tr>
+            <tr><td>3</td><td>数据建模与设计</td><td>搜狐11域</td></tr>
+            <tr><td>4</td><td>数据存储与操作</td><td>搜狐11域</td></tr>
+            <tr><td>5</td><td>数据安全</td><td>搜狐11域</td></tr>
+            <tr><td>6</td><td>数据集成与互操作</td><td>搜狐11域</td></tr>
+            <tr><td>7</td><td>文件与内容管理</td><td>搜狐11域</td></tr>
+            <tr><td>8</td><td>参考与主数据</td><td>搜狐11域</td></tr>
+            <tr><td>9</td><td>数据仓库与BI</td><td>搜狐11域</td></tr>
+            <tr><td>10</td><td>元数据管理</td><td>搜狐11域</td></tr>
+            <tr><td>11</td><td>数据质量</td><td>搜狐11域</td></tr>
+            <tr><td>+</td><td>大数据/数据科学（2R 新增）</td><td>搜狐11域末段 / 希赛高频考点</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>⏱️ 不买教材的复习节奏（接你现有的 26 周计划）</h3>
+        <ul>
+          <li><b>通读 W3–W7</b>：用 3 篇网页 + 2 份 PDF 替代教材通读，逐域过 + 原创题自测。</li>
+          <li><b>精学 W8–W20</b>：按高/中/低分域重读对应网页 + 希赛免费"必背要点"。</li>
+          <li><b>刷题 W21–W24</b>：本仓库 52 题 + 希赛免费"核心考点精练50题" + 希赛网页免费刷题。</li>
+          <li><b>冲刺 W25–W26</b>：免费视频"小白入门课"过框架，只看错题本 + 术语表。</li>
+        </ul>
+      </section>
+
+      <!-- CDGA LADDER: 三级进阶总规划 -->
+      <section class="page" id="cdga-ladder">
+        <h1 class="doc-title">🏆 DAMA 三级进阶总规划（主线 CDGA → CDGP → CDGE · CDAM / CDMP 为可选增值）</h1>
+        <div class="doc-sub">考证不止于初级。基于 2025–2026 DAMA 中国与 DGBOK 平台公开规则，把现有「26 周 CDGA 单一规划」扩展为 <b>5 年进阶路径</b>。对应原 markdown 文档：<code>01_考证/DAMA_三级进阶规划_CDGA_CDGP_CDGE.md</code>。</div>
+
+        <div class="callout">🎯 <b>适合你</b>：数据治理岗 + 在职读博 + 想拿硬通货证书。推荐主线：<b>CDGA → CDGP → CDGE</b>；<b>CDAM / CDMP 为可选增值项</b>（视职业方向再决定，不提前分散精力）。</div>
+
+        <h2>① 五级一图看懂</h2>
+        <div class="ladder-grid">
+          <div class="lv-card">
+            <span class="lv-tag">L1 · 入门</span>
+            <h3>CDGA 数据治理工程师</h3>
+            <div class="lv-sub">DAMA 中国 · 2027-03 目标场次</div>
+            <div class="lv-meta"><b>题型</b><span>100 单选</span></div>
+            <div class="lv-meta"><b>时长</b><span>100 分钟</span></div>
+            <div class="lv-meta"><b>门槛</b><span>专科 / 大学生即可</span></div>
+            <div class="lv-price">报名费 <b>¥1,000</b> · 有效期 3 年</div>
+          </div>
+          <div class="lv-card l2">
+            <span class="lv-tag">L2 · 中级</span>
+            <h3>CDGP 数据治理专家</h3>
+            <div class="lv-sub">DAMA 中国 · 2027 下半年目标</div>
+            <div class="lv-meta"><b>题型</b><span>10 单 + 15 多 + 5~6 论述（全必做）</span></div>
+            <div class="lv-meta"><b>时长</b><span>130 分钟</span></div>
+            <div class="lv-meta"><b>门槛</b><span>持 CDGA + 学历/年限</span></div>
+            <div class="lv-price">报名费 <b>¥2,000</b> · 有效期 3 年</div>
+          </div>
+          <div class="lv-card l3">
+            <span class="lv-tag">L3 · 高级</span>
+            <h3>CDGE 数据治理大师</h3>
+            <div class="lv-sub">DGBOK 体系 · 2028–2029 远期</div>
+            <div class="lv-meta"><b>分阶</b><span>Steward → Professional → CDO</span></div>
+            <div class="lv-meta"><b>形式</b><span>线上机考 + 履历评审</span></div>
+            <div class="lv-meta"><b>门槛</b><span>无 → 3 年 → 5 年 + 评审</span></div>
+            <div class="lv-price">报名费 <b>¥600/次</b> · M/G 级须评审</div>
+          </div>
+          <div class="lv-card optional">
+            <span class="lv-tag">可选 · 增值</span>
+            <h3>CDAM 数据资产管理师</h3>
+            <div class="lv-sub">DAMA 中国 · 可选 · 可与 CDGP 同步考</div>
+            <div class="lv-meta"><b>热点</b><span>数据资产入表 / 数据要素</span></div>
+            <div class="lv-meta"><b>题型</b><span>单 + 多 + 论述(3 选 2)</span></div>
+            <div class="lv-meta"><b>门槛</b><span>本科在校大三 / 大专 3 年</span></div>
+            <div class="lv-price">报名费 <b>¥1,500</b> · 有效期 3 年</div>
+          </div>
+          <div class="lv-card optional">
+            <span class="lv-tag">可选 · 国际</span>
+            <h3>CDMP 国际版</h3>
+            <div class="lv-sub">DAMA 国际 · 可选 · 远期或外企用</div>
+            <div class="lv-meta"><b>等级</b><span>Assoc. → Pract. → Master → Fellow</span></div>
+            <div class="lv-meta"><b>形式</b><span>英文机考 (ProctorU)</span></div>
+            <div class="lv-meta"><b>时长</b><span>90+20 分钟（每门）</span></div>
+            <div class="lv-price">报名费 <b>$311/门</b> · 有效期 3 年</div>
+          </div>
+        </div>
+
+        <h2>② 证书有效期与续证（考完才用上，以官方为准）</h2>
+        <div class="callout info"><span class="ct">已统一口径</span>综合多方来源：DAMA 中国证书（CDGA / CDGP / CDGE / CDAM）据光环国际等机构文章为 <b>终身有效、无需年审 / 续证费</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3 年有效＋续证 ¥200"的口径），<b>请以 MyDAMA 官方最新公告为准</b>。结论：可视为<b>终身有效</b>，把继续教育(PDU)当作<b>自愿提升</b>，<b>完全不影响你现在的 26 周备考计划</b>。</div>
+
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>证书体系</th><th>有效期 / 续证</th><th>继续教育(PDU)</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><b>DAMA 中国</b><br>CDGA / CDGP / CDGE / CDAM</td><td><b>终身有效</b>（据光环国际等）<br>无需年审 / 续证费</td><td><b>自愿</b>，非强制</td><td>部分渠道称"3 年＋¥200 续证"，以官方为准</td></tr>
+            <tr><td><b>DAMA 国际</b><br>CDMP</td><td>会员费维护（第 4 年起每年 $50＋签道德准则）</td><td>120h CPE / 3 年（口径之一）</td><td>英文机考，国际通用</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>继续教育 PDU（自愿提升，非强制）</h3>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>来源</th><th>分值</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>参加 DAMA 中国年度大会 / 峰会</td><td>约 20 分 / 次</td><td>一年 1–2 次</td></tr>
+            <tr><td>培训 / 课程</td><td>1 分 / 小时，上限 20 分</td><td>日常顺带积累</td></tr>
+            <tr><td>经验分享 / 志愿服务</td><td>5–10 分 / 次</td><td>内部分享、社群答疑等</td></tr>
+            <tr><td>日常工作</td><td><b>不折算</b></td><td>不能把上班当学分</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip">💡 即使按"3 年续证"口径，60 分分摊到 3 年 ≈ 每年 20 分，<b>参加 1 次行业大会就解决一大半</b>。考研 / 读博期间顺手攒，<b>不占备考时间</b>。按当前"终身有效"口径则更无需担心。</div>
+
+        <h3>会改变你现在的计划吗？</h3>
+        <ul>
+          <li><b>当前 26 周计划只针对 CDGA</b>（目标 2027-03 上场），<b>不动</b>。</li>
+          <li>无论"终身有效"还是"3 年续证"，都<b>不影响当前备考</b>；续证最早也在拿证后第 3 年（约 2030）。</li>
+          <li>5 年规划里的 CDGP / CDGE / CDAM / CDMP 都排在 <b>2027 下半年之后</b>，续证更靠后。</li>
+          <li>PDU 可日后<b>自愿</b>顺带积累，<b>不额外占用复习时间</b>。</li>
+        </ul>
+
+        <h2>③ 5 年时间轴（衔接你现有的 26 周计划）</h2>
+        <div class="timeline-band">
+          <div class="tl-track">
+            <div class="tl-step l1"><div class="ph">阶段 0</div><div class="when">2026-08 → 09</div><div class="what">CDGA 报名+领教材</div></div>
+            <div class="tl-step l1"><div class="ph">阶段 1</div><div class="when">2026-09 → 11</div><div class="what">CDGA 通读 + 自测</div></div>
+            <div class="tl-step l1"><div class="ph">阶段 2</div><div class="when">2026-11 → 02</div><div class="what">CDGA 精学 + 模拟</div></div>
+            <div class="tl-step l1"><div class="ph">🎯 03</div><div class="when">2027-03</div><div class="what">CDGA 上场</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 3</div><div class="when">2027-04 → 09</div><div class="what">CDGP 论述 + CDAM 双修</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 4</div><div class="when">2027-10 → 2028-06</div><div class="what">实务沉淀 + 案例库</div></div>
+            <div class="tl-step l3"><div class="ph">阶段 5–6</div><div class="when">2028-07 → 2029</div><div class="what">CDGE / CDMP 远期</div></div>
+          </div>
+        </div>
+
+        <h2>④ CDGP 备考核心（半年内重点）</h2>
+        <h3>报考条件速查</h3>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>学历</th><th>须持 CDGA</th><th>数据管理工作年限</th></tr></thead>
+          <tbody>
+            <tr><td>博士</td><td>✅</td><td>无要求</td></tr>
+            <tr><td>硕士</td><td>✅</td><td>≥ 1 年</td></tr>
+            <tr><td><b>本科</b></td><td>✅</td><td><b>≥ 3 年</b></td></tr>
+            <tr><td>专科</td><td>✅</td><td>≥ 5 年</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>题型与时间分配（130 分钟）</h3>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>部分</th><th>题型</th><th>题数</th><th>分值</th><th>建议用时</th></tr></thead>
+          <tbody>
+            <tr><td>第一类</td><td>单选</td><td>10</td><td>10</td><td>10 分钟</td></tr>
+            <tr><td>第二类</td><td>多选</td><td>15</td><td>30</td><td>30 分钟</td></tr>
+            <tr><td>第三类</td><td><b>论述（6 题全必做）</b></td><td>5–6</td><td>60</td><td><b>90 分钟（每题 15 分钟）</b></td></tr>
+            <tr><td>合计</td><td></td><td>30–31</td><td>100</td><td>130 分钟</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout urgent">⚠️ 论述题 <b>不提供选题权</b>，6 大主题每个都要会。</div>
+
+        <h3>论述题六大主题（按出题概率排序）</h3>
+        <div class="theme-card-row">
+          <div class="theme-card"><div class="ix">主题 1 · 高频</div><h4>数据治理体系顶层设计</h4><p>DG 委员会 / RACI / 战略对齐</p></div>
+          <div class="theme-card"><div class="ix">主题 2 · 高频</div><h4>数据质量场景化治理</h4><p>根因分析 + 六维度 + 改进闭环</p></div>
+          <div class="theme-card"><div class="ix">主题 3</div><h4>元数据与血缘</h4><p>业务/技术/操作元数据 + 影响分析</p></div>
+          <div class="theme-card"><div class="ix">主题 4</div><h4>主数据与参考数据</h4><p>MDM 实施模式 + 主数据案例</p></div>
+          <div class="theme-card"><div class="ix">主题 5</div><h4>数据架构与建模</h4><p>分层 + 维度/范式 + 资产目录</p></div>
+          <div class="theme-card"><div class="ix">主题 6</div><h4>数据安全与合规</h4><p>分类分级 + 脱敏 + 个保法</p></div>
+        </div>
+
+        <h3>论述题答题模板（15 分钟一题）</h3>
+        <ol>
+          <li><b>现象诊断</b>（2 min）：拆题目给出的业务场景，识别 1–2 个核心矛盾</li>
+          <li><b>方法论框架</b>（4 min）：引用 DMBOK 对应域概念，画出 RACI / 六维度 / 分层结构图</li>
+          <li><b>落地路径</b>（5 min）：短期 1 月 / 中期 3 月 / 长期 6–12 月</li>
+          <li><b>风险与衡量</b>（2 min）：列 2–3 个风险 + 1 组量化指标</li>
+          <li><b>案例引用</b>（2 min）：用案例库或项目经验佐证</li>
+        </ol>
+
+        <h2>⑤ CDAM 同步备考（增值项 · 可选）</h2>
+        <p>为什么并行考：内容与 CDGP 重叠 60%+，但额外覆盖「数据资产入表」（财政部 2023-08 新规）、《数据资产管理知识体系指南》。<b>你做的是电网数据治理 + 申请在职博士，论文方向如选「数据资产价值评估」可直接用上</b>。</p>
+        <h3>论述题 3 选 2：建议组合</h3>
+        <div class="theme-card-row">
+          <div class="theme-card"><div class="ix">⭐ 入表</div><h4>数据资产入表</h4><p>财政部 2023-08 暂行规定 + 2024 案例</p></div>
+          <div class="theme-card"><div class="ix">⭐ 价值评估</div><h4>数据资产价值评估</h4><p>成本法 / 收益法 / 市场法</p></div>
+          <div class="theme-card"><div class="ix">运营</div><h4>公共数据资产运营</h4><p>授权运营 / 收益分配机制</p></div>
+        </div>
+        <p style="margin-top:8px"><b>策略</b>：避开最弱的「跨境流通」，专攻「入表 + 价值评估」。建议 2027-06 或 09 与 CDGP 一起报。</p>
+
+        <h2>⑥ CDGE / CDMP 远期路径（均为可选）</h2>
+        <details>
+          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">📚 CDGE（DGBOK 体系）路径</summary>
+          <div style="padding:8px 14px">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>级别</th><th>名称</th><th>条件</th></tr></thead>
+              <tbody>
+                <tr><td>Steward</td><td>数据治理专员</td><td>16+ 岁，统考 ≥ C，无学历</td></tr>
+                <tr><td>Professional</td><td>数据治理工程师</td><td>≥ 3 年治理经验 + 统考 ≥ A 或（≥ C + 1 门专业 ≥ C）</td></tr>
+                <tr><td>CDO</td><td>首席数据官</td><td>≥ 5 年 + 统考 ≥ C + 2 门专业 ≥ C</td></tr>
+                <tr><td>M / G 级</td><td>大师 / 院士</td><td>职业履历鉴定 + 资历评审</td></tr>
+              </tbody>
+            </table></div>
+            <p>📌 平台 <code>dgbok.org.cn</code> · 教材《DGBOK1.0》（出版中）+《简明数据治理手册》过渡。150 道选择题，线上机考远程监考，<b>500 元考试 + 100 元认证</b>。<b>CDGA 拿到后无须重考，可直接参 DGBOK 统考。</b></p>
+            <p><b>你的节奏</b>：2028-07 报 CDGE-Steward（成本低、练兵）→ 2029 CDGE-Professional（结合 3 年+ 项目经验）→ 2030+ 评估 CDO 评审。</p>
+          </div>
+        </details>
+        <details>
+          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">🌍 CDMP 国际版（远期 / 外企用）</summary>
+          <div style="padding:8px 14px">
+            <p><b>4 等级</b>：Associate → Practitioner → Master → Fellow。英文机考，ProctorU 远程监考，每门 311 美元。</p>
+            <p><b>10 门专业方向（必选 ≥ 1）</b>：Data Governance / Architecture / Modeling / Quality / Integration / Metadata / Security / Warehousing / Reference & Master / Data Science。</p>
+            <p><b>报考建议</b>：考完 CDGP 后（约 2028 年）直接冲 CDMP Practitioner（Data Governance 方向），把已有 DMBOK 知识直接迁移，复习周期可压缩到 60 天。</p>
+          </div>
+        </details>
+
+        <h2>⑦ 5 年预算与时间账</h2>
+        <div class="budget-bar">
+          <div><div class="lbl">CDGA ×1</div><div class="amt">¥1,000</div><div class="note">2027 报名</div></div>
+          <div><div class="lbl">CDGP ×1</div><div class="amt">¥2,000</div><div class="note">2027 下半年</div></div>
+          <div><div class="lbl">CDAM ×1</div><div class="amt">¥1,500</div><div class="note">2027 同步</div></div>
+          <div><div class="lbl">CDGE ×2</div><div class="amt">¥1,200</div><div class="note">2028–29</div></div>
+          <div><div class="lbl">CDMP ×2</div><div class="amt">¥4,400</div><div class="note">2028+ 国际</div></div>
+          <div><div class="lbl">合计</div><div class="amt">≈¥10,100</div><div class="note">5 年总额</div></div>
+        </div>
+        <div class="callout tip">📊 平均每天多花 10 分钟用于进阶内容，5 年总投入 ≈ <b>300 小时</b>，比一次 PMP 培训 ROI 高。5 年拿到 3–4 张证书，对申请在职博士、跳槽 CDO、跳外企都是硬通货。</div>
+
+        <h2>⑧ 与现有 26 周计划的衔接</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>现有 W1–W26（不变）</th><th>W26 之后衔接</th></tr></thead>
+          <tbody>
+            <tr><td>W1–W2 准备</td><td>立即报名 CDGA（2027-03 场次）</td></tr>
+            <tr><td>W3–W7 通读 DMBOK 17 域</td><td>同时为 CDGP 打底</td></tr>
+            <tr><td>W8–W20 精学</td><td>重点精学 CDGP 高频 6 主题</td></tr>
+            <tr><td>W21–W24 刷题</td><td>同时刷 CDGA 单选 + CDGP 论述</td></tr>
+            <tr><td>W25–W26 冲刺</td><td>CDGA 模拟 + CDGP 论述模板</td></tr>
+            <tr><td><b>W27–W52（新增）</b></td><td><b>半年专攻 CDGP 论述 + CDAM</b></td></tr>
+            <tr><td>W52+</td><td>CDGE-Steward → CDMP Associate</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>⑨ 资料获取清单（追加）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>资料</th><th>路径</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>《数据资产管理知识体系指南》</td><td>MyDAMA 公众号 / DAMA 授权机构（出版中）</td><td>CDAM 备考</td></tr>
+            <tr><td>财政部《企业数据资源相关会计处理暂行规定》</td><td>财政部官网 2023-08</td><td>数据资产入表</td></tr>
+            <tr><td>DGBOK 平台开放课（免费）</td><td>dgbok.org.cn</td><td>CDGE 入门</td></tr>
+            <tr><td>DAMA-DMBOK2（已有）</td><td>已入手</td><td>CDGA / CDGP 主教材</td></tr>
+            <tr><td>CDGP 论述题真题回忆</td><td>MyDAMA 公众号历年推送 / 培训社群</td><td>复习 CDGP 论述</td></tr>
+            <tr><td>《一本书讲透数据治理》石秀峰</td><td>机械工业出版社</td><td>CDGE 辅助</td></tr>
+            <tr><td>《数据治理之论》梅宏主编</td><td>中国人民大学出版社</td><td>学术 / 写论文参考</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>⑩ 风险与备选</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>风险</th><th>概率</th><th>备选</th></tr></thead>
+          <tbody>
+            <tr><td>CDGP 论述题偏题失分</td><td>中</td><td>提前 60 天模拟 3 次；带案例库上场</td></tr>
+            <tr><td>CDAM 教材未出版</td><td>低</td><td>关注 MyDAMA「复习内容清单」更新</td></tr>
+            <tr><td>工作年限不够 CDGP</td><td>视情况</td><td>攒案例 + 申请「项目经验证明」</td></tr>
+            <tr><td>CDGE / CDMP 英文不足</td><td>中</td><td>跟读英文 DMBOK 6 个月过渡</td></tr>
+            <tr><td>续证忘记学分</td><td>低</td><td>每年 2 次行业大会（10 月峰会+12 月）攒学分</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>⑪ 一句话行动清单（可勾选，localStorage 持久化）</h2>
+        <div id="ladderProgress" style="font-size:13px;color:var(--text-2);margin:4px 0 8px">已完成 — / —</div>
+        <div class="checklist" id="ladder-checks">
+          <label><input type="checkbox" data-key="mydama-follow"><span><b>关注 MyDAMA 公众号</b>（报名/成绩/续证主入口）</span></label>
+          <label><input type="checkbox" data-key="dgbok-follow"><span><b>关注 DGBOK 公众号</b>（CDGE 体系入口）</span></label>
+          <label><input type="checkbox" data-key="dgbok-register"><span><b>在 dgbok.org.cn 注册账号</b>，收藏免费开放课</span></label>
+          <label><input type="checkbox" data-key="cdga-confirm"><span><b>在 DAMA 认证小程序确认 CDGA 报名状态</b>（目标 2027-03 场次）</span></label>
+          <label><input type="checkbox" data-key="cdam-bookmark"><span><b>收藏《数据资产管理知识体系指南》出版通知</b>（CDAM 用）</span></label>
+          <label><input type="checkbox" data-key="cdgp-mindmap"><span><b>画一张 DMBOK 知识域关联图</b>（CDGP 论述题底层）</span></label>
+          <label><input type="checkbox" data-key="cases-v1"><span><b>沉淀 2–3 个项目案例</b>（电网主数据 / 数据质量 / 数据共享）</span></label>
+          <label><input type="checkbox" data-key="cdgp-outline"><span><b>建 CDGP 论述题 6 主题答题大纲</b></span></label>
+          <label><input type="checkbox" data-key="moe-notice"><span><b>收藏财政部「数据资源入表」相关政策原文</b></span></label>
+          <label><input type="checkbox" data-key="ladder-locked"><span><b>把本页加入「01_考证」目录顶部作为 5 年总纲</b></span></label>
+        </div>
+      </section>
+
+      <!-- PHD PLAN -->
+      <section class="page" id="phd-plan">
+        <h1 class="doc-title">🏛️ 上海交通大学在职博士申请计划（修正版 v2）</h1>
+        <div class="doc-sub">数据治理 / 电力数据方向 · 非全日制工程博士 · 目标入学 <b>2028-09</b></div>
+
+        <div class="callout danger"><span class="ct">🔴 关键修正</span>硕士已于 <b>2025-03 在日本毕业</b>（非 2028）。工龄时钟早已启动——到今天（2026-08）已工作约 <b>1.5 年</b>，3 年工龄红线在 <b>2028-03</b>，最理想入学节点就是 <b>2028-09</b>。CDGA（2027-03）正好卡在申请前一年，是申请前能拿到的最硬背书。</div>
+        <div class="callout info"><span class="ct">跨学科约束</span>硕士为<b>艺术类</b>，但上海交大非全日制工程博士要求「硕士或学士至少一个为理工科」——<b>本科为理工科，门槛已满足</b>，工程博士路线成立。推荐信「须含硕士导师」硬要求不受影响。</div>
+
+        <h2>一、时间线倒推（关键里程碑）</h2>
+        <div class="timeline">
+          <div class="tl-item done"><div class="when">2025-03</div><div class="what">日本硕士毕业</div><div class="desc">✅ 已完成，需补国外学历认证（CSCSE）</div></div>
+          <div class="tl-item done"><div class="when">2026-08</div><div class="what">当前</div><div class="desc">已工作约 1.5 年，CDGA 备考中</div></div>
+          <div class="tl-item"><div class="when">2027-03</div><div class="what">CDGA 考试</div><div class="desc">申请前最硬背书</div></div>
+          <div class="tl-item"><div class="when">2027-09</div><div class="what">关注简章 + 联系导师</div><div class="desc">交大 2028 招生简章 + 联系意向导师</div></div>
+          <div class="tl-item"><div class="when">2028-03</div><div class="what">工龄满 3 年（红线）</div><div class="desc">满足多数非全博士工作年限门槛</div></div>
+          <div class="tl-item"><div class="when">2028 H1</div><div class="what">备材料 / 网报 / 复试</div><div class="desc">研究计划、推荐信、单位同意证明、学历认证</div></div>
+          <div class="tl-item"><div class="when">2028-09</div><div class="what">入学（理想目标）</div><div class="desc">非全日制博士在读</div></div>
+        </div>
+
+        <h2>二、常见报考资格</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>项目</th><th>常见要求</th><th>你的现状/对策</th></tr></thead>
+          <tbody>
+            <tr><td>学位</td><td>已获硕士学位</td><td>2025-03 日本取得 ✅（需补 CSCSE 认证）</td></tr>
+            <tr><td>工作年限</td><td>非全工程博士多要求 2–5 年</td><td>2028-03 满 3 年，基本覆盖</td></tr>
+            <tr><td>年龄</td><td>多数 ≤45 周岁</td><td>远未到 ✅</td></tr>
+            <tr><td>专家推荐信</td><td>2 位副教授以上</td><td>仅剩 ~1.5 年窗口，需尽快积累人脉</td></tr>
+            <tr><td>单位同意</td><td>在职需单位同意证明</td><td>现在就经营领导关系</td></tr>
+            <tr><td>外语</td><td>CET-6 或相当</td><td>保持/补强，必要时考雅思</td></tr>
+            <tr><td>科研成果</td><td>部分要求论文/专利</td><td>2027 内至少出 1 篇论文/专利/软著</td></tr>
+            <tr><td>学科背景</td><td>硕士或学士至少一理工科</td><td>✅ 本科理工科，已满足</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>三、上海交大对口专业方向</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>院系</th><th>可能方向</th><th>匹配度</th></tr></thead>
+          <tbody>
+            <tr><td>电子信息与电气工程学院</td><td>电气工程（能源互联网）、计算机（数据管理）</td><td>★★★</td></tr>
+            <tr><td>安泰经济与管理学院</td><td>管科（信息系统/数据治理）、DBA</td><td>★★★</td></tr>
+            <tr><td>机械与动力工程学院</td><td>工业工程（智能制造/大数据）</td><td>★★</td></tr>
+            <tr><td>上海高级金融学院</td><td>金融学/DBA（金融数据）</td><td>★★</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout tip">首选 <b>非全日制工程博士</b>——电院 电子信息(085400)/电气工程(085801)/能源动力(085800)，最贴 datalake-etl 工程技术实践；安泰管科/DBA 作备选。</div>
+
+        <h2>四、剩余积累窗口（2026-08 ~ 2028-03，约 1.5 年）</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>阶段</th><th>时间</th><th>核心目标</th></tr></thead>
+          <tbody>
+            <tr><td>A 起步</td><td>2026 H2</td><td>定方向 + 经营单位 + 认证；CDGA 冲刺</td></tr>
+            <tr><td>B 筑基</td><td>2027 全年</td><td>证书 + 项目 + 人脉；考 CDGP</td></tr>
+            <tr><td>C 冲刺</td><td>2028 H1</td><td>成果 + 材料 + 申请；9 月入学</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>五、申请材料清单</h2>
+        <ul>
+          <li>☐ 博士研究生报名表（网报生成）</li>
+          <li>☐ <b>国外学历学位认证书（CSCSE）</b> ← 日本硕士新增必需项</li>
+          <li>☐ 硕士/本科学位证、毕业证（复印件+核验）</li>
+          <li>☐ 硕士成绩单、硕士学位论文（整本，非应届）</li>
+          <li>☐ 单位人事部门同意报考证明</li>
+          <li>☐ 两位专家推荐信（副教授以上，<b>含硕士导师</b>）</li>
+          <li>☐ 研究计划书 / 攻读博士科学研究计划</li>
+          <li>☐ 外语水平证明（CET-6 / 雅思 / 托福 / N1）</li>
+          <li>☐ 科研成果（论文、专利、软著、项目证明）</li>
+          <li>☐ CDGA / CDGP 等职业资格证书（加分项）</li>
+        </ul>
+
+        <h2>五·B 推荐信实战策略：搞定日本硕士导师</h2>
+        <ul>
+          <li><b>本科院长不能替代硕士导师</b>：只能当第 2/3 封，硕士导师那封是刚需。</li>
+          <li><b>艺术类硕士导师的信也够格</b>：规则要的是「硕士导师」身份来源，不要求专业一致。</li>
+          <li><b>导师三年不理你——现在就续旧</b>：发「好久不见」邮件，先不提推荐信，只汇报近况+附简历。</li>
+          <li><b>失联兜底</b>：2027 书面咨询院系研招办申请例外（非保证），备「情况说明」材料包。</li>
+        </ul>
+
+        <h2>六、与 CDGA 备考的协同</h2>
+        <ul>
+          <li>CDGA（2027-03）等于提前给研究计划盖「专业方向」章，申请直接加分。</li>
+          <li>可续考 CDGP、CDAM，形成「数据治理证书链」。</li>
+          <li>复习主页、案例卡本身就是读博研究计划素材库。</li>
+        </ul>
+
+        <h2>八、分阶段行动清单</h2>
+        <p><b>现在 ~ 2026-12（起步）</b>：跟领导铺垫读博意向；启动 CSCSE 认证；给日本硕士导师发续旧邮件（🔴最该做）；确认岗位是否「数据治理」类；2027-03 拿下 CDGA。</p>
+        <p><b>2027（筑基）</b>：CDGA 到手+续考 CDGP；主导 1 个数据治理项目；结识 2 位推荐人；9 月盯 2028 简章；联系导师、启动研究计划。</p>
+        <p><b>2028 H1（冲刺）</b>：出 1 篇论文/专利；备齐材料；网报+复试；9 月入学。</p>
+        <div class="doc-sub" style="border:none;margin-top:24px">修正日期 2026-08-14（v2）· 目标入学 2028-09 · 所有年限/方向/名额以申请当年官方简章为准。</div>
+      </section>
+
+      <!-- PHD RECO -->
+      <section class="page" id="phd-reco">
+        <h1 class="doc-title">✉️ 上海交通大学博士推荐信 · 格式要求与模板</h1>
+        <div class="doc-sub">适用：非全日制工程博士（电子信息/电气/能源动力等）申请-考核制 · 更新 2026-08-14</div>
+
+        <h2>一、提交机制（最重要）</h2>
+        <ul>
+          <li><b>全程系统在线提交，无纸质版</b>。填推荐人姓名+邮箱，系统自动发邮件 → 推荐人点链接在线填写提交。</li>
+          <li><b>硕士导师须用本人高校邮箱提交</b>。务必确认他能收到并用学校官方邮箱（如 <code>@xxx.ac.jp</code>）收系统信。</li>
+          <li>提交时限与网报截止同步，逾期系统关闭——必须提前 1–2 个月请托。</li>
+        </ul>
+
+        <h2>二、硬性要求速查</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>项目</th><th>要求</th></tr></thead>
+          <tbody>
+            <tr><td>数量</td><td><b>至少 2 封</b>（非双一流少数院系加至 3 封）</td></tr>
+            <tr><td>推荐人资格</td><td>报考学科领域内副教授以上，或相当职称（教授级高工、研究员等）</td></tr>
+            <tr><td>硬约束</td><td><b>其中 1 封必须是硕士导师</b>（不可由本科院长/校企老师替代）</td></tr>
+            <tr><td>语言</td><td>系统接受中/英文；日文建议改英文或附中文翻译</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>三、推荐信内容结构</h2>
+        <ol>
+          <li>推荐人身份（姓名、职称、单位、与申请人关系）</li>
+          <li>思想品德 / 政治表现</li>
+          <li>学习 / 工作态度</li>
+          <li>专业知识掌握</li>
+          <li>科研能力 / 学术水平（<b>核心项</b>，用具体事例撑）</li>
+          <li>发展潜力</li>
+          <li>外语水平（可选）</li>
+          <li>具体事例（避免空泛）</li>
+          <li>攻读博士适合度</li>
+          <li>明确推荐结论 + 署名 + 日期 + 联系方式</li>
+        </ol>
+
+        <h2>四、中文模板（校企老师 / 本科院长用）</h2>
+        <pre><code>推荐信
+
+尊敬的上海交通大学电子信息与电气工程学院招生委员会：
+
+本人 XXX，现任 XXX 大学 XXX 学院教授 / XXX 公司首席专家（教授级高工），
+与申请人 XXX 因 [校企合作项目 / 本科阶段指导] 相识，了解其 [X] 年。
+现郑重推荐其攻读贵院 [电子信息 / 电气工程] 专业工程博士。
+
+在 [项目名称 / 共事期间]，申请人表现出：
+- 扎实的数据治理 / 工程技术功底，能独立承担 [具体任务]；
+- 严谨的研究态度，曾主导解决 [具体技术难点]；
+- 良好的工程实践能力与团队协作，[具体成果]。
+
+综上，本人认为 XXX 具备攻读博士学位的学术基础与发展潜力，
+同意毫无保留推荐其报考贵校工程博士。
+
+推荐人：XXX　职称：教授 / 教授级高工
+单位：XXX　邮箱：XXX　电话：XXX　日期：2028 年 X 月 X 日</code></pre>
+
+        <h2>五、英文模板（日本硕士导师用）</h2>
+        <pre><code>Letter of Recommendation
+
+To the Admissions Committee of Shanghai Jiao Tong University:
+
+I am [Full Name], Professor at the [Department, University in Japan], and served as
+the master's supervisor of [Applicant Name] from [year] to [year]. I am writing to
+strongly recommend [him/her] for admission to the professional doctoral program
+(Engineering) at SJTU.
+
+During [his/her] master's studies, [Applicant Name] demonstrated:
+- rigorous research attitude and strong independence in completing [thesis topic];
+- solid foundational training and the ability to analyze problems systematically;
+- perseverance and a genuine drive for further study.
+
+I believe [he/she] possesses the academic grounding and potential required for
+doctoral study, and I fully support [his/her] application.
+
+Sincerely,
+[Full Name]　Title: Professor
+Institution: [University, Japan]　Email: [institutional email]
+Date: [Month] [Year]</code></pre>
+
+        <h2>六、学生代拟草稿的操作提示</h2>
+        <ul>
+          <li>海外/忙碌导师普遍接受学生先起草、其审核提交，是惯例不是冒犯。</li>
+          <li>发续旧/请托邮件时附：中文简历 + 对应模板（英文版给日本导师）。</li>
+          <li>草稿要具体、有事例、不夸大，避免材料不实风险。</li>
+        </ul>
+      </section>
+
+      <!-- PHD URLS -->
+      <section class="page" id="phd-urls">
+        <h1 class="doc-title">🌐 上海交通大学在职博士 · 申请网址汇总</h1>
+        <div class="doc-sub">核实日期 2026-08-14 · 链接来自交大研招网及各院系 2026 招生通知 · 简章每年更新，以当年官方页面为准</div>
+
+        <h2>一、官方总入口</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>名称</th><th>网址</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>上海交通大学研究生招生网</td><td><a href="http://yzb.sjtu.edu.cn" target="_blank" rel="noopener">yzb.sjtu.edu.cn</a></td><td>博士招生首页、简章、报名入口（最核心）</td></tr>
+            <tr><td>博士网上报名系统</td><td>研招网 → 网上报名 → 博士报名</td><td>填信息、传材料、填推荐人邮箱触发发信</td></tr>
+            <tr><td>上海交通大学研究生院</td><td><a href="https://www.gs.sjtu.edu.cn" target="_blank" rel="noopener">gs.sjtu.edu.cn</a></td><td>培养政策、导师招生资格规定</td></tr>
+            <tr><td>上海交通大学官网</td><td><a href="https://www.sjtu.edu.cn" target="_blank" rel="noopener">sjtu.edu.cn</a></td><td>院系导航总入口</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>二、目标院系 · 非全工程博士招生通知</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>院系</th><th>2026 招生通知（原文）</th></tr></thead>
+          <tbody>
+            <tr><td><b>电子信息与电气工程学院（首选）</b></td><td><a href="https://tw.seiee.sjtu.edu.cn/mem/info/36865.htm" target="_blank" rel="noopener">tw.seiee.sjtu.edu.cn/mem/info/36865.htm</a></td></tr>
+            <tr><td>智慧能源创新学院</td><td><a href="https://www.senergy.sjtu.edu.cn/index/fqrzyjszs/3938.html" target="_blank" rel="noopener">senergy.sjtu.edu.cn</a></td></tr>
+            <tr><td>人工智能学院</td><td><a href="https://sai.sjtu.edu.cn/cn/show/475" target="_blank" rel="noopener">sai.sjtu.edu.cn</a></td></tr>
+            <tr><td>机械与动力工程学院</td><td><a href="https://me.sjtu.edu.cn/YanJS/mainnotice/7653.html" target="_blank" rel="noopener">me.sjtu.edu.cn</a></td></tr>
+            <tr><td>设计学院</td><td><a href="https://designschool.sjtu.edu.cn/dynamic/notice/detail/670e4e25af91374a011040e3" target="_blank" rel="noopener">designschool.sjtu.edu.cn</a></td></tr>
+            <tr><td>中英国际低碳学院</td><td><a href="https://lcc.sjtu.edu.cn/Data/View/4687" target="_blank" rel="noopener">lcc.sjtu.edu.cn</a></td></tr>
+            <tr><td>李政道研究所</td><td><a href="https://tdli.sjtu.edu.cn/post/15589" target="_blank" rel="noopener">tdli.sjtu.edu.cn</a></td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>三、联系导师用</h2>
+        <ul>
+          <li>电院师资队伍：<a href="https://www.seiee.sjtu.edu.cn/" target="_blank" rel="noopener">seiee.sjtu.edu.cn</a>（找「师资队伍」按方向查邮箱）</li>
+          <li>智慧能源师资：<a href="https://www.senergy.sjtu.edu.cn/" target="_blank" rel="noopener">senergy.sjtu.edu.cn</a></li>
+          <li>联系导师<b>务必在网报前</b>。</li>
+        </ul>
+
+        <h2>四、材料办理平台</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>材料</th><th>平台</th><th>网址</th></tr></thead>
+          <tbody>
+            <tr><td>国（境）外学历学位认证</td><td>中国留学政务服务网（CSCSE）</td><td><a href="http://zwfw.cscse.edu.cn/" target="_blank" rel="noopener">zwfw.cscse.edu.cn</a></td></tr>
+            <tr><td>教育部留学服务中心</td><td>CSCSE 官网</td><td><a href="http://www.cscse.edu.cn/" target="_blank" rel="noopener">cscse.edu.cn</a></td></tr>
+            <tr><td>境内学位认证</td><td>学信网</td><td><a href="https://www.chsi.com.cn/" target="_blank" rel="noopener">chsi.com.cn</a></td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>五、外语 / 成绩证明</h2>
+        <ul>
+          <li>雅思 IELTS：<a href="https://www.chinaielts.org/" target="_blank" rel="noopener">chinaielts.org</a></li>
+          <li>托福 TOEFL：<a href="https://www.toefl.cn/" target="_blank" rel="noopener">toefl.cn</a></li>
+          <li>日语能力测试 JLPT（N1）：<a href="https://www.jlpt.jp/" target="_blank" rel="noopener">jlpt.jp</a></li>
+        </ul>
+
+        <h2>六、查简章的节奏与技巧</h2>
+        <ol>
+          <li><b>高发期</b>：每年 3–5 月、9–11 月（非全工程博士多在春季批，约 3–5 月报名、9 月入学）。</li>
+          <li><b>盯两处</b>：① 研招网博士招生栏目；② 目标院系「招生通知」。</li>
+          <li><b>站内搜索词</b>：<code>非全日制工程类专业学位博士</code> <code>申请-考核</code> <code>博士招生报名通知</code>。</li>
+          <li>报名前必做：联系导师拿到同意 + 推荐人邮箱就位。</li>
+        </ol>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="资料/articles.js"></script>
+<script>
+/* ---------- Theme ---------- */
+const html=document.documentElement;
+const saved=localStorage.getItem('bb-theme');
+if(saved)html.setAttribute('data-theme',saved);
+document.getElementById('themeBtn').onclick=()=>{
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);localStorage.setItem('bb-theme',next);
+};
+
+/* ---------- Nav ---------- */
+const crumbs=document.getElementById('crumbs');
+const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','cdga-weekly':'26 周学习计划','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','cdga-ladder':'三级进阶总规划','phd-plan':'申请计划','phd-reco':'推荐信格式与模板','phd-urls':'申请网址汇总','my-progress':'我的进度'};
+const GROUP={'cdga-daily':'今日','my-progress':'今日','cdga-plan':'备考 CDGA','cdga-weekly':'备考 CDGA','cdga-check':'备考 CDGA','cdga-quiz':'备考 CDGA','cdga-res':'资料','cdga-news':'资讯','cdga-sources':'资讯','cdga-ladder':'进阶考证','phd-plan':'读博 交大','phd-reco':'读博 交大','phd-urls':'读博 交大',home:'关于本站'};
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById(id); if(el)el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+  const grp=GROUP[id]||'';
+  crumbs.innerHTML = '备考资料中心 / '+(grp?'<b>'+grp+'</b> / ':'')+'<b>'+(titles[id]||'')+'</b>';
+  document.querySelector('.content').scrollTo({top:0});
+  if(id==='my-progress')renderProgress();
+  if(id==='cdga-news')renderNews();
+  if(id==='cdga-sources')renderSources();
+  window.scrollTo({top:0});
+  closeSidebar();
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>showPage(n.dataset.page));
+document.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dataset.goto));
+
+/* ---------- Mobile sidebar ---------- */
+const sidebar=document.getElementById('sidebar'),scrim=document.getElementById('scrim');
+function openSidebar(){sidebar.classList.add('open');scrim.classList.add('show');}
+function closeSidebar(){sidebar.classList.remove('open');scrim.classList.remove('show');}
+document.getElementById('menuBtn').onclick=openSidebar;
+scrim.onclick=closeSidebar;
+
+/* ---------- Search ---------- */
+document.getElementById('search').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    const t=(n.textContent||'').toLowerCase();
+    n.style.display = (!q||t.includes(q))?'block':'none';
+  });
+});
+
+/* ---------- Checklist persistence ---------- */
+const KEY='bb-cdga-check';
+function loadChecks(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}}
+function saveChecks(o){localStorage.setItem(KEY,JSON.stringify(o))}
+function updateProgress(){
+  const all=document.querySelectorAll('#cdga-check .chk');
+  if(!all.length)return;
+  const done=document.querySelectorAll('#cdga-check .chk:checked').length;
+  document.getElementById('chkBar').style.width=(done/all.length*100)+'%';
+  document.getElementById('chkLabel').textContent='已掌握 '+done+' / '+all.length;
+}
+(function initChecks(){
+  const state=loadChecks();
+  document.querySelectorAll('#cdga-check .chk').forEach((c,i)=>{
+    c.checked=!!state[i];
+    c.addEventListener('change',()=>{
+      const s=loadChecks();s[i]=c.checked;saveChecks(s);
+      c.closest('.chk-row').classList.toggle('done',c.checked);
+      updateProgress();
+    });
+    c.closest('.chk-row').classList.toggle('done',c.checked);
+  });
+  updateProgress();
+})();
+
+/* ---------- Video schedule check-in (independent) ---------- */
+const VKEY='bb-video-checks';
+function loadVideo(){try{return JSON.parse(localStorage.getItem(VKEY))||{}}catch(e){return{}}}
+function saveVideo(o){localStorage.setItem(VKEY,JSON.stringify(o))}
+function updateVideoProgress(){
+  const all=document.querySelectorAll('#cdga-res .vchk');
+  if(!all.length)return;
+  const done=document.querySelectorAll('#cdga-res .vchk:checked').length;
+  document.getElementById('videoBar').style.width=(done/all.length*100)+'%';
+  document.getElementById('videoLabel').textContent='已打卡 '+done+' / '+all.length+' 周';
+}
+(function initVideoChecks(){
+  const state=loadVideo();
+  document.querySelectorAll('#cdga-res .vchk').forEach((c,i)=>{
+    c.checked=!!state[i];
+    c.addEventListener('change',()=>{
+      const s=loadVideo();s[i]=c.checked;saveVideo(s);
+      c.closest('tr').classList.toggle('vdone',c.checked);
+      updateVideoProgress();
+    });
+    c.closest('tr').classList.toggle('vdone',c.checked);
+  });
+  updateVideoProgress();
+})();
+const LADDER_KEY='bb-ladder-checks';
+function loadLadder(){try{return JSON.parse(localStorage.getItem(LADDER_KEY))||{}}catch(e){return{}}}
+function saveLadder(o){localStorage.setItem(LADDER_KEY,JSON.stringify(o))}
+(function initLadder(){
+  const state=loadLadder();
+  document.querySelectorAll('#ladder-checks input[type=checkbox]').forEach(c=>{
+    const k=c.dataset.key;
+    c.checked=!!state[k];
+    c.addEventListener('change',()=>{
+      const s=loadLadder();s[k]=c.checked;saveLadder(s);
+      c.closest('label').classList.toggle('checked',c.checked);
+      updateLadderProgress();
+    });
+    c.closest('label').classList.toggle('checked',c.checked);
+  });
+  updateLadderProgress();
+})();
+function updateLadderProgress(){
+  const all=document.querySelectorAll('#ladder-checks input[type=checkbox]');
+  if(!all.length)return;
+  const done=[...all].filter(c=>c.checked).length;
+  const target=document.getElementById('ladderProgress');
+  if(target)target.textContent=`已完成 ${done} / ${all.length}`;
+}
+
+/* ---------- Quiz render ---------- */
+const QUIZ=[
+ {d:'一、数据治理',q:'下列关于"数据治理"与"数据管理"的关系，正确的是：',o:['两者是并列关系','数据治理是数据管理的一部分，负责决策与监督','数据管理是数据治理的一部分','两者无任何关系'],a:'B',e:'治理 ⊆ 管理，治理侧重规划、监督、决策，管理侧重执行。'},
+ {d:'一、数据治理',q:'数据治理委员会（DG Council）的主要职责是：',o:['编写具体 ETL 代码','制定数据战略、政策并监督执行','负责数据库备份','仅做技术选型'],a:'B',e:'委员会是决策与监督机构，不负责具体技术执行。'},
+ {d:'一、数据治理',q:'数据管家（Data Steward）的核心职责是：',o:['拥有数据资产的业务决策权','在某一领域负责数据质量与标准落地','采购硬件','编写全部 SQL'],a:'B',e:'管家是数据标准的执行者与质量守门人。'},
+ {d:'一、数据治理',q:'首席数据官（CDO）的主要定位是：',o:['一线数据库运维','组织层面的数据资产责任人，推动数据战略','仅负责报表开发','外部审计员'],a:'B',e:'CDO 对组织数据资产负责，统筹治理战略。'},
+ {d:'一、数据治理',q:'数据治理成熟度评估的主要作用不包括：',o:['识别当前能力差距','指导改进路径','直接生成业务收入','向管理层呈现治理现状'],a:'C',e:'成熟度评估是诊断与规划工具，不直接影响营收。'},
+ {d:'二、数据质量',q:'以下哪项不属于 DAMA 数据质量六维度？',o:['准确性','完整性','美观性','一致性'],a:'C',e:'六维度为准确性、完整性、一致性、唯一性、及时性、有效性。'},
+ {d:'二、数据质量',q:'客户表中同一客户出现两条重复记录，违反的是：',o:['及时性','唯一性','有效性','准确性'],a:'B',e:'唯一性要求无重复实体。'},
+ {d:'二、数据质量',q:'某字段值超出合理取值范围（如年龄=200），违反的是：',o:['有效性','完整性','一致性','及时性'],a:'A',e:'有效性指数据符合定义域/业务规则。'},
+ {d:'二、数据质量',q:'订单金额与明细金额合计不符，属于违反：',o:['准确性','一致性','唯一性','及时性'],a:'B',e:'一致性指数据在不同处或跨表逻辑一致。'},
+ {d:'二、数据质量',q:'数据未能在约定时间同步到位（如 ODS 同步延迟），主要影响：',o:['有效性','准确性','及时性','唯一性'],a:'C',e:'及时性指数据在需要时可用、时效达标。'},
+ {d:'二、数据质量',q:'数据质量根因分析的首要步骤通常是：',o:['直接删除错误数据','定位问题源头而非仅清洗表象','忽略不计','仅重命名字段'],a:'B',e:'根因分析强调溯源治理，而非表面清洗。'},
+ {d:'三、元数据管理',q:'下列中属于"业务元数据"的是：',o:['表字段数据类型','数据业务含义、口径定义','作业调度时间','存储路径'],a:'B',e:'业务元数据描述业务含义与口径。'},
+ {d:'三、元数据管理',q:'"某字段为 VARCHAR(20)，位于 ODS 层"属于：',o:['业务元数据','技术元数据','操作元数据','主数据'],a:'B',e:'技术元数据描述结构、类型、物理位置。'},
+ {d:'三、元数据管理',q:'数据血缘（Lineage）分析主要用于：',o:['美化报表','追踪数据来源与加工路径、做影响分析','压缩存储','删除日志'],a:'B',e:'血缘支持溯源与影响分析，如 EPK→ODS→DWS。'},
+ {d:'三、元数据管理',q:'操作元数据通常描述：',o:['业务口径','数据访问频率、作业运行状态','概念模型','主数据编码'],a:'B',e:'操作元数据记录运行/使用层面的信息。'},
+ {d:'四、数据仓库与BI',q:'Inmon 与 Kimball 企业级数据仓库方法论的主要区别是：',o:['Inmon 自顶向下范式化，Kimball 面向主题维度化','两者完全相同','Kimball 不使用维度','Inmon 不使用实体'],a:'A',e:'Inmon 企业级范式模型，Kimball 维度/数据集市。'},
+ {d:'四、数据仓库与BI',q:'ETL 与 ELT 的核心区别是：',o:['ETL 先转换后加载，ELT 先加载后转换','两者无区别','ELT 不做加载','ETL 不做转换'],a:'A',e:'加载与转换顺序不同，ELT 依赖数仓算力。'},
+ {d:'四、数据仓库与BI',q:'ODS 层的主要特征是：',o:['面向历史的聚合报表','贴近源系统的操作数据存储，细节保留','仅存主数据','不含任何原始数据'],a:'B',e:'ODS 保留细节、贴近源，供操作与集成。'},
+ {d:'四、数据仓库与BI',q:'DWS（数据服务/汇总层）通常承担：',o:['原始采集','面向主题的轻度/重度汇总，支撑分析','仅备份','文档管理'],a:'B',e:'DWS 做汇总加工，服务分析与应用。'},
+ {d:'四、数据仓库与BI',q:'维度建模中"事实表"主要存放：',o:['唯一标识','业务过程度量（如金额、数量）','仅文本说明','权限配置'],a:'B',e:'事实表存度量，维度表存描述属性。'},
+ {d:'五、参考数据和主数据',q:'以下属于"主数据"的是：',o:['一次性临时日志','客户、产品、供应商等核心业务实体','网页访问 PV','系统报错信息'],a:'B',e:'主数据是跨系统共享的核心实体。'},
+ {d:'五、参考数据和主数据',q:'户号↔合同映射（如你项目）本质上属于：',o:['文件管理','主数据管理','网络安全','内容管理'],a:'B',e:'统一核心实体标识即主数据治理。'},
+ {d:'五、参考数据和主数据',q:'参考数据与主数据的主要区别是：',o:['参考数据是用于分类的受控值集，主数据是核心实体','两者完全相同','主数据不可共享','参考数据是原始日志'],a:'A',e:'参考数据为分类/代码，主数据为核心实体。'},
+ {d:'五、参考数据和主数据',q:'MDM 实施模式不包括以下哪项常见分类：',o:['注册型（Registry）','集中型（Centralized）','共存型（Coexistence）','随机型（Random）'],a:'D',e:'常见为注册/集中/共存/整合等。'},
+ {d:'六、数据建模与设计',q:'概念模型、逻辑模型、物理模型的顺序是：',o:['物理→逻辑→概念','概念→逻辑→物理','三者无序','仅逻辑与物理'],a:'B',e:'抽象程度由高到低。'},
+ {d:'六、数据建模与设计',q:'三范式建模主要用于：',o:['减少冗余、保证一致性','提升报表美观','删除数据','仅做备份'],a:'A',e:'范式化消除冗余、避免更新异常。'},
+ {d:'六、数据建模与设计',q:'维度建模更适用于：',o:['联机分析处理（OLAP）/ 报表分析','高频事务写入优化','文件存储','网络传输'],a:'A',e:'维度建模面向分析查询。'},
+ {d:'六、数据建模与设计',q:'ER 图用于表达：',o:['实体及实体间关系','网络拓扑','组织架构','财务报表'],a:'A',e:'ER 图描述实体与关系。'},
+ {d:'七、数据架构',q:'企业数据模型（EDM）的主要作用：',o:['描述组织全局数据资产蓝图与标准','编写具体 SQL','仅做备份','管理打印机'],a:'A',e:'EDM 是全局数据蓝图。'},
+ {d:'七、数据架构',q:'数据流图（DFD）主要用于：',o:['展示数据在系统间的流转','画组织架构','设计 UI','编写合同'],a:'A',e:'DFD 描述数据流向。'},
+ {d:'七、数据架构',q:'数据架构与业务架构的关系应：',o:['对齐并支撑业务战略','完全独立','仅技术自洽','无需考虑业务'],a:'A',e:'数据架构须与业务/应用架构对齐。'},
+ {d:'八、数据安全',q:'数据分类分级的主要目的是：',o:['区分数据重要性与敏感度，实施差异化保护','仅做排序展示','删除低价值数据','压缩存储'],a:'A',e:'分类分级是差异化安全策略基础。'},
+ {d:'八、数据安全',q:'数据脱敏通常用于：',o:['在非生产环境保护敏感信息','提升查询速度','删除数据','加密硬盘'],a:'A',e:'脱敏在开发/测试等场景遮蔽敏感值。'},
+ {d:'八、数据安全',q:'访问控制的基本原则包括：',o:['最小权限原则','全员可读写所有表','无需认证','仅物理隔离'],a:'A',e:'最小权限是安全基线。'},
+ {d:'八、数据安全',q:'个人信息保护合规主要依据包括：',o:['《个人信息保护法》等法规','仅内部规定','无依据','仅技术文档'],a:'A',e:'需符合个保法、数据安全法等。'},
+ {d:'九、大数据和数据科学',q:'大数据"5V"通常不包含：',o:['Volume（体量）','Velocity（速度）','Vanilla（香草）','Variety（多样）'],a:'C',e:'5V 为 Volume/Velocity/Variety/Veracity/Value。'},
+ {d:'九、大数据和数据科学',q:'国网 15 分钟间隔账单数据属于：',o:['静态文档','高时效性时序/大数据范畴','主数据','元数据'],a:'B',e:'高频时序数据体现 Velocity/Variety。'},
+ {d:'九、大数据和数据科学',q:'数据挖掘的主要目标是：',o:['从数据中发现模式与知识','仅做备份','删除记录','美化界面'],a:'A',e:'挖掘旨在发现规律支撑决策。'},
+ {d:'十、成熟度评估',q:'常见的数据管理成熟度模型包括：',o:['CMMI / DAMA-DMM 等','无模型','仅 Excel','仅代码评审'],a:'A',e:'CMMI、DAMA 数据管理成熟度模型等。'},
+ {d:'十、成熟度评估',q:'成熟度等级通常从低到高表示为：',o:['无意识→被动→主动→已管理→优化','随机→删除','仅两级','无等级'],a:'A',e:'典型五级渐进模型。'},
+ {d:'十、成熟度评估',q:'成熟度评估的输出最常用于：',o:['制定改进路线图','直接替代治理','仅存档','删库'],a:'A',e:'评估驱动改进规划。'},
+ {d:'十一、数据管理概述',q:'数据被视为：',o:['组织资产，具有价值需管理','无价值副产品','仅技术细节','仅合规负担'],a:'A',e:'DAMA 原则：数据是有价值的企业资产。'},
+ {d:'十一、数据管理概述',q:'数据生命周期通常涵盖：',o:['创建、存储、使用、共享、归档/销毁','仅创建','仅删除','无周期'],a:'A',e:'全生命周期管理。'},
+ {d:'十二、数据处理伦理',q:'数据伦理原则强调：',o:['透明、负责、尊重隐私','随意使用数据','隐瞒用途','无视合规'],a:'A',e:'伦理要求透明与责任。'},
+ {d:'十二、数据处理伦理',q:'AI 伦理在修订版中：',o:['被新增强调（含隐私与公平性）','被删除','无关','仅旧版有'],a:'A',e:'DMBOK2R 新增 AI 伦理内容。'},
+ {d:'十三、其余低分域',q:'数据存储与操作关注：',o:['数据库管理与备份恢复规范','仅前端展示','仅文档','仅网络'],a:'A',e:'数据库管理与备份恢复。'},
+ {d:'十三、其余低分域',q:'数据集成与互操作关注：',o:['ETL、数据交换与共享','仅删除','仅归档','仅备份'],a:'A',e:'ODS 同步即此域。'},
+ {d:'十三、其余低分域',q:'文件和内容管理主要处理：',o:['非结构化数据（文档、图像等）','仅主数据','仅元数据','仅网络'],a:'A',e:'非结构化数据管理。'},
+ {d:'十三、其余低分域',q:'数据所有者（Data Owner）的职责是：',o:['对数据业务含义与定义负责','仅做运维','仅采购','无职责'],a:'A',e:'对业务含义与定义负责。'},
+ {d:'十三、其余低分域',q:'数据管理员（Custodian）通常负责：',o:['数据的技术实现与保管','业务决策','仅审计','仅销售'],a:'A',e:'技术实现与保管。'},
+ {d:'十三、其余低分域',q:'组织变革管理在数据治理中的作用是：',o:['培育数据文化、推动落地','无作用','仅裁员','仅采购'],a:'A',e:'培育文化、推动落地。'},
+ {d:'十三、其余低分域',q:'数据管理组织与角色期望强调：',o:['明确各角色职责边界','职责模糊','无需角色','仅一人负责'],a:'A',e:'明确职责边界。'}
+];
+/* ============================================================
+   QUIZ: 双模式渲染（学习模式 + 刷题模式）
+   ============================================================ */
+const QUIZ_DOMAINS=[...new Set(QUIZ.map(q=>q.d))];
+const QUIZ_TOTAL=QUIZ.length;
+const QUIZ_STORE='cdga-quiz-progress-v1';
+
+// 当前模式（持久化）
+let quizMode=localStorage.getItem('cdga-quiz-mode')||'study';
+
+// 学习模式（保留折叠展开的原有体验）
+function renderStudyMode(){
+  const box=document.getElementById('quiz-list');if(!box)return;
+  let html='',cur='';
+  QUIZ.forEach((it,i)=>{
+    if(it.d!==cur){cur=it.d;html+=`<div class="quiz-domain">${cur}</div>`;}
+    const opts=it.o.map((o,k)=>`<div>${'ABCD'[k]}．${o}</div>`).join('');
+    html+=`<details class="q"><summary><span class="qn">${i+1}.</span><span>${it.q}</span></summary>`+
+          `<div class="opts">${opts}</div>`+
+          `<div class="ans"><b>答案：${it.a}</b> ｜ ${it.e}</div></details>`;
+  });
+  box.innerHTML=html;
+}
+
+// 刷题模式状态
+const practice={
+  // 用户作答：{ idxInDomain: 'A'|'B'|'C'|'D'|null }
+  answers:{},
+  // 当前题目在 QUIZ 中的全局索引
+  currentIdx:0,
+  // 按域筛选，all 表示全部
+  domainFilter:'all',
+  finished:false
+};
+
+function loadPractice(){
+  try{
+    const raw=localStorage.getItem(QUIZ_STORE);
+    if(raw){const s=JSON.parse(raw);
+      practice.answers=s.answers||{};
+      practice.currentIdx=s.currentIdx||0;
+      practice.domainFilter=s.domainFilter||'all';
+      practice.finished=!!s.finished;
+    }
+  }catch(e){}
+}
+function savePractice(){
+  try{localStorage.setItem(QUIZ_STORE,JSON.stringify({
+    answers:practice.answers, currentIdx:practice.currentIdx,
+    domainFilter:practice.domainFilter, finished:practice.finished
+  }));}catch(e){}
+}
+function resetPractice(){
+  practice.answers={}; practice.currentIdx=0;
+  practice.finished=false; savePractice(); renderPractice();
+}
+
+// 当前筛选下的题目列表
+function practiceList(){
+  if(practice.domainFilter==='all') return QUIZ.map((q,i)=>({q,i}));
+  return QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d===practice.domainFilter);
+}
+
+// 渲染：HUD + 题目卡片（或结果）
+function renderPractice(){
+  const root=document.getElementById('quiz-practice');if(!root)return;
+  const list=practiceList();
+  if(list.length===0){
+    root.innerHTML=`<div class="callout">该域暂无题目。</div>`;
+    return;
+  }
+  // 修正 currentIdx 到合法范围
+  if(practice.currentIdx>=list.length) practice.currentIdx=list.length-1;
+  if(practice.currentIdx<0) practice.currentIdx=0;
+
+  const done=Object.keys(practice.answers).filter(k=>practice.answers[k]).length;
+  const right=Object.keys(practice.answers).filter(k=>{
+    const it=QUIZ[k]; return it && practice.answers[k]===it.a;
+  }).length;
+  const answeredHere=list.filter(x=>practice.answers[x.i]).length;
+  const progressPct=list.length?Math.round(answeredHere/list.length*100):0;
+
+  // 如果做完了，渲染结果
+  if(practice.finished){
+    root.innerHTML=renderResults(list);
+    bindPracticeEvents();
+    return;
+  }
+
+  const idx=practice.currentIdx;
+  const item=list[idx];
+  const userAns=practice.answers[item.i];
+  const locked=!!userAns;
+
+  root.innerHTML=`
+    <div class="practice-hud">
+      <div class="stat">📍 第 <b>${idx+1}</b> / ${list.length} 题</div>
+      <div class="progress" title="${progressPct}% 已作答"><span style="width:${progressPct}%"></span></div>
+      <div class="stat" style="color:var(--green)">✅ 对 <b>${right}</b></div>
+      <div class="stat" style="color:var(--red)">❌ 错 <b>${done-right}</b></div>
+    </div>
+    <div class="domain-chips" id="dom-chips">
+      <div class="domain-chip ${practice.domainFilter==='all'?'active':''}" data-d="all">全部 <span class="ct">${QUIZ_TOTAL}</span></div>
+      ${QUIZ_DOMAINS.map(d=>{
+        const cnt=QUIZ.filter(q=>q.d===d).length;
+        const active=practice.domainFilter===d;
+        return `<div class="domain-chip ${active?'active':''}" data-d="${d}">${d} <span class="ct">${cnt}</span></div>`;
+      }).join('')}
+    </div>
+    <div class="practice-card" id="pcard">
+      <div class="pc-head">
+        <span class="pc-domain">${item.q.d}</span>
+        <span class="pc-num">#${item.i+1} / ${QUIZ_TOTAL}</span>
+      </div>
+      <div class="pc-question">${item.q.q}</div>
+      <div class="pc-options">
+        ${item.q.o.map((o,k)=>{
+          const L='ABCD'[k];
+          let cls='pc-opt';
+          if(locked){
+            cls+=' locked';
+            if(L===item.q.a) cls+=' correct';
+            if(L===userAns && L!==item.q.a) cls+=' wrong';
+          }else if(userAns===L){
+            cls+=' selected';
+          }
+          return `<button class="${cls}" data-pick="${L}" ${locked?'disabled':''}>
+            <span class="letter">${L}</span><span class="text">${o}</span>
+          </button>`;
+        }).join('')}
+      </div>
+      ${locked?`
+        <div class="pc-feedback ${userAns===item.q.a?'correct':'wrong'}">
+          <div class="label">${userAns===item.q.a?'✅ 回答正确':'❌ 回答错误，正确答案是 '+item.q.a}</div>
+          <div class="expl"><b>解析：</b>${item.q.e}</div>
+        </div>`:''}
+      <div class="pc-nav">
+        <div class="left">
+          <button class="pc-btn" id="btn-prev" ${idx===0?'disabled':''}>← 上一题</button>
+        </div>
+        <div class="right">
+          ${locked
+            ? (idx===list.length-1
+                ? `<button class="pc-btn primary" id="btn-finish">查看成绩 →</button>`
+                : `<button class="pc-btn primary" id="btn-next">下一题 →</button>`)
+            : `<button class="pc-btn" id="btn-skip" title="不计入正确率，直接看下一题">跳过</button>`}
+        </div>
+      </div>
+      <div class="pc-jump">
+        <span class="pc-jump-label">跳题：</span>
+        ${list.map(x=>{
+          const a=practice.answers[x.i];
+          let cls='pc-jump-dot';
+          if(x.i===item.i) cls+=' current';
+          else if(a===x.q.a) cls+=' right';
+          else if(a) cls+=' wrong';
+          return `<span class="${cls}" data-goto="${x.i}">${x.i+1}</span>`;
+        }).join('')}
+      </div>
+      <div style="margin-top:14px;text-align:right">
+        <button class="pc-btn ghost" id="btn-reset" style="font-size:12px;padding:6px 12px;color:var(--text-3)">↺ 重置刷题进度</button>
+      </div>
+    </div>
+  `;
+  bindPracticeEvents();
+}
+
+// 结果面板
+function renderResults(list){
+  const done=list.length;
+  const answered=list.filter(x=>practice.answers[x.i]).length;
+  const right=list.filter(x=>practice.answers[x.i]===x.q.a).length;
+  const wrong=answered-right;
+  const unanswered=done-answered;
+  const acc=answered?Math.round(right/answered*100):0;
+  // 按域统计
+  const byDomain={};
+  list.forEach(x=>{
+    const a=practice.answers[x.i];
+    const ok=a===x.q.a;
+    if(!byDomain[x.q.d]) byDomain[x.q.d]={n:0,r:0};
+    byDomain[x.q.d].n++;
+    if(a===x.q.a) byDomain[x.q.d].r++;
+  });
+  const wrongs=list.filter(x=>practice.answers[x.i] && practice.answers[x.i]!==x.q.a);
+
+  return `
+    <div class="pc-results">
+      <div class="trophy">${acc>=80?'🏆':acc>=60?'🎯':'📚'}</div>
+      <h3>本轮刷题完成</h3>
+      <div class="score">${acc}%</div>
+      <div class="score-label">正确率 · 共 ${answered}/${done} 题</div>
+      <div class="breakdown">
+        <div><div class="v good">${right}</div><div class="l">答对</div></div>
+        <div><div class="v bad">${wrong}</div><div class="l">答错</div></div>
+        <div><div class="v">${unanswered}</div><div class="l">未作答</div></div>
+        <div><div class="v">${done}</div><div class="l">总题数</div></div>
+      </div>
+      ${Object.keys(byDomain).length>1?`
+        <div style="text-align:left;margin:8px 0 4px">
+          <div style="font-size:12px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">分域正确率</div>
+          ${Object.entries(byDomain).map(([d,s])=>{
+            const p=Math.round(s.r/s.n*100);
+            const color=p>=80?'var(--green)':p>=60?'var(--yellow)':'var(--red)';
+            return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px">
+              <span style="flex:0 0 130px;color:var(--text-2)">${d}</span>
+              <div style="flex:1;height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden">
+                <div style="height:100%;width:${p}%;background:${color};transition:width .4s"></div>
+              </div>
+              <span style="font-size:12px;color:var(--text-3);min-width:54px;text-align:right">${s.r}/${s.n} · ${p}%</span>
+            </div>`;
+          }).join('')}
+        </div>`:''}
+      ${wrongs.length>0?`
+        <div class="review-list">
+          <h4>${wrongs.length} 道错题回顾</h4>
+          ${wrongs.map(x=>`<div class="review-item wrong" data-review="${x.i}">
+            <span class="badge">✕</span>
+            <div><div class="q">#${x.i+1} ${x.q.q}</div>
+            <div style="font-size:12px;color:var(--text-3);margin-top:3px">你的答案 ${practice.answers[x.i]} · 正确答案 ${x.q.a}</div></div>
+          </div>`).join('')}
+        </div>`:''}
+      <div class="actions">
+        <button class="pc-btn" id="btn-back">← 返回第 1 题</button>
+        <button class="pc-btn primary" id="btn-redo">↺ 再来一轮</button>
+      </div>
+    </div>
+  `;
+}
+
+// 绑定刷题区内事件
+function bindPracticeEvents(){
+  const root=document.getElementById('quiz-practice');
+  if(!root)return;
+
+  // 选项点击（记录答案）
+  root.querySelectorAll('.pc-opt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const list=practiceList();
+      if(practice.finished) return;
+      const item=list[practice.currentIdx];
+      practice.answers[item.i]=btn.dataset.pick;
+      savePractice(); renderPractice();
+    });
+  });
+
+  // 上下题
+  root.querySelector('#btn-prev')?.addEventListener('click',()=>{
+    if(practice.currentIdx>0){practice.currentIdx--;savePractice();renderPractice();}
+  });
+  root.querySelector('#btn-next')?.addEventListener('click',()=>{
+    const list=practiceList();
+    if(practice.currentIdx<list.length-1){practice.currentIdx++;savePractice();renderPractice();}
+  });
+  root.querySelector('#btn-skip')?.addEventListener('click',()=>{
+    const list=practiceList();
+    if(practice.currentIdx<list.length-1){practice.currentIdx++;savePractice();renderPractice();}
+  });
+  root.querySelector('#btn-finish')?.addEventListener('click',()=>{
+    practice.finished=true;savePractice();renderPractice();
+  });
+  root.querySelector('#btn-reset')?.addEventListener('click',()=>{
+    if(confirm('确定清空刷题进度吗？此操作不可撤销。')) resetPractice();
+  });
+
+  // 跳题
+  root.querySelectorAll('.pc-jump-dot').forEach(d=>{
+    d.addEventListener('click',()=>{
+      practice.currentIdx=parseInt(d.dataset.goto);
+      // 跳到的 idx 是 QUIZ 全局索引，需要换算到当前列表位置
+      const list=practiceList();
+      const pos=list.findIndex(x=>x.i===practice.currentIdx);
+      if(pos>=0){practice.currentIdx=pos;savePractice();renderPractice();}
+    });
+  });
+
+  // 域筛选
+  root.querySelectorAll('.domain-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      practice.domainFilter=c.dataset.d;
+      practice.currentIdx=0; // 切域后回到第一题
+      practice.finished=false;
+      savePractice(); renderPractice();
+    });
+  });
+
+  // 结果页按钮
+  root.querySelector('#btn-back')?.addEventListener('click',()=>{
+    practice.finished=false; practice.currentIdx=0; savePractice(); renderPractice();
+  });
+  root.querySelector('#btn-redo')?.addEventListener('click',()=>{
+    resetPractice();
+  });
+  // 错题回顾点击 -> 跳到对应题
+  root.querySelectorAll('[data-review]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const i=parseInt(el.dataset.review);
+      const list=practiceList();
+      const pos=list.findIndex(x=>x.i===i);
+      if(pos>=0){practice.finished=false;practice.currentIdx=pos;savePractice();renderPractice();window.scrollTo({top:0,behavior:'smooth'});}
+    });
+  });
+}
+
+// 初始化：根据持久化的模式渲染
+function applyQuizMode(){
+  document.getElementById('quiz-study').hidden = quizMode!=='study';
+  document.getElementById('quiz-practice').hidden = quizMode!=='practice';
+  document.querySelectorAll('.mode-toggle button').forEach(b=>{
+    const on=b.dataset.mode===quizMode;
+    b.classList.toggle('active',on);
+    b.setAttribute('aria-selected',on?'true':'false');
+  });
+  if(quizMode==='study') renderStudyMode();
+  else { loadPractice(); renderPractice(); }
+}
+
+// 模式切换事件
+document.querySelectorAll('.mode-toggle button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    quizMode=b.dataset.mode;
+    localStorage.setItem('cdga-quiz-mode',quizMode);
+    applyQuizMode();
+    window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+  });
+});
+
+// 页面首次加载：按持久化的模式渲染
+applyQuizMode();
+// 拦截原 showPage 函数以支持模式切换后重渲染
+const _origShowPage=window.showPage;
+window.showPage=function(id){
+  _origShowPage(id);
+  if(id==='cdga-quiz') applyQuizMode();
+};
+
+/* ============================================================
+   每日学习中心：日期驱动，合并 计划 + 阅读(PDF/笔记) + 做题 + 视频
+   ============================================================ */
+const U={
+  b1:'https://www.bilibili.com/video/BV1qv411y7Wv/',
+  b2:'https://www.bilibili.com/video/BV1jA411F76d',
+  b3:'https://www.bilibili.com/video/BV1XZ4y1v7jR',
+  b4:'https://www.bilibili.com/video/BV1gN4y137pj',
+  b5:'https://www.bilibili.com/video/BV1aF411c7Rh',
+  b6:'https://www.bilibili.com/video/BV1xf4y1f7Ro',
+  b8:'https://www.bilibili.com/video/BV1J3411u72E',
+  b9:'https://www.bilibili.com/video/BV1Ef4y1f7DG',
+  cv11:'https://www.bilibili.com/read/cv40292820',
+  cv12:'https://www.bilibili.com/read/cv43715687',
+  cv13:'https://www.bilibili.com/read/mobile?id=36785416',
+  search:'https://search.bilibili.com/all?keyword=DAMA视频系列'
+};
+const RES={
+  sohu:{name:'搜狐·11域逐域详解',file:'资料/03_机构免费资料/free_11知识领域详解_搜狐.html'},
+  notes:{name:'⭐ 11域备考笔记.md',file:'资料/03_机构免费资料/DMBOK2R_11知识领域备考笔记.md'},
+  oval:{name:'OvalEdge·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架详解_OvalEdge.html'},
+  sogeti:{name:'Sogeti·DMBOK框架',file:'资料/03_机构免费资料/free_DMBOK框架_Sogeti.html'},
+  damaPdf:{name:'DAMA·DMBOK框架一页纸(PDF)',file:'资料/03_机构免费资料/dama-dmbok-overview.pdf'},
+  dgiPdf:{name:'DGI·数据治理框架(PDF)',file:'资料/03_机构免费资料/dgi-data-governance-overview.pdf'}
+};
+const RES_ORDER=['sohu','notes','oval','sogeti','damaPdf','dgiPdf'];
+const TERMS={
+  '一、数据治理':['治理 ⊂ 管理（治理=决策监督，管理=执行）','CDO=组织数据资产责任人；Data Steward=标准执行者/质量守门人'],
+  '二、数据质量':['质量六维度：准确性/完整性/一致性/唯一性/及时性/有效性','根因分析：溯源而非只清洗表象'],
+  '三、元数据管理':['业务元数据=业务含义/口径；技术元数据=结构/类型/位置','血缘 Lineage=追踪来源与加工路径、做影响分析'],
+  '四、数据仓库与BI':['Inmon 范式化 vs Kimball 维度化','ETL 先转换后加载 / ELT 先加载后转换；ODS→DWS 分层'],
+  '五、参考数据和主数据':['参考数据=受控分类值集；主数据=核心业务实体','MDM 模式：注册/集中/共存/整合'],
+  '六、数据建模与设计':['概念→逻辑→物理（抽象度递减）','范式化去冗余；维度建模面向 OLAP 分析'],
+  '七、数据架构':['EDM 企业数据模型=全局蓝图','DFD 数据流图=系统间流转；须对齐业务架构'],
+  '八、数据安全':['分类分级=差异化保护基础','脱敏保护非生产环境；最小权限原则'],
+  '九、大数据和数据科学':['大数据 5V：Volume/Velocity/Variety/Veracity/Value','挖掘=从数据中发现模式与知识'],
+  '十、成熟度评估':['成熟度模型：CMMI / DAMA-DMM','五级：无意识→被动→主动→已管理→优化'],
+  '十一、数据管理概述':['数据是企业资产，具价值需管理','生命周期：创建→存储→使用→共享→归档/销毁'],
+  '十二、数据处理伦理':['伦理原则：透明/负责/尊重隐私','DMBOK2R 新增 AI 伦理（隐私与公平性）'],
+  '十三、其余低分域':['Data Owner=业务含义与定义；Custodian=技术实现与保管','变革管理=培育数据文化推动落地']
+};
+const DAY_ROLES=[
+  {t:'周末大块精学',h:'用 2–3h 看系统课/专栏，做完整精学 + 更新思维导图'},
+  {t:'周末复盘',h:'本周内容复盘 + 更新思维导图 / 错题本'},
+  {t:'看课建立直觉',h:'看 20–30min 短视频/课程片段，先听建立直觉'},
+  {t:'精读做笔记',h:'结合课程精读资料 / 做笔记 30–40min'},
+  {t:'术语卡 + 易混对比',h:'今天新记 1–2 个易混词（写定义 + 区别）'},
+  {t:'案例 / 画图练习',h:'画一张图或写一张案例卡（血缘 / 分层 / 模型）'},
+  {t:'自测 + 错题整理',h:'从自测题抽 1–2 题写出答案与理由，归错题本'}
+];
+const WEEKS=[
+ {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'搜「DAMA视频系列」关注，看前 5 集（DAMA 是什么 / 12 原则）',vWeekend:'看 #11 专栏《认证介绍+17章大纲》（30min）；定下收藏夹',videos:[['#11 专栏·认证介绍',U.cv11],['DAMA视频系列(搜)',U.search]]},
+ {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'DAMA视频系列「第1章 数据管理」短集（每天 2 集）',vWeekend:'#9 数语《数据行业职业发展》(40min) + #11 大纲再读',videos:[['#9 职业发展',U.b9],['#11 大纲',U.cv11],['DAMA视频系列',U.search]]},
+ {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'DAMA视频系列「数据治理」短集',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h)',videos:[['#3 数语·数据治理',U.b3],['DAMA视频系列·治理',U.search]]},
+ {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'DAMA视频系列「质量/元数据」短集',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + #6/#7/#8 资产目录上中下',videos:[['#2 尚硅谷·元数据',U.b2],['#6/#7/#8 资产目录',U.b6],['DAMA视频系列',U.search]]},
+ {w:5,start:'2026-09-12',end:'2026-09-18',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'DAMA视频系列「数仓/主数据」短集',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + #12/#13 专栏',videos:[['#1 哈喽鹏程·数仓',U.b1],['#12 专栏·数仓+质量',U.cv12],['#13 专栏·数仓建设',U.cv13]]},
+ {w:6,start:'2026-09-19',end:'2026-09-25',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'DAMA视频系列「建模/架构」短集',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',videos:[['#5 数语·数据模型',U.b5],['#4 数语·数据标准',U.b4],['DAMA视频系列',U.search]]},
+ {w:7,start:'2026-09-26',end:'2026-10-02',stage:'通读',focus:'安全/大数据/成熟度/低分域',domains:['八、数据安全','九、大数据和数据科学','十、成熟度评估','十三、其余低分域'],milestone:'🏁 通读两遍+术语表成型；17 域名称全过一遍',vWork:'DAMA视频系列「安全/大数据/成熟度」短集',vWeekend:'#4 数语《数据标准》补看 + 思维导图 v2 补全',videos:[['#4 数语·数据标准',U.b4],['DAMA视频系列',U.search]]},
+ {w:8,start:'2026-10-03',end:'2026-10-09',stage:'高分精学',focus:'数据治理(精)',domains:['一、数据治理'],milestone:'案例卡完成，章节题≥70%',vWork:'回看 #3 + DAMA视频系列治理短集',vWeekend:'#3 数语《数据治理》二刷 + 案例卡整理',videos:[['#3 数语·数据治理',U.b3],['DAMA视频系列·治理',U.search]]},
+ {w:9,start:'2026-10-10',end:'2026-10-16',stage:'高分精学',focus:'数据质量(精)',domains:['二、数据质量'],milestone:'能给场景判维度',vWork:'回看 DAMA视频系列质量短集',vWeekend:'#12 专栏《数仓+质量》精读 + 质量六维度笔记',videos:[['#12 专栏·数仓+质量',U.cv12],['DAMA视频系列·质量',U.search]]},
+ {w:10,start:'2026-10-17',end:'2026-10-23',stage:'高分精学',focus:'元数据(精)',domains:['三、元数据管理'],milestone:'血缘图完成',vWork:'回看 #2 尚硅谷 Atlas 片段',vWeekend:'#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图',videos:[['#2 尚硅谷·元数据',U.b2],['DAMA视频系列·元数据',U.search]]},
+ {w:11,start:'2026-10-24',end:'2026-10-30',stage:'高分精学',focus:'数仓BI(精)',domains:['四、数据仓库与BI'],milestone:'说清 ETL/ELT 区别',vWork:'回看 #1 数仓课片段',vWeekend:'#1 数仓课二刷（ETL vs ELT 章）+ #13 专栏',videos:[['#1 哈喽鹏程·数仓',U.b1],['#13 专栏·数仓建设',U.cv13],['DAMA视频系列·数仓',U.search]]},
+ {w:12,start:'2026-10-31',end:'2026-11-06',stage:'高分精学',focus:'参考/主数据(精)',domains:['五、参考数据和主数据'],milestone:'主数据案例卡完成',vWork:'回看 #6/#7/#8 资产目录片段',vWeekend:'#6/#7/#8 资产目录三集二刷 + 户号↔合同 mapping 案例',videos:[['#6/#7/#8 资产目录',U.b6],['DAMA视频系列·主数据',U.search]]},
+ {w:13,start:'2026-11-07',end:'2026-11-13',stage:'高分精学',focus:'数据建模(精)',domains:['六、数据建模与设计'],milestone:'🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析',vWork:'回看 #5 数语《数据模型》片段',vWeekend:'#5 数据模型二刷 + 维度 vs 范式辨析笔记',videos:[['#5 数语·数据模型',U.b5],['DAMA视频系列·建模',U.search]]},
+ {w:14,start:'2026-11-14',end:'2026-11-20',stage:'高分精学',focus:'高分域复盘',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'高分域正确率≥75%',vWork:'高分域 DAMA视频系列错题相关短集',vWeekend:'高分域视频三刷 + 章节题（目标 ≥75%）',videos:[['DAMA视频系列·错题',U.search]]},
+ {w:15,start:'2026-11-21',end:'2026-11-27',stage:'中分精学',focus:'数据架构(精)',domains:['七、数据架构'],milestone:'能画数据流图',vWork:'DAMA视频系列架构短集',vWeekend:'#4 数语《数据标准》+ 企业数据模型笔记',videos:[['#4 数语·数据标准',U.b4],['DAMA视频系列·架构',U.search]]},
+ {w:16,start:'2026-11-28',end:'2026-12-04',stage:'中分精学',focus:'数据安全(精)',domains:['八、数据安全'],milestone:'说清分类分级步骤',vWork:'DAMA视频系列安全短集',vWeekend:'安全分类分级 + 个保法/等保 笔记',videos:[['安全分类分级视频',U.search],['DAMA视频系列·安全',U.search]]},
+ {w:17,start:'2026-12-05',end:'2026-12-11',stage:'中分精学',focus:'大数据/数据科学(精)',domains:['九、大数据和数据科学'],milestone:'说出大数据特征',vWork:'DAMA视频系列大数据短集',vWeekend:'大数据 6V 特征 + 电网 15min 账单案例',videos:[['大数据 6V 视频',U.search],['DAMA视频系列·大数据',U.search]]},
+ {w:18,start:'2026-12-12',end:'2026-12-18',stage:'中分精学',focus:'成熟度评估(精)',domains:['十、成熟度评估'],milestone:'说出 2 个成熟度模型',vWork:'DAMA视频系列成熟度短集',vWeekend:'成熟度模型笔记（说清 2 个模型）',videos:[['成熟度模型视频',U.search],['DAMA视频系列·成熟度',U.search]]},
+ {w:19,start:'2026-12-19',end:'2026-12-25',stage:'低分精学',focus:'概述/伦理/文件/组织角色',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域概念全覆盖',vWork:'DAMA视频系列低分域短集（碎片补足）',vWeekend:'4 域速记卡',videos:[['低分域短集',U.search],['DAMA视频系列·低分域',U.search]]},
+ {w:20,start:'2026-12-26',end:'2027-01-01',stage:'低分精学',focus:'存储/集成/变革管理',domains:['十三、其余低分域'],milestone:'🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区',vWork:'DAMA视频系列低分域短集',vWeekend:'3 域速记 + 思维导图 v3 全量回顾',videos:[['低分域短集',U.search],['DAMA视频系列·低分域',U.search]]},
+ {w:21,start:'2027-01-02',end:'2027-01-08',stage:'刷题',focus:'高分域题库',domains:['一、数据治理','二、数据质量','三、元数据管理','四、数据仓库与BI','五、参考数据和主数据','六、数据建模与设计'],milestone:'错题本启动，正确率统计',vWork:'错题对应 DAMA视频系列短集回看',vWeekend:'高分域视频错题章回看',videos:[['错题章回看',U.search]]},
+ {w:22,start:'2027-01-09',end:'2027-01-15',stage:'刷题',focus:'中分域题库',domains:['七、数据架构','八、数据安全','九、大数据和数据科学','十、成熟度评估'],milestone:'中分域正确率≥70%',vWork:'对应错题 DAMA视频系列短集回看',vWeekend:'中分域视频错题章回看',videos:[['中分域错题回看',U.search]]},
+ {w:23,start:'2027-01-16',end:'2027-01-22',stage:'刷题',focus:'低分域题库',domains:['十一、数据管理概述','十二、数据处理伦理','十三、其余低分域'],milestone:'低分域正确率≥60%',vWork:'对应错题 DAMA视频系列短集回看',vWeekend:'低分域视频错题章回看',videos:[['低分域错题回看',U.search]]},
+ {w:24,start:'2027-01-23',end:'2027-01-29',stage:'刷题',focus:'全量+回炉',domains:['all'],milestone:'🏁 题库正确率≥70%且错题本成型；全局正确率≥75%',vWork:'正确率<70% 域回看对应视频',vWeekend:'全局视频查漏',videos:[['全局视频查漏',U.search]]},
+ {w:25,start:'2027-01-30',end:'2027-02-05',stage:'冲刺',focus:'模拟考1',domains:['all'],milestone:'模拟1 ≥75 分',vWork:'只回看薄弱章短视频',vWeekend:'限时模拟考 + 失分域视频补救',videos:[['薄弱章短视频',U.search]]},
+ {w:26,start:'2027-02-06',end:'2027-02-12',stage:'冲刺',focus:'模拟考2+查漏',domains:['all'],milestone:'模拟2 ≥75 分；临考清单就绪',vWork:'只看错题本 + 术语表',vWeekend:'模拟考2 + 临考清单（视频停看，保状态）',videos:[['（冲刺保状态，停看视频）',U.search]]}
+];
+function buildDaily(){
+  const out=[]; let day=0;
+  WEEKS.forEach(wk=>{
+    const p=wk.start.split('-').map(Number); const start=new Date(p[0],p[1]-1,p[2]);
+    for(let i=0;i<7;i++){
+      day++;
+      const dt=new Date(start); dt.setDate(start.getDate()+i);
+      const iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+      const wd=['周日','周一','周二','周三','周四','周五','周六'][dt.getDay()];
+      const isWeekend=(wd==='周六'||wd==='周日');
+      out.push(Object.assign({day:day,iso:iso,wd:wd,i:i,isWeekend:isWeekend},wk));
+    }
+  });
+  return out;
+}
+const DAILY=buildDaily();
+const DAILY_BY_ISO={}; DAILY.forEach(x=>DAILY_BY_ISO[x.iso]=x);
+const DAILY_KEY='cdga-daily-checks';
+function loadDailyChecks(){try{return JSON.parse(localStorage.getItem(DAILY_KEY))||{}}catch(e){return{}}}
+function saveDailyChecks(o){try{localStorage.setItem(DAILY_KEY,JSON.stringify(o))}catch(e){}}
+let dailyChecks=loadDailyChecks();
+const TODAY_ISO=(()=>{const t=new Date();const p=n=>String(n).padStart(2,'0');return t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());})();
+const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const heatGrid=document.getElementById('heatGrid');
+const heatMonths=document.getElementById('heatMonths');
+const heatDone=document.getElementById('heatDone');
+const heatRate=document.getElementById('heatRate');
+const heatWeek=document.getElementById('heatWeek');
+const heatStreak=document.getElementById('heatStreak');
+const heatBest=document.getElementById('heatBest');
+function buildHeat(){
+  if(!heatGrid) return;
+  heatGrid.innerHTML=DAILY.map(x=>`<div class="hl-cell" data-iso="${x.iso}" title="${x.iso} ${x.wd} · W${x.w}"></div>`).join('');
+  heatGrid.querySelectorAll('.hl-cell').forEach(c=>c.onclick=()=>{const d=DAILY_BY_ISO[c.dataset.iso];if(d){dayDate.value=c.dataset.iso;renderDay(c.dataset.iso);}});
+  if(heatMonths){
+    heatMonths.innerHTML=WEEKS.map(wk=>{
+      const cur=wk.start.slice(5,7);
+      const prev=wk.w>1?WEEKS[wk.w-2].start.slice(5,7):'00';
+      const label=(wk.w===1||cur!==prev)?MONTHS[Number(cur)-1]:'';
+      return `<span>${label}</span>`;
+    }).join('');
+  }
+}
+function refreshHeat(){
+  if(!heatGrid) return;
+  let done=0;
+  heatGrid.querySelectorAll('.hl-cell').forEach(c=>{
+    const iso=c.dataset.iso; const isDone=!!dailyChecks[iso]; if(isDone)done++;
+    const cls=['hl-cell'];
+    if(isDone) cls.push('hl-done');
+    else if(iso>TODAY_ISO) cls.push('hl-future');
+    else cls.push('hl-todo');
+    if(iso===TODAY_ISO) cls.push('hl-today');
+    c.className=cls.join(' ');
+  });
+  const total=DAILY.length;
+  const rate=total?Math.round(done/total*100):0;
+  if(heatDone)heatDone.textContent=`已完成 ${done} / ${total} 天`;
+  if(heatRate)heatRate.textContent=`打卡率 ${rate}%`;
+  const cur=DAILY_BY_ISO[dayDate.value];
+  if(cur&&heatWeek){
+    const wkDays=DAILY.filter(x=>x.w===cur.w);
+    const wdone=wkDays.filter(x=>dailyChecks[x.iso]).length;
+    heatWeek.textContent=`本周完成 ${wdone} / ${wkDays.length}`;
+  }
+  // streak: longest run + current alive streak (last checked within 1 day of today)
+  let best=0, run=0, lastIdx=-1;
+  for(let i=0;i<DAILY.length;i++){
+    if(dailyChecks[DAILY[i].iso]){ run++; if(run>best)best=run; lastIdx=i; }
+    else run=0;
+  }
+  let streak=0;
+  if(lastIdx>=0){
+    const gap=Math.round((Date.parse(TODAY_ISO)-Date.parse(DAILY[lastIdx].iso))/86400000);
+    if(gap<=1){ for(let i=lastIdx;i>=0;i--){ if(dailyChecks[DAILY[i].iso]) streak++; else break; } }
+  }
+  if(heatStreak){ heatStreak.textContent=`🔥 连续 ${streak} 天`; heatStreak.classList.toggle('hot', streak>=3); }
+  if(heatBest) heatBest.textContent=`🏆 最长 ${best} 天`;
+}
+const dayDate=document.getElementById('dayDate');
+const dayCard=document.getElementById('dayCard');
+const weekStrip=document.getElementById('weekStrip');
+
+function renderWeekStrip(activeW){
+  weekStrip.innerHTML=WEEKS.map(wk=>`<div class="week-chip ${wk.w===activeW?'active':''}" data-w="${wk.w}">W${wk.w}<small>${wk.start.slice(5)}~${wk.end.slice(5)}</small></div>`).join('');
+}
+function gotoDay(n){
+  n=Math.max(1,Math.min(DAILY.length,n));
+  const iso=DAILY[n-1].iso; dayDate.value=iso; renderDay(iso);
+}
+function renderDay(iso){
+  let d=DAILY_BY_ISO[iso];
+  if(!d){ iso = iso < '2026-08-15' ? '2026-08-15' : '2027-02-12'; d=DAILY_BY_ISO[iso]; dayDate.value=iso; }
+  const role=DAY_ROLES[d.i];
+  const dom=d.domains;
+  const termDom = dom[0]==='all' ? '十一、数据管理概述' : dom[0];
+  const terms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
+  const videoTask = d.isWeekend ? d.vWeekend : d.vWork;
+  const links=(d.videos||[]).map(v=>`<a class="dc-link" href="${v[1]}" target="_blank" rel="noopener">▶ ${v[0]}</a>`).join('');
+  const quizBtns=dom.map(k=>{
+    if(k==='all') return `<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题 <span style="opacity:.7;font-weight:400">${QUIZ_TOTAL}题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`;
+    const cnt=QUIZ.filter(q=>q.d===k).length;
+    const name=k.replace(/^[^、]+、/,'');
+    return `<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span style="opacity:.7;font-weight:400">${cnt}题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`;
+  }).join('');
+  const resChips=RES_ORDER.map(k=>`<span class="dc-reschip" data-res="${k}">${RES[k].name}</span>`).join('');
+  const done=!!dailyChecks[iso];
+  const dayChips=DAILY.filter(x=>x.w===d.w).map(x=>{
+    const c=dailyChecks[x.iso]?'done':''; const a=x.iso===iso?'active':'';
+    return `<span class="dc-daychip ${a} ${c}" data-iso="${x.iso}">${x.wd.slice(1)}</span>`;
+  }).join('');
+  // 今日推文：考证 / 考博 交替混排，按天序号取一篇（保证两类都能稳定轮到）
+  const DAPOOL = (window.ARTICLES && window.ARTICLES.length) ? DAILY_ARTICLES : [];
+  const art = DAPOOL.length ? DAPOOL[(d.day-1) % DAPOOL.length] : null;
+  const _seen = (()=>{ try{ return new Set(JSON.parse(localStorage.getItem('cdga-news-seen')||'[]')); }catch(e){ return new Set(); } })();
+  const artRead = art ? _seen.has(art.id) : false;
+  const artFull = art ? (art.content||art.points ? (art.content||'（暂无全文，点「阅读原文」查看）') : '') : '';
+  const artHTML = art ? `
+    <div class="dc-art">
+      <div class="dc-art-head">
+        <span class="dc-art-cat cat-${art.cat}">${art.cat==='考证'?'🎓 考证':'🏛️ 考博'}</span>
+        <span class="dc-art-account">📣 ${art.account}</span>
+        <span class="dc-art-date">${art.date}</span>
+        ${artRead?'<span class="news-badge" style="background:var(--green);color:#fff">✅ 已读</span>':'<span class="news-badge">🆕 未读</span>'}
+      </div>
+      <div class="dc-art-title">${art.title}</div>
+      <div class="news-tags">${(art.tags||[]).map(t=>`<span class="news-tag">${t}</span>`).join('')}</div>
+      <div class="dc-art-body">
+        <div class="news-label">🔑 重要信息提取</div>
+        <ul class="news-points">${(art.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
+        <div class="news-full" id="dcFull" hidden><div class="news-full-label">📖 全文（一字不落）</div><div class="news-full-text">${artFull.replace(/</g,'&lt;')}</div></div>
+      </div>
+      <div class="dc-art-foot">
+        <button class="news-expand" id="dcExpand">📖 展开全文</button>
+        <button class="news-mark" id="dcMark">${artRead?'↺ 标为未读':'✅ 标记已读'}</button>
+        <a class="news-read" href="${art.url}" target="_blank" rel="noopener">阅读原文 ↗</a>
+      </div>
+    </div>` : '<div class="dc-meta">暂无可读推文，去「📰 公众号推文精选」看看。</div>';
+  dayCard.innerHTML=`
+    <div class="dc-head">
+     <div>
+       <div class="dc-date">${d.iso} ${d.wd}</div>
+       <div class="dc-tags"><span class="dc-tag stage">${d.stage}</span><span class="dc-tag">W${d.w}</span><span class="dc-tag">第 ${d.day} 天 / 共 182 天</span></div>
+     </div>
+     <label class="dc-check"><input type="checkbox" id="dayCheck" ${done?'checked':''}> 今日完成打卡</label>
+   </div>
+   <h2 class="dc-goal">🎯 今日目标</h2>
+   <p class="dc-goal-text">${d.focus} —— <b>${role.t}</b>：${role.h}</p>
+   <p class="dc-meta">本周重点：${d.focus} ｜ 阶段：${d.stage}${d.milestone?' ｜ 🏁 本周末自检：'+d.milestone:''}</p>
+   <div class="dc-grid">
+     <div class="dc-block">
+       <h4>▶️ 看课 / 视频</h4>
+       <div class="dc-task">${d.isWeekend?'<b>周末</b>：':'<b>工作日晚上</b>：'}${videoTask}</div>
+       <div class="dc-links">${links||'<span class="dc-meta">（冲刺期以做题为主，视频仅查漏）</span>'}</div>
+     </div>
+     <div class="dc-block">
+       <h4>📖 阅读（PDF / 笔记）</h4>
+       <button class="dc-btn" id="openReader">📂 打开今日阅读资料</button>
+       <div class="dc-reslist">${resChips}</div>
+     </div>
+     <div class="dc-block">
+       <h4>🎯 自测 / 做题</h4>
+       <div class="dc-links">${quizBtns}</div>
+     </div>
+      <div class="dc-block">
+        <h4>🔤 术语卡</h4>
+        <div class="dc-term">${terms.map(t=>'• '+t).join('<br>')}</div>
+      </div>
+   </div>
+   <div class="dc-article">
+     <h4>📰 今日推文 · 每日一篇（考证 / 考博 轮流，读完点「标记已读」）</h4>
+     ${artHTML}
+   </div>
+   <div class="dc-nav">
+     <button id="dcPrev">← 前一天</button>
+     <button id="dcNext">后一天 →</button>
+     <div class="dc-daychips">${dayChips}</div>
+   </div>
+   ${d.isWeekend&&d.milestone?`<div class="callout tip" style="margin-top:16px">🏁 本周末自检：${d.milestone}</div>`:''}
+  `;
+  document.getElementById('dayCheck').onchange=e=>{dailyChecks[iso]=e.target.checked;saveDailyChecks(dailyChecks);renderDay(iso);};
+  document.getElementById('openReader').onclick=()=>openReader('sohu');
+  dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
+  dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  document.getElementById('dcPrev').onclick=()=>gotoDay(d.day-1);
+  document.getElementById('dcNext').onclick=()=>gotoDay(d.day+1);
+  dayCard.querySelectorAll('[data-iso]').forEach(c=>c.onclick=()=>{dayDate.value=c.dataset.iso;renderDay(c.dataset.iso);});
+  const dcExpand=document.getElementById('dcExpand');
+  if(dcExpand) dcExpand.onclick=()=>{const el=document.getElementById('dcFull');if(el){const open=!el.hidden;el.hidden=open;dcExpand.textContent=open?'📖 展开全文':'📕 收起全文';}};
+  const dcMark=document.getElementById('dcMark');
+  if(dcMark) dcMark.onclick=()=>{const s=_seen;if(s.has(art.id))s.delete(art.id);else s.add(art.id);localStorage.setItem('cdga-news-seen',JSON.stringify([...s]));renderDay(iso);};
+  renderWeekStrip(d.w);
+  refreshHeat();
+}
+function openReader(k){
+  const r=RES[k]; if(!r) return;
+  document.getElementById('readerTitle').textContent='📖 '+r.name;
+  document.getElementById('readerFrame').src=r.file;
+  document.getElementById('readerExt').href=r.file;
+  document.getElementById('readerTabs').innerHTML=RES_ORDER.map(x=>`<span class="reader-tab ${x===k?'active':''}" data-res="${x}">${RES[x].name}</span>`).join('');
+  document.getElementById('readerTabs').querySelectorAll('.reader-tab').forEach(t=>t.onclick=()=>openReader(t.dataset.res));
+  document.getElementById('readerMask').hidden=false;
+}
+function closeReader(){document.getElementById('readerMask').hidden=true;document.getElementById('readerFrame').src='';}
+document.getElementById('readerClose').onclick=closeReader;
+document.getElementById('readerMask').onclick=e=>{if(e.target.id==='readerMask')closeReader();};
+function openQuiz(domain,mode){
+  practice.domainFilter=(domain&&QUIZ_DOMAINS.includes(domain))?domain:'all';
+  practice.currentIdx=0; practice.finished=false;
+  quizMode=mode||'practice'; localStorage.setItem('cdga-quiz-mode',quizMode);
+  savePractice(); showPage('cdga-quiz'); applyQuizMode();
+  if(mode==='study' && domain && domain!=='all'){
+    setTimeout(()=>{const els=[].slice.call(document.querySelectorAll('#quiz-list .quiz-domain'));const t=els.find(e=>e.textContent===domain);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},60);
+  } else { window.scrollTo({top:0}); }
+}
+dayDate.onchange=()=>renderDay(dayDate.value);
+document.getElementById('dayPrev').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)-1);
+document.getElementById('dayNext').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)+1);
+document.getElementById('dayStart').onclick=()=>{dayDate.value='2026-08-15';renderDay('2026-08-15');};
+weekStrip.onclick=e=>{const c=e.target.closest('.week-chip');if(c){const wk=WEEKS.find(w=>w.w==c.dataset.w);dayDate.value=wk.start;renderDay(wk.start);}};
+/* ---------- 我的进度聚合 ---------- */
+function getStore(key){try{return JSON.parse(localStorage.getItem(key))||{}}catch(e){return{}}}
+function countChecked(sectionId){
+  const sec=document.getElementById(sectionId); if(!sec)return{done:0,total:0};
+  const all=sec.querySelectorAll('input[type=checkbox]');
+  let done=0; all.forEach(c=>{if(c.checked)done++;});
+  return {done,total:all.length};
+}
+function progCard(name,done,total,page){
+  const p=total?Math.round(done/total*100):0;
+  return '<div class="prog-card"><div class="prog-row"><span class="prog-name">'+name+'</span><span class="prog-num">'+done+' / '+total+'</span></div>'
+    +'<div class="progress"><i style="width:'+p+'%"></i></div>'
+    +'<button class="prog-go" data-goto="'+page+'">继续 →</button></div>';
+}
+function renderProgress(){
+  const grid=document.getElementById('progGrid'); if(!grid)return;
+  const banner=document.getElementById('progBanner');
+  const cards=[];
+  const dStore=getStore(DAILY_KEY); let dDone=0; for(const k in dStore){if(dStore[k])dDone++;}
+  const TOTAL_DAYS=182;
+  cards.push(progCard('📅 每日打卡',dDone,TOTAL_DAYS,'cdga-daily'));
+  const cc=countChecked('cdga-check'); cards.push(progCard('✅ 知识点自查清单',cc.done,cc.total,'cdga-check'));
+  const q=getStore(QUIZ_STORE).answers||{}; cards.push(progCard('📝 原创自测练习题',Object.keys(q).length,QUIZ_TOTAL,'cdga-quiz'));
+  const vc=countChecked('cdga-res'); cards.push(progCard('▶️ B站视频打卡',vc.done,vc.total,'cdga-res'));
+  const lc=countChecked('cdga-ladder'); cards.push(progCard('🏆 三级进阶行动清单',lc.done,lc.total,'cdga-ladder'));
+  grid.innerHTML=cards.join('');
+  grid.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dataset.goto));
+  let best=0,run=0,lastIdx=-1;
+  if(DAILY)for(let i=0;i<DAILY.length;i++){if(dStore[DAILY[i].iso]){run++;if(run>best)best=run;lastIdx=i;}else run=0;}
+  let cur=0;
+  if(lastIdx>=0&&DAILY){const gap=Math.round((Date.parse(TODAY_ISO)-Date.parse(DAILY[lastIdx].iso))/86400000);if(gap<=1){for(let i=lastIdx;i>=0;i--){if(dStore[DAILY[i].iso])cur++;else break;}}}
+  if(banner)banner.innerHTML='<div><span class="pb-num">🔥 '+cur+'</span><span class="pb-lbl">当前连续（天）</span></div>'
+    +'<div><span class="pb-num">🏆 '+best+'</span><span class="pb-lbl">最长连续（天）</span></div>'
+    +'<div><span class="pb-num">'+dDone+' / '+TOTAL_DAYS+'</span><span class="pb-lbl">每日打卡已累计</span></div>';
+}
+function buildDailyArticles(){
+  const all=window.ARTICLES||[];
+  const ka=all.filter(a=>a.cat==='考证' && a.region!=='overseas');
+  const kb=all.filter(a=>a.cat==='考博' && a.region!=='overseas');
+  const pool=[]; const minLen=Math.min(ka.length,kb.length);
+  for(let i=0;i<minLen;i++){ pool.push(ka[i]); pool.push(kb[i]); }
+  if(ka.length>kb.length) pool.push(...ka.slice(minLen));
+  if(kb.length>ka.length) pool.push(...kb.slice(minLen));
+  return pool;
+}
+const DAILY_ARTICLES=buildDailyArticles();
+buildHeat();
+renderDay('2026-08-15');
+refreshHeat();
+document.querySelector('.brand').onclick=()=>showPage('home');
+showPage('cdga-daily');
+
+const NEWS_SEEN_KEY='cdga-news-seen';
+function newsGetSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(NEWS_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
+let newsFilter='all', newsUnreadOnly=false, newsCat='all';
+function renderNews(){
+  const list=document.getElementById('newsList'); if(!list) return;
+  const all=window.ARTICLES||[];
+  const seen=newsGetSeen();
+  let items=all.filter(a=>{
+    const catOk = newsCat==='all' ? true
+                : newsCat==='overseas' ? a.region==='overseas'
+                : (a.cat===newsCat && a.region!=='overseas');
+    return catOk && (newsFilter==='all' || (a.tags||[]).includes(newsFilter));
+  });
+  if(newsUnreadOnly) items=items.filter(a=> !seen.has(a.id));
+  const upd=document.getElementById('newsUpdated'); if(upd) upd.textContent=window.ARTICLES_UPDATED||'—';
+  const tot=document.getElementById('newsTotal'); if(tot) tot.textContent=all.length;
+  const un=document.getElementById('newsUnread'); if(un) un.textContent=all.filter(a=>!seen.has(a.id)).length;
+  if(!items.length){ list.innerHTML='<div class="news-empty">'+(newsUnreadOnly?'🎉 没有未读文章，已全部看完':'该分类下暂无文章')+'</div>'; return; }
+  list.innerHTML=items.map(a=>{
+    const unread=!seen.has(a.id);
+    const full=a.content||a.points? (a.content||'（暂无全文，点「阅读原文」查看）'):'';
+    return `<article class="news-card${unread?' unread':''}">
+      <div class="news-head">
+        <div class="news-meta"><span class="news-account">📣 ${a.account}</span><span class="news-date">${a.date}</span>${unread?'<span class="news-badge">🆕 新</span>':''}</div>
+        <h3 class="news-title">${a.title}</h3>
+        <div class="news-tags">${(a.tags||[]).map(t=>`<span class="news-tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="news-body">
+        <div class="news-label">🔑 重要信息提取</div>
+        <ul class="news-points">${(a.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
+        <div class="news-full" id="full-${a.id}" hidden><div class="news-full-label">📖 全文（一字不落）</div><div class="news-full-text">${full.replace(/</g,'&lt;')}</div></div>
+      </div>
+      <div class="news-foot">
+        <button class="news-expand" data-id="${a.id}">📖 展开全文</button>
+        <button class="news-mark" data-id="${a.id}">${unread?'✅ 标记已读':'↺ 标为未读'}</button>
+        <a class="news-read" href="${a.url}" target="_blank" rel="noopener">阅读原文 ↗</a>
+      </div>
+    </article>`;
+  }).join('');
+}
+(function(){
+  const f=document.getElementById('newsFilters');
+  if(f) f.addEventListener('click',e=>{ const b=e.target.closest('.nf-chip'); if(!b) return; f.querySelectorAll('.nf-chip').forEach(x=>x.classList.remove('active')); b.classList.add('active'); newsFilter=b.dataset.f; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub) ub.classList.remove('active'); renderNews(); });
+  const cat=document.getElementById('newsCats');
+  if(cat) cat.addEventListener('click',e=>{ const b=e.target.closest('.nf-cat'); if(!b) return; cat.querySelectorAll('.nf-cat').forEach(x=>x.classList.remove('active')); b.classList.add('active'); newsCat=b.dataset.cat; renderNews(); });
+  const ub=document.getElementById('newsUnreadBtn');
+  if(ub) ub.addEventListener('click',()=>{ newsUnreadOnly=!newsUnreadOnly; ub.classList.toggle('active',newsUnreadOnly); renderNews(); });
+  const list=document.getElementById('newsList');
+  if(list){ list.addEventListener('click',e=>{
+    const ex=e.target.closest('.news-expand');
+    if(ex){ const el=document.getElementById('full-'+ex.dataset.id); if(el){ const open=!el.hidden; el.hidden=open; ex.textContent=open?'📖 展开全文':'📕 收起全文'; } return; }
+    const mk=e.target.closest('.news-mark');
+    if(mk){ const id=mk.dataset.id; const seen=newsGetSeen(); if(seen.has(id)) seen.delete(id); else seen.add(id); localStorage.setItem(NEWS_SEEN_KEY, JSON.stringify([...seen])); renderNews(); }
+  }); }
+  renderNews();
+})();
+/* ---------- 关注源 ---------- */
+let srcCat='all';
+function escSrc(s){return (s||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+function renderSources(){
+  const grid=document.getElementById('srcGrid'); if(!grid) return;
+  const srcs=window.SOURCES||[];
+  const arts=window.ARTICLES||[];
+  const t=document.getElementById('srcTotal'); if(t)t.textContent=srcs.length;
+  const ka=document.getElementById('srcKa'); if(ka)ka.textContent=srcs.filter(s=>s.cat==='考证').length;
+  const kb=document.getElementById('srcKb'); if(kb)kb.textContent=srcs.filter(s=>s.cat==='考博').length;
+  const up=document.getElementById('srcUpdated'); if(up)up.textContent=window.ARTICLES_UPDATED||'—';
+  const list=srcs.filter(s=> srcCat==='all'||s.cat===srcCat);
+  if(!list.length){ grid.innerHTML='<div class="news-empty">该分类下暂无关注源</div>'; return; }
+  grid.innerHTML=list.map(s=>{
+    const mine=arts.filter(a=>(s.accounts||[]).includes(a.account)).sort((x,y)=>(y.date||'').localeCompare(x.date||''));
+    const items=mine.slice(0,3).map(a=>`<div class="src-item"><span class="src-item-date">${(a.date||'?').slice(0,10)}</span><span class="src-item-title">${escSrc(a.title)}</span></div>`).join('')||'<div class="src-empty">暂无收录文章</div>';
+    return `<div class="src-card cat-${s.cat}">
+      <div class="src-head"><span class="src-tag tag-${s.cat}">${s.cat==='考证'?'🎓 考证':'🏛️ 考博'}</span><span class="src-name">${escSrc(s.name)}</span></div>
+      <div class="src-meta"><span>${s.count} 篇</span><span>最近 ${s.latest||'—'}</span></div>
+      <div class="src-latest">${items}</div>
+      <div class="src-foot"><span class="src-all" data-cat="${s.cat}">看全部 ${s.count} 篇 →</span></div>
+    </div>`;
+  }).join('');
+}
+(function(){
+  const cats=document.getElementById('srcCats');
+  if(cats) cats.addEventListener('click',e=>{ const b=e.target.closest('.nf-cat'); if(!b)return; cats.querySelectorAll('.nf-cat').forEach(x=>x.classList.remove('active')); b.classList.add('active'); srcCat=b.dataset.cat; renderSources(); });
+  const grid=document.getElementById('srcGrid');
+  if(grid) grid.addEventListener('click',e=>{
+    const all=e.target.closest('.src-all');
+    if(all){ const cat=all.dataset.cat; newsCat=cat; const nc=document.getElementById('newsCats'); if(nc) nc.querySelectorAll('.nf-cat').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat)); newsFilter='all'; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub)ub.classList.remove('active'); const nf=document.getElementById('newsFilters'); if(nf)nf.querySelectorAll('.nf-chip').forEach(x=>x.classList.toggle('active',x.dataset.f==='all')); renderNews(); showPage('cdga-news'); return; }
+    if(e.target.closest('.src-item')){ showPage('cdga-news'); }
+  });
+  renderSources();
+})();
+</script>
+</body>
+</html>
