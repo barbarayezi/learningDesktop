@@ -2837,7 +2837,7 @@ function gotoDay(n){
 }
 
 /* ---------- 主动投递:本周主题 + spaced repetition 复习提醒 ---------- */
-/* ---------- 文章外链降级：微信内搜 + 复制链接（替代常过期的原始 URL） ---------- */
+/* ---------- 文章外链降级（修 file:// clipboard 失败）：3 按钮 · 微信内搜 + 百度搜 + 复制标题 ---------- */
 function showToast(msg){
   let el=document.getElementById('toast');
   if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); }
@@ -2846,33 +2846,55 @@ function showToast(msg){
   clearTimeout(showToast._t);
   showToast._t=setTimeout(()=>el.classList.remove('show'), 2200);
 }
+// file:// 下 navigator.clipboard 多半 silently 失败：直接走 execCommand
+function copyText(text, successMsg){
+  const after=ok=>showToast(ok?successMsg:'⚠️ 复制失败，请长按按钮 → 右键「复制」');
+  const canUseClip=location.protocol!=='file:' && navigator.clipboard && window.isSecureContext;
+  if(canUseClip){
+    navigator.clipboard.writeText(text).then(()=>after(true), ()=>execCopy(text,after));
+  }else{
+    execCopy(text,after);
+  }
+}
+function execCopy(text,after){
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.tabIndex=-1;
+  ta.style.position='fixed'; ta.style.left='-9999px'; ta.style.top='0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  let ok=false;
+  try{ ok=document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  after(ok);
+}
+// window.open 在 file:// 下经常被 popup-blocker 静默拦截
+function openUrl(url){
+  const w=window.open(url,'_blank','noopener');
+  if(!w) showToast('⚠️ 浏览器拦截了新窗口，请允许本站弹窗后重试');
+}
 document.addEventListener('click', e=>{
+  // 微信内搜（sogou，精确搜公众号）
   const sBtn=e.target.closest('.news-search');
   if(sBtn){
     const q=(sBtn.dataset.title||'').trim();
-    if(!q) return;
-    const url='https://weixin.sogou.com/weixin?type=2&ie=utf8&query='+encodeURIComponent(q);
-    window.open(url,'_blank','noopener');
+    if(!q){ showToast('⚠️ 标题缺失，没法搜'); return; }
+    openUrl('https://weixin.sogou.com/weixin?type=2&ie=utf8&query='+encodeURIComponent(q));
     return;
   }
+  // 百度搜（更稳：中文命中率高，常绕过 sogou 验证码）
+  const bBtn=e.target.closest('.news-baidu');
+  if(bBtn){
+    const q=(bBtn.dataset.title||'').trim();
+    if(!q){ showToast('⚠️ 标题缺失，没法搜'); return; }
+    openUrl('https://www.baidu.com/s?wd='+encodeURIComponent(q+' 微信公众号'));
+    return;
+  }
+  // 复制标题（不是 URL：标题永不过期，粘贴到微信/百度搜一搜）
   const cBtn=e.target.closest('.news-copy');
   if(cBtn){
-    const u=cBtn.dataset.url||'';
-    if(!u){ showToast('原文链接缺失'); return; }
-    const ok=()=>showToast('✓ 链接已复制（可能仍失效，粘贴到微信/浏览器试）');
-    const fail=()=>{
-      // fallback path for file:// where navigator.clipboard is blocked
-      const ta=document.createElement('textarea');
-      ta.value=u; ta.style.position='fixed'; ta.style.left='-9999px';
-      document.body.appendChild(ta); ta.select();
-      try{ document.execCommand('copy'); ok(); }catch(e){ showToast('复制失败，请长按按钮手动复制'); }
-      document.body.removeChild(ta);
-    };
-    if(navigator.clipboard && window.isSecureContext){
-      navigator.clipboard.writeText(u).then(ok,fail);
-    }else{
-      fail();
-    }
+    const q=(cBtn.dataset.title||'').trim();
+    if(!q){ showToast('⚠️ 标题缺失'); return; }
+    copyText(q, '✓ 标题已复制，去微信「搜一搜」/ 百度粘贴搜索');
     return;
   }
 });
@@ -3161,7 +3183,7 @@ function renderDay(iso){
       <div class="dc-art-foot">
         <button class="news-expand" id="dcExpand">📖 展开全文</button>
         <button class="news-mark" id="dcMark">${artRead?'↺ 标为未读':'✅ 标记已读'}</button>
-        <button class="news-read news-search" data-url="${art.url}" data-title="${art.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${art.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
+        <button class="news-read news-search" data-url="${art.url}" data-title="${art.title}" title="微信内搜（精确搜公众号）" type="button">🔍 微信内搜</button><button class="news-read news-baidu" data-url="${art.url}" data-title="${art.title}" title="百度搜（更稳，中文命中率高）" type="button">🔍 百度搜</button><button class="news-read news-copy" data-url="${art.url}" data-title="${art.title}" title="复制标题（永不过期，比 URL 更适合搜）" type="button">📋 复制标题</button>
       </div>
       <div class="dc-art-note">
         <div class="dc-art-note-head">📝 我的笔记<span class="dc-art-note-sub">看完这篇写两句，自动保存</span></div>
@@ -3535,7 +3557,7 @@ function renderNews(){
       <div class="news-foot">
         <button class="news-expand" data-id="${a.id}">📖 展开全文</button>
         <button class="news-mark" data-id="${a.id}">${unread?'✅ 标记已读':'↺ 标为未读'}</button>
-        <button class="news-read news-search" data-url="${a.url}" data-title="${a.title}" title="微信临时外链常过期 → 用微信内搜标题更稳" type="button">🔍 微信内搜</button><button class="news-read news-copy" data-url="${a.url}" title="复制原始链接到剪贴板（仍可能失效）" type="button">📋 复制</button>
+        <button class="news-read news-search" data-url="${a.url}" data-title="${a.title}" title="微信内搜（精确搜公众号）" type="button">🔍 微信内搜</button><button class="news-read news-baidu" data-url="${a.url}" data-title="${a.title}" title="百度搜（更稳，中文命中率高）" type="button">🔍 百度搜</button><button class="news-read news-copy" data-url="${a.url}" data-title="${a.title}" title="复制标题（永不过期，比 URL 更适合搜）" type="button">📋 复制标题</button>
       </div>
       <div class="news-note-wrap">
         <div class="news-note-head">📝 我的笔记<span class="news-note-sub">自动保存</span></div>
