@@ -2872,21 +2872,29 @@ function openUrl(url){
   const w=window.open(url,'_blank','noopener');
   if(!w) showToast('⚠️ 浏览器拦截了新窗口，请允许本站弹窗后重试');
 }
+// sogou 长 query 易"没结果"：截到 25 字 + 去标点（sogou 分词器在长 query 上 tokenization 失败）
+function shortTitle(t){
+  const s=t.replace(/[？?！!。.,，、；;:\s]+/g,' ').trim();
+  return s.length>25 ? s.slice(0,25) : s;
+}
 document.addEventListener('click', e=>{
   // 微信内搜（sogou，精确搜公众号）
   const sBtn=e.target.closest('.news-search');
   if(sBtn){
     const q=(sBtn.dataset.title||'').trim();
     if(!q){ showToast('⚠️ 标题缺失，没法搜'); return; }
-    openUrl('https://weixin.sogou.com/weixin?type=2&ie=utf8&query='+encodeURIComponent(q));
+    const shortQ=shortTitle(q);
+    openUrl('https://weixin.sogou.com/weixin?type=2&ie=utf8&query='+encodeURIComponent(shortQ));
+    showToast('🔍 已开 sogou 搜「'+shortQ+(q.length>25?'…」':'」')+' · 若 0 结果换百度搜或复制标题');
     return;
   }
-  // 百度搜（更稳：中文命中率高，常绕过 sogou 验证码）
+  // 百度搜（更稳：site:mp.weixin.qq.com 限定公众号 + 全标题）
   const bBtn=e.target.closest('.news-baidu');
   if(bBtn){
     const q=(bBtn.dataset.title||'').trim();
     if(!q){ showToast('⚠️ 标题缺失，没法搜'); return; }
-    openUrl('https://www.baidu.com/s?wd='+encodeURIComponent(q+' 微信公众号'));
+    openUrl('https://www.baidu.com/s?wd='+encodeURIComponent(q+' site:mp.weixin.qq.com'));
+    showToast('🔍 已开百度搜（限定公众号）');
     return;
   }
   // 复制标题（不是 URL：标题永不过期，粘贴到微信/百度搜一搜）
