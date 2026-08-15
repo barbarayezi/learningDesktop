@@ -20,3 +20,9 @@
 - **主动投递**: 每日学习中心是每日唯一入口。每日展示「本周主题 + 3 个关键概念（按 WEEK_DOMAINS 映射到清单 checkbox）+ 复习提醒（spaced repetition 3/7/14/30/60/90 天）」。
 - **清单设计**: `bb-cdga-check` = `{i: bool}`（兼容旧 schema）；新增 `bb-cdga-check-dates` = `{i: ISO-date}`（mastered_at）。勾选时记录，取消时删除。`setCheckState(i, checked)` 统一入口同步主页 checkbox + mastered_at。概念文本从 `#cdga-check` DOM 抽取，单一来源免维护。
 - **新页面/导航**: 半年复习规划 + 知识点自查清单 + 每日学习中心 + 我的进度。**无**独立的 26 周页面。
+
+## 资料阅读器 · Markdown 渲染
+- `.md` 文件**不能**直接做 `iframe.src`（浏览器当纯文本显示，可读性差）。
+- 必须走 **`fetch + mdRender`** 链路：检测 `.md` 扩展名 → fetch → `mdRender()` → 注入 `#mdHost`。
+- 渲染器：`mdEsc(s) / mdInline(s) / mdRender(md)`，自实现约 50 行无外部依赖，支持 GFM 表格/代码块/列表/引用/链接/粗斜体。失败自动 fallback 到 iframe。
+- 样式全跟主题走，加载中/失败都有视觉反馈（`.md-loading` 旋转动画 + `.md-err`）。
