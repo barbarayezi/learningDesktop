@@ -2448,6 +2448,26 @@ Date: [Month] [Year]</code></pre>
 
 <script src="资料/articles.js"></script>
 <script>
+/* ---------- 本地存储兜底（防止 iframe/隐私模式等环境没有 localStorage 导致整段脚本崩溃） ---------- */
+(function(){
+  var ok = false;
+  try {
+    if (typeof localStorage === 'undefined') throw new Error('no localStorage');
+    localStorage.setItem('__ld_test__', '1');
+    localStorage.removeItem('__ld_test__');
+    ok = true;
+  } catch (e) {}
+  if (ok) return;
+  var fake = {
+    _data: {},
+    getItem: function(k){ return Object.prototype.hasOwnProperty.call(this._data, k) ? this._data[k] : null; },
+    setItem: function(k, v){ this._data[k] = String(v); },
+    removeItem: function(k){ delete this._data[k]; }
+  };
+  try { window.localStorage = fake; } catch(e){}
+  try { localStorage = fake; } catch(e){}
+})();
+
 /* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
 var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
 var API_PROXY = window.location.origin + "/api";
