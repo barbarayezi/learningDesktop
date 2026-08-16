@@ -3480,8 +3480,20 @@ const heatWeek=document.getElementById('heatWeek');
 const heatStreak=document.getElementById('heatStreak');
 const heatBest=document.getElementById('heatBest');
 function buildHeat(){
-  if(!heatGrid) return;
-  heatGrid.innerHTML=DAILY.map(x=>`<div class="hl-cell" data-iso="${x.iso}" title="${x.iso} ${x.wd} · W${x.w}"></div>`).join('');
+  console.log('[HEAT-DEBUG] buildHeat() start, DAILY.length=',DAILY?DAILY.length:'UNDEF');
+  if(!heatGrid){ console.log('[HEAT-DEBUG] ABORT: no heatGrid element'); return; }
+  try {
+    var html=DAILY.map(function(x){return '<div class="hl-cell" data-iso="'+x.iso+'" title="'+x.iso+' W'+x.w+'"></div>';}).join('');
+    console.log('[HEAT-DEBUG] html built, length='+html.length+', hl-cell count='+(html.match(/hl-cell/g)||[]).length);
+    heatGrid.innerHTML=html;
+    console.log('[HEAT-DEBUG] after innerHTML: children.length='+heatGrid.children.length+' offsetHeight='+heatGrid.offsetHeight+' offsetWidth='+heatGrid.offsetWidth);
+    // Force visible fallback
+    heatGrid.style.cssText='display:grid!important;grid-template-rows:repeat(7,14px)!important;grid-auto-flow:column;gap:3px;width:max-content;min-height:98px;background:#fff000';
+  } catch(e) {
+    console.error('[HEAT-DEBUG] ERROR:',e.message,e.stack);
+    heatGrid.innerHTML='<div style="padding:20px;color:red;font-weight:bold">热力图渲染失败: '+e.message+'</div>';
+    return;
+  }
   heatGrid.querySelectorAll('.hl-cell').forEach(c=>c.onclick=()=>{const d=DAILY_BY_ISO[c.dataset.iso];if(d){dayDate.value=c.dataset.iso;renderDay(c.dataset.iso); maybeSwitchStageByDate(c.dataset.iso);}});
   if(heatMonths){
     heatMonths.innerHTML=WEEKS.map(wk=>{

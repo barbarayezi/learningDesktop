@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>热力图隔离测试</title>
+<style>
+body{font-family:system-ui;padding:20px;background:#fff}
+.heat-wrap{border:2px solid red;padding:12px}
+.heat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.heat-title{font-weight:700;font-size:15px}
+.heat-stats{display:flex;gap:10px;font-size:12px;color:var(--fg-2,#555)}
+.hs{white-space:nowrap}
+.heat-scroll{overflow-x:auto;padding-bottom:6px;min-height:110px;border:1px dashed blue}
+.heat-months{display:flex;margin-bottom:4px;font-size:11px;color:#999;gap:14px}
+.heat-grid{display:grid!important;grid-template-rows:repeat(7,14px)!important;grid-auto-flow:column;gap:3px;width:max-content;min-height:98px;background:yellow}
+.hl-cell{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;border-radius:3px;display:inline-block;background:#e7ebf2;cursor:pointer;transition:transform .1s;border:1px solid #ccc}
+.hl-cell:hover{transform:scale(1.4)}
+.hl-done{background:#22c55e}
+.hl-today{background:#3b82f6;border-color:#1d4ed8}
+.hl-due{background:#facc15}
+.heat-legend{display:flex;gap:12px;margin-top:8px;font-size:12px;color:#666;align-items:center}
+</style>
+</head>
+<body>
+<h1>热力图隔离测试 — 如果这里能看到格子，说明代码本身没问题</h1>
+
+<div class="heat-wrap" id="heatWrap">
+  <div class="heat-head">
+    <div class="heat-title">📊 打卡日历（182 天）</div>
+    <div class="heat-stats">
+      <span class="hs" id="heatDone">统计...</span>
+    </div>
+  </div>
+  <div class="heat-scroll">
+    <div class="heat-months" id="heatMonths"></div>
+    <div class="heat-grid" id="heatGrid"></div>
+  </div>
+  <div class="heat-legend">
+    <span class="hl-cell hl-future"></span> 未到
+    <span class="hl-cell hl-done"></span> 已完成
+    <span class="hl-cell hl-today"></span> 今天
+  </div>
+</div>
+
+<div id="debug" style="margin-top:20px;padding:10px;background:#eee;font-family:monospace;white-space:pre-wrap"></div>
+
+<script>
+// === 复制自 index.html 的 WEEKS 数据 ===
+const WEEKS=[
+  {w:1,start:'2026-08-15',stage:'准备'},
+  {w:2,start:'2026-08-22',stage:'准备'},
+  {w:3,start:'2026-08-29',stage:'通读'},
+  {w:4,start:'2026-09-05',stage:'通读'},
+  {w:5,start:'2026-09-12',stage:'通读'},
+  {w:6,start:'2026-09-19',stage:'通读'},
+  {w:7,start:'2026-09-26',stage:'通读'},
+  {w:8,start:'2026-10-03',stage:'高分精学'},
+  {w:9,start:'2026-10-10',stage:'高分精学'},
+  {w:10,start:'2026-10-17',stage:'高分精学'},
+  {w:11,start:'2026-10-24',stage:'高分精学'},
+  {w:12,start:'2026-10-31',stage:'高分精学'},
+  {w:13,start:'2026-11-07',stage:'高分精学'},
+  {w:14,start:'2026-11-14',stage:'高分精学'},
+  {w:15,start:'2026-11-21',stage:'中分精学'},
+  {w:16,start:'2026-11-28',stage:'中分精学'},
+  {w:17,start:'2026-12-05',stage:'中分精学'},
+  {w:18,start:'2026-12-12',stage:'中分精学'},
+  {w:19,start:'2026-12-19',stage:'低分精学'},
+  {w:20,start:'2026-12-26',stage:'低分精学'},
+  {w:21,start:'2027-01-02',stage:'刷题'},
+  {w:22,start:'2027-01-09',stage:'刷题'},
+  {w:23,start:'2026-01-16',stage:'刷题'},
+  {w:24,start:'2027-01-23',stage:'刷题'},
+  {w:25,start:'2027-01-30',stage:'冲刺'},
+  {w:26,start:'2027-02-06',stage:'冲刺'}
+];
+
+function buildDaily(){
+  const out=[]; let day=0;
+  WEEKS.forEach(wk=>{
+    const p=wk.start.split('-').map(Number); const start=new Date(p[0],p[1]-1,p[2]);
+    for(let i=0;i<7;i++){
+      day++;
+      const dt=new Date(start); dt.setDate(start.getDate()+i);
+      const iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+      out.push(Object.assign({day:day,iso:iso,i:i},wk));
+    }
+  });
+  return out;
+}
+
+const DAILY=buildDaily();
+const DAILY_BY_ISO={}; DAILY.forEach(x=>DAILY_BY_ISO[x.iso]=x);
+
+function isPast(iso){return iso<TODAY_ISO;}
+function isToday(iso){return iso===TODAY_ISO;}
+const TODAY_ISO=(()=>{const t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');})();
+const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+const heatGrid=document.getElementById('heatGrid');
+const heatMonths=document.getElementById('heatMonths');
+const heatDone=document.getElementById('heatDone');
+
+function buildHeat(){
+  var dbg=document.getElementById('debug');
+  dbg.textContent += 'buildHeat() called\n';
+  dbg.textContent += '  heatGrid exists: '+(heatGrid!==null)+'\n';
+  dbg.textContent += '  DAILY.length: '+DAILY.length+'\n';
+  
+  if(!heatGrid){ dbg.textContent += '  ABORT: no heatGrid\n'; return; }
+  
+  var html=DAILY.map(function(x){
+    var cl=x.done?'hl-done':(isToday(x.iso)?'hl-today':(isPast(x.iso)?'hl-due':''));
+    return '<div class="hl-cell '+cl+'" data-iso="'+x.iso+'" title="'+x.iso+' W'+x.w+'"></div>';
+  }).join('');
+  
+  dbg.textContent += '  html length: '+html.length+' chars\n';
+  dbg.textContent += '  html contains hl-cell count: '+(html.match(/hl-cell/g)||[]).length+'\n';
+  
+  heatGrid.innerHTML=html;
+  
+  dbg.textContent += '  after innerHTML: heatGrid.children.length = '+heatGrid.children.length+'\n';
+  dbg.textContent += '  heatGrid.offsetHeight = '+heatGrid.offsetHeight+'\n';
+  dbg.textContent += '  heatGrid.offsetWidth = '+heatGrid.offsetWidth+'\n';
+}
+
+function refreshHeat(){
+  if(!heatDone) return;
+  var done=0;
+  DAILY.forEach(function(x){if(x.done)done++;});
+  heatDone.textContent='已完成 '+done+' / '+DAILY.length+' 天';
+}
+
+// Run
+buildHeat();
+refreshHeat();
+</script>
+</body>
+</html>
