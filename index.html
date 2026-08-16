@@ -2887,11 +2887,11 @@ function updatePhdProgress(){
   if(!all.length)return;
   const done=[...all].filter(c=>c.checked).length;
   const aAll=document.querySelectorAll('[data-phd="A"] input[type="checkbox"]');
-  const aDone=aAll.filter(c=>c.checked).length;
+  const aDone=[...aAll].filter(c=>c.checked).length;
   const bAll=document.querySelectorAll('[data-phd="B"] input[type="checkbox"]');
-  const bDone=bAll.filter(c=>c.checked).length;
+  const bDone=[...bAll].filter(c=>c.checked).length;
   const cAll=document.querySelectorAll('[data-phd="C"] input[type="checkbox"]');
-  const cDone=cAll.filter(c=>c.checked).length;
+  const cDone=[...cAll].filter(c=>c.checked).length;
   const t=document.getElementById('phdTotal');if(t)t.textContent=all.length;
   const d=document.getElementById('phdDone');if(d)d.textContent=done;
   const at=document.getElementById('phdATotal');if(at)at.textContent=aAll.length;
@@ -3500,17 +3500,11 @@ const heatWeek=document.getElementById('heatWeek');
 const heatStreak=document.getElementById('heatStreak');
 const heatBest=document.getElementById('heatBest');
 function buildHeat(){
-  console.log('[HEAT-DEBUG] buildHeat() start, DAILY.length=',DAILY?DAILY.length:'UNDEF');
-  if(!heatGrid){ console.log('[HEAT-DEBUG] ABORT: no heatGrid element'); return; }
+  if(!heatGrid) return;
   try {
     var html=DAILY.map(function(x){return '<div class="hl-cell" data-iso="'+x.iso+'" title="'+x.iso+' W'+x.w+'"></div>';}).join('');
-    console.log('[HEAT-DEBUG] html built, length='+html.length+', hl-cell count='+(html.match(/hl-cell/g)||[]).length);
     heatGrid.innerHTML=html;
-    console.log('[HEAT-DEBUG] after innerHTML: children.length='+heatGrid.children.length+' offsetHeight='+heatGrid.offsetHeight+' offsetWidth='+heatGrid.offsetWidth);
-    // Force visible fallback
-    heatGrid.style.cssText='display:grid!important;grid-template-rows:repeat(7,14px)!important;grid-auto-flow:column;gap:3px;width:max-content;min-height:98px;background:#fff000';
   } catch(e) {
-    console.error('[HEAT-DEBUG] ERROR:',e.message,e.stack);
     heatGrid.innerHTML='<div style="padding:20px;color:red;font-weight:bold">热力图渲染失败: '+e.message+'</div>';
     return;
   }
