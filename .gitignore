@@ -7,3 +7,6 @@ node_modules/
 .idea/
 __pycache__/
 *.pyc
+# 本地临时碎片
+Find
+Find/

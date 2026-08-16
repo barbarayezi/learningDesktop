@@ -484,6 +484,23 @@ pre code{background:none;padding:0}
 .badge.mid{background:var(--yellow-soft);color:var(--yellow)}
 .badge.lo{background:var(--green-soft);color:var(--green)}
 
+/* 考试阶段导航条 */
+.stage-bar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.stage-bar-title{font-size:13px;font-weight:700;color:var(--text-2);width:100%;margin-bottom:6px}
+.stage-chip{font-size:12.5px;padding:7px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.stage-chip:hover{border-color:var(--accent);color:var(--accent)}
+.stage-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.stage-chip .sd{font-size:11px;opacity:.75}
+.stage-chip .sn{font-weight:600}
+
+/* 进阶考证自查清单 tab 导航 */
+.tab-nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 12px;padding:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);width:fit-content}
+.tab-btn{font-size:13px;font-weight:600;padding:8px 14px;border-radius:99px;border:1px solid transparent;background:transparent;color:var(--text-2);cursor:pointer;transition:.15s}
+.tab-btn:hover{background:var(--surface);color:var(--accent)}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
 @media(max-width:860px){
   .sidebar{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .22s;box-shadow:var(--shadow)}
   .sidebar.open{transform:none}
@@ -522,7 +539,9 @@ pre code{background:none;padding:0}
 .dc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
 @media(max-width:680px){.dc-grid{grid-template-columns:1fr}}
 .dc-block{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--bg)}
-.dc-block h4{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:7px}
+.dc-block h4{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.dc-h4-meta{font-size:12.5px;color:var(--text-2);font-weight:normal;background:var(--surface-2);padding:2px 9px;border-radius:10px;border:1px solid var(--border)}
+.dc-h4-meta b{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
 .dc-task{font-size:13.5px;color:var(--text-2);line-height:1.65;margin-bottom:10px}
 .dc-task b{color:var(--text)}
 .dc-links{display:flex;flex-wrap:wrap;gap:7px}
@@ -552,7 +571,7 @@ pre code{background:none;padding:0}
 .dc-tag-prio.p-P3{background:#888;color:#fff}
 .dc-mini{display:inline-block;font-size:11px;color:var(--text-3);margin-left:4px;font-variant-numeric:tabular-nums}
 .dc-link,.dc-reschip{display:inline-flex;align-items:center;gap:4px;margin:3px 6px 3px 0;padding:5px 10px;font-size:13px}
-.dc-link{background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--accent);text-decoration:none;font-weight:500}
+.dc-link{display:inline-block;max-width:255px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--accent);text-decoration:none;font-weight:500;vertical-align:middle}
 .dc-link:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .dc-reschip{cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;color:var(--text-2)}
 .dc-reschip:hover{background:var(--surface);border-color:var(--accent);color:var(--accent)}
@@ -560,6 +579,15 @@ pre code{background:none;padding:0}
 .dc-fold-toggle:hover{color:var(--accent);border-color:var(--accent)}
 .dc-fold-block{display:none;margin-top:6px;padding-top:6px;border-top:1px dashed var(--border)}
 .dc-fold-block.open{display:block}
+.dc-parts{margin:4px 0 2px 22px;border-left:2px solid var(--border);padding-left:10px}
+.dc-parts-sum{font-size:11.5px;color:var(--text-3);cursor:pointer;user-select:none;margin:2px 0}
+.dc-parts-sum:hover{color:var(--accent)}
+.dc-parts[open] .dc-parts-sum{color:var(--accent);font-weight:600}
+.dc-part-list{margin:6px 0 2px;display:flex;flex-direction:column;gap:4px}
+.dc-part{display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.4}
+.dc-part-link{color:var(--accent);text-decoration:none;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dc-part-link:hover{text-decoration:underline}
+.dc-part-dur{color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:11px}
 .dc-art-treat{margin:6px 0 0}
 .dc-reslist{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .dc-reschip{font-size:12px;padding:4px 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:.15s}
@@ -578,7 +606,9 @@ pre code{background:none;padding:0}
 .dc-series{margin:9px 0;padding:9px 11px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
 .dc-series-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
 .dc-series-name{font-size:13px;font-weight:700;color:var(--text)}
-.dc-series-prog{font-size:11.5px;color:var(--text-3);background:var(--surface-2);padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dc-series-prog{font-size:11.5px;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap;display:inline-flex;gap:5px;align-items:center}
+.dc-prog-today{background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:10px;font-weight:600}
+.dc-prog-all{background:var(--surface-2);color:var(--text-3);padding:2px 8px;border-radius:10px}
 .dc-video{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:4px 0;font-size:12.5px}
 .dc-video input.dc-vchk{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex:none}
 .dc-video.done .dc-link{opacity:.5;text-decoration:line-through}
@@ -608,14 +638,14 @@ pre code{background:none;padding:0}
 .heat-scroll{overflow-x:auto;padding-bottom:6px}
 .heat-months{display:grid;grid-template-columns:repeat(26,14px);gap:3px;margin:0 0 4px 0;width:max-content}
 .heat-months span{font-size:10px;color:var(--text-3);white-space:nowrap;overflow:visible}
-.heat-grid{display:grid;grid-template-rows:repeat(7,14px);grid-auto-flow:column;gap:3px;width:max-content}
+.heat-grid,.gen-heat{display:grid;grid-template-rows:repeat(7,14px);grid-auto-flow:column;gap:3px;width:max-content}
 .hl-cell{width:14px;height:14px;border-radius:3px;display:inline-block;background:#e7ebf2;cursor:pointer;transition:transform .1s}
 .hl-future{background:#eceff5}
 .hl-todo{background:#c7d2e8}
 .hl-done{background:#2f9e6b}
 .hl-today{outline:2px solid var(--accent);outline-offset:1px}
 .hl-now{box-shadow:0 0 0 2px var(--accent) inset}
-.heat-grid .hl-cell:hover{transform:scale(1.4);box-shadow:0 0 0 1px rgba(0,0,0,.18)}
+.heat-grid .hl-cell:hover,.gen-heat .hl-cell:hover{transform:scale(1.4);box-shadow:0 0 0 1px rgba(0,0,0,.18)}
 .heat-legend{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:12px;color:var(--text-3);flex-wrap:wrap}
 .heat-legend .hl-cell{vertical-align:middle;cursor:default}
 .dc-daychip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -773,33 +803,29 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
     </div>
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot red"></span>🎯 今日</div>
-      <div class="nav-item active" data-page="cdga-daily">📅 每日学习中心</div>
+      <div class="nav-item active" data-page="daily">📅 每日学习中心</div>
       <div class="nav-item" data-page="my-progress">📊 我的进度</div>
     </div>
     <div class="nav-group">
-      <div class="nav-group-title"><span class="dot red"></span>📚 备考 CDGA</div>
+      <div class="nav-group-title"><span class="dot red"></span>📘 CDGA 主备考</div>
       <div class="nav-item" data-page="cdga-plan">🗺️ 半年复习规划</div>
       <div class="nav-item" data-page="cdga-check">✅ 知识点自查清单</div>
       <div class="nav-item" data-page="cdga-quiz">📝 原创自测练习题</div>
     </div>
     <div class="nav-group">
-      <div class="nav-group-title"><span class="dot blue"></span>🔗 资料</div>
-      <div class="nav-item" data-page="cdga-res">📥 资料获取清单</div>
-    </div>
-      <div class="nav-group">
-        <div class="nav-group-title"><span class="dot blue"></span>📰 资讯</div>
-        <div class="nav-item" data-page="cdga-news">📰 公众号推文精选</div>
-        <div class="nav-item" data-page="cdga-sources">📡 关注源</div>
-      </div>
-    <div class="nav-group">
       <div class="nav-group-title"><span class="dot blue"></span>🏆 进阶考证</div>
-      <div class="nav-item" data-page="cdga-ladder">🏆 三级进阶总规划</div>
+      <div class="nav-item" data-page="advanced-plan">📈 进阶考证总规划</div>
+      <div class="nav-item" data-page="advanced-check">✅ 进阶考证自查清单</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title"><span class="dot blue"></span>🔗 资料资讯</div>
+      <div class="nav-item" data-page="cdga-res">📥 资料获取清单</div>
+      <div class="nav-item" data-page="cdga-news">📰 公众号推文精选</div>
+      <div class="nav-item" data-page="cdga-sources">📡 关注源</div>
     </div>
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot blue"></span>🏛️ 读博 交大</div>
-      <div class="nav-item" data-page="phd-plan">📋 申请计划</div>
-      <div class="nav-item" data-page="phd-reco">✉️ 推荐信格式与模板</div>
-      <div class="nav-item" data-page="phd-urls">🌐 申请网址汇总</div>
+      <div class="nav-item" data-page="phd">🏛️ 博士申请</div>
     </div>
   </aside>
   <div class="scrim" id="scrim"></div>
@@ -817,7 +843,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
       <section class="page" id="home">
         <div class="hero">
           <h1>备考资料中心</h1>
-          <p>把分散的 markdown 文档整理成一处可检索、可勾选、随时翻看的备考站点。左侧切换「考证 / 读博」两大板块，清单可勾选并自动保存进度。</p>
+          <p>把 CDGA、软考、数据开发工程师、CDGP 与读博计划集中到一处。左侧按「今日 / CDGA 主备考 / 进阶考证 / 资料资讯 / 读博」分组；每日学习中心按日期自动落到对应考试阶段，任务卡片顶部标注所属考试。</p>
         </div>
         <div class="cards">
           <div class="cat-card" data-goto="cdga-plan">
@@ -826,15 +852,15 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
             <p>DAMA 中国认证 · 半年长线复习 · 含规划 / 清单 / 自测 / 周计划</p>
             <div class="meta">6 份资料 · 目标 2027-03 场次</div>
           </div>
-          <div class="cat-card" data-goto="phd-plan">
+          <div class="cat-card" data-goto="phd">
             <div class="ic" style="background:var(--accent-soft);color:var(--accent)">🏛️</div>
             <h3>读博 · 上海交大在职博士</h3>
             <p>非全工程博士 · 数据治理方向 · 申请计划 / 推荐信 / 网址</p>
             <div class="meta">3 份资料 · 目标 2028-09 入学</div>
           </div>
         </div>
-        <div class="callout tip" style="margin-top:22px;cursor:pointer" data-goto="cdga-daily">
-          <b>📅 每日学习中心</b>：选一个日期，直接打开当天要学的「计划 + 看 PDF/笔记 + 做题 + 看视频」，覆盖 W1–W26 共 182 天。点此进入 →
+        <div class="callout tip" style="margin-top:22px;cursor:pointer" data-goto="daily">
+          <b>📅 每日学习中心</b>：选一个日期，自动显示对应考试阶段（CDGA → 软考 → 数据开发 → CDGP）的当日任务，任务卡片顶部标注所属考试。点此进入 →
         </div>
         <div class="home-note">
           <b>💡 使用提示</b><br>
@@ -1206,8 +1232,9 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 
       <!-- CDGA DAILY · 每日学习中心（选日期） -->
       <section class="page active" id="cdga-daily">
-        <h1 class="doc-title">📅 CDGA 每日学习中心</h1>
-        <div class="doc-sub">选一个日期，直接打开当天要学的内容——把「计划 + 看 PDF/笔记 + 做题 + 看视频」合并到一天。Day 1 = 2026-08-15（周六），覆盖 W1–W26 共 182 天。打卡进度自动保存在本机。<b>每天还会从「公众号推文精选」里挑一篇（考证/考博轮流）放进当日卡片</b>，点开读「重要信息提取 + 全文（一字不落）」，读完点「标记已读」。</div>
+        <h1 class="doc-title">📅 每日学习中心 · CDGA 阶段</h1>
+        <div class="doc-sub">选一个日期，打开当天要学的内容。当前日期会自动落到对应考试阶段；学习任务卡片顶部会标注所属考试名称。CDGA 阶段保留「公众号推文 + 视频分P + 自测题」完整功能。</div>
+        <div class="stage-bar" data-stage-for="cdga-daily"></div>
 
         <div class="day-picker">
           <div class="dp-controls">
@@ -1593,109 +1620,85 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
       </section>
 
       <!-- CDGA LADDER: 三级进阶总规划 -->
-      <section class="page" id="cdga-ladder">
-        <h1 class="doc-title">🏆 DAMA 三级进阶总规划（主线 CDGA → CDGP → CDGE · CDAM / CDMP 为可选增值）</h1>
-        <div class="doc-sub">考证不止于初级。基于 2025–2026 DAMA 中国与 DGBOK 平台公开规则，把现有「26 周 CDGA 单一规划」扩展为 <b>5 年进阶路径</b>。对应原 markdown 文档：<code>01_考证/DAMA_三级进阶规划_CDGA_CDGP_CDGE.md</code>。</div>
+            <!-- ADVANCED PLAN: 进阶考证总规划 -->
+            <section class="page" id="advanced-plan">
+        <h1 class="doc-title">📈 进阶考证总规划</h1>
+        <div class="doc-sub">CDGA → 软考 → 数据开发证 → CDGP/CDAM → 读博的完整路线。</div>
 
-        <div class="callout">🎯 <b>适合你</b>：数据治理岗 + 在职读博 + 想拿硬通货证书。推荐主线：<b>CDGA → CDGP → CDGE</b>；<b>CDAM / CDMP 为可选增值项</b>（视职业方向再决定，不提前分散精力）。</div>
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="ladder-panel" type="button">🏆 三级进阶总览</button>
+          <button class="tab-btn" data-tab="datadev-panel" type="button">🛠️ 数据开发工程师证书</button>
+        </div>
 
-        <h2>① 五级一图看懂</h2>
+        <div class="tab-content active" id="ladder-panel">
+        <div class="callout tip">主线 <b>CDGA → CDGP → CDGE</b>；CDAM / CDMP / 软考按需要再决定，不提前分散精力。</div>
+
+        <h2>① 五级证书</h2>
         <div class="ladder-grid">
           <div class="lv-card">
             <span class="lv-tag">L1 · 入门</span>
             <h3>CDGA 数据治理工程师</h3>
-            <div class="lv-sub">DAMA 中国 · 2027-03 目标场次</div>
+            <div class="lv-sub">DAMA 中国 · 2027-03</div>
             <div class="lv-meta"><b>题型</b><span>100 单选</span></div>
             <div class="lv-meta"><b>时长</b><span>100 分钟</span></div>
-            <div class="lv-meta"><b>门槛</b><span>专科 / 大学生即可</span></div>
-            <div class="lv-price">报名费 <b>¥1,000</b> · 有效期 3 年</div>
+            <div class="lv-meta"><b>门槛</b><span>专科 / 大学生</span></div>
+            <div class="lv-price">¥1,000 · 有效期 3 年</div>
           </div>
           <div class="lv-card l2">
             <span class="lv-tag">L2 · 中级</span>
             <h3>CDGP 数据治理专家</h3>
-            <div class="lv-sub">DAMA 中国 · 2027 下半年目标</div>
-            <div class="lv-meta"><b>题型</b><span>10 单 + 15 多 + 5~6 论述（全必做）</span></div>
+            <div class="lv-sub">DAMA 中国 · 2027 下半年</div>
+            <div class="lv-meta"><b>题型</b><span>10 单 + 15 多 + 5~6 论述</span></div>
             <div class="lv-meta"><b>时长</b><span>130 分钟</span></div>
             <div class="lv-meta"><b>门槛</b><span>持 CDGA + 学历/年限</span></div>
-            <div class="lv-price">报名费 <b>¥2,000</b> · 有效期 3 年</div>
+            <div class="lv-price">¥2,000 · 有效期 3 年</div>
           </div>
           <div class="lv-card l3">
             <span class="lv-tag">L3 · 高级</span>
             <h3>CDGE 数据治理大师</h3>
-            <div class="lv-sub">DGBOK 体系 · 2028–2029 远期</div>
+            <div class="lv-sub">DGBOK 体系 · 2028–2029</div>
             <div class="lv-meta"><b>分阶</b><span>Steward → Professional → CDO</span></div>
             <div class="lv-meta"><b>形式</b><span>线上机考 + 履历评审</span></div>
             <div class="lv-meta"><b>门槛</b><span>无 → 3 年 → 5 年 + 评审</span></div>
-            <div class="lv-price">报名费 <b>¥600/次</b> · M/G 级须评审</div>
+            <div class="lv-price">¥600/次 · M/G 须评审</div>
           </div>
           <div class="lv-card optional">
             <span class="lv-tag">可选 · 增值</span>
             <h3>CDAM 数据资产管理师</h3>
-            <div class="lv-sub">DAMA 中国 · 可选 · 可与 CDGP 同步考</div>
+            <div class="lv-sub">DAMA 中国 · 可与 CDGP 同步</div>
             <div class="lv-meta"><b>热点</b><span>数据资产入表 / 数据要素</span></div>
             <div class="lv-meta"><b>题型</b><span>单 + 多 + 论述(3 选 2)</span></div>
-            <div class="lv-meta"><b>门槛</b><span>本科在校大三 / 大专 3 年</span></div>
-            <div class="lv-price">报名费 <b>¥1,500</b> · 有效期 3 年</div>
+            <div class="lv-meta"><b>门槛</b><span>本科大三 / 大专 3 年</span></div>
+            <div class="lv-price">¥1,500 · 有效期 3 年</div>
           </div>
           <div class="lv-card optional">
             <span class="lv-tag">可选 · 国际</span>
             <h3>CDMP 国际版</h3>
-            <div class="lv-sub">DAMA 国际 · 可选 · 远期或外企用</div>
+            <div class="lv-sub">DAMA 国际 · 远期 / 外企</div>
             <div class="lv-meta"><b>等级</b><span>Assoc. → Pract. → Master → Fellow</span></div>
             <div class="lv-meta"><b>形式</b><span>英文机考 (ProctorU)</span></div>
-            <div class="lv-meta"><b>时长</b><span>90+20 分钟（每门）</span></div>
-            <div class="lv-price">报名费 <b>$311/门</b> · 有效期 3 年</div>
+            <div class="lv-meta"><b>时长</b><span>90+20 分钟/门</span></div>
+            <div class="lv-price">$311/门 · 有效期 3 年</div>
           </div>
         </div>
 
-        <h2>② 证书有效期与续证（考完才用上，以官方为准）</h2>
-        <div class="callout info"><span class="ct">已统一口径</span>综合多方来源：DAMA 中国证书（CDGA / CDGP / CDGE / CDAM）据光环国际等机构文章为 <b>终身有效、无需年审 / 续证费</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3 年有效＋续证 ¥200"的口径），<b>请以 MyDAMA 官方最新公告为准</b>。结论：可视为<b>终身有效</b>，把继续教育(PDU)当作<b>自愿提升</b>，<b>完全不影响你现在的 26 周备考计划</b>。</div>
-
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>证书体系</th><th>有效期 / 续证</th><th>继续教育(PDU)</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td><b>DAMA 中国</b><br>CDGA / CDGP / CDGE / CDAM</td><td><b>终身有效</b>（据光环国际等）<br>无需年审 / 续证费</td><td><b>自愿</b>，非强制</td><td>部分渠道称"3 年＋¥200 续证"，以官方为准</td></tr>
-            <tr><td><b>DAMA 国际</b><br>CDMP</td><td>会员费维护（第 4 年起每年 $50＋签道德准则）</td><td>120h CPE / 3 年（口径之一）</td><td>英文机考，国际通用</td></tr>
-          </tbody>
-        </table></div>
-
-        <h3>继续教育 PDU（自愿提升，非强制）</h3>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>来源</th><th>分值</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td>参加 DAMA 中国年度大会 / 峰会</td><td>约 20 分 / 次</td><td>一年 1–2 次</td></tr>
-            <tr><td>培训 / 课程</td><td>1 分 / 小时，上限 20 分</td><td>日常顺带积累</td></tr>
-            <tr><td>经验分享 / 志愿服务</td><td>5–10 分 / 次</td><td>内部分享、社群答疑等</td></tr>
-            <tr><td>日常工作</td><td><b>不折算</b></td><td>不能把上班当学分</td></tr>
-          </tbody>
-        </table></div>
-        <div class="callout tip">💡 即使按"3 年续证"口径，60 分分摊到 3 年 ≈ 每年 20 分，<b>参加 1 次行业大会就解决一大半</b>。考研 / 读博期间顺手攒，<b>不占备考时间</b>。按当前"终身有效"口径则更无需担心。</div>
-
-        <h3>会改变你现在的计划吗？</h3>
-        <ul>
-          <li><b>当前 26 周计划只针对 CDGA</b>（目标 2027-03 上场），<b>不动</b>。</li>
-          <li>无论"终身有效"还是"3 年续证"，都<b>不影响当前备考</b>；续证最早也在拿证后第 3 年（约 2030）。</li>
-          <li>5 年规划里的 CDGP / CDGE / CDAM / CDMP 都排在 <b>2027 下半年之后</b>，续证更靠后。</li>
-          <li>PDU 可日后<b>自愿</b>顺带积累，<b>不额外占用复习时间</b>。</li>
-        </ul>
-
-        <h2>③ 5 年时间轴（衔接你现有的 26 周计划）</h2>
+        <h2>② 5 年时间轴</h2>
         <div class="timeline-band">
           <div class="tl-track">
-            <div class="tl-step l1"><div class="ph">阶段 0</div><div class="when">2026-08 → 09</div><div class="what">CDGA 报名+领教材</div></div>
-            <div class="tl-step l1"><div class="ph">阶段 1</div><div class="when">2026-09 → 11</div><div class="what">CDGA 通读 + 自测</div></div>
-            <div class="tl-step l1"><div class="ph">阶段 2</div><div class="when">2026-11 → 02</div><div class="what">CDGA 精学 + 模拟</div></div>
-            <div class="tl-step l1"><div class="ph">🎯 03</div><div class="when">2027-03</div><div class="what">CDGA 上场</div></div>
-            <div class="tl-step l2"><div class="ph">阶段 3</div><div class="when">2027-04 → 09</div><div class="what">CDGP 论述 + CDAM 双修</div></div>
-            <div class="tl-step l2"><div class="ph">阶段 4</div><div class="when">2027-10 → 2028-06</div><div class="what">实务沉淀 + 案例库</div></div>
-            <div class="tl-step l3"><div class="ph">阶段 5–6</div><div class="when">2028-07 → 2029</div><div class="what">CDGE / CDMP 远期</div></div>
+            <div class="tl-step l1"><div class="ph">阶段 1</div><div class="when">2026-08 → 2027-03</div><div class="what">CDGA 备考</div></div>
+            <div class="tl-step l1"><div class="ph">📌</div><div class="when">2027-03</div><div class="what">软考报名</div></div>
+            <div class="tl-step l1"><div class="ph">⚡</div><div class="when">2027-03 → 05</div><div class="what">软考冲刺</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 3</div><div class="when">2027-05 → 08</div><div class="what">数据开发证 ACP → Databricks</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 4</div><div class="when">2027-08 → 2028-02</div><div class="what">CDGP + CDAM</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 5</div><div class="when">2028-03 → 09</div><div class="what">博士申请</div></div>
+            <div class="tl-step l3"><div class="ph">阶段 6</div><div class="when">2028+</div><div class="what">CDGE / CDMP</div></div>
           </div>
         </div>
+        <div class="callout info">2026-08-16 更新：CDGA 考后插入数据开发证冲刺，CDGP 顺延至 2027-08。完整排期见 <span style="color:var(--accent);cursor:pointer;text-decoration:underline" onclick="switchAdvancedTab('datadev-panel')">数据开发工程师证书</span>。</div>
 
-        <h2>④ CDGP 备考核心（半年内重点）</h2>
-        <h3>报考条件速查</h3>
+        <h2>③ CDGP 备考要点</h2>
         <div class="tbl-wrap"><table>
-          <thead><tr><th>学历</th><th>须持 CDGA</th><th>数据管理工作年限</th></tr></thead>
+          <thead><tr><th>学历</th><th>须持 CDGA</th><th>数据管理年限</th></tr></thead>
           <tbody>
             <tr><td>博士</td><td>✅</td><td>无要求</td></tr>
             <tr><td>硕士</td><td>✅</td><td>≥ 1 年</td></tr>
@@ -1703,20 +1706,17 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
             <tr><td>专科</td><td>✅</td><td>≥ 5 年</td></tr>
           </tbody>
         </table></div>
-
-        <h3>题型与时间分配（130 分钟）</h3>
         <div class="tbl-wrap"><table>
           <thead><tr><th>部分</th><th>题型</th><th>题数</th><th>分值</th><th>建议用时</th></tr></thead>
           <tbody>
             <tr><td>第一类</td><td>单选</td><td>10</td><td>10</td><td>10 分钟</td></tr>
             <tr><td>第二类</td><td>多选</td><td>15</td><td>30</td><td>30 分钟</td></tr>
-            <tr><td>第三类</td><td><b>论述（6 题全必做）</b></td><td>5–6</td><td>60</td><td><b>90 分钟（每题 15 分钟）</b></td></tr>
-            <tr><td>合计</td><td></td><td>30–31</td><td>100</td><td>130 分钟</td></tr>
+            <tr><td>第三类</td><td><b>论述（全必做）</b></td><td>5–6</td><td>60</td><td><b>90 分钟</b></td></tr>
           </tbody>
         </table></div>
-        <div class="callout urgent">⚠️ 论述题 <b>不提供选题权</b>，6 大主题每个都要会。</div>
+        <div class="callout urgent">论述题不提供选题权，6 大主题每个都要会。</div>
 
-        <h3>论述题六大主题（按出题概率排序）</h3>
+        <h3>论述题六大主题</h3>
         <div class="theme-card-row">
           <div class="theme-card"><div class="ix">主题 1 · 高频</div><h4>数据治理体系顶层设计</h4><p>DG 委员会 / RACI / 战略对齐</p></div>
           <div class="theme-card"><div class="ix">主题 2 · 高频</div><h4>数据质量场景化治理</h4><p>根因分析 + 六维度 + 改进闭环</p></div>
@@ -1726,127 +1726,311 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
           <div class="theme-card"><div class="ix">主题 6</div><h4>数据安全与合规</h4><p>分类分级 + 脱敏 + 个保法</p></div>
         </div>
 
-        <h3>论述题答题模板（15 分钟一题）</h3>
+        <h3>论述题答题模板（15 分钟/题）</h3>
         <ol>
-          <li><b>现象诊断</b>（2 min）：拆题目给出的业务场景，识别 1–2 个核心矛盾</li>
-          <li><b>方法论框架</b>（4 min）：引用 DMBOK 对应域概念，画出 RACI / 六维度 / 分层结构图</li>
+          <li><b>现象诊断</b>（2 min）：识别核心矛盾</li>
+          <li><b>方法论框架</b>（4 min）：引用 DMBOK 对应域概念</li>
           <li><b>落地路径</b>（5 min）：短期 1 月 / 中期 3 月 / 长期 6–12 月</li>
-          <li><b>风险与衡量</b>（2 min）：列 2–3 个风险 + 1 组量化指标</li>
-          <li><b>案例引用</b>（2 min）：用案例库或项目经验佐证</li>
+          <li><b>风险与衡量</b>（2 min）：2–3 个风险 + 量化指标</li>
+          <li><b>案例引用</b>（2 min）：用项目经验佐证</li>
         </ol>
 
-        <h2>⑤ CDAM 同步备考（增值项 · 可选）</h2>
-        <p>为什么并行考：内容与 CDGP 重叠 60%+，但额外覆盖「数据资产入表」（财政部 2023-08 新规）、《数据资产管理知识体系指南》。<b>你做的是电网数据治理 + 申请在职博士，论文方向如选「数据资产价值评估」可直接用上</b>。</p>
-        <h3>论述题 3 选 2：建议组合</h3>
-        <div class="theme-card-row">
-          <div class="theme-card"><div class="ix">⭐ 入表</div><h4>数据资产入表</h4><p>财政部 2023-08 暂行规定 + 2024 案例</p></div>
-          <div class="theme-card"><div class="ix">⭐ 价值评估</div><h4>数据资产价值评估</h4><p>成本法 / 收益法 / 市场法</p></div>
-          <div class="theme-card"><div class="ix">运营</div><h4>公共数据资产运营</h4><p>授权运营 / 收益分配机制</p></div>
-        </div>
-        <p style="margin-top:8px"><b>策略</b>：避开最弱的「跨境流通」，专攻「入表 + 价值评估」。建议 2027-06 或 09 与 CDGP 一起报。</p>
-
-        <h2>⑥ CDGE / CDMP 远期路径（均为可选）</h2>
+        <h2>④ 可选远期</h2>
         <details>
-          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">📚 CDGE（DGBOK 体系）路径</summary>
+          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">📚 CDGE（DGBOK 体系）</summary>
           <div style="padding:8px 14px">
-            <div class="tbl-wrap"><table>
-              <thead><tr><th>级别</th><th>名称</th><th>条件</th></tr></thead>
-              <tbody>
-                <tr><td>Steward</td><td>数据治理专员</td><td>16+ 岁，统考 ≥ C，无学历</td></tr>
-                <tr><td>Professional</td><td>数据治理工程师</td><td>≥ 3 年治理经验 + 统考 ≥ A 或（≥ C + 1 门专业 ≥ C）</td></tr>
-                <tr><td>CDO</td><td>首席数据官</td><td>≥ 5 年 + 统考 ≥ C + 2 门专业 ≥ C</td></tr>
-                <tr><td>M / G 级</td><td>大师 / 院士</td><td>职业履历鉴定 + 资历评审</td></tr>
-              </tbody>
-            </table></div>
-            <p>📌 平台 <code>dgbok.org.cn</code> · 教材《DGBOK1.0》（出版中）+《简明数据治理手册》过渡。150 道选择题，线上机考远程监考，<b>500 元考试 + 100 元认证</b>。<b>CDGA 拿到后无须重考，可直接参 DGBOK 统考。</b></p>
-            <p><b>你的节奏</b>：2028-07 报 CDGE-Steward（成本低、练兵）→ 2029 CDGE-Professional（结合 3 年+ 项目经验）→ 2030+ 评估 CDO 评审。</p>
+            <p>Steward → Professional（≥3 年经验）→ CDO（≥5 年 + 评审）。平台 <code>dgbok.org.cn</code>，线上机考，CDGA 拿到后可直接参 DGBOK 统考。建议 2028-07 起 Steward 练兵。</p>
           </div>
         </details>
         <details>
-          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">🌍 CDMP 国际版（远期 / 外企用）</summary>
+          <summary style="cursor:pointer;font-weight:600;padding:10px 14px;background:var(--surface-2);border-radius:9px;border:1px solid var(--border);margin-bottom:8px">🌍 CDMP 国际版</summary>
           <div style="padding:8px 14px">
-            <p><b>4 等级</b>：Associate → Practitioner → Master → Fellow。英文机考，ProctorU 远程监考，每门 311 美元。</p>
-            <p><b>10 门专业方向（必选 ≥ 1）</b>：Data Governance / Architecture / Modeling / Quality / Integration / Metadata / Security / Warehousing / Reference & Master / Data Science。</p>
-            <p><b>报考建议</b>：考完 CDGP 后（约 2028 年）直接冲 CDMP Practitioner（Data Governance 方向），把已有 DMBOK 知识直接迁移，复习周期可压缩到 60 天。</p>
+            <p>Associate → Practitioner → Master → Fellow。英文机考 ProctorU，$311/门。考完 CDGP 后（约 2028）可冲 Practitioner（Data Governance 方向），已有 DMBOK 知识可直接迁移。</p>
           </div>
         </details>
 
-        <h2>⑦ 5 年预算与时间账</h2>
+        <h2>⑤ 5 年预算</h2>
         <div class="budget-bar">
-          <div><div class="lbl">CDGA ×1</div><div class="amt">¥1,000</div><div class="note">2027 报名</div></div>
-          <div><div class="lbl">CDGP ×1</div><div class="amt">¥2,000</div><div class="note">2027 下半年</div></div>
-          <div><div class="lbl">CDAM ×1</div><div class="amt">¥1,500</div><div class="note">2027 同步</div></div>
-          <div><div class="lbl">CDGE ×2</div><div class="amt">¥1,200</div><div class="note">2028–29</div></div>
-          <div><div class="lbl">CDMP ×2</div><div class="amt">¥4,400</div><div class="note">2028+ 国际</div></div>
-          <div><div class="lbl">合计</div><div class="amt">≈¥10,100</div><div class="note">5 年总额</div></div>
+          <div><div class="lbl">CDGA</div><div class="amt">¥1,000</div></div>
+          <div><div class="lbl">CDGP</div><div class="amt">¥2,000</div></div>
+          <div><div class="lbl">CDAM</div><div class="amt">¥1,500</div></div>
+          <div><div class="lbl">CDGE ×2</div><div class="amt">¥1,200</div></div>
+          <div><div class="lbl">CDMP ×2</div><div class="amt">¥4,400</div></div>
+          <div><div class="lbl">合计</div><div class="amt">≈¥10,100</div></div>
         </div>
-        <div class="callout tip">📊 平均每天多花 10 分钟用于进阶内容，5 年总投入 ≈ <b>300 小时</b>，比一次 PMP 培训 ROI 高。5 年拿到 3–4 张证书，对申请在职博士、跳槽 CDO、跳外企都是硬通货。</div>
 
-        <h2>⑧ 与现有 26 周计划的衔接</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>现有 W1–W26（不变）</th><th>W26 之后衔接</th></tr></thead>
-          <tbody>
-            <tr><td>W1–W2 准备</td><td>立即报名 CDGA（2027-03 场次）</td></tr>
-            <tr><td>W3–W7 通读 DMBOK 17 域</td><td>同时为 CDGP 打底</td></tr>
-            <tr><td>W8–W20 精学</td><td>重点精学 CDGP 高频 6 主题</td></tr>
-            <tr><td>W21–W24 刷题</td><td>同时刷 CDGA 单选 + CDGP 论述</td></tr>
-            <tr><td>W25–W26 冲刺</td><td>CDGA 模拟 + CDGP 论述模板</td></tr>
-            <tr><td><b>W27–W52（新增）</b></td><td><b>半年专攻 CDGP 论述 + CDAM</b></td></tr>
-            <tr><td>W52+</td><td>CDGE-Steward → CDMP Associate</td></tr>
-          </tbody>
-        </table></div>
-
-        <h2>⑨ 资料获取清单（追加）</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>资料</th><th>路径</th><th>用途</th></tr></thead>
-          <tbody>
-            <tr><td>《数据资产管理知识体系指南》</td><td>MyDAMA 公众号 / DAMA 授权机构（出版中）</td><td>CDAM 备考</td></tr>
-            <tr><td>财政部《企业数据资源相关会计处理暂行规定》</td><td>财政部官网 2023-08</td><td>数据资产入表</td></tr>
-            <tr><td>DGBOK 平台开放课（免费）</td><td>dgbok.org.cn</td><td>CDGE 入门</td></tr>
-            <tr><td>DAMA-DMBOK2（已有）</td><td>已入手</td><td>CDGA / CDGP 主教材</td></tr>
-            <tr><td>CDGP 论述题真题回忆</td><td>MyDAMA 公众号历年推送 / 培训社群</td><td>复习 CDGP 论述</td></tr>
-            <tr><td>《一本书讲透数据治理》石秀峰</td><td>机械工业出版社</td><td>CDGE 辅助</td></tr>
-            <tr><td>《数据治理之论》梅宏主编</td><td>中国人民大学出版社</td><td>学术 / 写论文参考</td></tr>
-          </tbody>
-        </table></div>
-
-        <h2>⑩ 风险与备选</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>风险</th><th>概率</th><th>备选</th></tr></thead>
-          <tbody>
-            <tr><td>CDGP 论述题偏题失分</td><td>中</td><td>提前 60 天模拟 3 次；带案例库上场</td></tr>
-            <tr><td>CDAM 教材未出版</td><td>低</td><td>关注 MyDAMA「复习内容清单」更新</td></tr>
-            <tr><td>工作年限不够 CDGP</td><td>视情况</td><td>攒案例 + 申请「项目经验证明」</td></tr>
-            <tr><td>CDGE / CDMP 英文不足</td><td>中</td><td>跟读英文 DMBOK 6 个月过渡</td></tr>
-            <tr><td>续证忘记学分</td><td>低</td><td>每年 2 次行业大会（10 月峰会+12 月）攒学分</td></tr>
-          </tbody>
-        </table></div>
-
-        <h2>⑪ 一句话行动清单（可勾选，localStorage 持久化）</h2>
+        <h2>⑥ 行动清单</h2>
         <div id="ladderProgress" style="font-size:13px;color:var(--text-2);margin:4px 0 8px">已完成 — / —</div>
         <div class="checklist" id="ladder-checks">
-          <label><input type="checkbox" data-key="mydama-follow"><span><b>关注 MyDAMA 公众号</b>（报名/成绩/续证主入口）</span></label>
-          <label><input type="checkbox" data-key="dgbok-follow"><span><b>关注 DGBOK 公众号</b>（CDGE 体系入口）</span></label>
+          <label><input type="checkbox" data-key="mydama-follow"><span><b>关注 MyDAMA 公众号</b>（报名/成绩主入口）</span></label>
+          <label><input type="checkbox" data-key="dgbok-follow"><span><b>关注 DGBOK 公众号</b>（CDGE 入口）</span></label>
           <label><input type="checkbox" data-key="dgbok-register"><span><b>在 dgbok.org.cn 注册账号</b>，收藏免费开放课</span></label>
-          <label><input type="checkbox" data-key="cdga-confirm"><span><b>在 DAMA 认证小程序确认 CDGA 报名状态</b>（目标 2027-03 场次）</span></label>
-          <label><input type="checkbox" data-key="cdam-bookmark"><span><b>收藏《数据资产管理知识体系指南》出版通知</b>（CDAM 用）</span></label>
-          <label><input type="checkbox" data-key="cdgp-mindmap"><span><b>画一张 DMBOK 知识域关联图</b>（CDGP 论述题底层）</span></label>
+          <label><input type="checkbox" data-key="cdga-confirm"><span><b>确认 CDGA 报名状态</b>（目标 2027-03 场次）</span></label>
+          <label><input type="checkbox" data-key="cdam-bookmark"><span><b>收藏《数据资产管理知识体系指南》出版通知</b></span></label>
+          <label><input type="checkbox" data-key="cdgp-mindmap"><span><b>画一张 DMBOK 知识域关联图</b></span></label>
           <label><input type="checkbox" data-key="cases-v1"><span><b>沉淀 2–3 个项目案例</b>（电网主数据 / 数据质量 / 数据共享）</span></label>
           <label><input type="checkbox" data-key="cdgp-outline"><span><b>建 CDGP 论述题 6 主题答题大纲</b></span></label>
-          <label><input type="checkbox" data-key="moe-notice"><span><b>收藏财政部「数据资源入表」相关政策原文</b></span></label>
-          <label><input type="checkbox" data-key="ladder-locked"><span><b>把本页加入「01_考证」目录顶部作为 5 年总纲</b></span></label>
+          <label><input type="checkbox" data-key="moe-notice"><span><b>收藏财政部「数据资源入表」政策原文</b></span></label>
+        </div>
+        </div>
+
+        <div class="tab-content" id="datadev-panel">
+        <div class="callout info">2026-08-16 更新：CDGA 考后插入 12 周数据开发证冲刺；CDGP 顺延至 2027-08 启动，与三级进阶总规划一致。</div>
+
+        <h2>① 结论</h2>
+        <ul>
+          <li><b>能装下。</b>CDGA 考后 2027-03 → 2027-06 密集冲刺数据开发证，CDGP 顺延 3 个月，周投入 6–8h，无并行过载。</li>
+          <li><b>先考工程实战类。</b>你已有 CDGA/CDGP 治理链，缺「开发/工程」侧硬通货，两者互补。</li>
+          <li><b>顺序：阿里云 ACP 大数据（先）→ Databricks DE Associate（后）</b>；国企/职称加成再加软考（数据库系统工程师）。</li>
+        </ul>
+
+        <h2>② 证书对比</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>证书</th><th>定位</th><th>形式</th><th>费用</th><th>有效期</th><th>匹配度</th></tr></thead>
+          <tbody>
+            <tr><td><b>阿里云 ACP 大数据</b> ⭐</td><td>国内云上大数据开发/治理</td><td>100 题，80 分及格</td><td>约 ¥1,200</td><td>2 年</td><td>★★★</td></tr>
+            <tr><td><b>Databricks DE Associate</b></td><td>国际 Lakehouse 数据工程</td><td>45 单选，90 分钟</td><td>$200</td><td>2 年</td><td>★★★</td></tr>
+            <tr><td>华为 HCIP-Big Data</td><td>国内华为栈</td><td>笔试 90 分钟</td><td>约 ¥1,800</td><td>3 年</td><td>★★</td></tr>
+            <tr><td>软考 · 数据库系统工程师</td><td>国内职称/工程师资格</td><td>上下午笔试</td><td>约 ¥150</td><td>长期</td><td>★★</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>③ 推荐顺序</h2>
+        <ul>
+          <li><b>只考一张</b>：阿里云 ACP 大数据（国内对口、岗位名匹配）。</li>
+          <li><b>推荐两证</b>：ACP（2027-03→06）+ Databricks DE（2027 下半年或读博期间）。</li>
+          <li><b>职称加成</b>：软考数据库系统工程师推到 2027 上半年（约 5 月），CDGA 考后 2 个月冲刺。</li>
+        </ul>
+
+        <h2>④ 排期</h2>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>阶段</th><th>时间窗</th><th>主线</th><th>周投入</th></tr></thead>
+          <tbody>
+            <tr><td>CDGA</td><td>2026-08 → 2027-03</td><td>数据治理工程师</td><td>8–10h</td></tr>
+            <tr><td>软考</td><td>2027-03 → 2027-05</td><td>数据库系统工程师</td><td>5–7h</td></tr>
+            <tr><td>数据开发证</td><td>2027-05 → 2027-08</td><td>ACP → Databricks DE</td><td>6–8h</td></tr>
+            <tr><td>CDGP</td><td>2027-08 → 2028-02</td><td>数据治理专家</td><td>6–8h</td></tr>
+            <tr><td>博士申请</td><td>2027-09 → 2028-09</td><td>研究计划/材料</td><td>阶段性强</td></tr>
+          </tbody>
+        </table></div>
+        <div class="timeline-band">
+          <div class="tl-track">
+            <div class="tl-step l1"><div class="ph">阶段 1</div><div class="when">2026-08 → 03</div><div class="what">CDGA</div></div>
+            <div class="tl-step l1"><div class="ph">⚡</div><div class="when">2027-03 → 05</div><div class="what">软考</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 3</div><div class="when">2027-05 → 08</div><div class="what">ACP → Databricks</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 4</div><div class="when">2027-08 → 2028-02</div><div class="what">CDGP + CDAM</div></div>
+            <div class="tl-step l2"><div class="ph">阶段 5</div><div class="when">2027-09 → 2028-09</div><div class="what">博士申请</div></div>
+          </div>
+        </div>
+
+        <h2>⑤ 三者协同</h2>
+        <ul>
+          <li><b>CDGA × 数据开发证</b>：博士方向是"电力系统数据治理"，工程证证明能把治理落地成管道。</li>
+          <li><b>复用现有项目</b>：datalake-etl 的 EPK→ODS→DWS 既是 CDGA 案例，也是 DataWorks / Databricks 的练习对象。</li>
+          <li><b>错峰降低遗忘</b>：CDGA 考后趁热做数据开发证，再回 CDGP 时 DMBOK 框架仍在。</li>
+        </ul>
+
+        <h2>⑥ 行动清单</h2>
+        <div id="datadevProgress" style="font-size:13px;color:var(--text-2);margin:4px 0 8px">已完成 — / —</div>
+        <div class="checklist" id="datadev-checks">
+          <label><input type="checkbox" data-key="dd-confirm" checked><span><b>定两张证、先 ACP（已确认）</b></span></label>
+          <label><input type="checkbox" data-key="dd-practice"><span>CDGA 之余，<b>每周 1h 用 datalake-etl 项目当实验场</b> 熟悉目标平台</span></label>
+          <label><input type="checkbox" data-key="dd-sprint"><span><b>2027-03 CDGA 考后</b>立即进入 12 周数据开发证冲刺</span></label>
+          <label><input type="checkbox" data-key="dd-cdgp"><span>确认 CDGP 启动已改 2027-08</span></label>
+          <label><input type="checkbox" data-key="dd-ruankao"><span><b>软考推到 2027 上半年</b>，CDGA 考完后再报名冲刺</span></label>
+        </div>
+        </div>
+      </section>
+
+<!-- RUANKAO DAILY · 软考每日学习中心 -->
+      <section class="page" id="ruankao-daily">
+        <h1 class="doc-title">📅 每日学习中心 · 软考阶段</h1>
+        <div class="doc-sub">CDGA 考完（2027-03）后趁热冲刺，约 10 周（2027-03-15 → 2027-05-23）冲 2027 上半年考试。选日期打开当天任务，打卡自动保存本机。教材：《数据库系统工程师教程（第4版）》（清华大学出版社）；上午 75 选择 + 下午 5 案例，两科均 45 分合格、须一次全过。</div>
+        <div class="stage-bar" data-stage-for="ruankao-daily"></div>
+        <div class="heat-title">📊 打卡日历（<span id="ruankao-total">70</span> 天 · 点格子跳到那天）</div>
+        <div class="gen-heat" style="margin:8px 0 14px"></div>
+        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <input type="date" class="gen-date">
+          <button class="gen-prev" type="button">← 前一天</button>
+          <button class="gen-next" type="button">后一天 →</button>
+          <button class="gen-start" type="button">回到第一天</button>
+          <span id="ruankao-done" style="margin-left:auto;color:var(--muted)"></span>
+        </div>
+        <div class="gen-card"></div>
+        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏（长期不变）：目标 → 看课 → 阅读 → 自测 → 打卡。工作日约 1h（教程章节 + 上午选择题），周末约 2–3h（下午案例动手写 + 整套真题）。进度存本机、离线可用。</div>
+      </section>
+
+      <!-- 进阶考证自查清单（软考 / 数据开发 / CDGP 合并） -->
+      <section class="page" id="advanced-check">
+        <h1 class="doc-title">✅ 进阶考证知识点自查清单</h1>
+        <div class="doc-sub">软考·数据库系统工程师、数据开发工程师（阿里云 ACP + Databricks）、CDGP 数据治理专家三证的知识点自查，按下方 tab 切换。勾选与「已掌握日期」自动保存，用于「每日学习中心」的复习提醒。各证存储键独立（bb-ruankao-*/bb-datadev-*/bb-cdgp-*），互不混淆。</div>
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="ruankao-check-list" type="button">🗄️ 软考·数据库系统工程师</button>
+          <button class="tab-btn" data-tab="datadev-check-list" type="button">🔧 数据开发工程师</button>
+          <button class="tab-btn" data-tab="cdgp-check-list" type="button">📊 CDGP 数据治理专家</button>
+        </div>
+
+        <!-- 软考自查 -->
+        <div class="tab-content active" id="ruankao-check-list">
+        <div class="progress"><i id="ruankao-chkBar"></i></div>
+        <div class="progress-label" id="ruankao-chkLabel">已掌握 0 / 0</div>
+        <div class="chk-head"><h3>① 计算机系统 &amp; 软件基础</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据表示：原码/反码/补码/移码与定点/浮点</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>存储体系：Cache 映射、主存编址</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>I/O 接口功能、中断与 DMA</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>程序语言翻译基础（编译/解释）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据结构：线性表/树/图、排序与查找、时间复杂度</span></label>
+        <div class="chk-head"><h3>② 操作系统 &amp; 网络</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>进程管理：PV 操作、进程状态、死锁</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>存储管理：分页/分段/虚拟内存</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>文件管理：目录/空闲空间管理</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>网络：OSI 七层 / TCP-IP、IP/端口</span></label>
+        <div class="chk-head"><h3>③ 数据库基础 &amp; 关系理论</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据模型三要素；三级模式两级映像</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DBMS 功能与体系</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>关系代数：σ/π/⋈/×/÷ 与等价转换（每年必考）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>关系演算（元组/域）</span></label>
+        <div class="chk-head"><h3>④ SQL 语言</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DDL：建库/表/约束</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DML：增删改查、连接</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>嵌套查询、聚合函数、分组</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>视图、授权 GRANT/REVOKE</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>触发器、存储过程（下午高频）</span></label>
+        <div class="chk-head"><h3>⑤ 数据库设计 &amp; 规范化</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>E-R 图建模与「1:1 / 1:n / m:n」转换规则</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>候选键/主键/外键求取（属性闭包）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>1NF–BCNF 判定与模式分解（保持函数依赖/无损）</span></label>
+        <div class="chk-head"><h3>⑥ 事务 &amp; 运维</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>ACID 特性</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>并发控制：三级封锁协议、隔离级别</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>死锁：预防/检测/解除</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>故障恢复：日志、检查点、备份策略</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>性能调优、安全管理</span></label>
+        <div class="chk-head"><h3>⑦ 新技术 &amp; 软件工程 &amp; 标准化</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>NoSQL 分类、分布式数据库（2026 扩展考点）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>软件生命周期、开发模型、软件测试</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>标准化与知识产权、专业英语</span></label>
+        </div>
+
+      <!-- DATADEV DAILY · 数据开发每日学习中心 -->
+      <section class="page" id="datadev-daily">
+        <h1 class="doc-title">📅 每日学习中心 · 数据开发阶段</h1>
+        <div class="doc-sub">CDGA 考后、软考后的工程实战冲刺：先阿里云 ACP 大数据（开发方向）→ 再 Databricks DE Associate，约 13 周（2027-05-15 → 2027-08-07）。选日期打开当天任务，打卡自动保存本机。ACP：在线实验+上机，100 分 80 分过；Databricks：45 选择、90 分钟、$200、70% 过、2 年有效。大纲以官方当年公告为准；本页为唯一来源。</div>
+        <div class="stage-bar" data-stage-for="datadev-daily"></div>
+        <div class="heat-title">📊 打卡日历（<span id="datadev-total">91</span> 天 · 点格子跳到那天）</div>
+        <div class="gen-heat" style="margin:8px 0 14px"></div>
+        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <input type="date" class="gen-date">
+          <button class="gen-prev" type="button">← 前一天</button>
+          <button class="gen-next" type="button">后一天 →</button>
+          <button class="gen-start" type="button">回到第一天</button>
+          <span id="datadev-done" style="margin-left:auto;color:var(--muted)"></span>
+        </div>
+        <div class="gen-card"></div>
+        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 看课/实验 → 阅读 → 自测/动手 → 打卡。工作日约 1–1.5h（平台文档+选择题），周末约 2.5–3h（动手实验/写 SQL+Pipeline）。ACP 重 MaxCompute/DataWorks/Flink 实操；Databricks 重 Spark SQL/Delta/Lakehouse 实战。进度存本机。</div>
+      </section>
+
+        <!-- 数据开发自查 -->
+        <div class="tab-content" id="datadev-check-list">
+        <div class="progress"><i id="datadev-chkBar"></i></div>
+        <div class="progress-label" id="datadev-chkLabel">已掌握 0 / 0</div>
+        <div class="chk-head"><h3>① 阿里云 ACP · 平台与 MaxCompute</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>阿里云大数据产品体系（MaxCompute/DataWorks/Flink/Hologres/ES）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>MaxCompute 架构与基本概念（SaaS 模式云数仓）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>MaxCompute SQL：DDL/DML/常见内置函数</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>MaxCompute 权限管理与安全（RAM/项目级授权）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>MaxCompute 性能调优与数据迁移（Tunnel/数据同步）</span></label>
+        <div class="chk-head"><h3>② 阿里云 ACP · DataWorks 与实时</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DataWorks 数据集成（离线/实时同步）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DataWorks 数据建模与数据开发运维</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>DataWorks 数据质量监控与任务调度</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Flink 实时计算 SQL 与作业调优</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Hologres 实时数仓特性与应用</span></label>
+        <div class="chk-head"><h3>③ 阿里云 ACP · 检索 / 数据湖 / 可视化</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Elasticsearch DSL 开发与性能优化</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据湖 OSS/EMR 方案；PAI 机器学习；Quick BI/DataV 可视化</span></label>
+        <div class="chk-head"><h3>④ Databricks · Lakehouse 与 Delta</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Databricks 平台架构、计算选型（all-purpose vs job cluster/serverless）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Delta Lake ACID（_delta_log）、MERGE INTO、time travel（VERSION/TIMESTAMP AS OF）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>OPTIMIZE / Z-Ordering / Liquid Clustering / VACUUM</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Medallion 架构（Bronze→Silver→Gold）与数据质量 expectations</span></label>
+        <div class="chk-head"><h3>⑤ Databricks · 摄取 / 转换 / 治理</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Auto Loader（schema enforcement/evolution）与 COPY INTO 增量摄取</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>PySpark/Spark SQL 转换、连接、去重、聚合、半结构化数据</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Structured Streaming（trigger/output mode/watermark/checkpoint）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Unity Catalog（catalog.schema.table、GRANT/REVOKE/行级安全/血缘）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>Lakeflow Jobs/DLT 编排；CI/CD（Repos/DABs/CLI）</span></label>
+        </div>
+
+      <!-- CDGP DAILY · CDGP每日学习中心 -->
+      <section class="page" id="cdgp-daily">
+        <h1 class="doc-title">📅 每日学习中心 · CDGP 阶段</h1>
+        <div class="doc-sub">CDGA 之后、数据开发证之后顺延启动（2027-08-08 → 2028-02-07，约 26 周）。线下闭卷笔试 130 分钟、100 分 60 分过；单选 10 题(10)+多选 15 题(30)+论述 6 题(60)，三部分各自 ≥40%。论述题是核心战场。选日期打开当天任务，打卡自动保存本机。</div>
+        <div class="stage-bar" data-stage-for="cdgp-daily"></div>
+        <div class="heat-title">📊 打卡日历（<span id="cdgp-total">182</span> 天 · 点格子跳到那天）</div>
+        <div class="gen-heat" style="margin:8px 0 14px"></div>
+        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <input type="date" class="gen-date">
+          <button class="gen-prev" type="button">← 前一天</button>
+          <button class="gen-next" type="button">后一天 →</button>
+          <button class="gen-start" type="button">回到第一天</button>
+          <span id="cdgp-done" style="margin-left:auto;color:var(--muted)"></span>
+        </div>
+        <div class="gen-card"></div>
+        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 精读 DMBOK → 收集案例 → 论述练笔/选择题 → 打卡。工作日约 1–1.5h，周末约 2.5–3h（重点在「每天 1–2 道论述、15 分钟内写完、对照答案自评」）。前段知识深化、后段真题演练；各知识域备 1–2 个分析框架 + 思维导图。进度存本机。</div>
+      </section>
+
+        <!-- CDGP 自查 -->
+        <div class="tab-content" id="cdgp-check-list">
+        <div class="progress"><i id="cdgp-chkBar"></i></div>
+        <div class="progress-label" id="cdgp-chkLabel">已掌握 0 / 0</div>
+        <div class="chk-head"><h3>① 战略规划与成熟度</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据治理成熟度模型（L1 初始 → L5 优化）与评估方法</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>3–5 年治理路线图设计（现状→目标→路径→风险）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>治理 KPI 体系与向高管汇报价值</span></label>
+        <div class="chk-head"><h3>② 治理组织架构</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据治理委员会（决策层）组成与职责</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>CDO / 数据管家（执行层）/ 数据 Owner（问责层）/ 数据消费者（使用层）职责边界</span></label>
+        <div class="chk-head"><h3>③ 数据架构治理与建模</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>CIF 企业信息工厂、数仓棋子视图等经典架构</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>架构评审流程、架构变更管理与技术债管理</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>信息工程表示法、维度建模技术与模型-质量衔接</span></label>
+        <div class="chk-head"><h3>④ 数据质量</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>六大质量维度（准确性/完整性/一致性/及时性/唯一性/有效性）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>质量度量、根因分析与「发现-度量-分析-改进-监控」闭环</span></label>
+        <div class="chk-head"><h3>⑤ 元数据与主数据</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>业务/技术/操作元数据类型；血缘分析与影响分析</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>元数据仓库建设、数据资产目录应用</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>主数据识别、主数据模型与管理平台规划</span></label>
+        <div class="chk-head"><h3>⑥ 数据安全与前沿</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据分类分级、脱敏技术与访问控制机制</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>GDPR 等隐私法规、数据安全事件应急响应</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据湖 vs 数据仓库架构对比</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>前沿：数据跨境流通/隐私计算/数据要素/数据编织/主动元数据管理</span></label>
+        <div class="chk-head"><h3>⑦ 题型与答题</h3></div>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>论述题「问题分析-理论依据-方案设计-预期效果」四段结构</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>多选题拆解干扰（语境关系图、概念片段分散）</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"><span>三部分各自 ≥40%：单选争取 8+、多选争取 22+、论述 ≥30</span></label>
         </div>
       </section>
 
       <!-- PHD PLAN -->
-      <section class="page" id="phd-plan">
-        <h1 class="doc-title">🏛️ 上海交通大学在职博士申请计划（修正版 v2）</h1>
-        <div class="doc-sub">数据治理 / 电力数据方向 · 非全日制工程博士 · 目标入学 <b>2028-09</b></div>
+            <!-- PHD: 博士申请 -->
+      <section class="page" id="phd">
+        <h1 class="doc-title">🏛️ 上海交通大学在职博士申请</h1>
+        <div class="doc-sub">数据治理 / 电力数据方向 · 非全日制工程博士 · 目标入学 <b>2028-09</b>。申请计划、推荐信模板、官方网址一站式查看。</div>
 
-        <div class="callout danger"><span class="ct">🔴 关键修正</span>硕士已于 <b>2025-03 在日本毕业</b>（非 2028）。工龄时钟早已启动——到今天（2026-08）已工作约 <b>1.5 年</b>，3 年工龄红线在 <b>2028-03</b>，最理想入学节点就是 <b>2028-09</b>。CDGA（2027-03）正好卡在申请前一年，是申请前能拿到的最硬背书。</div>
-        <div class="callout info"><span class="ct">跨学科约束</span>硕士为<b>艺术类</b>，但上海交大非全日制工程博士要求「硕士或学士至少一个为理工科」——<b>本科为理工科，门槛已满足</b>，工程博士路线成立。推荐信「须含硕士导师」硬要求不受影响。</div>
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="phd-plan-panel" type="button">📋 申请计划</button>
+          <button class="tab-btn" data-tab="phd-reco-panel" type="button">✉️ 推荐信</button>
+          <button class="tab-btn" data-tab="phd-urls-panel" type="button">🌐 网址汇总</button>
+        </div>
 
-        <h2>一、时间线倒推（关键里程碑）</h2>
+        <div class="tab-content active" id="phd-plan-panel">
+<h2>一、时间线倒推（关键里程碑）</h2>
         <div class="timeline">
           <div class="tl-item done"><div class="when">2025-03</div><div class="what">日本硕士毕业</div><div class="desc">✅ 已完成，需补国外学历认证（CSCSE）</div></div>
           <div class="tl-item done"><div class="when">2026-08</div><div class="what">当前</div><div class="desc">已工作约 1.5 年，CDGA 备考中</div></div>
@@ -1928,14 +2112,11 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <p><b>2027（筑基）</b>：CDGA 到手+续考 CDGP；主导 1 个数据治理项目；结识 2 位推荐人；9 月盯 2028 简章；联系导师、启动研究计划。</p>
         <p><b>2028 H1（冲刺）</b>：出 1 篇论文/专利；备齐材料；网报+复试；9 月入学。</p>
         <div class="doc-sub" style="border:none;margin-top:24px">修正日期 2026-08-14（v2）· 目标入学 2028-09 · 所有年限/方向/名额以申请当年官方简章为准。</div>
-      </section>
+      
+        </div>
 
-      <!-- PHD RECO -->
-      <section class="page" id="phd-reco">
-        <h1 class="doc-title">✉️ 上海交通大学博士推荐信 · 格式要求与模板</h1>
-        <div class="doc-sub">适用：非全日制工程博士（电子信息/电气/能源动力等）申请-考核制 · 更新 2026-08-14</div>
-
-        <h2>一、提交机制（最重要）</h2>
+        <div class="tab-content" id="phd-reco-panel">
+<h2>一、提交机制（最重要）</h2>
         <ul>
           <li><b>全程系统在线提交，无纸质版</b>。填推荐人姓名+邮箱，系统自动发邮件 → 推荐人点链接在线填写提交。</li>
           <li><b>硕士导师须用本人高校邮箱提交</b>。务必确认他能收到并用学校官方邮箱（如 <code>@xxx.ac.jp</code>）收系统信。</li>
@@ -2016,14 +2197,11 @@ Date: [Month] [Year]</code></pre>
           <li>发续旧/请托邮件时附：中文简历 + 对应模板（英文版给日本导师）。</li>
           <li>草稿要具体、有事例、不夸大，避免材料不实风险。</li>
         </ul>
-      </section>
+      
+        </div>
 
-      <!-- PHD URLS -->
-      <section class="page" id="phd-urls">
-        <h1 class="doc-title">🌐 上海交通大学在职博士 · 申请网址汇总</h1>
-        <div class="doc-sub">核实日期 2026-08-14 · 链接来自交大研招网及各院系 2026 招生通知 · 简章每年更新，以当年官方页面为准</div>
-
-        <h2>一、官方总入口</h2>
+        <div class="tab-content" id="phd-urls-panel">
+<h2>一、官方总入口</h2>
         <div class="tbl-wrap"><table>
           <thead><tr><th>名称</th><th>网址</th><th>用途</th></tr></thead>
           <tbody>
@@ -2079,14 +2257,141 @@ Date: [Month] [Year]</code></pre>
           <li><b>站内搜索词</b>：<code>非全日制工程类专业学位博士</code> <code>申请-考核</code> <code>博士招生报名通知</code>。</li>
           <li>报名前必做：联系导师拿到同意 + 推荐人邮箱就位。</li>
         </ol>
+      
+        </div>
       </section>
 
-    </div>
+<!-- PHD RECO -->
+      <!-- PHD URLS -->
+      </div>
   </main>
 </div>
 
 <script src="资料/articles.js"></script>
 <script>
+/* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
+var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
+var API_PROXY = window.location.origin + "/api";
+var REST_URL = API_PROXY + "/v1/rdb/rest";
+
+var cloudReady = false;
+var accessToken = null;
+
+// 生成随机 device ID
+function genDeviceId() {
+  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random()*16|0, v = c==='x'?r:(r&0x3|0x8);
+    return v.toString(16);
+  });
+}
+
+// 匿名登录：通过代理获取 access token
+async function cloudbaseAnonLogin() {
+  var url = API_PROXY + '/auth/v1/signin/anonymously?client_id=' + CLOUDBASE_ENV;
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=UTF-8',
+      'x-device-id': genDeviceId(),
+      'x-sdk-version': '@cloudbase/js-sdk/3.7.1'
+    },
+    body: '{}'
+  });
+  if (!res.ok) {
+    var err = await res.json();
+    throw new Error(err.error_description || err.message || 'auth failed');
+  }
+  return res.json();
+}
+
+// 轻量级 PostgREST API 封装（通过代理）
+var cloud = {
+  from: function(table) {
+    var headers = {
+      'Content-Type': 'application/json'
+    };
+    if (accessToken) {
+      headers['Authorization'] = 'Bearer ' + accessToken;
+    }
+    var base = REST_URL + '/' + table;
+    return {
+      select: async function(cols) {
+        var url = base + '?select=' + encodeURIComponent(cols || '*');
+        var res = await fetch(url, { headers: headers });
+        if (!res.ok) throw new Error((await res.text()) || res.statusText);
+        return { data: await res.json(), error: null };
+      },
+      upsert: async function(rows, opts) {
+        var qs = opts && opts.onConflict ? '?on_conflict=' + opts.onConflict : '';
+        var res = await fetch(base + qs, {
+          method: 'POST',
+          headers: Object.assign({}, headers, { 'Prefer': 'resolution=merge-duplicates' }),
+          body: JSON.stringify(rows)
+        });
+        if (!res.ok) throw new Error((await res.text()) || res.statusText);
+        return { error: null };
+      },
+      delete: async function() {
+        return {
+          eq: async function(col, val) {
+            var url = base + '?' + col + '=eq.' + encodeURIComponent(val);
+            var res = await fetch(url, { method: 'DELETE', headers: headers });
+            if (!res.ok) throw new Error((await res.text()) || res.statusText);
+            return { error: null };
+          }
+        };
+      }
+    };
+  }
+};
+
+// 初始化：匿名登录 → 从云端加载数据到 localStorage
+(async function initCloud() {
+  try {
+    var loginResult = await cloudbaseAnonLogin();
+    if (loginResult && loginResult.access_token) {
+      accessToken = loginResult.access_token;
+      console.log('匿名登录成功');
+    }
+
+    var result = await cloud.from('user_data').select('key,value');
+    if (result.error) throw result.error;
+    if (result.data) {
+      result.data.forEach(function(row) {
+        localStorage.setItem(row.key, JSON.stringify(row.value));
+      });
+    }
+    cloudReady = true;
+    console.log('✅ 云端已连接，同步了 ' + (result.data ? result.data.length : 0) + ' 条数据');
+  } catch (e) {
+    console.warn('⚠️ 云端连接失败，使用本地缓存:', e.message);
+  }
+})();
+
+// 拦截 localStorage.setItem，同步写入云端
+var _origSetItem = localStorage.setItem.bind(localStorage);
+localStorage.setItem = function(key, value) {
+  _origSetItem(key, value);
+  if (!cloudReady) return;
+  try {
+    cloud.from('user_data').upsert({
+      key: key,
+      value: JSON.parse(value),
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'key' }).catch(function(){});
+  } catch (e) {}
+};
+
+// 拦截 localStorage.removeItem
+var _origRemoveItem = localStorage.removeItem.bind(localStorage);
+localStorage.removeItem = function(key) {
+  _origRemoveItem(key);
+  if (!cloudReady) return;
+  try {
+    cloud.from('user_data').delete().eq('key', key).catch(function(){});
+  } catch (e) {}
+};
+
 /* ---------- Theme ---------- */
 const html=document.documentElement;
 const saved=localStorage.getItem('bb-theme');
@@ -2098,12 +2403,32 @@ document.getElementById('themeBtn').onclick=()=>{
 
 /* ---------- Nav ---------- */
 const crumbs=document.getElementById('crumbs');
-const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','cdga-ladder':'三级进阶总规划','phd-plan':'申请计划','phd-reco':'推荐信格式与模板','phd-urls':'申请网址汇总','my-progress':'我的进度'};
-const GROUP={'cdga-daily':'今日','my-progress':'今日','cdga-plan':'备考 CDGA','cdga-check':'备考 CDGA','cdga-quiz':'备考 CDGA','cdga-res':'资料','cdga-news':'资讯','cdga-sources':'资讯','cdga-ladder':'进阶考证','phd-plan':'读博 交大','phd-reco':'读博 交大','phd-urls':'读博 交大',home:'关于本站'};
+const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','daily':'每日学习中心','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','advanced-plan':'进阶考证总规划','phd':'博士申请','my-progress':'我的进度','ruankao-daily':'软考每日中心','datadev-daily':'数据开发每日中心','cdgp-daily':'CDGP每日中心','advanced-check':'进阶考证自查清单'};
+const GROUP={'daily':'今日','cdga-daily':'今日','my-progress':'今日','cdga-plan':'CDGA 主备考','cdga-check':'CDGA 主备考','cdga-quiz':'CDGA 主备考','cdga-res':'资料资讯','cdga-news':'资料资讯','cdga-sources':'资料资讯','advanced-plan':'进阶考证','advanced-check':'进阶考证','phd':'读博 交大',home:'关于本站'};
+const EXAM_STAGES=[
+  {id:'cdga-daily',name:'CDGA 数据治理工程师',start:'2026-08-15',end:'2027-02-12'},
+  {id:'ruankao-daily',name:'软考·数据库系统工程师',start:'2027-03-15',end:'2027-05-23'},
+  {id:'datadev-daily',name:'数据开发工程师证书',start:'2027-05-15',end:'2027-08-07'},
+  {id:'cdgp-daily',name:'CDGP 数据治理专家',start:'2027-08-08',end:'2028-02-07'}
+];
+function navTodayISO(){ return new Date().toLocaleDateString('sv'); }
+function stageForDate(iso){
+  for(const s of EXAM_STAGES){ if(iso>=s.start && iso<=s.end) return s; }
+  // 不在任何阶段：返回最近的未来阶段，或最早的阶段
+  for(const s of EXAM_STAGES){ if(iso<s.start) return s; }
+  return EXAM_STAGES[EXAM_STAGES.length-1];
+}
+function currentStage(){ return stageForDate(navTodayISO()); }
 function showPage(id){
+  // 统一的每日学习中心入口：按当前日期自动落到对应考试阶段
+  if(id==='daily') id=currentStage().id;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el=document.getElementById(id); if(el)el.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    const np=n.dataset.page;
+    const active = np===id || (np==='daily' && EXAM_STAGES.some(s=>s.id===id));
+    n.classList.toggle('active', active);
+  });
   const grp=GROUP[id]||'';
   crumbs.innerHTML = '备考资料中心 / '+(grp?'<b>'+grp+'</b> / ':'')+'<b>'+(titles[id]||'')+'</b>';
   document.querySelector('.content').scrollTo({top:0});
@@ -2112,7 +2437,68 @@ function showPage(id){
   if(id==='cdga-sources')renderSources();
   window.scrollTo({top:0});
   closeSidebar();
+  // 阶段切换后刷新阶段导航条高亮
+  renderStageBars(id);
 }
+
+/* 渲染每日学习中心顶部的考试阶段导航条 */
+function escStage(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function renderStageBars(activeStageId){
+  const bars=document.querySelectorAll('.stage-bar');
+  bars.forEach(bar=>{
+    const today=navTodayISO();
+    const currentStageForBar=stageForDate(today);
+    let html='<div class="stage-bar-title">📍 当前学习任务所属考试</div>';
+    EXAM_STAGES.forEach(s=>{
+      const isActive=s.id===activeStageId;
+      const isCurrent=s.id===currentStageForBar.id;
+      const badge=isCurrent?'<span style="font-size:10px;background:var(--green);color:#fff;padding:1px 5px;border-radius:99px;margin-left:4px">当前</span>':'';
+      html+='<button class="stage-chip '+(isActive?'active':'')+'" data-stage="'+s.id+'" type="button"><span class="sn">'+escStage(s.name)+'</span><span class="sd">'+s.start+'~'+s.end.slice(5)+'</span>'+badge+'</button>';
+    });
+    bar.innerHTML=html;
+  });
+  document.querySelectorAll('.stage-chip').forEach(b=>{
+    b.onclick=()=>showPage(b.dataset.stage);
+  });
+}
+
+/* 日期变化时，若跨阶段则自动切换 */
+function maybeSwitchStageByDate(iso){
+  const s=stageForDate(iso);
+  const active=document.querySelector('.page.active');
+  if(!active || active.id===s.id) return;
+  showPage(s.id);
+}
+
+/* 初始化阶段导航条 */
+renderStageBars('cdga-daily');
+
+/* tab 切换通用函数 */
+function initTabs(wrapId){
+  const wrap=document.getElementById(wrapId);
+  if(!wrap) return;
+  const btns=wrap.querySelectorAll('.tab-btn');
+  const tabs=wrap.querySelectorAll('.tab-content');
+  btns.forEach(b=>{
+    b.onclick=()=>{
+      const id=b.dataset.tab;
+      btns.forEach(x=>x.classList.toggle('active',x===b));
+      tabs.forEach(t=>t.classList.toggle('active',t.id===id));
+    };
+  });
+}
+initTabs('advanced-check');
+initTabs('advanced-plan');
+initTabs('phd');
+function switchAdvancedTab(tabId){
+  showPage('advanced-plan');
+  const wrap=document.getElementById('advanced-plan'); if(!wrap)return;
+  const btns=wrap.querySelectorAll('.tab-btn');
+  const tabs=wrap.querySelectorAll('.tab-content');
+  btns.forEach(b=>b.classList.toggle('active',b.dataset.tab===tabId));
+  tabs.forEach(t=>t.classList.toggle('active',t.id===tabId));
+}
+
 document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>showPage(n.dataset.page));
 document.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dataset.goto));
 
@@ -2213,6 +2599,32 @@ function updateLadderProgress(){
   if(!all.length)return;
   const done=[...all].filter(c=>c.checked).length;
   const target=document.getElementById('ladderProgress');
+  if(target)target.textContent=`已完成 ${done} / ${all.length}`;
+}
+
+/* ---------- Data-Dev checklist ---------- */
+const DATADEV_KEY='bb-datadev-checks';
+function loadDataDev(){try{return JSON.parse(localStorage.getItem(DATADEV_KEY))||{}}catch(e){return{}}}
+function saveDataDev(o){localStorage.setItem(DATADEV_KEY,JSON.stringify(o))}
+(function initDataDev(){
+  const state=loadDataDev();
+  document.querySelectorAll('#datadev-checks input[type=checkbox]').forEach(c=>{
+    const k=c.dataset.key;
+    c.checked=!!state[k];
+    c.addEventListener('change',()=>{
+      const s=loadDataDev();s[k]=c.checked;saveDataDev(s);
+      c.closest('label').classList.toggle('checked',c.checked);
+      updateDataDevProgress();
+    });
+    c.closest('label').classList.toggle('checked',c.checked);
+  });
+  updateDataDevProgress();
+})();
+function updateDataDevProgress(){
+  const all=document.querySelectorAll('#datadev-checks input[type=checkbox]');
+  if(!all.length)return;
+  const done=[...all].filter(c=>c.checked).length;
+  const target=document.getElementById('datadevProgress');
   if(target)target.textContent=`已完成 ${done} / ${all.length}`;
 }
 
@@ -2718,7 +3130,7 @@ const DAY_ROLES=[
   {t:'案例 / 画图练习',h:'画一张图或写一张案例卡（血缘 / 分层 / 模型）'},
   {t:'自测 + 错题整理',h:'从自测题抽 1–2 题写出答案与理由，归错题本'}
 ];const WEEKS=[
- {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'看 Ch1《数据管理》全片（18min）+ 6h 速成版前 1h（概览）',vWeekend:'看 cv11《认证介绍+17章大纲》（30min）+ 经验分享 exp（12min）',vWorkVideos:[['Ch1 数据管理',U.c1,'精读',18,'P1']],vWeekendVideos:[['⭐ 6h 速成（概览）',U.whole,'浏览',60,'P3'],['cv11 大纲',U.cv11,'精读',30,'P1'],['一次过经验',U.exp,'浏览',12,'P3']]},
+ {w:1,start:'2026-08-15',end:'2026-08-21',stage:'准备',focus:'认知全貌 / 资料与报名',domains:['all'],milestone:'教材已下单；场次已定；仓库已建',vWork:'看 Ch1《数据管理》全片（18min）+ 6h 速成版前 1h（概览）',vWeekend:'看 cv11《认证介绍+17章大纲》（30min）+ 经验分享 exp（12min）',vWorkVideos:[['Ch1 数据管理',U.c1,'精读',18,'P1']],vWeekendVideos:[['cv11 大纲',U.cv11,'精读',30,'P1'],['一次过经验',U.exp,'浏览',12,'P3']]},
  {w:2,start:'2026-08-22',end:'2026-08-28',stage:'准备',focus:'数据管理概述 / 思维导图',domains:['十一、数据管理概述'],milestone:'🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词',vWork:'Ch1 数据管理 二刷（每天 30min）；Ch2 数据处理伦理（9min）',vWeekend:'#9 数语《数据行业职业发展》(40min) + cv11 大纲再读',vWorkVideos:[['Ch1 数据管理',U.c1,'精读',30,'P1'],['Ch2 数据伦理',U.c2,'精读',9,'P1']],vWeekendVideos:[['#9 职业发展',U.b9,'浏览',40,'P3'],['cv11 大纲',U.cv11,'浏览',30,'P2']]},
  {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch3 数据治理（24min，分两天看完）',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷',vWorkVideos:[['Ch3 数据治理',U.c3,'精读',24,'P1']],vWeekendVideos:[['#3 数语·数据治理',U.b3,'精读',150,'P2']]},
  {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'Ch13 数据质量（22min）+ Ch12 元数据管理（15min）',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + Ch13/12 二刷',vWorkVideos:[['Ch13 数据质量',U.c13,'精读',22,'P1'],['Ch12 元数据',U.c12,'精读',15,'P1']],vWeekendVideos:[['#2 尚硅谷·元数据',U.b2,'精读',150,'P2'],['#6 资产目录',U.b6,'浏览',60,'P3']]},
@@ -2778,7 +3190,7 @@ const heatBest=document.getElementById('heatBest');
 function buildHeat(){
   if(!heatGrid) return;
   heatGrid.innerHTML=DAILY.map(x=>`<div class="hl-cell" data-iso="${x.iso}" title="${x.iso} ${x.wd} · W${x.w}"></div>`).join('');
-  heatGrid.querySelectorAll('.hl-cell').forEach(c=>c.onclick=()=>{const d=DAILY_BY_ISO[c.dataset.iso];if(d){dayDate.value=c.dataset.iso;renderDay(c.dataset.iso);}});
+  heatGrid.querySelectorAll('.hl-cell').forEach(c=>c.onclick=()=>{const d=DAILY_BY_ISO[c.dataset.iso];if(d){dayDate.value=c.dataset.iso;renderDay(c.dataset.iso); maybeSwitchStageByDate(c.dataset.iso);}});
   if(heatMonths){
     heatMonths.innerHTML=WEEKS.map(wk=>{
       const cur=wk.start.slice(5,7);
@@ -2833,7 +3245,7 @@ function renderWeekStrip(activeW){
 }
 function gotoDay(n){
   n=Math.max(1,Math.min(DAILY.length,n));
-  const iso=DAILY[n-1].iso; dayDate.value=iso; renderDay(iso);
+  const iso=DAILY[n-1].iso; dayDate.value=iso; renderDay(iso); maybeSwitchStageByDate(iso);
 }
 
 /* ---------- 主动投递:本周主题 + spaced repetition 复习提醒 ---------- */
@@ -2936,6 +3348,7 @@ const WEEK_META = {
   24:'W24 · 全量回炉', 25:'W25 · 模拟考1', 26:'W26 · 模拟考2+查漏'
 };
 function escH(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function fmtDur(sec){ if(sec==null) return ''; const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; if(h>0) return h+'h'+String(m).padStart(2,'0')+'m'; if(m>0) return m+'min'+(s?' '+s+'s':''); return s+'s'; }
 function conceptText(i){
   const cb = document.querySelectorAll('#cdga-check .chk')[i];
   if(cb){
@@ -3017,6 +3430,44 @@ const VIDEO_SERIES=[
     {url:U.cv11,idx:1},{url:U.cv12,idx:2},{url:U.cv13,idx:3}
   ]}
 ];
+
+// ===== 分P视频真实数据（自动抓取 B站 pagelist，2026-08-16）=====
+const VIDEO_PARTS={
+  "BV1qv411y7Wv":[{p:1,t:"00-【开篇】课程介绍&学习指南",d:411},{p:2,t:"01-【简介】数据仓库诞生背景",d:315},{p:3,t:"02-【简介】数据仓库概述",d:490},{p:4,t:"03-【简介】数据仓库技术实现（上）",d:327},{p:5,t:"04-【简介】数据仓库技术实现（下）",d:413},{p:6,t:"05-【简介】MPP&分布式架构（上）",d:354},{p:7,t:"06-【简介】MPP&分布式架构（下）",d:372},{p:8,t:"07-【简介】常见数据仓库产品",d:495},{p:9,t:"08-【架构】数据仓库架构设计",d:509},{p:10,t:"09-【架构】ETL流程（上）",d:366},{p:11,t:"10-【架构】ETL流程（下）",d:157},{p:12,t:"11-【架构】数据积存功能之ODS层",d:308},{p:13,t:"12-【架构】数据分析功能之DWD、DWS、ADS层",d:407},{p:14,t:"13-【建模】不同系统的建模方法",d:358},{p:15,t:"14-【建模】ROLAP维度模型",d:495},{p:16,t:"15-【建模】MOLAP建模方法",d:279},{p:17,t:"16-【建模】多维分析",d:255},{p:18,t:"17-【最佳实践】数仓中的表类型（上）",d:497},{p:19,t:"18-【最佳实践】数仓中的表类型（下）",d:480},{p:20,t:"19-【最佳实践】ETL同步策略",d:389},{p:21,t:"20-【最佳实践】任务调度",d:189},{p:22,t:"21-【项目实战】项目&数据概述",d:296},{p:23,t:"22-【项目实战】架构设计&环境规划",d:262},{p:24,t:"23-【项目实战】环境搭建01（虚拟机）",d:688},{p:25,t:"24-【项目实战】环境搭建02（XShell）",d:253},{p:26,t:"25-【项目实战】环境搭建03（脚本准备）",d:890},{p:27,t:"26-【项目实战】环境搭建04（集群安装）",d:863},{p:28,t:"27-【项目实战】项目流程&数据生成",d:379},{p:29,t:"28-【项目实战】ETL数据导入、",d:1022},{p:30,t:"29-【项目实战】ODS层创建&数据接入",d:643},{p:31,t:"30-【项目实战】DWD层创建&数据接入",d:551},{p:32,t:"31-【项目实战】DWS层创建&数据接入",d:1119},{p:33,t:"32-【项目实战】ADS层复购率统计",d:444},{p:34,t:"33-【项目实战】ADS层数据导出",d:662},{p:35,t:"34-【项目实战】Azkaban自动化调度",d:803},{p:36,t:"35-【课后作业】GMV成交总额计算",d:130},{p:37,t:"36-【课后作业】ADS层创建&数据接入",d:374},{p:38,t:"37-【课后作业】ADS层数据导出",d:338},{p:39,t:"38-【课后作业】Azkaban自动化调度",d:459}],
+  "BV1jA411F76d":[{p:1,t:"01.Atlas课程介绍",d:414},{p:2,t:"02.Atlas概述",d:445},{p:3,t:"03.Atlas架构讲解",d:928},{p:4,t:"04.Atlas部署-安装环境介绍",d:396},{p:5,t:"05.Atlas部署-三台虚拟机准备",d:1170},{p:6,t:"06.Atlas部署-配置免密登录和JDK的安装",d:1074},{p:7,t:"07.Atlas部署-Hadoop集群的安装和启动",d:1043},{p:8,t:"08.Atlas部署-MySQL安装部署",d:767},{p:9,t:"09.Atlas部署-Hive安装部署",d:1269},{p:10,t:"10.Atlas部署-ZooKeeper安装部署",d:391},{p:11,t:"11.Atlas部署-Kafka安装部署",d:692},{p:12,t:"12.Atlas部署-HBase安装部署",d:513},{p:13,t:"13.Atlas部署-Solr安装部署",d:781},{p:14,t:"14.Atlas部署-Atlas安装和配置",d:1015},{p:15,t:"15.Atlas部署-Atlas集成Hive",d:374},{p:16,t:"16.Atlas部署-Atlas启动和登录",d:577},{p:17,t:"17.Atlas使用-元数据初次导入",d:396},{p:18,t:"18.Atlas使用-查看血缘依赖关系",d:993},{p:19,t:"19.Atlas使用-扩展内容",d:279}],
+  "BV1tFcWzeEra":[{p:1,t:"01数据管理01引言",d:450},{p:2,t:"01数据管理02基本概念",d:1973},{p:3,t:"01数据管理03数据管理框架",d:576},{p:4,t:"02数据处理伦理01引言",d:222},{p:5,t:"02数据处理伦理02业务驱动因素",d:96},{p:6,t:"02数据处理伦理03基本概念",d:915},{p:7,t:"03数据治理01引言01概述",d:871},{p:8,t:"03数据治理01引言02语境关系图",d:166},{p:9,t:"03数据治理01引言03业务驱动因素",d:537},{p:10,t:"03数据治理01引言04目标和原则",d:543},{p:11,t:"03数据治理01引言05基本概念01以数据为中心的组织和数据治理组织",d:494},{p:12,t:"03数据治理01引言05基本概念02数据治理运营模型类型",d:258},{p:13,t:"03数据治理01引言05基本概念03数据管理职责",d:59},{p:14,t:"03数据治理01引言05基本概念04数据管理岗位的类型和数据制度",d:224},{p:15,t:"03数据治理01引言05基本概念05数据资产的估值",d:177},{p:16,t:"03数据治理02活动01定义组织的数据治理",d:301},{p:17,t:"03数据治理02活动02制定数据治理战略",d:235},{p:18,t:"03数据治理02活动03实施数据治理",d:395},{p:19,t:"03数据治理02活动04嵌入数据治理",d:158},{p:20,t:"03数据治理03工具和方法",d:175},{p:21,t:"03数据治理05度量指标",d:91},{p:22,t:"04数据架构01引言",d:2218},{p:23,t:"04数据架构02活动",d:515},{p:24,t:"04数据架构05实施指南",d:594},{p:25,t:"05数据建模和设计01引言",d:4272},{p:26,t:"05数据建模和设计02活动",d:331},{p:27,t:"05数据建模和设计04方法",d:318},{p:28,t:"05数据建模和设计05数据建模和设计治理",d:170},{p:29,t:"06数据存储和运营01引言",d:926},{p:30,t:"07数据安全01引言",d:2555},{p:31,t:"07数据安全02活动",d:118},{p:32,t:"07数据安全04方法",d:77},{p:33,t:"07数据安全05实施指南",d:153},{p:34,t:"07数据安全06数据安全治理",d:174},{p:35,t:"08数据集成和互操作01引言",d:1990},{p:36,t:"08数据集成和互操作02活动",d:157},{p:37,t:"08数据集成和互操作03工具",d:151},{p:38,t:"08数据集成和互操作06数据集成和互操作治理",d:66}],
+  "BV1Yf5X6CEAU":[{p:1,t:"CDGA考试第一课-01数据管理01引言",d:450},{p:2,t:"01数据管理02基本概念",d:1973},{p:3,t:"01数据管理03数据管理框架",d:576},{p:4,t:"02数据处理伦理01引言",d:222},{p:5,t:"02数据处理伦理02业务驱动因素",d:96},{p:6,t:"02数据处理伦理03基本概念",d:915},{p:7,t:"03数据治理01引言01概述",d:871},{p:8,t:"03数据治理01引言02语境关系图",d:166},{p:9,t:"03数据治理01引言03业务驱动因素",d:537},{p:10,t:"03数据治理01引言04目标和原则",d:543},{p:11,t:"03数据治理01引言05基本概念01以数据为中心的组织和数据治理组织",d:494},{p:12,t:"03数据治理01引言05基本概念02数据治理运营模型类型",d:258},{p:13,t:"03数据治理01引言05基本概念03数据管理职责",d:59},{p:14,t:"03数据治理01引言05基本概念04数据管理岗位的类型和数据制度",d:224},{p:15,t:"03数据治理01引言05基本概念05数据资产的估值",d:177},{p:16,t:"03数据治理02活动01定义组织的数据治理",d:301},{p:17,t:"03数据治理02活动02制定数据治理战略",d:235},{p:18,t:"03数据治理02活动03实施数据治理",d:395},{p:19,t:"03数据治理02活动04嵌入数据治理",d:158},{p:20,t:"03数据治理03工具和方法",d:175},{p:21,t:"03数据治理05度量指标",d:91},{p:22,t:"04数据架构01引言",d:2218},{p:23,t:"04数据架构02活动",d:515},{p:24,t:"04数据架构05实施指南",d:594},{p:25,t:"05数据建模和设计01引言",d:4272},{p:26,t:"05数据建模和设计02活动",d:331},{p:27,t:"05数据建模和设计04方法",d:318},{p:28,t:"05数据建模和设计05数据建模和设计治理",d:170},{p:29,t:"06数据存储和运营01引言",d:926},{p:30,t:"07数据安全01引言",d:2555},{p:31,t:"07数据安全02活动",d:118},{p:32,t:"07数据安全04方法",d:77},{p:33,t:"07数据安全05实施指南",d:153},{p:34,t:"07数据安全06数据安全治理",d:174},{p:35,t:"08数据集成和互操作01引言",d:1990},{p:36,t:"08数据集成和互操作02活动",d:157},{p:37,t:"08数据集成和互操作03工具",d:151},{p:38,t:"08数据集成和互操作06数据集成和互操作治理",d:66},{p:39,t:"12.1-01-CDGA启宸-CDGA数据管理模拟题讲解01",d:3876},{p:40,t:"12.1-02-CDGA启宸-CDGA数据管理模拟题讲解02",d:2453},{p:41,t:"12.3-01-CDGA启宸-CDGA数据管理模拟题讲解03",d:3838},{p:42,t:"12.3-02-CDGA启宸-CDGA数据管理模拟题讲解04",d:2505},{p:43,t:"数据管理的通用蓝图 01.23-数据管理01",d:3828},{p:44,t:"数据管理的通用蓝图 01.23-数据管理02",d:1629},{p:45,t:"数据管理的通用蓝图 01.23-数据处理伦理01",d:1142},{p:46,t:"DAMA数据管理知识体系通关秘籍",d:5184},{p:47,t:"数据管理的通用蓝图-数据管理01",d:3599},{p:48,t:"数据管理的通用蓝图-数据管理02",d:1524},{p:49,t:"数据管理的通用蓝图-数据处理伦理01",d:1826}],
+};
+const VIDEO_DUR={
+  "BV1qv411y7Wv":18042,
+  "BV1jA411F76d":13517,
+  "BV1XZ4y1v7jR":2219,
+  "BV1gN4y137pj":1233,
+  "BV1aF411c7Rh":1408,
+  "BV1xf4y1f7Ro":825,
+  "BV1J3411u72E":328,
+  "BV1Ef4y1f7DG":271,
+  "BV1rxS5BvEbZ":1119,
+  "BV1RxS7BAEzK":565,
+  "BV1LWS7BeETP":1452,
+  "BV1CiSCBHE7Q":1112,
+  "BV1AeSCBXEZm":1760,
+  "BV1MDSWBgEsm":736,
+  "BV1GkSWB1Es8":1293,
+  "BV1sLSWBPEBU":808,
+  "BV1WESWBwEhB":723,
+  "BV1viSWBSEmj":1172,
+  "BV1AVmEBVEfn":1136,
+  "BV1p5mEBkESv":951,
+  "BV1hZm7BWET9":1374,
+  "BV1Q7mkBoEdk":1217,
+  "BV1qtmrBwEbm":713,
+  "BV1Rdbpz5EaX":444,
+  "BV1nJmrBqEhk":466,
+  "BV1tFcWzeEra":23701,
+  "BV1Yf5X6CEAU":55105,
+  "BV1vJ4m1j79C":707,
+};
 const SERIES_BY_KEY={}; VIDEO_SERIES.forEach(s=>{ s.total=s.items.length; SERIES_BY_KEY[s.key]=s; });
 const URL_TO_SERIES=(()=>{ const m={}; VIDEO_SERIES.forEach(s=>s.items.forEach(it=>{ m[it.url]={key:s.key,name:s.name,total:s.total,idx:it.idx}; })); return m; })();
 
@@ -3042,16 +3493,25 @@ function renderVideoLinks(videos){
   const metas=videos.map(videoMeta);
   const groups={}; const loose=[];
   metas.forEach(m=>{ const s=URL_TO_SERIES[m.url]; if(s){ (groups[s.key]||(groups[s.key]={series:s,items:[]})).items.push(m); } else loose.push(m); });
-  const videoRow=(m)=>{
+  const videoRow=(m,pos,total)=>{
     const s=URL_TO_SERIES[m.url];
-    const ord = s&&s.total>1 ? `<span class="dc-ord">第${s.idx}讲</span>` : '';
+    const ord = (s&&total>1) ? `<span class="dc-ord" title="今天该系列第 ${pos} / ${total} 讲">${pos}/${total}</span>` : '';
     const watched = !!videoWatched[m.url];
     const checked = watched?'checked':'';
     const done = watched?'done':'';
+    const bvidMatch=m.url.match(/BV[A-Za-z0-9]+/);
+    const bvid=bvidMatch?bvidMatch[0]:null;
+    const parts=(bvid&&VIDEO_PARTS[bvid])?VIDEO_PARTS[bvid]:null;
+    let extra='';
+    if(parts){
+      const realTotal=parts.reduce((a,p)=>a+p.d,0);
+      const partList=parts.map(p=>`<div class="dc-part"><a class="dc-part-link" href="${m.url}?p=${p.p}" target="_blank" rel="noopener" title="${escH(p.t)}">P${p.p} · ${escH(p.t)}</a><span class="dc-part-dur">${fmtDur(p.d)}</span></div>`).join('');
+      extra=`<details class="dc-parts"><summary class="dc-parts-sum">▸ 含 ${parts.length} 个分P · 真实总时长 ${fmtDur(realTotal)}（点开看每个小视频）</summary><div class="dc-part-list">${partList}</div></details>`;
+    }
     return `<label class="dc-video ${done}" data-vurl="${m.url.replace(/"/g,'&quot;')}">
       <input type="checkbox" class="dc-vchk" ${checked}>
-      <a class="dc-link" href="${m.url}" target="_blank" rel="noopener">▶ ${escH(m.title)}</a>
-      ${ord}${treatmentBadge(m.treatment)}${minutesTag(m.minutes)}${priorityBadge(m.p)}
+      ${ord}<a class="dc-link" title="${escH(m.title)}" href="${m.url}" target="_blank" rel="noopener">▶ ${escH(m.title)}</a>
+      ${treatmentBadge(m.treatment)}${minutesTag(m.minutes)}${priorityBadge(m.p)}${extra}
     </label>`;
   };
   let html='';
@@ -3059,12 +3519,13 @@ function renderVideoLinks(videos){
     g.items.sort((a,b)=>URL_TO_SERIES[a.url].idx-URL_TO_SERIES[b.url].idx);
     const fullSeries=SERIES_BY_KEY[g.series.key];
     const doneCount=fullSeries.items.filter(it=>videoWatched[it.url]).length;
+    const todayN=g.items.length;
     html+=`<div class="dc-series" data-skey="${g.series.key}">
-      <div class="dc-series-head"><span class="dc-series-name">📺 ${escH(g.series.name)}</span><span class="dc-series-prog">已看 ${doneCount}/${g.series.total}</span></div>
-      ${g.items.map(videoRow).join('')}
+      <div class="dc-series-head"><span class="dc-series-name">📺 ${escH(g.series.name)}</span><span class="dc-series-prog"><span class="dc-prog-today" title="今天这个系列要你完成的条数">今日 ${todayN} 项</span><span class="dc-prog-all" title="整个系列全集进度（含以往学过 / 补课）">全集 ${doneCount}/${g.series.total}</span></span></div>
+      ${g.items.map((m,i)=>videoRow(m, i+1, todayN)).join('')}
     </div>`;
   });
-  if(loose.length) html+=`<div class="dc-series"><div class="dc-series-head"><span class="dc-series-name">📎 其它视频</span></div>${loose.map(videoRow).join('')}</div>`;
+  if(loose.length) html+=`<div class="dc-series"><div class="dc-series-head"><span class="dc-series-name">📎 其它视频</span></div>${loose.map((m,i)=>videoRow(m, i+1, loose.length)).join('')}</div>`;
   return html;
 }
 function renderResChips(order){
@@ -3104,8 +3565,10 @@ function renderDay(iso){
   const dom=d.domains;
   const termDom = dom[0]==='all' ? '十一、数据管理概述' : dom[0];
   const terms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
-  const videoTask = d.isWeekend ? d.vWeekend : d.vWork;
-  const dayVideos = d.isWeekend ? (d.vWeekendVideos||[]) : (d.vWorkVideos||[]);
+  const isSun = d.wd==='周日';
+  const wkndVids = d.vWeekendVideos||[];
+  const videoTask = !d.isWeekend ? d.vWork : (isSun ? ('【周日·复盘消化】'+d.vWeekend) : d.vWeekend);
+  const dayVideos = !d.isWeekend ? (d.vWorkVideos||[]) : (isSun ? wkndVids.slice(1) : wkndVids.slice(0, Math.max(1, wkndVids.length-1)));
   const links=renderVideoLinks(dayVideos);
   const quizBtns=(function(){
     // 已答数：先按域筛选，再统计 practice.answers 中已作答且非空
@@ -3249,7 +3712,7 @@ function renderDay(iso){
    <p class="dc-meta">本周重点：${d.focus} ｜ 阶段：${d.stage}${d.milestone?' ｜ 🏁 本周末自检：'+d.milestone:''}</p>
    <div class="dc-grid">
      <div class="dc-block">
-       <h4>▶️ 看课 / 视频</h4>
+       <h4>▶️ 看课 / 视频${(()=>{ const n=dayVideos.length; if(!n) return ' <span class="dc-h4-meta">（今天无视频）</span>'; const m=dayVideos.reduce((s,v)=>s+(parseInt(v[3],10)||0),0); return ` <span class="dc-h4-meta">今天 <b>${n}</b> 项 · 共 <b>${m}</b>min</span>`; })()}</h4>
        <div class="dc-task">${d.isWeekend?'<b>周末</b>：':'<b>工作日晚上</b>：'}${videoTask}</div>
        <div class="dc-links">${links||'<span class="dc-meta">（冲刺期以做题为主，视频仅查漏）</span>'}</div>
      </div>
@@ -3340,7 +3803,7 @@ function renderDay(iso){
       const seriesEl=cb.closest('.dc-series');
       if(seriesEl && seriesEl.dataset.skey){
         const s=SERIES_BY_KEY[seriesEl.dataset.skey];
-        if(s){ const done=s.items.filter(it=>videoWatched[it.url]).length; const prog=seriesEl.querySelector('.dc-series-prog'); if(prog) prog.textContent='已看 '+done+'/'+s.total; }
+        if(s){ const done=s.items.filter(it=>videoWatched[it.url]).length; const allEl=seriesEl.querySelector('.dc-prog-all'); if(allEl) allEl.textContent='全集 '+done+'/'+s.total; }
       }
     };
   });
@@ -3482,7 +3945,7 @@ function openQuiz(domain,mode){
     setTimeout(()=>{const els=[].slice.call(document.querySelectorAll('#quiz-list .quiz-domain'));const t=els.find(e=>e.textContent===domain);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},60);
   } else { window.scrollTo({top:0}); }
 }
-dayDate.onchange=()=>renderDay(dayDate.value);
+dayDate.onchange=()=>{ renderDay(dayDate.value); maybeSwitchStageByDate(dayDate.value); };
 document.getElementById('dayPrev').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)-1);
 document.getElementById('dayNext').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)+1);
 document.getElementById('dayStart').onclick=()=>{dayDate.value='2026-08-15';renderDay('2026-08-15');};
@@ -3511,7 +3974,12 @@ function renderProgress(){
   const cc=countChecked('cdga-check'); cards.push(progCard('✅ 知识点自查清单',cc.done,cc.total,'cdga-check'));
   const q=getStore(QUIZ_STORE).answers||{}; cards.push(progCard('📝 原创自测练习题',Object.keys(q).length,QUIZ_TOTAL,'cdga-quiz'));
   const vc=countChecked('cdga-res'); cards.push(progCard('▶️ B站视频打卡',vc.done,vc.total,'cdga-res'));
-  const lc=countChecked('cdga-ladder'); cards.push(progCard('🏆 三级进阶行动清单',lc.done,lc.total,'cdga-ladder'));
+  const lc=countChecked('ladder-checks'); cards.push(progCard('🏆 三级进阶行动清单',lc.done,lc.total,'advanced-plan'));
+  const ddc=countChecked('datadev-checks'); cards.push(progCard('🛠️ 数据开发行动清单',ddc.done,ddc.total,'advanced-plan'));
+  const rc=countChecked('ruankao-check-list'); if(rc.total) cards.push(progCard('🗄️ 软考自查清单',rc.done,rc.total,'advanced-check'));
+  const dtc=countChecked('datadev-check-list'); if(dtc.total) cards.push(progCard('🔧 数据开发自查清单',dtc.done,dtc.total,'advanced-check'));
+  const gc=countChecked('cdgp-check-list'); if(gc.total) cards.push(progCard('📊 CDGP自查清单',gc.done,gc.total,'advanced-check'));
+  Object.keys(window.GEN||{}).forEach(p=>{const e=window.GEN[p]; if(!e)return; const done=Object.values(e.store).filter(Boolean).length; cards.push(progCard(e.cfg.progName||e.cfg.title,done,e.totalDays,e.cfg.pageId));});
   grid.innerHTML=cards.join('');
   grid.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dataset.goto));
   let best=0,run=0,lastIdx=-1;
@@ -3537,7 +4005,7 @@ buildHeat();
 renderDay('2026-08-15');
 refreshHeat();
 document.querySelector('.brand').onclick=()=>showPage('home');
-showPage('cdga-daily');
+showPage('daily');
 
 const NEWS_SEEN_KEY='cdga-news-seen';
 function newsGetSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(NEWS_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
@@ -3635,6 +4103,155 @@ function renderSources(){
   });
   renderSources();
 })();
+
+/* ===================== 通用每日中心（软考/数据开发证/CDGP 共用，独立于 CDGA） ===================== */
+window.GEN = window.GEN || {};
+function genTodayISO(){return new Date().toLocaleDateString('sv');}
+function genAddDays(iso,n){const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d.toLocaleDateString('sv');}
+function genDiffDays(start,iso){const d1=new Date(start+'T00:00:00'),d2=new Date(iso+'T00:00:00');return Math.floor((d2-d1)/86400000);}
+function genLoad(prefix,sub){try{return JSON.parse(localStorage.getItem('bb-'+prefix+'-'+sub))||{}}catch(e){return{}}}
+function genSave(prefix,sub,o){try{localStorage.setItem('bb-'+prefix+'-'+sub,JSON.stringify(o))}catch(e){}}
+
+/* 通用知识清单（独立存储键 bb-PREFIX-check / -check-dates） */
+function initGenChecks(prefix,pageId){
+  const all=document.querySelectorAll('#'+pageId+' .gchk'); if(!all.length)return;
+  const st=genLoad(prefix,'check'), dt=genLoad(prefix,'check-dates');
+  const bar=document.getElementById(prefix+'-chkBar'), lbl=document.getElementById(prefix+'-chkLabel');
+  function refresh(){const done=Object.values(st).filter(Boolean).length; if(bar)bar.style.width=(done/all.length*100)+'%'; if(lbl)lbl.textContent='已掌握 '+done+' / '+all.length;}
+  all.forEach((c,i)=>{
+    c.checked=!!st[i]; const row=c.closest('.chk-row'); if(row)row.classList.toggle('done',c.checked);
+    c.addEventListener('change',()=>{ st[i]=c.checked; genSave(prefix,'check',st); if(c.checked)dt[i]=genTodayISO(); else delete dt[i]; genSave(prefix,'check-dates',dt); if(row)row.classList.toggle('done',c.checked); refresh(); if(GEN[prefix])genRenderDay(prefix, GEN[prefix].dayEl.querySelector('.gen-date').value); });
+  });
+  refresh();
+}
+function genDue(prefix){
+  const dt=genLoad(prefix,'check-dates'), st=genLoad(prefix,'check'); const cycles=[3,7,14,30,60,90]; const due=[]; const today=new Date(genTodayISO()+'T00:00:00');
+  Object.keys(dt).forEach(k=>{ if(st[k]!==true)return; const past=new Date(dt[k]+'T00:00:00'); const days=Math.floor((today-past)/86400000); if(days<0)return; let cyc=null; for(const c of cycles){if(days>=c-1&&days<=c+1){cyc=c;break;}} if(cyc!==null)due.push({i:Number(k),days,cycle:cyc}); });
+  due.sort((a,b)=>a.cycle-b.cycle||a.days-b.days); return due;
+}
+function genConceptText(prefix,i){ const cb=document.querySelectorAll('#'+prefix+'-check-list .gchk')[i]; if(cb){const sp=cb.closest('.chk-row')&&cb.closest('.chk-row').querySelector('span'); if(sp)return sp.textContent.trim();} return '概念 '+(i+1); }
+
+/* 构建某证的每日中心 */
+function buildGenDaily(cfg){
+  const prefix=cfg.prefix, pageId=cfg.pageId, start=cfg.startISO, weeks=cfg.weeks, totalDays=weeks.length*7;
+  const days=[];
+  for(let w=0;w<weeks.length;w++)for(let d=0;d<7;d++){ const iso=genAddDays(start,w*7+d); const wd=['周日','周一','周二','周三','周四','周五','周六'][new Date(iso+'T00:00:00').getDay()]; days.push({day:w*7+d+1,w:w+1,iso,wd,isWeekend:(wd==='周六'||wd==='周日'),week:weeks[w]}); }
+  const store=genLoad(prefix,'daily');
+  const dayEl=document.getElementById(pageId); if(!dayEl)return;
+  GEN[prefix]={cfg,days,totalDays,store,dayEl};
+  const heat=dayEl.querySelector('.gen-heat');
+  if(heat){ let h=''; days.forEach(x=>{const cls=['hl-cell']; if(store[x.iso])cls.push('hl-done'); else cls.push('hl-todo'); if(x.iso===genTodayISO())cls.push('hl-today'); h+='<span class="'+cls.join(' ')+'" data-iso="'+x.iso+'" data-w="'+x.w+'" title="'+x.iso+' '+x.wd+' · W'+x.w+'"></span>';}); heat.innerHTML=h; heat.querySelectorAll('[data-iso]').forEach(s=>s.onclick=()=>genGotoDay(prefix,s.dataset.iso)); }
+  const strip=dayEl.querySelector('.gen-weekstrip');
+  if(strip){ strip.innerHTML=weeks.map((wk,i)=>'<span class="week-chip" data-w="'+(i+1)+'">W'+(i+1)+' · '+escH(wk.meta)+'</span>').join(''); strip.querySelectorAll('.week-chip').forEach(c=>c.onclick=()=>genGotoDay(prefix, genAddDays(start,(Number(c.dataset.w)-1)*7))); }
+  const dp=dayEl.querySelector('.gen-date');
+  if(dp){ let idx=genDiffDays(start,genTodayISO()); idx=Math.max(0,Math.min(days.length-1,idx)); dp.value=days[idx].iso; dp.min=start; dp.max=days[days.length-1].iso; dp.onchange=()=>{ genRenderDay(prefix,dp.value); maybeSwitchStageByDate(dp.value); }; }
+  const prev=dayEl.querySelector('.gen-prev'), next=dayEl.querySelector('.gen-next'), sb=dayEl.querySelector('.gen-start');
+  if(prev)prev.onclick=()=>{const i=days.findIndex(x=>x.iso===dp.value); genGotoDay(prefix,days[Math.max(0,i-1)].iso);};
+  if(next)next.onclick=()=>{const i=days.findIndex(x=>x.iso===dp.value); genGotoDay(prefix,days[Math.min(days.length-1,i+1)].iso);};
+  if(sb)sb.onclick=()=>genGotoDay(prefix,start);
+  const tot=document.getElementById(prefix+'-total'); if(tot)tot.textContent=totalDays;
+  const pc=document.getElementById(prefix+'-done'); if(pc)pc.textContent=Object.values(store).filter(Boolean).length+' / '+totalDays;
+  initGenChecks(prefix,cfg.checkPageId);
+  genRenderDay(prefix,dp.value);
+  if(typeof renderProgress==='function') renderProgress();
+}
+function genGotoDay(prefix,iso){ const e=GEN[prefix]; if(!e)return; const dp=e.dayEl.querySelector('.gen-date'); if(dp)dp.value=iso; genRenderDay(prefix,iso); maybeSwitchStageByDate(iso); }
+function genRenderDay(prefix,iso){
+  const e=GEN[prefix]; if(!e)return; const day=e.days.find(x=>x.iso===iso)||e.days[0]; const wk=day.week; const store=genLoad(prefix,'daily'); const done=!!store[iso];
+  const due=genDue(prefix).slice(0,6);
+  const review=due.length?'<div class="dc-review"><h4>🔁 复习提醒 ('+due.length+' 条) — 学过的按 3/7/14/30 天循环考你</h4>'+due.map(({i,days,cycle})=>'<div class="dc-review-item"><span class="dc-cycle-tag c'+(cycle<=30?cycle:30)+'">+'+cycle+'d</span><span class="dc-review-text">'+escH(genConceptText(prefix,i))+'</span></div>').join('')+'</div>':'';
+  const strip=e.dayEl.querySelector('.gen-weekstrip');
+  if(strip) strip.querySelectorAll('.week-chip').forEach(c=>c.classList.toggle('active', Number(c.dataset.w)===day.w));
+  const card=e.dayEl.querySelector('.gen-card'); if(!card)return;
+  card.innerHTML='<div class="dc-dayhead"><span class="dc-wd">'+day.wd+'</span><span class="dc-dnum">Day '+day.day+' · '+iso+'</span><span class="dc-week">'+escH(wk.meta)+'</span></div>'
+    +'<div class="dc-steps">'
+    +'<div class="dc-step"><b>🎯 今日目标</b><div>'+escH(wk.meta)+'</div></div>'
+    +'<div class="dc-step"><b>📺 看课 / 教程</b><div>'+escH(wk.watch||'（本周无专属视频，复习已学）')+'</div></div>'
+    +'<div class="dc-step"><b>📖 阅读 / 划重点</b><div>'+escH(wk.read||'（见本周任务）')+'</div></div>'
+    +'<div class="dc-step"><b>✍️ 自测 / 动手</b><div>'+escH(wk.self||'（勾选下方知识清单对应项）')+'</div></div>'
+    +'</div>'+review+'<label class="dc-check"><input type="checkbox" class="gen-daycheck" '+(done?'checked':'')+'> 今日完成打卡</label>';
+  const chk=card.querySelector('.gen-daycheck');
+  chk.onchange=()=>{ const s=genLoad(prefix,'daily'); if(chk.checked)s[iso]=true; else delete s[iso]; genSave(prefix,'daily',s); const pc=document.getElementById(prefix+'-done'); if(pc)pc.textContent=Object.values(s).filter(Boolean).length+' / '+e.totalDays; const heat=e.dayEl.querySelector('.gen-heat'); if(heat){const sp=heat.querySelector('[data-iso="'+iso+'"]'); if(sp){sp.classList.toggle('hl-done',chk.checked); sp.classList.toggle('hl-todo',!chk.checked);} } if(typeof renderProgress==='function')renderProgress(); };
+}
+
+/* ---- 软考·数据库系统工程师 配置（CDGA 后 2027-03 → 05 冲刺，10 周） ---- */
+const RUANKAO_CFG={
+  prefix:'ruankao', pageId:'ruankao-daily', checkPageId:'ruankao-check-list',
+  title:'软考·数据库系统工程师', progName:'📅 软考每日打卡',
+  startISO:'2027-03-15',
+  weeks:[
+    {w:1,meta:'计算机系统+程序语言+数据结构',watch:'教程第1章 计算机系统（组成/存储体系/Cache/I-O接口）；第2章 程序语言（编译-解释）；第3章 数据结构与算法（线性表/树/图/排序查找）',read:'划重点：数据表示（原反补移码）、Cache 映射、I-O 接口功能',self:'上午选择题：计算机系统 + 数据结构各 20 题'},
+    {w:2,meta:'操作系统+网络+数据库技术基础',watch:'教程第4章 操作系统（进程/存储/文件）；第5章 网络基础（OSI-TCP-IP）；第6章 数据库技术基础（数据模型/三级模式两级映像/DBMS）',read:'关系模型三要素、三级模式两级映像',self:'上午题：OS + 网络各 15 题'},
+    {w:3,meta:'关系数据库+SQL基础',watch:'教程第7章 关系数据库（关系代数 σ/π/⋈/×/÷、关系演算）；第8章 SQL（DDL-DML）',read:'关系代数运算等价转换（每年必考）',self:'手算关系代数 5 题；写 DDL 建表 3 题'},
+    {w:4,meta:'SQL进阶+E-R图设计',watch:'教程第8章 SQL 进阶（嵌套查询/聚合/视图/授权/触发器）；第9章 数据库设计（E-R 建模）',read:'E-R 图 → 关系模式转换规则',self:'写嵌套查询+视图+触发器各 2 题；画 E-R 图 1 套'},
+    {w:5,meta:'规范化理论+数据库设计',watch:'教程第9章 规范化（1NF–BCNF、候选键/主键/外键求取、模式分解）',read:'候选码求解（属性闭包）、保持函数依赖分解',self:'求候选键+范式判定+分解 5 题（下午高频）'},
+    {w:6,meta:'事务管理+数据库运维',watch:'教程第10章 事务（ACID/并发控制/封锁协议/死锁）；第11章 数据库运维（备份恢复/性能调优/安全）',read:'三级封锁协议、死锁预防、日志与恢复',self:'并发控制+恢复 5 题；写存储过程/触发器 1 题'},
+    {w:7,meta:'NoSQL/新技术+软件工程+标准化+英语',watch:'教程第12章 NoSQL/分布式/大数据存储；第13章 系统开发与运行（生命周期/模型/测试）；标准化与知识产权；专业英语',read:'NoSQL 分类、分布式数据库（2026 扩展考点）',self:'上午题：新技术+软件工程+标准化 20 题'},
+    {w:8,meta:'下午案例·设计+规范化专项',watch:'近 5 年下午真题「数据库设计题」「规范化题」逐题动手写',read:'标准答题格式（先 E-R、再转换、再范式说明）',self:'完整写 3 套设计/规范化案例（对照标准答案改）'},
+    {w:9,meta:'下午案例·SQL+并发控制专项',watch:'近 5 年下午真题「SQL 应用」「并发控制设计」逐题动手写',read:'存储过程/触发器/视图得分点；锁与隔离级别',self:'完整写 3 套 SQL/并发案例'},
+    {w:10,meta:'真题套卷+模拟+查漏',watch:'近 5 年上下午全套卷 ×2 轮；限时模拟',read:'错题本复盘；薄弱模块回教程',self:'套卷 ≥75 分（两科）；临考清单就绪'}
+  ]
+};
+buildGenDaily(RUANKAO_CFG);
+
+/* ---- 数据开发工程师 配置（ACP → Databricks，2027-05-15 → 2027-08-07，13 周） ---- */
+const DATADEV_CFG={
+  prefix:'datadev', pageId:'datadev-daily', checkPageId:'datadev-check-list',
+  title:'数据开发工程师', progName:'📅 数据开发每日打卡',
+  startISO:'2027-05-15',
+  weeks:[
+    {w:1,meta:'ACP·平台与产品体系',watch:'阿里云大数据认证辅导课（edu.aliyun.com/course/1129）+ 大数据基础与产品体系（MaxCompute/DataWorks/Flink/Hologres/ES）',read:'梳理「离线 vs 实时 vs 检索 vs 数仓」产品边界与应用场景',self:'ACP 选择：大数据基础 2% 模块 ×20 题'},
+    {w:2,meta:'ACP·MaxCompute(1)',watch:'MaxCompute 概述/架构/SQL 开发（DDL/DML/内置函数）',read:'MaxCompute 基本概念与 SaaS 云数仓架构、最佳实践',self:'写 MaxCompute SQL 建表+查询 5 题（含内置函数）'},
+    {w:3,meta:'ACP·MaxCompute(2)权限调优',watch:'MaxCompute 权限管理/安全、性能调优、数据迁移（Tunnel）、MR 与 UDF',read:'权限模型（RAM/项目级）、常见性能瓶颈与调优手段',self:'ACP 选择：MaxCompute 25% 模块 ×30 题 + 权限配置练习'},
+    {w:4,meta:'ACP·DataWorks 集成建模',watch:'DataWorks 数据集成（离线/实时同步）、数据建模',read:'DataWorks 基本概念与架构、数据开发/管理/运维模块',self:'画 EPK→ODS→DWD→DWS 同步链路；免费实训配置一次数据集成'},
+    {w:5,meta:'ACP·DataWorks 治理调度',watch:'DataWorks 数据质量监控、任务调度、运维中心',read:'数据质量规则配置、调度依赖与运维排查',self:'ACP 选择：DataWorks 25% 模块 ×30 题 + 配一条质量监控规则'},
+    {w:6,meta:'ACP·Flink+Hologres 实时',watch:'Flink 实时计算 SQL 与作业调优；Hologres 实时数仓特性',read:'实时计算业务流程、Hologres 部署架构与典型场景',self:'写 Flink SQL 实时聚合 1 题；Hologres 特性辨析 ×15 题'},
+    {w:7,meta:'ACP·ES/数据湖/可视化',watch:'Elasticsearch DSL 开发；OSS/EMR 数据湖；PAI/Quick BI/DataV',read:'ES DSL 优化、数据湖构建、可视化应用场景',self:'ACP 选择：ES 10%+数据湖 5%+可视化 3% 综合 ×25 题'},
+    {w:8,meta:'ACP·真题+实验冲刺',watch:'阿里云免费实训环境实操：数据同步/调度/清洗/报表/权限；ACP 题库',read:'错题梳理、易混淆点（离线 vs 实时场景差异、存储产品适配）',self:'ACP 全真模拟 ≥80 分（70 单+30 多）；实验走通一条完整管道'},
+    {w:9,meta:'Databricks·平台+Delta',watch:'Databricks Academy：Lakehouse Fundamentals；Delta Lake ACID/事务日志/MERGE/time travel',read:'计算选型（all-purpose vs job/serverless）、_delta_log 机制',self:'写 Delta DML（MERGE/UPDATE/DELETE/time travel）5 题'},
+    {w:10,meta:'Databricks·摄取',watch:'Auto Loader（schema enforcement/evolution）、COPY INTO、Lakeflow Connect、半结构化数据',read:'Auto Loader vs COPY INTO 取舍（高容量连续摄取）',self:'写 Auto Loader/COPY INTO 摄取脚本各 1；摄取域 21% 练习 ×20 题'},
+    {w:11,meta:'Databricks·转换建模',watch:'PySpark/Spark SQL 转换（join/dedup/agg）、Medallion Bronze→Silver→Gold、数据质量 expectations',read:'转换域 22%：DataFrame 操作、质量检查写法',self:'写 Bronze→Silver 清洗 + Gold 聚合 Pipeline 1 套'},
+    {w:12,meta:'Databricks·生产化+治理',watch:'Lakeflow Jobs/DLT 编排；CI/CD（Repos/DABs/CLI）；Unity Catalog 权限与行级安全',read:'任务 DAG/重试、Unity Catalog ABAC、血缘',self:'配一个多任务 Job + Unity Catalog GRANT/REVOKE 练习；治理域 15% ×15 题'},
+    {w:13,meta:'Databricks·排错+模拟考',watch:'Spark UI 排错（数据倾斜/shuffle/spill）、预测优化；3–5 套全真模拟（限时）',read:'对照官方 exam guide（2026-05 版）复盘错题',self:'模拟考 ≥70%（32/45）；临考清单就绪'}
+  ]
+};
+buildGenDaily(DATADEV_CFG);
+
+/* ---- CDGP 数据治理专家 配置（2027-08-08 → 2028-02-07，26 周） ---- */
+const CDGP_CFG={
+  prefix:'cdgp', pageId:'cdgp-daily', checkPageId:'cdgp-check-list',
+  title:'CDGP数据治理专家', progName:'📅 CDGP每日打卡',
+  startISO:'2027-08-08',
+  weeks:[
+    {w:1,meta:'战略规划①·成熟度与路线图',watch:'精读 DMBOK 数据治理/数据战略章；成熟度模型（L1 初始→L5 优化）',read:'为某企业设计 3–5 年治理路线图的「现状→目标→路径→风险」逻辑链',self:'画治理成熟度雷达；写 1 段路线图论述要点'},
+    {w:2,meta:'战略规划②·KPI与价值汇报',watch:'治理 KPI 体系设计；向高管汇报治理价值的话术与指标',read:'把治理投入映射到业务价值（降本/控险/增收）',self:'写 1 道「设计治理 KPI」论述框架'},
+    {w:3,meta:'组织架构·职责边界',watch:'数据治理委员会 / CDO / 数据管家 / 数据 Owner / 消费者 角色',read:'明确各角色决策权/执行权/监督权，避免职责重叠或真空',self:'写 1 道「设计治理组织架构并论述职责边界」论述'},
+    {w:4,meta:'架构治理①·CIF与棋子视图',watch:'CIF 企业信息工厂、数仓棋子视图等经典架构',read:'各架构层（ODS/DWD/DWS/ADS）职责与流转',self:'画一张企业数据架构分层图并注解'},
+    {w:5,meta:'架构治理②·评审与变更',watch:'架构评审流程（新系统上线前合规检查）、架构变更管理、技术债管理',read:'架构标准管理（建模规范/命名标准）的制定与执行',self:'写 1 道「设计数据架构评审流程」论述'},
+    {w:6,meta:'数据建模·信息工程与维度',watch:'信息工程表示法、维度建模技术；模型与数据架构/质量衔接',read:'逻辑数据模型设计、范式与维度建模取舍',self:'针对一业务场景设计逻辑模型（ER + 维度）'},
+    {w:7,meta:'数据质量①·维度与度量',watch:'六大质量维度（准确性/完整性/一致性/及时性/唯一性/有效性）',read:'质量评估方法与指标设计原则',self:'为某数据质量问题判定所属维度并设度量指标'},
+    {w:8,meta:'数据质量②·改进闭环',watch:'根因分析、质量改进「发现-度量-分析-改进-监控」闭环',read:'质量规则定义、质量报告编制要点',self:'写 1 道「设计数据质量改进方案」论述'},
+    {w:9,meta:'元数据·分类与血缘',watch:'业务/技术/操作元数据类型；血缘分析与影响分析',read:'元数据仓库建设路径与核心流程',self:'写 1 道「元数据管理应用（血缘/资产目录）」论述'},
+    {w:10,meta:'数据安全①·分级与脱敏',watch:'数据分类分级方法、脱敏技术类型与适用场景',read:'敏感数据分类标准、防护措施部署',self:'为某场景设计分类分级方案'},
+    {w:11,meta:'数据安全②·合规与应急 + 主数据识别',watch:'访问控制机制、GDPR 等隐私法规、数据安全事件应急响应',read:'技术措施与管理措施结合的系统化安全治理',self:'写 1 道「数据安全方案」论述；主数据识别练习'},
+    {w:12,meta:'主数据·模型与平台',watch:'主数据识别、主数据模型设计、主数据管理平台规划',read:'主数据实施路径与治理架构',self:'写 1 道「主数据管理实施路径」论述'},
+    {w:13,meta:'数据湖vs数仓 + 前沿总览',watch:'数据湖 vs 数据仓库架构对比；前沿方向梳理',read:'前沿：数据跨境/隐私计算/数据要素/数据编织/主动元数据',self:'写 1 道「湖仓对比」论述 + 前沿要点卡'},
+    {w:14,meta:'前沿深化',watch:'数据跨境流通、隐私计算、数据要素、数据编织、主动元数据管理',read:'前沿考点如何融入论述题（体现体系化思维）',self:'每个前沿方向写 1 个可引用要点'},
+    {w:15,meta:'单选+多选①·基础精确',watch:'CDGP 单选题（概念改写、精确理解）；多选题难点专项',read:'单选争取 8+、多选争取 22+ 的得分策略',self:'单选 ×20（争取错≤2）；多选 ×10'},
+    {w:16,meta:'多选②·拆解干扰',watch:'多选题选项拆解（概念片段分散、语境关系图）',read:'数据安全活动步骤、质量流程等需结合上下文的题',self:'多选 ×20（对照答案复盘易混点）'},
+    {w:17,meta:'论述专项·数据质量',watch:'论述题「问题分析-理论-方案-效果」四段结构实训',read:'每天 1–2 道、控制在 15 分钟内；对照答案自评',self:'完成 2 道数据质量论述（计时）'},
+    {w:18,meta:'论述专项·数据安全',watch:'数据安全论述（分级分类/风险措施）计时实训',read:'技术与管理的结合表述',self:'完成 2 道数据安全论述（计时）'},
+    {w:19,meta:'论述专项·主数据/元数据',watch:'主数据/元数据论述计时实训',read:'元数据支撑治理基础性的论述角度',self:'完成 2 道主数据/元数据论述（计时）'},
+    {w:20,meta:'论述专项·架构/战略',watch:'数据架构/战略规划论述计时实训',read:'现状分析→目标→路径→风险的完整逻辑链',self:'完成 2 道架构/战略论述（计时）'},
+    {w:21,meta:'真题套卷①',watch:'完整 130 分钟真题模拟（单选+多选+论述 6 题）',read:'三部分各自 ≥40%：单选≥4/10、多选≥12/30、论述≥24/60',self:'全真模拟 1 套并自评（标失分域）'},
+    {w:22,meta:'真题套卷②',watch:'第 2 套真题模拟；对照标准答案逐题复盘',read:'多选题区分度、论述分点完整性',self:'全真模拟 2 套并自评（补薄弱）'},
+    {w:23,meta:'论述冲刺·模板固化',watch:'固化四段答题结构；各域标准框架与术语规范',read:'避免口语化、段落逻辑连贯',self:'重写一篇薄弱论述，对照评分要点'},
+    {w:24,meta:'论述冲刺·导图与案例库',watch:'各知识域思维导图；行业数据治理案例库（论述素材）',read:'论述时引用 DMBOK 框架 + 场景结合',self:'产出 6 主题思维导图 + 每主题 1 案例'},
+    {w:25,meta:'薄弱模块回炉',watch:'按模拟考失分域重读 DMBOK 对应章',read:'查漏：单选/多选/论述各自的失分模式',self:'回炉 3 个最弱知识域 + 对应选择/论述'},
+    {w:26,meta:'临考·模拟+清单',watch:'最后 1 套全真模拟；临考清单（证件/时间/答题顺序）',read:'先答有把握题、不会立刻跳过，保证全部作答',self:'模拟 ≥60 且三部分各≥40%；临考清单就绪'}
+  ]
+};
+buildGenDaily(CDGP_CFG);
 </script>
 </body>
 </html>
