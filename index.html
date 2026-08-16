@@ -706,6 +706,37 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 .prog-num{font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums}
 .prog-go{margin-top:12px;width:100%;padding:8px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:background .12s}
 .prog-go:hover{background:var(--accent-soft);border-color:rgba(79,110,247,.3)}
+.prog-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.metric-num{font-size:26px;font-weight:700;color:var(--accent);line-height:1.1}
+.metric-lbl{font-size:13px;color:var(--text);margin-top:6px;font-weight:600}
+.metric-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.prog-today{display:flex;gap:14px;align-items:stretch;background:var(--accent-soft);border:1px solid var(--accent);border-radius:14px;padding:16px 18px;margin-top:18px}
+.today-badge{align-self:flex-start;background:var(--accent);color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.today-body{flex:1}
+.today-title{font-size:16px;font-weight:600;color:var(--text)}
+.today-sub{font-size:13px;color:var(--text-3);margin-top:4px}
+.today-cta{margin-top:12px;padding:8px 16px;border:none;border-radius:9px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.today-cta:hover{opacity:.9}
+.prog-h2{font-size:15px;font-weight:600;color:var(--text);margin:24px 0 10px}
+.prog-goals{display:flex;flex-direction:column;gap:14px}
+.goal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.goal-card.active{background:var(--accent-soft)}
+.goal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;cursor:pointer}
+.goal-titles{min-width:0}
+.goal-title{font-size:15px;font-weight:600;color:var(--text)}
+.goal-status{font-size:12px;color:var(--text-3);margin-top:3px}
+.goal-pct{font-size:20px;font-weight:700;color:var(--accent);white-space:nowrap}
+.goal-bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:12px 0 10px}
+.goal-bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:99px;transition:width .3s}
+.goal-subs{display:none;flex-direction:column;gap:6px;margin-top:6px}
+.goal-card.open .goal-subs{display:flex}
+.goal-sub{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text);padding:6px 0;border-top:1px solid var(--border)}
+.goal-sub:first-child{border-top:none}
+.goal-sub-name{flex:1}
+.goal-sub-num{color:var(--text-3);font-variant-numeric:tabular-nums}
+.goal-go{margin-left:auto;padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.goal-go:hover{background:var(--accent-soft);border-color:var(--accent)}
 
 .news-filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
 .nf-chip{font-size:13px;padding:7px 14px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:.15s}
@@ -790,6 +821,19 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 .src-foot{margin-top:2px}
 .src-all{font-size:12.5px;color:var(--accent);font-weight:600;cursor:pointer}
 .src-all:hover{text-decoration:underline}
+/* 每日学习中心顶部的可折叠备考路线图 */
+.roadmap{margin:14px 0 4px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--surface-2));overflow:hidden}
+.roadmap>summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:600;color:var(--accent);font-size:14px;display:flex;align-items:center;gap:8px;user-select:none}
+.roadmap>summary::-webkit-details-marker{display:none}
+.roadmap>summary::before{content:"▸";transition:transform .15s;font-size:12px;color:var(--accent)}
+.roadmap[open]>summary::before{transform:rotate(90deg)}
+.roadmap>summary:hover{background:var(--accent-soft)}
+.roadmap .gantt{margin:14px 16px;border-width:1px}
+.roadmap .tbl-wrap{margin:0 16px 14px}
+.roadmap .rm-h2{margin:20px 16px 10px;font-size:15px}
+.roadmap .callout{margin:0 16px 14px}
+.roadmap-foot{padding:0 16px 16px}
+.roadmap-foot .prog-go{margin-top:0;width:auto}
 </style>
 </head>
 <body>
@@ -808,7 +852,6 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
     </div>
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot red"></span>📘 CDGA 主备考</div>
-      <div class="nav-item" data-page="cdga-plan">🗺️ 半年复习规划</div>
       <div class="nav-item" data-page="cdga-check">✅ 知识点自查清单</div>
       <div class="nav-item" data-page="cdga-quiz">📝 原创自测练习题</div>
     </div>
@@ -819,9 +862,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
     </div>
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot blue"></span>🔗 资料资讯</div>
-      <div class="nav-item" data-page="cdga-res">📥 资料获取清单</div>
-      <div class="nav-item" data-page="cdga-news">📰 公众号推文精选</div>
-      <div class="nav-item" data-page="cdga-sources">📡 关注源</div>
+      <div class="nav-item" data-page="cdga-res">📚 资料与资讯</div>
     </div>
     <div class="nav-group">
       <div class="nav-group-title"><span class="dot blue"></span>🏛️ 读博 交大</div>
@@ -846,7 +887,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
           <p>把 CDGA、软考、数据开发工程师、CDGP 与读博计划集中到一处。左侧按「今日 / CDGA 主备考 / 进阶考证 / 资料资讯 / 读博」分组；每日学习中心按日期自动落到对应考试阶段，任务卡片顶部标注所属考试。</p>
         </div>
         <div class="cards">
-          <div class="cat-card" data-goto="cdga-plan">
+          <div class="cat-card" data-goto="daily">
             <div class="ic" style="background:var(--red-soft);color:var(--red)">🎓</div>
             <h3>考证 · CDGA 数据治理工程师</h3>
             <p>DAMA 中国认证 · 半年长线复习 · 含规划 / 清单 / 自测 / 周计划</p>
@@ -875,59 +916,12 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
       <section class="page" id="my-progress">
         <h1 class="doc-title">📊 我的备考进度</h1>
         <div class="doc-sub">以下数据均来自本机浏览器，自动保存、离线可用；各模块进度互相同步。</div>
-        <div class="prog-banner" id="progBanner"></div>
-        <div class="prog-grid" id="progGrid"></div>
-        <div class="callout tip" style="margin-top:18px">💡 连续打卡天数（🔥当前 / 🏆最长）实时统计见「📅 每日学习中心」顶部热力图，本页「每日打卡」进度与之同步。</div>
+        <div class="prog-metrics" id="progMetrics"></div>
+        <div class="prog-today" id="progToday"></div>
+        <h2 class="prog-h2">备考目标总览</h2>
+        <div class="prog-goals" id="progGoals"></div>
       </section>
 
-      <!-- CDGA NEWS -->
-      <section class="page" id="cdga-news">
-        <h1 class="doc-title">📰 公众号推文精选 · 考证(DAMA) / 考博(交大) 资讯</h1>
-        <div class="doc-sub">文章由「搜狗微信搜索」按关键词检索得到（合法公开来源），已抓取<b>全文</b>内嵌，可<b>一字不落</b>阅读；点「展开全文」看完整正文，点「阅读原文」打开微信原文。覆盖<b>考证（DAMA/数据治理）</b>与<b>考博（上海交大在职博士）</b>两大方向，每天自动检索新文章，<b>🆕 新文章</b>会标出，读完点「标记已读」。这些推文也会按天混排进「📅 每日学习中心」，让你每天读一篇。</div>
-        <div class="callout info"><span class="ct">已统一口径</span>综合多方来源，DAMA 中国证书（CDGA/CDGP/CDGE/CDAM）据光环国际等机构文章为 <b>终身有效、无需年审</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3年+续证"口径），<b>以 MyDAMA 官方最新公告为准</b>。继续教育(PDU)作为<b>自愿提升</b>，不占备考时间。详见「三级进阶总规划」②节。</div>
-        <div class="callout info"><span class="ct">🌏 拓展 · 海外</span>纯国外语境的申博经验（英国/香港博士招生、留服·境外学历认证等）已移出「📅 每日学习中心」核心流，归入「拓展 · 海外」分类，想看时再翻，不打扰交大备考主线。<b>推荐信 / 套磁手艺文因国内外通用，仍保留在核心流</b>——交大「申请-考核制」也要套磁、也要 2 封专家推荐信。</div>
-        <div class="news-bar">
-          <div class="news-stat"><span class="ns-num" id="newsTotal">0</span><span class="ns-lbl">篇文章</span></div>
-          <div class="news-stat"><span class="ns-num unread" id="newsUnread">0</span><span class="ns-lbl">篇未读</span></div>
-          <div class="news-stat grow"><span class="ns-lbl">最后更新</span><span class="ns-time" id="newsUpdated">—</span></div>
-          <button class="news-toggle-unread" id="newsUnreadBtn">只看未读</button>
-        </div>
-        <div class="news-cats" id="newsCats">
-          <button class="nf-cat active" data-cat="all">全部</button>
-          <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
-          <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
-          <button class="nf-cat" data-cat="overseas">🌏 拓展 · 海外</button>
-        </div>
-        <div class="news-filters" id="newsFilters">
-          <button class="nf-chip active" data-f="all">全部</button>
-          <button class="nf-chip" data-f="考试时间">考试时间</button>
-          <button class="nf-chip" data-f="认证体系">认证体系</button>
-          <button class="nf-chip" data-f="含金量">含金量</button>
-          <button class="nf-chip" data-f="备考经验">备考经验</button>
-          <button class="nf-chip" data-f="考试形式">考试形式</button>
-          <button class="nf-chip" data-f="费用">费用</button>
-          <button class="nf-chip" data-f="有效期">有效期</button>
-        </div>
-        <div class="news-list" id="newsList"></div>
-      </section>
-
-      <!-- CDGA SOURCES -->
-      <section class="page" id="cdga-sources">
-        <h1 class="doc-title">📡 关注源 · 实时跟踪的公众号</h1>
-        <div class="doc-sub">这里是你「持续关注」的公众号清单——<b>官方账号 + 知名有用的第三方</b>。每天 09:00 / 20:00 自动检索它们的最新推文，去重入档并标 🆕 未读；你也可以随时让我「检查最新」。下方按「考证 / 考博」分轨，每张卡片显示该号被收录的文章数与最近一篇日期，点开可见其最新推文（点标题跳到推文页读全文 / 标记已读）。</div>
-        <div class="src-bar">
-          <div class="news-stat"><span class="ns-num" id="srcTotal">0</span><span class="ns-lbl">个关注源</span></div>
-          <div class="news-stat"><span class="ns-num" id="srcKa">0</span><span class="ns-lbl">考证源</span></div>
-          <div class="news-stat"><span class="ns-num" id="srcKb">0</span><span class="ns-lbl">考博源</span></div>
-          <div class="news-stat grow"><span class="ns-lbl">最后抓取</span><span class="ns-time" id="srcUpdated">—</span></div>
-        </div>
-        <div class="src-cats" id="srcCats">
-          <button class="nf-cat active" data-cat="all">全部</button>
-          <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
-          <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
-        </div>
-        <div class="src-grid" id="srcGrid"></div>
-      </section>
 
       <!-- CDGA PLAN -->
       <section class="page" id="cdga-plan">
@@ -1234,6 +1228,58 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
       <section class="page active" id="cdga-daily">
         <h1 class="doc-title">📅 每日学习中心 · CDGA 阶段</h1>
         <div class="doc-sub">选一个日期，打开当天要学的内容。当前日期会自动落到对应考试阶段；学习任务卡片顶部会标注所属考试名称。CDGA 阶段保留「公众号推文 + 视频分P + 自测题」完整功能。</div>
+        <details class="roadmap">
+          <summary>📘 CDGA 半年复习路线图 · 点开看 26 周逐周明细（与上方每日任务同源）</summary>
+          <h2 class="rm-h2">🗺️ 半年长线复习路线图（26 周基准，目标 2027-03）</h2>
+          <div class="gantt">
+            <div class="bar"><span class="lab">阶段0 准备</span><div class="track"><div class="fill" style="width:8%;background:var(--text-3)">2w</div></div></div>
+            <div class="bar"><span class="lab">阶段1 通读</span><div class="track"><div class="fill" style="width:20%;background:var(--accent-2)">5w</div></div></div>
+            <div class="bar"><span class="lab">阶段2 精学</span><div class="track"><div class="fill" style="width:48%;background:var(--accent)">13w</div></div></div>
+            <div class="bar"><span class="lab">阶段3 刷题</span><div class="track"><div class="fill" style="width:16%;background:var(--yellow)">4w</div></div></div>
+            <div class="bar"><span class="lab">阶段4 冲刺</span><div class="track"><div class="fill" style="width:12%;background:var(--red)">3w</div></div></div>
+            <div class="legend">
+              <span><i style="background:var(--text-3)"></i>准备</span>
+              <span><i style="background:var(--accent-2)"></i>通读</span>
+              <span><i style="background:var(--accent)"></i>精学</span>
+              <span><i style="background:var(--yellow)"></i>刷题</span>
+              <span><i style="background:var(--red)"></i>冲刺</span>
+            </div>
+          </div>
+          <div class="callout tip">若想提前到 <b>2026 年 12 月</b>场次，把阶段 2/3 压缩 1/3 即可（已有实战底子，压缩可行）。下方是「26 周逐周明细」，配套每日中心自动按本周主题推送关键概念。</div>
+          <h2 class="rm-h2">📅 26 周逐周明细（W1–W26）</h2>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>重点知识域</th><th>周末自检</th></tr></thead>
+            <tbody>
+              <tr><td>W1</td><td>8/15–8/21</td><td>0</td><td>—</td><td>教材已下单；场次已定；仓库已建</td></tr>
+              <tr><td>W2</td><td>8/22–8/28</td><td>0</td><td>数据管理(概述)</td><td>🏁 思维导图完成+能说出 17 域名字；术语表 v1 10+ 词</td></tr>
+              <tr><td>W3</td><td>8/29–9/4</td><td>1</td><td>数据治理</td><td>能口述治理框架要素</td></tr>
+              <tr><td>W4</td><td>9/5–9/11</td><td>1</td><td>数据质量、元数据</td><td>说出质量六维度名称</td></tr>
+              <tr><td>W5</td><td>9/12–9/18</td><td>1</td><td>数仓与BI、参考/主数据</td><td>说出 ODS/DWS 分层含义</td></tr>
+              <tr><td>W6</td><td>9/19–9/25</td><td>1</td><td>数据建模、数据架构</td><td>区分概念/逻辑/物理模型</td></tr>
+              <tr><td>W7</td><td>9/26–10/2</td><td>1</td><td>安全/大数据/成熟度/低分域</td><td>🏁 通读两遍+术语表成型；17 域名称全过一遍</td></tr>
+              <tr><td>W8</td><td>10/3–10/9</td><td>2 高分</td><td>数据治理(精)</td><td>案例卡完成，章节题≥70%</td></tr>
+              <tr><td>W9</td><td>10/10–10/16</td><td>2 高分</td><td>数据质量(精)</td><td>能给场景判维度</td></tr>
+              <tr><td>W10</td><td>10/17–10/23</td><td>2 高分</td><td>元数据管理(精)</td><td>血缘图完成</td></tr>
+              <tr><td>W11</td><td>10/24–10/30</td><td>2 高分</td><td>数仓与BI(精)</td><td>说清 ETL/ELT 区别</td></tr>
+              <tr><td>W12</td><td>10/31–11/6</td><td>2 高分</td><td>参考/主数据(精)</td><td>主数据案例卡完成</td></tr>
+              <tr><td>W13</td><td>11/7–11/13</td><td>2 高分</td><td>数据建模与设计(精)</td><td>🏁 高分域笔记+案例卡完成；维度 vs 范式能辨析</td></tr>
+              <tr><td>W14</td><td>11/14–11/20</td><td>2 高分</td><td>高分域复盘</td><td>高分域正确率≥75%</td></tr>
+              <tr><td>W15</td><td>11/21–11/27</td><td>2 中分</td><td>数据架构(精)</td><td>能画数据流图</td></tr>
+              <tr><td>W16</td><td>11/28–12/4</td><td>2 中分</td><td>数据安全(精)</td><td>说清分类分级步骤</td></tr>
+              <tr><td>W17</td><td>12/5–12/11</td><td>2 中分</td><td>大数据和数据科学(精)</td><td>说出大数据特征</td></tr>
+              <tr><td>W18</td><td>12/12–12/18</td><td>2 中分</td><td>成熟度评估(精)</td><td>说出 2 个成熟度模型</td></tr>
+              <tr><td>W19</td><td>12/19–12/25</td><td>2 低分</td><td>概述/伦理/文件/组织角色</td><td>低分域概念全覆盖</td></tr>
+              <tr><td>W20</td><td>12/26–1/1</td><td>2 低分</td><td>存储/集成/变革管理</td><td>🏁 中/低分域过完+全量回顾无盲区；思维导图无盲区</td></tr>
+              <tr><td>W21</td><td>1/2–1/8</td><td>3 刷题</td><td>高分域题库</td><td>错题本启动，正确率统计</td></tr>
+              <tr><td>W22</td><td>1/9–1/15</td><td>3 刷题</td><td>中分域题库</td><td>中分域正确率≥70%</td></tr>
+              <tr><td>W23</td><td>1/16–1/22</td><td>3 刷题</td><td>低分域题库</td><td>低分域正确率≥60%</td></tr>
+              <tr><td>W24</td><td>1/23–1/29</td><td>3 刷题</td><td>全量+回炉</td><td>🏁 题库正确率≥70%且错题本成型；全局正确率≥75%</td></tr>
+              <tr><td>W25</td><td>1/30–2/5</td><td>4 冲刺</td><td>模拟考1</td><td>模拟1 ≥75 分</td></tr>
+              <tr><td>W26</td><td>2/6–2/12</td><td>4 冲刺</td><td>模拟考2+查漏</td><td>模拟2 ≥75 分；临考清单就绪</td></tr>
+            </tbody>
+          </table></div>
+          <div class="roadmap-foot"><button class="prog-go" data-goto="cdga-plan">📖 看完整备考百科（考试全貌 · 17 知识域权重 · 避坑失分点）→</button></div>
+        </details>
         <div class="stage-bar" data-stage-for="cdga-daily"></div>
 
         <div class="day-picker">
@@ -1461,9 +1507,14 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
 
       <!-- CDGA RESOURCES -->
       <section class="page" id="cdga-res">
-        <h1 class="doc-title">🔗 CDGA 学习资料获取清单（合法渠道）</h1>
-        <div class="doc-sub">⚠️ 版权声明：官方教材与真题受版权保护，本清单不提供任何盗版下载链接。所有资料请通过正版/官方渠道获取。</div>
-
+        <h1 class="doc-title">📚 资料与资讯中心</h1>
+        <div class="doc-sub">备考资料、公众号推文、关注源，统一在此管理。版权声明：官方教材与真题受版权保护，本清单不提供任何盗版下载链接，所有资料请通过正版/官方渠道获取。</div>
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="res-list" type="button">📥 资料获取清单</button>
+          <button class="tab-btn" data-tab="res-news" type="button">📰 公众号推文精选</button>
+          <button class="tab-btn" data-tab="res-sources" type="button">📡 关注源</button>
+        </div>
+        <div class="tab-content active" id="res-list">
         <h2>一、官方教材（必买正版）</h2>
         <div class="tbl-wrap"><table>
           <thead><tr><th>资料</th><th>版本</th><th>获取渠道</th></tr></thead>
@@ -1615,8 +1666,56 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
           <li><b>通读 W3–W7</b>：用 3 篇网页 + 2 份 PDF 替代教材通读，逐域过 + 原创题自测。</li>
           <li><b>精学 W8–W20</b>：按高/中/低分域重读对应网页 + 希赛免费"必背要点"。</li>
           <li><b>刷题 W21–W24</b>：本仓库 52 题 + 希赛免费"核心考点精练50题" + 希赛网页免费刷题。</li>
-          <li><b>冲刺 W25–W26</b>：免费视频"小白入门课"过框架，只看错题本 + 术语表。</li>
-        </ul>
+        <li><b>冲刺 W25–W26</b>：免费视频"小白入门课"过框架，只看错题本 + 术语表。</li>
+      </ul>
+        </div><!-- /res-list -->
+
+        <div class="tab-content" id="res-news">
+          <h2>📰 公众号推文精选 · 考证(DAMA) / 考博(交大) 资讯</h2>
+          <div class="doc-sub">文章由「搜狗微信搜索」按关键词检索得到（合法公开来源），已抓取<b>全文</b>内嵌，可<b>一字不落</b>阅读；点「展开全文」看完整正文，点「阅读原文」打开微信原文。覆盖<b>考证（DAMA/数据治理）</b>与<b>考博（上海交大在职博士）</b>两大方向，每天自动检索新文章，<b>🆕 新文章</b>会标出，读完点「标记已读」。这些推文也会按天混排进「📅 每日学习中心」，让你每天读一篇。</div>
+          <div class="callout info"><span class="ct">已统一口径</span>综合多方来源，DAMA 中国证书（CDGA/CDGP/CDGE/CDAM）据光环国际等机构文章为 <b>终身有效、无需年审</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3年+续证"口径），<b>以 MyDAMA 官方最新公告为准</b>。继续教育(PDU)作为<b>自愿提升</b>，不占备考时间。详见「三级进阶总规划」②节。</div>
+          <div class="callout info"><span class="ct">🌏 拓展 · 海外</span>纯国外语境的申博经验（英国/香港博士招生、留服·境外学历认证等）已移出「📅 每日学习中心」核心流，归入「拓展 · 海外」分类，想看时再翻，不打扰交大备考主线。<b>推荐信 / 套磁手艺文因国内外通用，仍保留在核心流</b>——交大「申请-考核制」也要套磁、也要 2 封专家推荐信。</div>
+          <div class="news-bar">
+            <div class="news-stat"><span class="ns-num" id="newsTotal">0</span><span class="ns-lbl">篇文章</span></div>
+            <div class="news-stat"><span class="ns-num unread" id="newsUnread">0</span><span class="ns-lbl">篇未读</span></div>
+            <div class="news-stat grow"><span class="ns-lbl">最后更新</span><span class="ns-time" id="newsUpdated">—</span></div>
+            <button class="news-toggle-unread" id="newsUnreadBtn">只看未读</button>
+          </div>
+          <div class="news-cats" id="newsCats">
+            <button class="nf-cat active" data-cat="all">全部</button>
+            <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+            <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+            <button class="nf-cat" data-cat="overseas">🌏 拓展 · 海外</button>
+          </div>
+          <div class="news-filters" id="newsFilters">
+            <button class="nf-chip active" data-f="all">全部</button>
+            <button class="nf-chip" data-f="考试时间">考试时间</button>
+            <button class="nf-chip" data-f="认证体系">认证体系</button>
+            <button class="nf-chip" data-f="含金量">含金量</button>
+            <button class="nf-chip" data-f="备考经验">备考经验</button>
+            <button class="nf-chip" data-f="考试形式">考试形式</button>
+            <button class="nf-chip" data-f="费用">费用</button>
+            <button class="nf-chip" data-f="有效期">有效期</button>
+          </div>
+          <div class="news-list" id="newsList"></div>
+        </div>
+
+        <div class="tab-content" id="res-sources">
+          <h2>📡 关注源 · 实时跟踪的公众号</h2>
+          <div class="doc-sub">这里是你「持续关注」的公众号清单——<b>官方账号 + 知名有用的第三方</b>。每天 09:00 / 20:00 自动检索它们的最新推文，去重入档并标 🆕 未读；你也可以随时让我「检查最新」。下方按「考证 / 考博」分轨，每张卡片显示该号被收录的文章数与最近一篇日期，点开可见其最新推文（点标题跳到推文页读全文 / 标记已读）。</div>
+          <div class="src-bar">
+            <div class="news-stat"><span class="ns-num" id="srcTotal">0</span><span class="ns-lbl">个关注源</span></div>
+            <div class="news-stat"><span class="ns-num" id="srcKa">0</span><span class="ns-lbl">考证源</span></div>
+            <div class="news-stat"><span class="ns-num" id="srcKb">0</span><span class="ns-lbl">考博源</span></div>
+            <div class="news-stat grow"><span class="ns-lbl">最后抓取</span><span class="ns-time" id="srcUpdated">—</span></div>
+          </div>
+          <div class="src-cats" id="srcCats">
+            <button class="nf-cat active" data-cat="all">全部</button>
+            <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+            <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+          </div>
+          <div class="src-grid" id="srcGrid"></div>
+        </div>
       </section>
 
       <!-- CDGA LADDER: 三级进阶总规划 -->
@@ -2403,8 +2502,8 @@ document.getElementById('themeBtn').onclick=()=>{
 
 /* ---------- Nav ---------- */
 const crumbs=document.getElementById('crumbs');
-const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','daily':'每日学习中心','cdga-daily':'每日学习中心','cdga-res':'资料获取清单','cdga-news':'公众号推文精选','cdga-sources':'关注源','advanced-plan':'进阶考证总规划','phd':'博士申请','my-progress':'我的进度','ruankao-daily':'软考每日中心','datadev-daily':'数据开发每日中心','cdgp-daily':'CDGP每日中心','advanced-check':'进阶考证自查清单'};
-const GROUP={'daily':'今日','cdga-daily':'今日','my-progress':'今日','cdga-plan':'CDGA 主备考','cdga-check':'CDGA 主备考','cdga-quiz':'CDGA 主备考','cdga-res':'资料资讯','cdga-news':'资料资讯','cdga-sources':'资料资讯','advanced-plan':'进阶考证','advanced-check':'进阶考证','phd':'读博 交大',home:'关于本站'};
+const titles={home:'站点说明', 'cdga-plan':'半年复习规划','cdga-check':'知识点自查清单','cdga-quiz':'原创自测练习题','daily':'每日学习中心','cdga-daily':'每日学习中心','cdga-res':'资料与资讯','advanced-plan':'进阶考证总规划','phd':'博士申请','my-progress':'我的进度','ruankao-daily':'软考每日中心','datadev-daily':'数据开发每日中心','cdgp-daily':'CDGP每日中心','advanced-check':'进阶考证自查清单'};
+const GROUP={'daily':'今日','cdga-daily':'今日','my-progress':'今日','cdga-plan':'CDGA 主备考','cdga-check':'CDGA 主备考','cdga-quiz':'CDGA 主备考','cdga-res':'资料资讯','advanced-plan':'进阶考证','advanced-check':'进阶考证','phd':'读博 交大',home:'关于本站'};
 const EXAM_STAGES=[
   {id:'cdga-daily',name:'CDGA 数据治理工程师',start:'2026-08-15',end:'2027-02-12'},
   {id:'ruankao-daily',name:'软考·数据库系统工程师',start:'2027-03-15',end:'2027-05-23'},
@@ -2433,8 +2532,7 @@ function showPage(id){
   crumbs.innerHTML = '备考资料中心 / '+(grp?'<b>'+grp+'</b> / ':'')+'<b>'+(titles[id]||'')+'</b>';
   document.querySelector('.content').scrollTo({top:0});
   if(id==='my-progress')renderProgress();
-  if(id==='cdga-news')renderNews();
-  if(id==='cdga-sources')renderSources();
+  if(id==='cdga-res'){renderNews();renderSources();}
   window.scrollTo({top:0});
   closeSidebar();
   // 阶段切换后刷新阶段导航条高亮
@@ -2490,6 +2588,12 @@ function initTabs(wrapId){
 initTabs('advanced-check');
 initTabs('advanced-plan');
 initTabs('phd');
+initTabs('cdga-res');
+function switchResTab(tabId){
+  const wrap=document.getElementById('cdga-res'); if(!wrap)return;
+  wrap.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tabId));
+  wrap.querySelectorAll('.tab-content').forEach(t=>t.classList.toggle('active', t.id===tabId));
+}
 function switchAdvancedTab(tabId){
   showPage('advanced-plan');
   const wrap=document.getElementById('advanced-plan'); if(!wrap)return;
@@ -3958,37 +4062,90 @@ function countChecked(sectionId){
   let done=0; all.forEach(c=>{if(c.checked)done++;});
   return {done,total:all.length};
 }
-function progCard(name,done,total,page){
-  const p=total?Math.round(done/total*100):0;
-  return '<div class="prog-card"><div class="prog-row"><span class="prog-name">'+name+'</span><span class="prog-num">'+done+' / '+total+'</span></div>'
-    +'<div class="progress"><i style="width:'+p+'%"></i></div>'
-    +'<button class="prog-go" data-goto="'+page+'">继续 →</button></div>';
+function metricCard(num,label,sub){
+  return '<div class="metric-card"><div class="metric-num">'+num+'</div><div class="metric-lbl">'+label+'</div><div class="metric-sub">'+sub+'</div></div>';
+}
+function goalCard(title,status,pct,subs,active,openByDefault){
+  let h='<div class="goal-card'+(active?' active':'')+(openByDefault?' open':'')+'">';
+  h+='<div class="goal-head"><div class="goal-titles"><div class="goal-title">'+escH(title)+'</div><div class="goal-status">'+escH(status)+'</div></div><div class="goal-pct">'+pct+'%</div></div>';
+  h+='<div class="goal-bar"><i style="width:'+pct+'%"></i></div>';
+  h+='<div class="goal-subs">';
+  subs.forEach(function(s){
+    h+='<div class="goal-sub"><span class="goal-sub-name">'+s.name+'</span>';
+    if(s.done!==undefined&&s.done!==null&&s.done!=='')h+='<span class="goal-sub-num">'+s.done+' / '+(s.total!==undefined&&s.total!==''?s.total:'')+'</span>';
+    if(s.page)h+='<button class="goal-go" data-goto="'+s.page+'">进入 →</button>';
+    h+='</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+function genSubFor(prefix){
+  const e=window.GEN[prefix];
+  const dDone=e?Object.values(e.store).filter(Boolean).length:0;
+  const dTot=e?e.totalDays:0;
+  const chk=countChecked(prefix+'-check-list');
+  return {dDone:dDone,dTot:dTot,cDone:chk.done,cTot:chk.total};
 }
 function renderProgress(){
-  const grid=document.getElementById('progGrid'); if(!grid)return;
-  const banner=document.getElementById('progBanner');
-  const cards=[];
+  const metrics=document.getElementById('progMetrics');
+  const today=document.getElementById('progToday');
+  const goals=document.getElementById('progGoals');
+  if(!metrics||!today||!goals)return;
   const dStore=getStore(DAILY_KEY); let dDone=0; for(const k in dStore){if(dStore[k])dDone++;}
   const TOTAL_DAYS=182;
-  cards.push(progCard('📅 每日打卡',dDone,TOTAL_DAYS,'cdga-daily'));
-  const cc=countChecked('cdga-check'); cards.push(progCard('✅ 知识点自查清单',cc.done,cc.total,'cdga-check'));
-  const q=getStore(QUIZ_STORE).answers||{}; cards.push(progCard('📝 原创自测练习题',Object.keys(q).length,QUIZ_TOTAL,'cdga-quiz'));
-  const vc=countChecked('cdga-res'); cards.push(progCard('▶️ B站视频打卡',vc.done,vc.total,'cdga-res'));
-  const lc=countChecked('ladder-checks'); cards.push(progCard('🏆 三级进阶行动清单',lc.done,lc.total,'advanced-plan'));
-  const ddc=countChecked('datadev-checks'); cards.push(progCard('🛠️ 数据开发行动清单',ddc.done,ddc.total,'advanced-plan'));
-  const rc=countChecked('ruankao-check-list'); if(rc.total) cards.push(progCard('🗄️ 软考自查清单',rc.done,rc.total,'advanced-check'));
-  const dtc=countChecked('datadev-check-list'); if(dtc.total) cards.push(progCard('🔧 数据开发自查清单',dtc.done,dtc.total,'advanced-check'));
-  const gc=countChecked('cdgp-check-list'); if(gc.total) cards.push(progCard('📊 CDGP自查清单',gc.done,gc.total,'advanced-check'));
-  Object.keys(window.GEN||{}).forEach(p=>{const e=window.GEN[p]; if(!e)return; const done=Object.values(e.store).filter(Boolean).length; cards.push(progCard(e.cfg.progName||e.cfg.title,done,e.totalDays,e.cfg.pageId));});
-  grid.innerHTML=cards.join('');
-  grid.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dataset.goto));
   let best=0,run=0,lastIdx=-1;
   if(DAILY)for(let i=0;i<DAILY.length;i++){if(dStore[DAILY[i].iso]){run++;if(run>best)best=run;lastIdx=i;}else run=0;}
   let cur=0;
   if(lastIdx>=0&&DAILY){const gap=Math.round((Date.parse(TODAY_ISO)-Date.parse(DAILY[lastIdx].iso))/86400000);if(gap<=1){for(let i=lastIdx;i>=0;i--){if(dStore[DAILY[i].iso])cur++;else break;}}}
-  if(banner)banner.innerHTML='<div><span class="pb-num">🔥 '+cur+'</span><span class="pb-lbl">当前连续（天）</span></div>'
-    +'<div><span class="pb-num">🏆 '+best+'</span><span class="pb-lbl">最长连续（天）</span></div>'
-    +'<div><span class="pb-num">'+dDone+' / '+TOTAL_DAYS+'</span><span class="pb-lbl">每日打卡已累计</span></div>';
+  const cc=countChecked('cdga-check');
+  const q=getStore(QUIZ_STORE).answers||{}; const qDone=Object.keys(q).length;
+  const vc=countChecked('cdga-res');
+  const lc=countChecked('ladder-checks');
+  const ddc=countChecked('datadev-checks');
+  const rc=countChecked('ruankao-check-list');
+  const dtc=countChecked('datadev-check-list');
+  const gc=countChecked('cdgp-check-list');
+  let genDailyDone=0,genDailyTot=0;
+  Object.keys(window.GEN||{}).forEach(function(p){const e=window.GEN[p];if(!e)return;genDailyDone+=Object.values(e.store).filter(Boolean).length;genDailyTot+=e.totalDays;});
+  let sumDone=dDone+cc.done+qDone+vc.done+lc.done+ddc.done+rc.done+dtc.done+gc.done+genDailyDone;
+  let sumTot=TOTAL_DAYS+cc.total+QUIZ_TOTAL+vc.total+lc.total+ddc.total+rc.total+dtc.total+gc.total+genDailyTot;
+  const overall=sumTot?Math.round(sumDone/sumTot*100):0;
+  metrics.innerHTML=metricCard(cur,'当前连续','天')+metricCard(dDone+' / '+TOTAL_DAYS,'累计打卡','CDGA 182天')+metricCard(overall+'%','总体完成率','全部模块');
+  const st=currentStage();
+  let dayInfo='';
+  if(st.id==='cdga-daily'){
+    const t=DAILY_BY_ISO[navTodayISO()];
+    if(t)dayInfo='第 '+t.w+' 周 · Day '+t.day+' · 本周：'+t.focus;
+  }else{
+    const e=Object.values(window.GEN||{}).find(function(g){return g.cfg.pageId===st.id;});
+    if(e){const idx=e.days.findIndex(function(x){return x.iso===navTodayISO();});if(idx>=0)dayInfo='第 '+(idx+1)+' / '+e.totalDays+' 天';}
+  }
+  today.innerHTML='<div class="today-badge">当前主攻</div><div class="today-body"><div class="today-title">'+escH(st.name)+'</div><div class="today-sub">'+escH(st.start)+' → '+escH(st.end)+(dayInfo?' · '+dayInfo:'')+'</div><button class="today-cta" data-goto="daily">进入今日学习 →</button></div>';
+  const cdgaSubs=[
+    {name:'📅 每日打卡',done:dDone,total:TOTAL_DAYS,page:'cdga-daily'},
+    {name:'✅ 知识点自查',done:cc.done,total:cc.total,page:'cdga-check'},
+    {name:'📝 原创自测',done:qDone,total:QUIZ_TOTAL,page:'cdga-quiz'},
+    {name:'▶️ B站视频',done:vc.done,total:vc.total,page:'cdga-res'}
+  ];
+  let cdgaDone=0,cdgaTot=0; cdgaSubs.forEach(function(s){cdgaDone+=s.done;cdgaTot+=s.total;});
+  let g='';
+  g+=goalCard('CDGA 主备考','进行中 · '+st.start+' → '+st.end, cdgaTot?Math.round(cdgaDone/cdgaTot*100):0, cdgaSubs, true, true);
+  const advDefs=[{prefix:'ruankao',title:'软考·数据库系统工程师',chk:rc},{prefix:'datadev',title:'数据开发工程师',chk:dtc},{prefix:'cdgp',title:'CDGP 数据治理专家',chk:gc}];
+  let advSubs=[],advDone=0,advTot=0;
+  advDefs.forEach(function(a){
+    const sub=genSubFor(a.prefix);
+    const done=sub.dDone+sub.cDone, total=sub.dTot+sub.cTot;
+    advDone+=done; advTot+=total;
+    const e=window.GEN[a.prefix];
+    advSubs.push({name:a.title,done:done,total:total,page:(e&&e.cfg.pageId)||'advanced-check'});
+  });
+  g+=goalCard('进阶考证','未开始 · 3 个目标（点击展开/收起）', advTot?Math.round(advDone/advTot*100):0, advSubs, false, false);
+  g+=goalCard('读博·交大（上海交大在职博士）','目标入学 2028-09 · 时间线已规划', 0, [{name:'申请计划 / 推荐信 / 网址汇总',page:'phd'}], false, true);
+  goals.innerHTML=g;
+  metrics.querySelectorAll('[data-goto]').forEach(function(c){c.onclick=function(){showPage(c.dataset.goto);};});
+  today.querySelectorAll('[data-goto]').forEach(function(c){c.onclick=function(){showPage(c.dataset.goto);};});
+  goals.querySelectorAll('[data-goto]').forEach(function(c){c.onclick=function(){showPage(c.dataset.goto);};});
+  goals.querySelectorAll('.goal-head').forEach(function(h){h.onclick=function(){h.closest('.goal-card').classList.toggle('open');};});
 }
 function buildDailyArticles(){
   const all=window.ARTICLES||[];
@@ -4098,8 +4255,8 @@ function renderSources(){
   const grid=document.getElementById('srcGrid');
   if(grid) grid.addEventListener('click',e=>{
     const all=e.target.closest('.src-all');
-    if(all){ const cat=all.dataset.cat; newsCat=cat; const nc=document.getElementById('newsCats'); if(nc) nc.querySelectorAll('.nf-cat').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat)); newsFilter='all'; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub)ub.classList.remove('active'); const nf=document.getElementById('newsFilters'); if(nf)nf.querySelectorAll('.nf-chip').forEach(x=>x.classList.toggle('active',x.dataset.f==='all')); renderNews(); showPage('cdga-news'); return; }
-    if(e.target.closest('.src-item')){ showPage('cdga-news'); }
+    if(all){ const cat=all.dataset.cat; newsCat=cat; const nc=document.getElementById('newsCats'); if(nc) nc.querySelectorAll('.nf-cat').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat)); newsFilter='all'; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub)ub.classList.remove('active'); const nf=document.getElementById('newsFilters'); if(nf)nf.querySelectorAll('.nf-chip').forEach(x=>x.classList.toggle('active',x.dataset.f==='all')); renderNews(); showPage('cdga-res'); switchResTab('res-news'); return; }
+    if(e.target.closest('.src-item')){ showPage('cdga-res'); switchResTab('res-news'); }
   });
   renderSources();
 })();
