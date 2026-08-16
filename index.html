@@ -825,6 +825,17 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 .src-card.active-src{border-color:var(--accent);box-shadow:0 4px 14px rgba(0,0,0,.10);background:var(--surface-2)}
 .news-acc-chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--accent);color:var(--text);border-radius:18px;padding:6px 12px;margin:10px 0;font-size:13px;font-weight:600}
 .news-acc-chip button{font:inherit;font-weight:700;border:none;background:var(--accent);color:#fff;border-radius:12px;padding:2px 9px;cursor:pointer}
+
+/* PhD Preparation Path */
+.phd-phase{font-size:1.15em;font-weight:700;color:var(--text);margin:24px 0 4px}
+.phd-phase-desc{color:var(--text-2);font-size:0.9em;margin-bottom:10px}
+.phd-task-group{font-size:0.92em;font-weight:600;color:var(--primary);margin:14px 0 6px;padding-left:2px}
+.phd-tasks{list-style:none;padding:0;margin:0 0 12px}
+.phd-tasks li{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:6px;font-size:0.9em;line-height:1.5;transition:background .15s}
+.phd-tasks li:hover{background:var(--surface-1)}
+.phd-tasks li input[type="checkbox"]{margin-top:3px;flex-shrink:0;accent-color:var(--primary);width:16px;height:16px;cursor:pointer}
+.phd-tasks li:has(input:checked){opacity:.55;text-decoration:line-through;text-decoration-color:var(--border)}
+.phd-tasks li b{color:var(--text)}
 .src-head{display:flex;align-items:center;gap:8px}
 .src-tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
 .tag-考证{background:var(--red-soft);color:var(--red)}
@@ -2301,17 +2312,133 @@ Date: [Month] [Year]</code></pre>
         </table></div>
         <div class="callout info"><span class="ct">📅 查简章节奏</span>每年 <b>3–5 月、9–11 月</b>为高发期（非全工程博士多春季批，约 3–5 月报名、9 月入学）。盯两处：① 研招网博士栏目 ② 目标院系「招生通知」。站内搜：<code>非全日制工程类专业学位博士</code> <code>申请-考核</code>。</div>
 
-<!-- ===== 七、行动清单 ===== -->
-<h2 style="margin-top:30px;border-top:1px solid var(--border);padding-top:20px">七、现在该做什么？</h2>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>阶段</th><th>时间</th><th>核心动作</th><th>🔴 最优先</th></tr></thead>
-          <tbody>
-            <tr><td><b>A 起步</b></td><td>现在 ~ 2026-12</td><td>定方向 + 经营领导 + CSCSE 认证 + CDGA 冲刺</td><td>给日本硕士导师发续旧邮件</td></tr>
-            <tr><td><b>B 筑基</b></td><td>2027 全年</td><td>CDGA 到手 + 续考 CDGP + 主导数据治理项目 + 结识推荐人</td><td>9 月盯 2028 简章 + 联系导师</td></tr>
-            <tr><td><b>C 冲刺</b></td><td>2028 H1</td><td>出论文/专利 + 备齐全部材料 + 网报 + 复试</td><td>9 月入学</td></tr>
-          </tbody>
-        </table></div>
-        <div class="doc-sub" style="border:none;margin-top:16px">修正日期 2026-08-14（v2 重构）· 目标入学 2028-09 · 所有年限/方向/名额以申请当年官方简章为准。</div>
+<!-- ===== 七、准备路径 ===== -->
+<h2 style="margin-top:30px;border-top:1px solid var(--border);padding-top:20px">七、准备路径 <span style="font-size:0.75em;color:var(--muted)">☐ 可勾选 · localStorage 持久化 · 结合时间线 + 材料 + 推荐信</span></h2>
+<div class="callout warn"><span class="ct">⏰ 核心约束</span>2028-03 工龄满 3 年（红线）；非全工程博士春季批多在 <b>3–5 月网报、9 月入学</b>；推荐信须提前 1–2 个月请托；CSCSE 认证需 1–2 个月。所有材料准备的死线都倒推到 <b>2028-02 底前备齐</b>。</div>
+
+<!-- Phase A -->
+<h3 class="phd-phase">🅰️ 起步期：现在 ~ 2026-12（约 4 个月）</h3>
+<p class="phd-phase-desc">目标：打通人脉线、启动认证、CDGA 冲刺、明确方向。</p>
+
+<h4 class="phd-task-group">🔴 最紧迫（推荐信窗口仅剩 ~18 个月）</h4>
+<ul class="phd-tasks" data-phd="A">
+  <li><input type="checkbox" data-pk="A01"> <b>A01</b> 给日本硕士导师发「续旧」邮件——先不提推荐信，只汇报近况+附中文简历；目标是恢复联系、确认邮箱仍有效</li>
+  <li><input type="checkbox" data-pk="A02"> <b>A02</b> 准备推荐信备用池：列出可能的第 2 位推荐人（校企导师 / 本科院长 / 项目合作教授），标注关系与联系方式</li>
+</ul>
+
+<h4 class="phd-task-group">📋 认证 & 资格</h4>
+<ul class="phd-tasks" data-phd="A">
+  <li><input type="checkbox" data-pk="A03"> <b>A03</b> 启动 <b>CSCSE 国外学历学位认证</b>（日本硕士）→ 登录 zwfw.cscse.edu.cn 申请，需 1–2 个月，越早越好</li>
+  <li><input type="checkbox" data-pk="A04"> <b>A04</b> 确认境内学位证/毕业证（本科+硕士）原件在手，学信网可查</li>
+  <li><input type="checkbox" data-pk="A05"> <b>A05</b> 找出硕士成绩单、硕士学位论文电子版（整本扫描件，非应届必须）</li>
+</ul>
+
+<h4 class="phd-task-group">💼 工作 & 方向</h4>
+<ul class="phd-tasks" data-phd="A">
+  <li><input type="checkbox" data-pk="A06"> <b>A06</b> 跟直接领导/HR 垫读博意向（单位同意证明的前提，不宜临到才提）</li>
+  <li><input type="checkbox" data-pk="A07"> <b>A07</b> 盘点当前岗位工作内容，确认归入「数据治理 / 数据工程 / 能源互联网」方向（影响研究计划选题）</li>
+  <li><input type="checkbox" data-pk="A08"> <b>A08</b> 整理 datalake-etl 相关项目经历为「科研成果素材」（ETL流水线、数据治理门户、血缘扫描器等→可包装为论文/专利/软著）</li>
+</ul>
+
+<h4 class="phd-task-group">🎓 CDGA</h4>
+<ul class="phd-tasks" data-phd="A">
+  <li><input type="checkbox" data-pk="A09"> <b>A09</b> CDGA 备考冲刺（目标 2027-03 考试）— 按每日学习中心 W1–W26 计划推进</li>
+</ul>
+
+<!-- Phase B -->
+<h3 class="phd-phase">🅱️ 筑基期：2027 全年（12 个月）</h3>
+<p class="phd-phase-desc">目标：证书到手、项目产出、人脉到位、研究计划成型。</p>
+
+<h4 class="phd-task-group">Q1（1–3 月）</h4>
+<ul class="phd-tasks" data-phd="B">
+  <li><input type="checkbox" data-pk="B01"> <b>B01</b> <b>拿下 CDGA</b>（3 月考试）— 申请前最硬背书</li>
+  <li><input type="checkbox" data-pk="B02"> <b>B02</b> 第二次联系硕士导师（汇报 CDGA 成绩 + 工作进展，关系持续升温）</li>
+  <li><input type="checkbox" data-pk="B03"> <b>B03</b> 初步确定研究计划方向（数据治理 × 电力能源？数据中台架构？DAMA 框架落地？）</li>
+</ul>
+
+<h4 class="phd-task-group">Q2（4–6 月）</h4>
+<ul class="phd-tasks" data-phd="B">
+  <li><input type="checkbox" data-pk="B04"> <b>B04</b> 报名并备考 <b>CDGP</b>（形成 CDGA→CDGP 证书链）</li>
+  <li><input type="checkbox" data-pk="B05"> <b>B05</b> 主导或深度参与 1 个数据治理相关项目（产出论文/专利的素材来源）</li>
+  <li><input type="checkbox" data-pk="B06"> <b>B06</b> 开始撰写论文/软著/专利初稿（目标 2027 内至少出 1 项）</li>
+</ul>
+
+<h4 class="phd-task-group">Q3（7–9 月）⭐ 关键季度</h4>
+<ul class="phd-tasks" data-phd="B">
+  <li><input type="checkbox" data-pk="B07"> <b>B07</b> CDGP 考试</li>
+  <li><input type="checkbox" data-pk="B08"> <b>B08</b> 🔴 <b>紧盯交大 2028 年博士招生简章</b>（高发期 9–11 月，关注电院/智慧能源/安泰）</li>
+  <li><input type="checkbox" data-pk="B09"> <b>B09</b> 🔴 <b>开始联系意向导师</b>（电院师资 seiee.sjtu.edu.cn → 按「电气工程/能源互联网/数据管理」方向筛选 2–3 位，附简历+研究计划概要发邮件）</li>
+  <li><input type="checkbox" data-pk="B10"> <b>B10</b> 确定第 2 位推荐人并首次沟通（表明读博意向，试探意愿）</li>
+</ul>
+
+<h4 class="phd-task-group">Q4（10–12 月）</h4>
+<ul class="phd-tasks" data-phd="B">
+  <li><input type="checkbox" data-pk="B11"> <b>B11</b> 完成 <b>研究计划书初稿</b>（3000–5000 字：研究背景→问题→方法→预期创新→参考文献）</li>
+  <li><input type="checkbox" data-pk="B12"> <b>B12</b> 论文/专利/软著投稿或提交申请</li>
+  <li><input type="checkbox" data-pk="B13"> <b>B13</b> 准备推荐信草稿（中文模板给国内推荐人、英文模板给日本导师），附最新简历</li>
+  <li><input type="checkbox" data-pk="B14"> <b>B14</b> 第三次联系硕士导师（附研究计划初稿，暗示即将进入申请季）</li>
+</ul>
+
+<!-- Phase C -->
+<h3 class="phd-phase">🅲 冲刺期：2028 H1（约 6 个月）</h3>
+<p class="phd-phase-desc">目标：全部材料齐备、网报完成、复试通过、入学。</p>
+
+<h4 class="phd-task-group">1–2 月（材料收口月）</h4>
+<ul class="phd-tasks" data-phd="C">
+  <li><input type="checkbox" data-pk="C01"> <b>C01</b> 确认 <b>CSCSE 认证书</b>已到手（若未启动则立即加急）</li>
+  <li><input type="checkbox" data-pk="C02"> <b>C02</b> <b>研究计划书定稿</b>（根据导师反馈修改最终版）</li>
+  <li><input type="checkbox" data-pk="C03"> <b>C03</b> 🔴 <b>正式请托两位推荐人</b>（发邮件+附草稿+简历+CSCSE信息；日本导师务必确认用高校邮箱 @xxx.ac.jp；<b>系统将在你网报后自动发邮件给他们</b>，但需提前 1–2 个月确认他们愿意且有时间）</li>
+  <li><input type="checkbox" data-pk="C04"> <b>C04</b> 确认外语水平证明（CET-6 成绩单 / 或已报名雅思/托福）</li>
+  <li><input type="checkbox" data-pk="C05"> <b>C05</b> 整理科研成果清单（论文/专利/软著/项目证明）复印件或 PDF</li>
+</ul>
+
+<h4 class="phd-task-group">3 月（工龄达标 + 单位证明）</h4>
+<ul class="phd-tasks" data-phd="C">
+  <li><input type="checkbox" data-pk="C06"> <b>C06</b> 🎉 <b>工龄满 3 年</b>（满足非全工程博士年限门槛）</li>
+  <li><input type="checkbox" data-pk="C07"> <b>C07</b> 拿到 <b>单位人事部门同意报考证明</b>（盖章原件）</li>
+  <li><input type="checkbox" data-pk="C08"> <b>C08</b> 最终确认目标院系+导师（根据 2028 简章微调）</li>
+</ul>
+
+<h4 class="phd-task-group">4–5 月（网报高峰）</h4>
+<ul class="phd-tasks" data-phd="C">
+  <li><input type="checkbox" data-pk="C09"> <b>C09</b> 🔴 <b>研招网博士网上报名</b>（填个人信息、上传材料、填写推荐人姓名+邮箱→系统自动发邀请邮件）</li>
+  <li><input type="checkbox" data-pk="C10"> <b>C10</b> 上传全部材料：报名表、学历认证、学位证、成绩单、学位论文、单位同意证明、研究计划、外语证明、科研成果</li>
+  <li><input type="checkbox" data-pk="C11"> <b>C11</b> 跟进两位推荐人 <b>在线提交推荐信</b>（系统发信后他们点链接填写；每周温和提醒一次直到完成）</li>
+</ul>
+
+<h4 class="phd-task-group">6–8 月（复试 & 录取）</h4>
+<ul class="phd-tasks" data-phd="C">
+  <li><input type="checkbox" data-pk="C12"> <b>C12</b> 关注初审结果 & 复试通知</li>
+  <li><input type="checkbox" data-pk="C13"> <b>C13</b> 准备复试：研究计划 PPT + 专业问答（数据治理/DAMA/数据中台/电力大数据方向）</li>
+  <li><input type="checkbox" data-pk="C14"> <b>C14</b> 参加复试</li>
+  <li><input type="checkbox" data-pk="C15"> <b>C15</b> 🎉 <b>录取 → 9 月入学</b></li>
+</ul>
+
+<!-- 材料总检 -->
+<h3 class="phd-phase" style="margin-top:28px">📦 材料总检清单（网报时逐项勾选）</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>#</th><th>材料</th><th>状态</th><th>办理渠道 / 备注</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>博士研究生报名表</td><td>网报生成</td><td>研招网博士报名系统</td></tr>
+    <tr><td>2</td><td><b>国外学历学位认证书（CSCSE）</b></td><td style="color:var(--danger)">⚠️ 需办理</td><td>zwfw.cscse.edu.cn（1–2 个月）</td></tr>
+    <tr><td>3</td><td>硕士/本科学位证 + 毕业证</td><td>✅ 应有</td><td>复印件+学信网核验</td></tr>
+    <tr><td>4</td><td>硕士成绩单 + 学位论文</td><td>✅ 应有</td><td>整本扫描件</td></tr>
+    <tr><td>5</td><td><b>单位同意报考证明</b></td><td style="color:var(--danger)">⚠️ 需办理</td><td>人事部门盖章（2028-03 后）</td></tr>
+    <tr><td>6</td><td><b>两位专家推荐信</b></td><td style="color:var(--danger)">⚠️ 最紧迫</td><td>系统在线提交（详见⑤）</td></tr>
+    <tr><td>7</td><td>研究计划书</td><td>待撰写</td><td>3000–5000 字（2027 Q4 初稿）</td></tr>
+    <tr><td>8</td><td>外语水平证明</td><td>待确认</td><td>CET-6 / 雅思 / 托福 / N1</td></tr>
+    <tr><td>9</td><td>科研成果</td><td>待积累</td><td>论文/专利/软著/项目证明（2027 内至少 1 项）</td></tr>
+    <tr><td>10</td><td>CDGA / CDGP 证书</td><td>进行中</td><td>CDGA 2027-03 / CDGP 2027 下半年</td></tr>
+  </tbody>
+</table></div>
+
+<div class="doc-sub" style="border:none;margin-top:16px">
+  <b>进度统计：</b>已完成 <span id="phdDone">0</span> / <span id="phdTotal">0</span> 项 · 
+  🅰️起步 <span id="phdADone">0</span>/<span id="phdATotal">0</span> · 
+  🅱️筑基 <span id="phdBDone">0</span>/<span id="phdBTotal">0</span> · 
+  🅲冲刺 <span id="phdCDone">0</span>/<span id="phdCTotal">0</span>
+</div>
+<div class="doc-sub" style="border:none;margin-top:4px">修正日期 2026-08-16（v3 细化准备路径）· 目标入学 2028-09 · 所有年限/方向/名额以申请当年官方简章为准。</div><div class="doc-sub" style="border:none;margin-top:16px">修正日期 2026-08-14（v2 重构）· 目标入学 2028-09 · 所有年限/方向/名额以申请当年官方简章为准。</div>
 
         </div></div>
       </section>
@@ -2730,6 +2857,42 @@ function updateLadderProgress(){
   const target=document.getElementById('ladderProgress');
   if(target)target.textContent=`已完成 ${done} / ${all.length}`;
 }
+
+/* ---------- PhD Preparation Path (section 7) ---------- */
+const PHD_KEY='bb-phd-path';
+function loadPhd(){try{return JSON.parse(localStorage.getItem(PHD_KEY))||{}}catch(e){return{}}}
+function savePhd(o){localStorage.setItem(PHD_KEY,JSON.stringify(o))}
+function updatePhdProgress(){
+  const all=document.querySelectorAll('.phd-tasks input[type="checkbox"]');
+  if(!all.length)return;
+  const done=[...all].filter(c=>c.checked).length;
+  const aAll=document.querySelectorAll('[data-phd="A"] input[type="checkbox"]');
+  const aDone=aAll.filter(c=>c.checked).length;
+  const bAll=document.querySelectorAll('[data-phd="B"] input[type="checkbox"]');
+  const bDone=bAll.filter(c=>c.checked).length;
+  const cAll=document.querySelectorAll('[data-phd="C"] input[type="checkbox"]');
+  const cDone=cAll.filter(c=>c.checked).length;
+  const t=document.getElementById('phdTotal');if(t)t.textContent=all.length;
+  const d=document.getElementById('phdDone');if(d)d.textContent=done;
+  const at=document.getElementById('phdATotal');if(at)at.textContent=aAll.length;
+  const ad=document.getElementById('phdADone');if(ad)ad.textContent=aDone;
+  const bt=document.getElementById('phdBTotal');if(bt)bt.textContent=bAll.length;
+  const bd=document.getElementById('phdBDone');if(bd)bd.textContent=bDone;
+  const ct=document.getElementById('phdCTotal');if(ct)ct.textContent=cAll.length;
+  const cd=document.getElementById('phdCDone');if(cd)cd.textContent=cDone;
+}
+(function initPhdPath(){
+  const state=loadPhd();
+  document.querySelectorAll('.phd-tasks input[type="checkbox"]').forEach(c=>{
+    const k=c.dataset.pk;
+    c.checked=!!state[k];
+    c.addEventListener('change',()=>{
+      const s=loadPhd();s[k]=c.checked;savePhd(s);
+      updatePhdProgress();
+    });
+  });
+  updatePhdProgress();
+})();
 
 /* ---------- Data-Dev checklist ---------- */
 const DATADEV_KEY='bb-datadev-checks';
