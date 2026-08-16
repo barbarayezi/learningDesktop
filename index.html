@@ -146,6 +146,18 @@ pre code{background:none;padding:0}
 .vcell{text-align:center;width:46px;vertical-align:middle}
 .vcell input{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
 .tbl-wrap table tr.vdone td{background:var(--surface-2)}
+.vb-dims{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.dim-btn{font-size:13px;font-weight:600;padding:7px 16px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s}
+.dim-btn:hover{color:var(--accent);border-color:var(--accent)}
+.dim-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.vb-tag{font-size:12px;font-weight:600;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.vcard{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--bg-soft);margin-top:6px}
+.vcard-head{font-weight:700;margin-bottom:8px;color:var(--text)}
+.vcard-row{display:flex;gap:10px;padding:6px 0;border-top:1px solid var(--border)}
+.vcard-row .vtag{flex:0 0 132px;font-weight:700;color:var(--accent);font-size:13px}
+.vcard-sub{margin-top:8px;color:var(--text-2);font-size:13px;line-height:1.6}
+.vweek-btn{margin-top:12px;font:inherit;font-weight:700;padding:8px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer}
+.vweek-btn.done{background:var(--green);border-color:var(--green);color:#fff}
 .chk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 6px}
 .chk-head h3{margin:0}
 
@@ -1326,6 +1338,29 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 
         <h2 style="margin-top:26px">📐 每日五步节奏（长期不变）</h2>
         <div class="callout tip">目标 → 看课 → 阅读 → 术语 → 自测 → 打卡。工作日约 1–1.5h（看课 25 + 阅读 35 + 术语/自测 20 + 打卡）；周末约 2.5–3h（系统课 50 + 精学/刷题 90 + 复盘 40）。某晚只有 1h 就压缩为「看课 20 + 阅读 30 + 自测/打卡 10」。所有免费资料与 52 道原创题已内置在本站，无需打开任何 md。</div>
+
+        <div class="res-block" id="videoChecks">
+        <h2 style="margin-top:30px">📺 B站视频打卡 <span class="vb-tag">CDGA 专属</span></h2>
+        <div class="doc-sub">视频周历的打卡集中在这里（不在资料清单）。支持 <b>今日 / 本周 / 全 26 周</b> 三视角切换；进度同步到「我的进度」。</div>
+        <div class="vb-dims">
+          <button class="dim-btn active" data-dim="all" type="button">全 26 周</button>
+          <button class="dim-btn" data-dim="week" type="button">本周</button>
+          <button class="dim-btn" data-dim="today" type="button">今日</button>
+        </div>
+        <div class="progress"><i id="videoBar"></i></div>
+        <div class="progress-label" id="videoLabel">已打卡 0 / 26 周</div>
+
+        <div class="vb-pane" id="vbAll">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>工作日晚上（碎片/短视频）</th><th>周末（系统课/专栏）</th><th>✅ 打卡</th></tr></thead>
+              <tbody id="videoRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="vb-pane" id="vbWeek" hidden><div id="videoWeekCard"></div></div>
+        <div class="vb-pane" id="vbToday" hidden><div id="videoTodayCard"></div></div>
+        </div><!-- /videoChecks -->
       </section>
 
       <!-- 资料阅读器（iframe 弹窗，站内看 PDF/笔记） -->
@@ -1605,42 +1640,7 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         </div>
 
         <h3>🗓️ 视频学习周历（W1–W26 全量）</h3>
-        <div class="progress"><i id="videoBar"></i></div>
-        <div class="progress-label" id="videoLabel">已打卡 0 / 26 周</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>周</th><th>日期</th><th>阶段</th><th>工作日晚上（碎片/短视频）</th><th>周末（系统课/专栏）<th>✅ 打卡</th></tr></thead>
-            <tbody>
-              <tr><td>W1</td><td>8/15–8/21</td><td>准备</td><td>搜「DAMA视频系列」关注，看前 5 集（DAMA 是什么/12 原则）</td><td>看 #11 专栏《认证介绍+大纲》（30min）；定收藏夹</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W2</td><td>8/22–8/28</td><td>准备</td><td>DAMA视频系列「第1章 数据管理」短集（每天 2 集）</td><td>#9 数语《数据行业职业发展》(40min) + #11 大纲再读</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W3</td><td>8/29–9/4</td><td>通读</td><td>DAMA视频系列「数据治理」短集</td><td>#3 数语《数据治理与数据中台架构》(2–3h)</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W4</td><td>9/5–9/11</td><td>通读</td><td>DAMA视频系列「质量/元数据」短集</td><td>#2 尚硅谷 Atlas 元数据 + #6/#7/#8 资产目录上中下</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W5</td><td>9/12–9/18</td><td>通读</td><td>DAMA视频系列「数仓/主数据」短集</td><td>#1 哈喽鹏程数仓课挑章 + #12/#13 专栏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W6</td><td>9/19–9/25</td><td>通读</td><td>DAMA视频系列「建模/架构」短集</td><td>#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W7</td><td>9/26–10/2</td><td>通读</td><td>DAMA视频系列「安全/大数据/成熟度」短集</td><td>#4 数语《数据标准》补看 + 思维导图 v2</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W8</td><td>10/3–10/9</td><td>高分精学</td><td>回看 #3 + DAMA视频系列治理短集</td><td>#3 数语《数据治理》二刷 + 案例卡整理</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W9</td><td>10/10–10/16</td><td>高分精学</td><td>回看 DAMA视频系列质量短集</td><td>#12 专栏《数仓+质量》精读 + 质量六维度笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W10</td><td>10/17–10/23</td><td>高分精学</td><td>回看 #2 尚硅谷 Atlas 片段</td><td>#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W11</td><td>10/24–10/30</td><td>高分精学</td><td>回看 #1 数仓课片段</td><td>#1 数仓课二刷（ETL vs ELT 章）+ #13 专栏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W12</td><td>10/31–11/6</td><td>高分精学</td><td>回看 #6/#7/#8 资产目录片段</td><td>#6/#7/#8 资产目录三集二刷 + 户号↔合同 mapping 案例</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W13</td><td>11/7–11/13</td><td>高分精学</td><td>回看 #5 数语《数据模型》片段</td><td>#5 数据模型二刷 + 维度 vs 范式辨析笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W14</td><td>11/14–11/20</td><td>高分精学</td><td>高分域 DAMA视频系列错题相关短集</td><td>高分域视频三刷 + 章节题（目标 ≥75%）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W15</td><td>11/21–11/27</td><td>中分精学</td><td>DAMA视频系列架构短集</td><td>#4 数语《数据标准》+ 企业数据模型笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W16</td><td>11/28–12/4</td><td>中分精学</td><td>DAMA视频系列安全短集</td><td>安全分类分级 + 个保法/等保 笔记</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W17</td><td>12/5–12/11</td><td>中分精学</td><td>DAMA视频系列大数据短集</td><td>大数据 6V 特征 + 电网 15min 账单案例</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W18</td><td>12/12–12/18</td><td>中分精学</td><td>DAMA视频系列成熟度短集</td><td>成熟度模型笔记（说清 2 个模型）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W19</td><td>12/19–12/25</td><td>低分精学</td><td>DAMA视频系列低分域短集（碎片补足）</td><td>4 域速记卡</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W20</td><td>12/26–1/1</td><td>低分精学</td><td>DAMA视频系列低分域短集</td><td>3 域速记 + 思维导图 v3 全量回顾</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W21</td><td>1/2–1/8</td><td>刷题</td><td>错题对应 DAMA视频系列短集回看</td><td>高分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W22</td><td>1/9–1/15</td><td>刷题</td><td>同上</td><td>中分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W23</td><td>1/16–1/22</td><td>刷题</td><td>同上</td><td>低分域视频错题章回看</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W24</td><td>1/23–1/29</td><td>刷题</td><td>正确率&lt;70% 域回看对应视频</td><td>全局视频查漏</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W25</td><td>1/30–2/5</td><td>冲刺</td><td>只回看薄弱章短视频</td><td>限时模拟考 + 失分域视频补救</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-              <tr><td>W26</td><td>2/6–2/12</td><td>冲刺</td><td>只看错题本 + 术语表</td><td>模拟考2 + 临考清单（视频停看，保状态）</td><td class="vcell"><input type="checkbox" class="vchk"></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="callout tip">心法：短视频（DAMA视频系列）当通勤碎片开胃菜；长课（哈喽鹏程/尚硅谷/数语）留到周末大块时间；专栏当对照表。W8 起进入精学，视频改为回看对应章；W21 起刷题为主，视频仅查漏。</div>
+        <div class="callout tip">📺 视频周历的「打卡」已移到 <b>📅 每日学习中心 · CDGA 阶段</b>（顶栏「每日学习中心」入口）。在那里支持 <b>今日 / 本周 / 全 26 周</b> 三视角切换打卡，进度同步到「我的进度」。上方「B站资源总览」仍可在本页直接点链接观看。</div>
 
         <h3>🆓 免费合法、但需在浏览器里看/听（无需下载）</h3>
         <ul>
@@ -2668,29 +2668,101 @@ function setCheckState(i, checked){
   updateProgress();
 })();
 
-/* ---------- Video schedule check-in (independent) ---------- */
+/* ---------- Video schedule check-in (CDGA daily center) ---------- */
 const VKEY='bb-video-checks';
 function loadVideo(){try{return JSON.parse(localStorage.getItem(VKEY))||{}}catch(e){return{}}}
 function saveVideo(o){localStorage.setItem(VKEY,JSON.stringify(o))}
+const VIDEO_WEEKS=[
+ [1,'8/15–8/21','准备','搜「DAMA视频系列」关注，看前 5 集（DAMA 是什么/12 原则）','看 #11 专栏《认证介绍+大纲》（30min）；定收藏夹'],
+ [2,'8/22–8/28','准备','DAMA视频系列「第1章 数据管理」短集（每天 2 集）','#9 数语《数据行业职业发展》(40min) + #11 大纲再读'],
+ [3,'8/29–9/4','通读','DAMA视频系列「数据治理」短集','#3 数语《数据治理与数据中台架构》(2–3h)'],
+ [4,'9/5–9/11','通读','DAMA视频系列「质量/元数据」短集','#2 尚硅谷 Atlas 元数据 + #6/#7/#8 资产目录上中下'],
+ [5,'9/12–9/18','通读','DAMA视频系列「数仓/主数据」短集','#1 哈喽鹏程数仓课挑章 + #12/#13 专栏'],
+ [6,'9/19–9/25','通读','DAMA视频系列「建模/架构」短集','#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)'],
+ [7,'9/26–10/2','通读','DAMA视频系列「安全/大数据/成熟度」短集','#4 数语《数据标准》补看 + 思维导图 v2'],
+ [8,'10/3–10/9','高分精学','回看 #3 + DAMA视频系列治理短集','#3 数语《数据治理》二刷 + 案例卡整理'],
+ [9,'10/10–10/16','高分精学','回看 DAMA视频系列质量短集','#12 专栏《数仓+质量》精读 + 质量六维度笔记'],
+ [10,'10/17–10/23','高分精学','回看 #2 尚硅谷 Atlas 片段','#2 元数据实战二刷 + 画 EPK→ODS→DWS 血缘图'],
+ [11,'10/24–10/30','高分精学','回看 #1 数仓课片段','#1 数仓课二刷（ETL vs ELT 章）+ #13 专栏'],
+ [12,'10/31–11/6','高分精学','回看 #6/#7/#8 资产目录片段','#6/#7/#8 资产目录三集二刷 + 户号↔合同 mapping 案例'],
+ [13,'11/7–11/13','高分精学','回看 #5 数语《数据模型》片段','#5 数据模型二刷 + 维度 vs 范式辨析笔记'],
+ [14,'11/14–11/20','高分精学','高分域 DAMA视频系列错题相关短集','高分域视频三刷 + 章节题（目标 ≥75%）'],
+ [15,'11/21–11/27','中分精学','DAMA视频系列架构短集','#4 数语《数据标准》+ 企业数据模型笔记'],
+ [16,'11/28–12/4','中分精学','DAMA视频系列安全短集','安全分类分级 + 个保法/等保 笔记'],
+ [17,'12/5–12/11','中分精学','DAMA视频系列大数据短集','大数据 6V 特征 + 电网 15min 账单案例'],
+ [18,'12/12–12/18','中分精学','DAMA视频系列成熟度短集','成熟度模型笔记（说清 2 个模型）'],
+ [19,'12/19–12/25','低分精学','DAMA视频系列低分域短集（碎片补足）','4 域速记卡'],
+ [20,'12/26–1/1','低分精学','DAMA视频系列低分域短集','3 域速记 + 思维导图 v3 全量回顾'],
+ [21,'1/2–1/8','刷题','错题对应 DAMA视频系列短集回看','高分域视频错题章回看'],
+ [22,'1/9–1/15','刷题','同上','中分域视频错题章回看'],
+ [23,'1/16–1/22','刷题','同上','低分域视频错题章回看'],
+ [24,'1/23–1/29','刷题','正确率<70% 域回看对应视频','全局视频查漏'],
+ [25,'1/30–2/5','冲刺','只回看薄弱章短视频','限时模拟考 + 失分域视频补救'],
+ [26,'2/6–2/12','冲刺','只看错题本 + 术语表','模拟考2 + 临考清单（视频停看，保状态）']
+];
+function vParse(md){const p=md.split('/').map(Number);const y=(p[0]>=8?2026:2027);return new Date(y+'-'+String(p[0]).padStart(2,'0')+'-'+String(p[1]).padStart(2,'0'));}
+function vIdxForToday(){const t=new Date();for(let i=0;i<VIDEO_WEEKS.length;i++){const parts=VIDEO_WEEKS[i][1].split('–');const s=vParse(parts[0]),e=vParse(parts[1]);if(t>=s&&t<=e)return i;}const iso=t.toLocaleDateString('sv');return iso<'2026-08-15'?0:VIDEO_WEEKS.length-1;}
 function updateVideoProgress(){
-  const all=document.querySelectorAll('#cdga-res .vchk');
+  const all=document.querySelectorAll('#videoChecks .vchk');
   if(!all.length)return;
-  const done=document.querySelectorAll('#cdga-res .vchk:checked').length;
-  document.getElementById('videoBar').style.width=(done/all.length*100)+'%';
-  document.getElementById('videoLabel').textContent='已打卡 '+done+' / '+all.length+' 周';
+  const done=document.querySelectorAll('#videoChecks .vchk:checked').length;
+  const bar=document.getElementById('videoBar');if(bar)bar.style.width=(done/all.length*100)+'%';
+  const lab=document.getElementById('videoLabel');if(lab)lab.textContent='已打卡 '+done+' / '+all.length+' 周';
 }
-(function initVideoChecks(){
+function renderVideoRows(){
+  const tb=document.getElementById('videoRows');if(!tb)return;
   const state=loadVideo();
-  document.querySelectorAll('#cdga-res .vchk').forEach((c,i)=>{
-    c.checked=!!state[i];
-    c.addEventListener('change',()=>{
-      const s=loadVideo();s[i]=c.checked;saveVideo(s);
-      c.closest('tr').classList.toggle('vdone',c.checked);
-      updateVideoProgress();
-    });
-    c.closest('tr').classList.toggle('vdone',c.checked);
+  tb.innerHTML=VIDEO_WEEKS.map((x,i)=>`<tr class="${state[i]?'vdone':''}" data-i="${i}">
+    <td>W${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${escH(x[3])}</td><td>${escH(x[4])}</td>
+    <td class="vcell"><input type="checkbox" class="vchk" data-i="${i}" ${state[i]?'checked':''}></td></tr>`).join('');
+}
+function syncVideoChecks(){
+  const state=loadVideo();
+  document.querySelectorAll('#videoChecks .vchk').forEach(c=>{const i=+c.dataset.i;c.checked=!!state[i];const tr=c.closest('tr');if(tr)tr.classList.toggle('vdone',!!state[i]);});
+}
+function renderVideoWeek(){
+  const card=document.getElementById('videoWeekCard');if(!card)return;
+  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const done=!!loadVideo()[i];
+  card.innerHTML=`<div class="vcard">
+    <div class="vcard-head">📅 本周：W${x[0]} · ${x[1]} · ${x[2]}</div>
+    <div class="vcard-row"><span class="vtag">工作日晚上</span><span>${escH(x[3])}</span></div>
+    <div class="vcard-row"><span class="vtag">周末</span><span>${escH(x[4])}</span></div>
+    <button class="vweek-btn ${done?'done':''}" id="vWeekBtn" type="button">${done?'✅ 本周已完成':'✅ 标记本周视频完成'}</button>
+  </div>`;
+  const b=document.getElementById('vWeekBtn');
+  if(b)b.onclick=()=>{const s=loadVideo();s[i]=!s[i];saveVideo(s);syncVideoChecks();updateVideoProgress();renderVideoWeek();};
+}
+function renderVideoToday(){
+  const card=document.getElementById('videoTodayCard');if(!card)return;
+  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const t=new Date();const dow=t.getDay();
+  const weekend=(dow===0||dow===6);const task=weekend?x[4]:x[3];const lab=weekend?'周末（系统课/专栏）':'工作日晚上（碎片/短视频）';
+  card.innerHTML=`<div class="vcard">
+    <div class="vcard-head">🕒 今日（${t.toLocaleDateString('sv')} · 周${'日一二三四五六'[dow]}）属于 W${x[0]}</div>
+    <div class="vcard-row"><span class="vtag">${lab}</span><span>${escH(task)}</span></div>
+    <div class="vcard-sub">本周目标：工作日晚上 — ${escH(x[3])} ｜ 周末 — ${escH(x[4])}</div>
+  </div>`;
+}
+(function(){
+  renderVideoRows();
+  const state=loadVideo();
+  document.querySelectorAll('#videoChecks .vchk').forEach(c=>{
+    const i=+c.dataset.i;c.checked=!!state[i];
+    c.addEventListener('change',()=>{const s=loadVideo();s[i]=c.checked;saveVideo(s);syncVideoChecks();updateVideoProgress();});
+    c.closest('tr').classList.toggle('vdone',!!state[i]);
   });
   updateVideoProgress();
+  renderVideoWeek();renderVideoToday();
+  const dims=document.querySelectorAll('.vb-dims .dim-btn');
+  dims.forEach(b=>b.addEventListener('click',()=>{
+    dims.forEach(x=>x.classList.remove('active'));b.classList.add('active');
+    const d=b.dataset.dim;
+    document.getElementById('vbAll').hidden=(d!=='all');
+    document.getElementById('vbWeek').hidden=(d!=='week');
+    document.getElementById('vbToday').hidden=(d!=='today');
+    if(d==='week')renderVideoWeek();
+    if(d==='today')renderVideoToday();
+  }));
+  if(typeof updateProgress==='function')updateProgress();
 })();
 const LADDER_KEY='bb-ladder-checks';
 function loadLadder(){try{return JSON.parse(localStorage.getItem(LADDER_KEY))||{}}catch(e){return{}}}
@@ -4110,7 +4182,7 @@ function renderProgress(){
   if(lastIdx>=0&&DAILY){const gap=Math.round((Date.parse(TODAY_ISO)-Date.parse(DAILY[lastIdx].iso))/86400000);if(gap<=1){for(let i=lastIdx;i>=0;i--){if(dStore[DAILY[i].iso])cur++;else break;}}}
   const cc=countChecked('cdga-check');
   const q=getStore(QUIZ_STORE).answers||{}; const qDone=Object.keys(q).length;
-  const vc=countChecked('cdga-res');
+  const vc=countChecked('videoChecks');
   const lc=countChecked('ladder-checks');
   const ddc=countChecked('datadev-checks');
   const rc=countChecked('ruankao-check-list');
@@ -4136,7 +4208,7 @@ function renderProgress(){
     {name:'📅 每日打卡',done:dDone,total:TOTAL_DAYS,page:'cdga-daily'},
     {name:'✅ 知识点自查',done:cc.done,total:cc.total,page:'cdga-check'},
     {name:'📝 原创自测',done:qDone,total:QUIZ_TOTAL,page:'cdga-quiz'},
-    {name:'▶️ B站视频',done:vc.done,total:vc.total,page:'cdga-res'}
+    {name:'▶️ B站视频',done:vc.done,total:vc.total,page:'cdga-daily'}
   ];
   let cdgaDone=0,cdgaTot=0; cdgaSubs.forEach(function(s){cdgaDone+=s.done;cdgaTot+=s.total;});
   let g='';
