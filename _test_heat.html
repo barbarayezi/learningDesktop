@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+body{font-family:system-ui;padding:20px;background:#f5f7fa}
+.heat-wrap{margin:18px 0 6px;padding:16px 18px;border:1px solid #ddd;border-radius:8px;background:#fff}
+.heat-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.heat-title{font-weight:700;font-size:15px}
+.heat-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hs{font-size:12px;padding:5px 11px;border-radius:20px;background:#f0f2f5;border:1px solid #ddd;color:#666}
+.heat-scroll{overflow-x:auto;padding-bottom:6px}
+.heat-months{display:grid;grid-template-columns:repeat(26,14px);gap:3px;margin:0 0 4px 0;width:max-content}
+.heat-months span{font-size:10px;color:#999;white-space:nowrap}
+.heat-grid{display:grid;grid-template-rows:repeat(7,14px);grid-auto-flow:column;gap:3px;width:max-content}
+.hl-cell{width:14px;height:14px;border-radius:3px;display:inline-block;background:#e7ebf2;cursor:pointer}
+.hl-future{background:#eceff5}
+.hl-todo{background:#c7d2e8}
+.hl-done{background:#2f9e6b}
+.hl-today{outline:2px solid #2563eb;outline-offset:1px}
+.heat-legend{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:12px;color:#999}
+.heat-legend .hl-cell{vertical-align:middle;cursor:default}
+</style></head><body>
+<div class="heat-wrap" id="heatWrap">
+  <div class="heat-head">
+    <div class="heat-title">TEST - should show 182 cells below</div>
+    <div class="heat-stats">
+      <span class="hs" id="heatDone">—</span>
+      <span class="hs" id="heatRate">—</span>
+    </div>
+  </div>
+  <div class="heat-scroll">
+    <div class="heat-months" id="heatMonths"></div>
+    <div class="heat-grid" id="heatGrid"></div>
+  </div>
+  <div class="heat-legend">
+    <span class="hl-cell hl-future"></span>未到
+    <span class="hl-cell hl-todo"></span>待打卡
+    <span class="hl-cell hl-done"></span>已完成
+  </div>
+</div>
+<script>
+// Copy exact logic from index.html
+const CDGA_START=new Date('2026-08-15');
+const CDGA_END=new Date('2027-02-12');
+const WEEKS=[];
+for(let w=0;w<26;w++){
+  const s=new Date(CDGA_START); s.setDate(s.getDate()+w*7);
+  const e=new Date(s); e.setDate(e.getDate()+6);
+  if(e>CDGA_END) e.setTime(CDGA_END.getTime());
+  WEEKS.push({w:w+1,start:fmt(s),end:fmt(e)});
+}
+function fmt(d){const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
+function buildDaily(){
+  const out=[];
+  WEEKS.forEach(wk=>{
+    const start=new Date(wk.start+'T00:00:00');
+    const end=new Date(wk.end+'T00:00:00');
+    for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+      const p=n=>String(n).padStart(2,'0');
+      const iso=d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+      const day=d.getDate();
+      const wd=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+      out.push(Object.assign({day,iso,wd,i:out.length,isWeekend:d.getDay()===0||d.getDay()===6},wk));
+    }
+  });
+  return out;
+}
+const DAILY=buildDaily();
+console.log('DAILY.length =', DAILY.length);
+
+const heatGrid=document.getElementById('heatGrid');
+const heatMonths=document.getElementById('heatMonths');
+const heatDone=document.getElementById('heatDone');
+
+function buildHeat(){
+  if(!heatGrid)return;
+  const html=DAILY.map(x=>`<div class="hl-cell" data-iso="${x.iso}" title="${x.iso} ${x.wd} · W${x.w}"></div>`).join('');
+  console.log('buildHeat: html length =', html.length);
+  heatGrid.innerHTML=html;
+  console.log('buildHeat: childCount =', heatGrid.children.length);
+  console.log('buildHeat: scrollWidth =', heatGrid.scrollWidth);
+  console.log('buildHeat: scrollHeight =', heatGrid.scrollHeight);
+  console.log('buildHeat: offsetWidth =', heatGrid.offsetWidth);
+  console.log('buildHeat: offsetHeight =', heatGrid.offsetHeight);
+  if(heatDone)heatDone.textContent=`${heatGrid.children.length} cells`;
+}
+
+buildHeat();
+</script></body></html>
