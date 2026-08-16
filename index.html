@@ -806,6 +806,13 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 .src-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(0,0,0,.06)}
 .src-card.cat-考证{border-left:3px solid var(--red)}
 .src-card.cat-考博{border-left:3px solid var(--accent)}
+.res-block{margin-top:6px}
+.res-divider{display:flex;align-items:center;gap:10px;margin:28px 0 18px;color:var(--text-2);font-size:13px;font-weight:600}
+.res-divider::before,.res-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.src-card{cursor:pointer}
+.src-card.active-src{border-color:var(--accent);box-shadow:0 4px 14px rgba(0,0,0,.10);background:var(--surface-2)}
+.news-acc-chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--accent);color:var(--text);border-radius:18px;padding:6px 12px;margin:10px 0;font-size:13px;font-weight:600}
+.news-acc-chip button{font:inherit;font-weight:700;border:none;background:var(--accent);color:#fff;border-radius:12px;padding:2px 9px;cursor:pointer}
 .src-head{display:flex;align-items:center;gap:8px}
 .src-tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
 .tag-考证{background:var(--red-soft);color:var(--red)}
@@ -1511,8 +1518,7 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <div class="doc-sub">备考资料、公众号推文、关注源，统一在此管理。版权声明：官方教材与真题受版权保护，本清单不提供任何盗版下载链接，所有资料请通过正版/官方渠道获取。</div>
         <div class="tab-nav">
           <button class="tab-btn active" data-tab="res-list" type="button">📥 资料获取清单</button>
-          <button class="tab-btn" data-tab="res-news" type="button">📰 公众号推文精选</button>
-          <button class="tab-btn" data-tab="res-sources" type="button">📡 关注源</button>
+          <button class="tab-btn" data-tab="res-info" type="button">📰 资讯与关注源</button>
         </div>
         <div class="tab-content active" id="res-list">
         <h2>一、官方教材（必买正版）</h2>
@@ -1670,51 +1676,56 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
       </ul>
         </div><!-- /res-list -->
 
-        <div class="tab-content" id="res-news">
-          <h2>📰 公众号推文精选 · 考证(DAMA) / 考博(交大) 资讯</h2>
-          <div class="doc-sub">文章由「搜狗微信搜索」按关键词检索得到（合法公开来源），已抓取<b>全文</b>内嵌，可<b>一字不落</b>阅读；点「展开全文」看完整正文，点「阅读原文」打开微信原文。覆盖<b>考证（DAMA/数据治理）</b>与<b>考博（上海交大在职博士）</b>两大方向，每天自动检索新文章，<b>🆕 新文章</b>会标出，读完点「标记已读」。这些推文也会按天混排进「📅 每日学习中心」，让你每天读一篇。</div>
-          <div class="callout info"><span class="ct">已统一口径</span>综合多方来源，DAMA 中国证书（CDGA/CDGP/CDGE/CDAM）据光环国际等机构文章为 <b>终身有效、无需年审</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3年+续证"口径），<b>以 MyDAMA 官方最新公告为准</b>。继续教育(PDU)作为<b>自愿提升</b>，不占备考时间。详见「三级进阶总规划」②节。</div>
-          <div class="callout info"><span class="ct">🌏 拓展 · 海外</span>纯国外语境的申博经验（英国/香港博士招生、留服·境外学历认证等）已移出「📅 每日学习中心」核心流，归入「拓展 · 海外」分类，想看时再翻，不打扰交大备考主线。<b>推荐信 / 套磁手艺文因国内外通用，仍保留在核心流</b>——交大「申请-考核制」也要套磁、也要 2 封专家推荐信。</div>
-          <div class="news-bar">
-            <div class="news-stat"><span class="ns-num" id="newsTotal">0</span><span class="ns-lbl">篇文章</span></div>
-            <div class="news-stat"><span class="ns-num unread" id="newsUnread">0</span><span class="ns-lbl">篇未读</span></div>
-            <div class="news-stat grow"><span class="ns-lbl">最后更新</span><span class="ns-time" id="newsUpdated">—</span></div>
-            <button class="news-toggle-unread" id="newsUnreadBtn">只看未读</button>
+        <div class="tab-content" id="res-info">
+          <div class="res-block">
+            <h2>📡 关注源 · 实时跟踪的公众号</h2>
+            <div class="doc-sub">这里是你「持续关注」的公众号清单——<b>官方账号 + 知名有用的第三方</b>。每天 09:00 / 20:00 自动检索它们的最新推文，去重入档并标 🆕 未读；你也可以随时让我「检查最新」。下方按「考证 / 考博」分轨，每张卡片显示该号被收录的文章数与最近一篇日期，<b>点卡片即可只看这个号的推文</b>（再点一次取消）。</div>
+            <div class="src-bar">
+              <div class="news-stat"><span class="ns-num" id="srcTotal">0</span><span class="ns-lbl">个关注源</span></div>
+              <div class="news-stat"><span class="ns-num" id="srcKa">0</span><span class="ns-lbl">考证源</span></div>
+              <div class="news-stat"><span class="ns-num" id="srcKb">0</span><span class="ns-lbl">考博源</span></div>
+              <div class="news-stat grow"><span class="ns-lbl">最后抓取</span><span class="ns-time" id="srcUpdated">—</span></div>
+            </div>
+            <div class="src-cats" id="srcCats">
+              <button class="nf-cat active" data-cat="all">全部</button>
+              <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+              <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+            </div>
+            <div class="src-grid" id="srcGrid"></div>
           </div>
-          <div class="news-cats" id="newsCats">
-            <button class="nf-cat active" data-cat="all">全部</button>
-            <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
-            <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
-            <button class="nf-cat" data-cat="overseas">🌏 拓展 · 海外</button>
-          </div>
-          <div class="news-filters" id="newsFilters">
-            <button class="nf-chip active" data-f="all">全部</button>
-            <button class="nf-chip" data-f="考试时间">考试时间</button>
-            <button class="nf-chip" data-f="认证体系">认证体系</button>
-            <button class="nf-chip" data-f="含金量">含金量</button>
-            <button class="nf-chip" data-f="备考经验">备考经验</button>
-            <button class="nf-chip" data-f="考试形式">考试形式</button>
-            <button class="nf-chip" data-f="费用">费用</button>
-            <button class="nf-chip" data-f="有效期">有效期</button>
-          </div>
-          <div class="news-list" id="newsList"></div>
-        </div>
 
-        <div class="tab-content" id="res-sources">
-          <h2>📡 关注源 · 实时跟踪的公众号</h2>
-          <div class="doc-sub">这里是你「持续关注」的公众号清单——<b>官方账号 + 知名有用的第三方</b>。每天 09:00 / 20:00 自动检索它们的最新推文，去重入档并标 🆕 未读；你也可以随时让我「检查最新」。下方按「考证 / 考博」分轨，每张卡片显示该号被收录的文章数与最近一篇日期，点开可见其最新推文（点标题跳到推文页读全文 / 标记已读）。</div>
-          <div class="src-bar">
-            <div class="news-stat"><span class="ns-num" id="srcTotal">0</span><span class="ns-lbl">个关注源</span></div>
-            <div class="news-stat"><span class="ns-num" id="srcKa">0</span><span class="ns-lbl">考证源</span></div>
-            <div class="news-stat"><span class="ns-num" id="srcKb">0</span><span class="ns-lbl">考博源</span></div>
-            <div class="news-stat grow"><span class="ns-lbl">最后抓取</span><span class="ns-time" id="srcUpdated">—</span></div>
+          <div class="res-divider"><span>👇 点上方任一关注源卡片，直接看它的推文 · 或下滑看全部推文 ↓</span></div>
+
+          <div class="res-block" id="newsBlock">
+            <h2>📰 公众号推文精选 · 考证(DAMA) / 考博(交大) 资讯</h2>
+            <div class="doc-sub">文章由「搜狗微信搜索」按关键词检索得到（合法公开来源），已抓取<b>全文</b>内嵌，可<b>一字不落</b>阅读；点「展开全文」看完整正文，点「阅读原文」打开微信原文。覆盖<b>考证（DAMA/数据治理）</b>与<b>考博（上海交大在职博士）</b>两大方向，每天自动检索新文章，<b>🆕 新文章</b>会标出，读完点「标记已读」。这些推文也会按天混排进「📅 每日学习中心」，让你每天读一篇。</div>
+            <div class="callout info"><span class="ct">已统一口径</span>综合多方来源，DAMA 中国证书（CDGA/CDGP/CDGE/CDAM）据光环国际等机构文章为 <b>终身有效、无需年审</b>；DAMA 国际 CDMP 采用会员费维护。不同渠道说法不一（也有"3年+续证"口径），<b>以 MyDAMA 官方最新公告为准</b>。继续教育(PDU)作为<b>自愿提升</b>，不占备考时间。详见「三级进阶总规划」②节。</div>
+            <div class="callout info"><span class="ct">🌏 拓展 · 海外</span>纯国外语境的申博经验（英国/香港博士招生、留服·境外学历认证等）已移出「📅 每日学习中心」核心流，归入「拓展 · 海外」分类，想看时再翻，不打扰交大备考主线。<b>推荐信 / 套磁手艺文因国内外通用，仍保留在核心流</b>——交大「申请-考核制」也要套磁、也要 2 封专家推荐信。</div>
+            <div class="news-bar">
+              <div class="news-stat"><span class="ns-num" id="newsTotal">0</span><span class="ns-lbl">篇文章</span></div>
+              <div class="news-stat"><span class="ns-num unread" id="newsUnread">0</span><span class="ns-lbl">篇未读</span></div>
+              <div class="news-stat grow"><span class="ns-lbl">最后更新</span><span class="ns-time" id="newsUpdated">—</span></div>
+              <button class="news-toggle-unread" id="newsUnreadBtn">只看未读</button>
+            </div>
+            <div class="news-cats" id="newsCats">
+              <button class="nf-cat active" data-cat="all">全部</button>
+              <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
+              <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
+              <button class="nf-cat" data-cat="overseas">🌏 拓展 · 海外</button>
+            </div>
+            <div class="news-filters" id="newsFilters">
+              <button class="nf-chip active" data-f="all">全部</button>
+              <button class="nf-chip" data-f="考试时间">考试时间</button>
+              <button class="nf-chip" data-f="认证体系">认证体系</button>
+              <button class="nf-chip" data-f="含金量">含金量</button>
+              <button class="nf-chip" data-f="备考经验">备考经验</button>
+              <button class="nf-chip" data-f="考试形式">考试形式</button>
+              <button class="nf-chip" data-f="费用">费用</button>
+              <button class="nf-chip" data-f="有效期">有效期</button>
+            </div>
+            <div class="news-acc-chip" id="newsAccChip" hidden></div>
+            <div class="news-list" id="newsList"></div>
           </div>
-          <div class="src-cats" id="srcCats">
-            <button class="nf-cat active" data-cat="all">全部</button>
-            <button class="nf-cat" data-cat="考证">🎓 考证 · DAMA</button>
-            <button class="nf-cat" data-cat="考博">🏛️ 考博 · 交大</button>
-          </div>
-          <div class="src-grid" id="srcGrid"></div>
         </div>
       </section>
 
@@ -3772,7 +3783,7 @@ function renderDay(iso){
         <div class="dc-art-note-head">📝 我的笔记<span class="dc-art-note-sub">看完这篇写两句，自动保存</span></div>
         <textarea id="dcArtNote" class="dc-note" data-id="${art.id}" placeholder="这篇讲了啥、哪点能用在备考里、有啥疑问…（自动保存到本地）" rows="2">${escH(notes[art.id]||'')}</textarea>
       </div>
-    </div>` : '<div class="dc-meta">暂无可读推文，去「📰 公众号推文精选」看看。</div>';
+    </div>` : '<div class="dc-meta">暂无可读推文，去「📰 资讯与关注源」看看。</div>';
   // ===== 每日用量汇总 (2026-08-15) =====
   const summaryItems=[
     ...dayVideos.map(v=>{const m=videoMeta(v); return {t:m.treatment,m:m.minutes,p:m.p};}),
@@ -4166,7 +4177,7 @@ showPage('daily');
 
 const NEWS_SEEN_KEY='cdga-news-seen';
 function newsGetSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(NEWS_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
-let newsFilter='all', newsUnreadOnly=false, newsCat='all';
+let newsFilter='all', newsUnreadOnly=false, newsCat='all', newsAccounts=null;
 function renderNews(){
   const list=document.getElementById('newsList'); if(!list) return;
   const all=window.ARTICLES||[];
@@ -4175,12 +4186,23 @@ function renderNews(){
     const catOk = newsCat==='all' ? true
                 : newsCat==='overseas' ? a.region==='overseas'
                 : (a.cat===newsCat && a.region!=='overseas');
-    return catOk && (newsFilter==='all' || (a.tags||[]).includes(newsFilter));
+    const accOk = !newsAccounts || (newsAccounts||[]).includes(a.account);
+    return catOk && accOk && (newsFilter==='all' || (a.tags||[]).includes(newsFilter));
   });
   if(newsUnreadOnly) items=items.filter(a=> !seen.has(a.id));
   const upd=document.getElementById('newsUpdated'); if(upd) upd.textContent=window.ARTICLES_UPDATED||'—';
   const tot=document.getElementById('newsTotal'); if(tot) tot.textContent=all.length;
   const un=document.getElementById('newsUnread'); if(un) un.textContent=all.filter(a=>!seen.has(a.id)).length;
+  const chip=document.getElementById('newsAccChip');
+  if(chip){
+    if(newsAccounts){
+      const nm=(window.SOURCES||[]).find(s=>(s.accounts||[]).join()===newsAccounts.join());
+      chip.hidden=false;
+      chip.innerHTML='当前来源：<b>'+(nm?nm.name:'')+'</b> <button id="newsAccClear" type="button">✕ 看全部</button>';
+      const cb=document.getElementById('newsAccClear');
+      if(cb) cb.onclick=()=>{ newsAccounts=null; document.querySelectorAll('#srcGrid .src-card').forEach(c=>c.classList.remove('active-src')); renderNews(); };
+    } else chip.hidden=true;
+  }
   if(!items.length){ list.innerHTML='<div class="news-empty">'+(newsUnreadOnly?'🎉 没有未读文章，已全部看完':'该分类下暂无文章')+'</div>'; return; }
   list.innerHTML=items.map(a=>{
     const unread=!seen.has(a.id);
@@ -4241,7 +4263,8 @@ function renderSources(){
   grid.innerHTML=list.map(s=>{
     const mine=arts.filter(a=>(s.accounts||[]).includes(a.account)).sort((x,y)=>(y.date||'').localeCompare(x.date||''));
     const items=mine.slice(0,3).map(a=>`<div class="src-item"><span class="src-item-date">${(a.date||'?').slice(0,10)}</span><span class="src-item-title">${escSrc(a.title)}</span></div>`).join('')||'<div class="src-empty">暂无收录文章</div>';
-    return `<div class="src-card cat-${s.cat}">
+    const active = newsAccounts && newsAccounts.join()===(s.accounts||[]).join();
+    return `<div class="src-card cat-${s.cat}${active?' active-src':''}" data-name="${escSrc(s.name).replace(/"/g,'&quot;')}">
       <div class="src-head"><span class="src-tag tag-${s.cat}">${s.cat==='考证'?'🎓 考证':'🏛️ 考博'}</span><span class="src-name">${escSrc(s.name)}</span></div>
       <div class="src-meta"><span>${s.count} 篇</span><span>最近 ${s.latest||'—'}</span></div>
       <div class="src-latest">${items}</div>
@@ -4249,14 +4272,16 @@ function renderSources(){
     </div>`;
   }).join('');
 }
+function focusNewsFeed(){ const b=document.getElementById('newsBlock'); if(b) b.scrollIntoView({behavior:'smooth', block:'start'}); }
 (function(){
   const cats=document.getElementById('srcCats');
   if(cats) cats.addEventListener('click',e=>{ const b=e.target.closest('.nf-cat'); if(!b)return; cats.querySelectorAll('.nf-cat').forEach(x=>x.classList.remove('active')); b.classList.add('active'); srcCat=b.dataset.cat; renderSources(); });
   const grid=document.getElementById('srcGrid');
   if(grid) grid.addEventListener('click',e=>{
     const all=e.target.closest('.src-all');
-    if(all){ const cat=all.dataset.cat; newsCat=cat; const nc=document.getElementById('newsCats'); if(nc) nc.querySelectorAll('.nf-cat').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat)); newsFilter='all'; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub)ub.classList.remove('active'); const nf=document.getElementById('newsFilters'); if(nf)nf.querySelectorAll('.nf-chip').forEach(x=>x.classList.toggle('active',x.dataset.f==='all')); renderNews(); showPage('cdga-res'); switchResTab('res-news'); return; }
-    if(e.target.closest('.src-item')){ showPage('cdga-res'); switchResTab('res-news'); }
+    if(all){ const cat=all.dataset.cat; newsCat=cat; const nc=document.getElementById('newsCats'); if(nc) nc.querySelectorAll('.nf-cat').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat)); newsFilter='all'; newsUnreadOnly=false; const ub=document.getElementById('newsUnreadBtn'); if(ub)ub.classList.remove('active'); const nf=document.getElementById('newsFilters'); if(nf)nf.querySelectorAll('.nf-chip').forEach(x=>x.classList.toggle('active',x.dataset.f==='all')); newsAccounts=null; document.querySelectorAll('#srcGrid .src-card').forEach(c=>c.classList.remove('active-src')); renderNews(); focusNewsFeed(); return; }
+    const card=e.target.closest('.src-card');
+    if(card){ const nm=card.dataset.name; const s=(window.SOURCES||[]).find(x=>x.name===nm); const acc=s?(s.accounts||[]):[]; if(newsAccounts && newsAccounts.join()===acc.join()){ newsAccounts=null; } else { newsAccounts=acc.length?acc:null; } renderSources(); renderNews(); focusNewsFeed(); return; }
   });
   renderSources();
 })();
