@@ -189,6 +189,49 @@ pre code{background:none;padding:0}
 .progress{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:6px 0 14px}
 .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width .3s}
 .progress-label{font-size:12px;color:var(--text-3)}
+/* ---- 软考知识点掌握度测试 ---- */
+.chk-row .topic-test{margin-left:auto;flex:0 0 auto;align-self:center;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:7px;font-size:12px;padding:3px 9px;cursor:pointer;line-height:1.5;white-space:nowrap}
+.chk-row .topic-test:hover{opacity:.85}
+.chk-row.done .topic-test{background:var(--surface);color:var(--accent)}
+.rk-mastery{margin:6px 0 12px;padding:12px 14px;background:var(--surface-2);border-radius:12px}
+.rk-mastery-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 8px}
+#ruankao-masteryLabel{font-size:13px;font-weight:700;color:var(--text-2)}
+.rk-btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.rk-btn:hover{opacity:.88}
+.rk-due{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rk-due:empty{display:none}
+.rk-chip{border:1px solid var(--yellow);background:var(--yellow-soft);color:#7a5b00;border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer;display:inline-flex;gap:5px;align-items:center}
+.rk-chip.due{border-color:var(--red);background:var(--red-soft);color:#a02020}
+.rk-chip b{font-weight:700}
+.rk-chip .m{opacity:.75;font-variant-numeric:tabular-nums}
+/* quiz modal */
+#rk-quiz-modal{position:fixed;inset:0;z-index:9999;display:none}
+#rk-quiz-modal.open{display:block}
+.rk-modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.5)}
+.rk-modal-card{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(660px,93vw);max-height:88vh;overflow:auto;background:var(--surface);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:18px 20px}
+.rk-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.rk-modal-title{font-weight:800;font-size:15px;color:var(--text)}
+.rk-modal-close{border:none;background:var(--surface-2);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:15px;color:var(--text-2)}
+.rk-q-text{font-size:15px;font-weight:600;line-height:1.5;margin:6px 0 12px}
+.rk-opt{display:block;width:100%;text-align:left;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer;font-size:14px;color:var(--text)}
+.rk-opt:hover{background:var(--surface-2)}
+.rk-opt.correct{border-color:var(--green);background:var(--green-soft);color:var(--green);font-weight:700}
+.rk-opt.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.rk-opt:disabled{cursor:default}
+.rk-feedback{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.55}
+.rk-feedback.correct{background:var(--green-soft);color:var(--green)}
+.rk-feedback.wrong{background:var(--red-soft);color:var(--red)}
+.rk-feedback b{font-weight:700}
+.rk-hud{display:flex;align-items:center;gap:12px;font-size:13px;margin-bottom:6px;flex-wrap:wrap}
+.rk-hud .progress{flex:1;height:7px;background:var(--surface-2);border-radius:4px;overflow:hidden;min-width:90px;margin:0}
+.rk-hud .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+.rk-nav{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
+.rk-nav button{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px}
+.rk-nav button.ghost{background:var(--surface);color:var(--accent)}
+.rk-results{text-align:center;padding:8px 4px}
+.rk-results .score{font-size:34px;font-weight:800;color:var(--accent)}
+.rk-results .trophy{font-size:36px}
+
 
 /* Quiz */
 .quiz-domain{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:22px 0 8px}
@@ -1996,42 +2039,51 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <div class="tab-content active" id="ruankao-check-list">
         <div class="progress"><i id="ruankao-chkBar"></i></div>
         <div class="progress-label" id="ruankao-chkLabel">已掌握 0 / 0</div>
+        <div class="rk-mastery">
+          <div class="rk-mastery-head">
+            <span id="ruankao-masteryLabel">📊 综合掌握度 —（先做几道题测一测）</span>
+            <button class="rk-btn" id="rk-all-test" type="button">🎯 全量自测</button>
+          </div>
+          <div class="progress"><i id="ruankao-masteryBar"></i></div>
+          <div class="callout" style="margin:8px 0 0;font-size:12px;padding:8px 12px">掌握度由你做对的题实时反推（非自评）：做对→上升并按遗忘曲线排复习；到期没复习→自动衰减。盲测模式隐藏答案，纯回忆才算数。</div>
+          <div class="rk-due" id="ruankao-dueStrip"></div>
+        </div>
         <div class="chk-head"><h3>① 计算机系统 &amp; 软件基础</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据表示：原码/反码/补码/移码与定点/浮点</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>存储体系：Cache 映射、主存编址</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>I/O 接口功能、中断与 DMA</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>程序语言翻译基础（编译/解释）</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据结构：线性表/树/图、排序与查找、时间复杂度</span></label>
+        <label class="chk-row" data-topic="rk01"><input type="checkbox" class="gchk"><span>数据表示：原码/反码/补码/移码与定点/浮点</span><button class="topic-test" type="button" data-topic="rk01" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk02"><input type="checkbox" class="gchk"><span>存储体系：Cache 映射、主存编址</span><button class="topic-test" type="button" data-topic="rk02" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk03"><input type="checkbox" class="gchk"><span>I/O 接口功能、中断与 DMA</span><button class="topic-test" type="button" data-topic="rk03" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk04"><input type="checkbox" class="gchk"><span>程序语言翻译基础（编译/解释）</span><button class="topic-test" type="button" data-topic="rk04" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk05"><input type="checkbox" class="gchk"><span>数据结构：线性表/树/图、排序与查找、时间复杂度</span><button class="topic-test" type="button" data-topic="rk05" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>② 操作系统 &amp; 网络</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>进程管理：PV 操作、进程状态、死锁</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>存储管理：分页/分段/虚拟内存</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>文件管理：目录/空闲空间管理</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>网络：OSI 七层 / TCP-IP、IP/端口</span></label>
+        <label class="chk-row" data-topic="rk06"><input type="checkbox" class="gchk"><span>进程管理：PV 操作、进程状态、死锁</span><button class="topic-test" type="button" data-topic="rk06" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk07"><input type="checkbox" class="gchk"><span>存储管理：分页/分段/虚拟内存</span><button class="topic-test" type="button" data-topic="rk07" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk08"><input type="checkbox" class="gchk"><span>文件管理：目录/空闲空间管理</span><button class="topic-test" type="button" data-topic="rk08" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk09"><input type="checkbox" class="gchk"><span>网络：OSI 七层 / TCP-IP、IP/端口</span><button class="topic-test" type="button" data-topic="rk09" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>③ 数据库基础 &amp; 关系理论</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>数据模型三要素；三级模式两级映像</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>DBMS 功能与体系</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>关系代数：σ/π/⋈/×/÷ 与等价转换（每年必考）</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>关系演算（元组/域）</span></label>
+        <label class="chk-row" data-topic="rk10"><input type="checkbox" class="gchk"><span>数据模型三要素；三级模式两级映像</span><button class="topic-test" type="button" data-topic="rk10" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk11"><input type="checkbox" class="gchk"><span>DBMS 功能与体系</span><button class="topic-test" type="button" data-topic="rk11" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk12"><input type="checkbox" class="gchk"><span>关系代数：σ/π/⋈/×/÷ 与等价转换（每年必考）</span><button class="topic-test" type="button" data-topic="rk12" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk13"><input type="checkbox" class="gchk"><span>关系演算（元组/域）</span><button class="topic-test" type="button" data-topic="rk13" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>④ SQL 语言</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>DDL：建库/表/约束</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>DML：增删改查、连接</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>嵌套查询、聚合函数、分组</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>视图、授权 GRANT/REVOKE</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>触发器、存储过程（下午高频）</span></label>
+        <label class="chk-row" data-topic="rk14"><input type="checkbox" class="gchk"><span>DDL：建库/表/约束</span><button class="topic-test" type="button" data-topic="rk14" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk15"><input type="checkbox" class="gchk"><span>DML：增删改查、连接</span><button class="topic-test" type="button" data-topic="rk15" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk16"><input type="checkbox" class="gchk"><span>嵌套查询、聚合函数、分组</span><button class="topic-test" type="button" data-topic="rk16" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk17"><input type="checkbox" class="gchk"><span>视图、授权 GRANT/REVOKE</span><button class="topic-test" type="button" data-topic="rk17" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk18"><input type="checkbox" class="gchk"><span>触发器、存储过程（下午高频）</span><button class="topic-test" type="button" data-topic="rk18" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>⑤ 数据库设计 &amp; 规范化</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>E-R 图建模与「1:1 / 1:n / m:n」转换规则</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>候选键/主键/外键求取（属性闭包）</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>1NF–BCNF 判定与模式分解（保持函数依赖/无损）</span></label>
+        <label class="chk-row" data-topic="rk19"><input type="checkbox" class="gchk"><span>E-R 图建模与「1:1 / 1:n / m:n」转换规则</span><button class="topic-test" type="button" data-topic="rk19" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk20"><input type="checkbox" class="gchk"><span>候选键/主键/外键求取（属性闭包）</span><button class="topic-test" type="button" data-topic="rk20" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk21"><input type="checkbox" class="gchk"><span>1NF–BCNF 判定与模式分解（保持函数依赖/无损）</span><button class="topic-test" type="button" data-topic="rk21" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>⑥ 事务 &amp; 运维</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>ACID 特性</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>并发控制：三级封锁协议、隔离级别</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>死锁：预防/检测/解除</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>故障恢复：日志、检查点、备份策略</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>性能调优、安全管理</span></label>
+        <label class="chk-row" data-topic="rk22"><input type="checkbox" class="gchk"><span>ACID 特性</span><button class="topic-test" type="button" data-topic="rk22" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk23"><input type="checkbox" class="gchk"><span>并发控制：三级封锁协议、隔离级别</span><button class="topic-test" type="button" data-topic="rk23" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk24"><input type="checkbox" class="gchk"><span>死锁：预防/检测/解除</span><button class="topic-test" type="button" data-topic="rk24" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk25"><input type="checkbox" class="gchk"><span>故障恢复：日志、检查点、备份策略</span><button class="topic-test" type="button" data-topic="rk25" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk26"><input type="checkbox" class="gchk"><span>性能调优、安全管理</span><button class="topic-test" type="button" data-topic="rk26" title="测试这个知识点">🎯 测</button></label>
         <div class="chk-head"><h3>⑦ 新技术 &amp; 软件工程 &amp; 标准化</h3></div>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>NoSQL 分类、分布式数据库（2026 扩展考点）</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>软件生命周期、开发模型、软件测试</span></label>
-        <label class="chk-row"><input type="checkbox" class="gchk"><span>标准化与知识产权、专业英语</span></label>
+        <label class="chk-row" data-topic="rk27"><input type="checkbox" class="gchk"><span>NoSQL 分类、分布式数据库（2026 扩展考点）</span><button class="topic-test" type="button" data-topic="rk27" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk28"><input type="checkbox" class="gchk"><span>软件生命周期、开发模型、软件测试</span><button class="topic-test" type="button" data-topic="rk28" title="测试这个知识点">🎯 测</button></label>
+        <label class="chk-row" data-topic="rk29"><input type="checkbox" class="gchk"><span>标准化与知识产权、专业英语</span><button class="topic-test" type="button" data-topic="rk29" title="测试这个知识点">🎯 测</button></label>
         </div>
 
       <!-- DATADEV DAILY · 数据开发每日学习中心 -->
@@ -3367,6 +3419,253 @@ window.showPage=function(id){
   _origShowPage(id);
   if(id==='cdga-quiz') applyQuizMode();
 };
+
+/* ============================================================
+   软考·数据库系统工程师 —— 知识点掌握度测试引擎（测试驱动，非自评）
+   核心：每个知识点挂真题，做对才计分；掌握度 = 该点下题目正确率 × 新鲜度；
+   间隔重复：做对按遗忘曲线延长复习间隔，做错重置；到期未复习自动衰减。
+   ============================================================ */
+const RK_TOPICS=[
+ {id:'rk01',name:'数据表示：原/反/补/移码与定点浮点'},
+ {id:'rk02',name:'存储体系：Cache 映射、主存编址'},
+ {id:'rk03',name:'I/O 接口、中断与 DMA'},
+ {id:'rk04',name:'程序语言翻译（编译/解释）'},
+ {id:'rk05',name:'数据结构：线性表/树/图、排序查找、复杂度'},
+ {id:'rk06',name:'进程管理：PV 操作、状态、死锁'},
+ {id:'rk07',name:'存储管理：分页/分段/虚拟内存'},
+ {id:'rk08',name:'文件管理：目录/空闲空间管理'},
+ {id:'rk09',name:'网络：OSI/TCP-IP、IP/端口'},
+ {id:'rk10',name:'数据模型三要素；三级模式两级映像'},
+ {id:'rk11',name:'DBMS 功能与体系'},
+ {id:'rk12',name:'关系代数：σ/π/⋈/×/÷ 与等价转换'},
+ {id:'rk13',name:'关系演算（元组/域）'},
+ {id:'rk14',name:'DDL：建库/表/约束'},
+ {id:'rk15',name:'DML：增删改查、连接'},
+ {id:'rk16',name:'嵌套查询、聚合函数、分组'},
+ {id:'rk17',name:'视图、授权 GRANT/REVOKE'},
+ {id:'rk18',name:'触发器、存储过程'},
+ {id:'rk19',name:'E-R 图建模与 1:1/1:n/m:n 转换'},
+ {id:'rk20',name:'候选键/主键/外键求取（属性闭包）'},
+ {id:'rk21',name:'1NF–BCNF 判定与模式分解'},
+ {id:'rk22',name:'ACID 特性'},
+ {id:'rk23',name:'并发控制：三级封锁协议、隔离级别'},
+ {id:'rk24',name:'死锁：预防/检测/解除'},
+ {id:'rk25',name:'故障恢复：日志、检查点、备份'},
+ {id:'rk26',name:'性能调优、安全管理'},
+ {id:'rk27',name:'NoSQL 分类、分布式数据库'},
+ {id:'rk28',name:'软件生命周期、开发模型、测试'},
+ {id:'rk29',name:'标准化与知识产权、专业英语'}
+];
+const RK_QUIZ=[
+ {t:'rk01',q:'8 位补码能表示的整数范围是？',o:['-127 ~ 127','-128 ~ 127','-127 ~ 128','-128 ~ 128'],a:'B',e:'8 位补码范围 -2^7 ~ 2^7-1 = -128 ~ 127，比原码多表示一个 -128。'},
+ {t:'rk01',q:'IEEE754 单精度浮点数规格化的主要作用是？',o:['扩大表示范围','提高有效数字精度','加快运算速度','减少存储空间'],a:'B',e:'规格化使尾数最高位为 1，充分利用尾数位数，提高表示精度。'},
+ {t:'rk02',q:'主存容量 1MB、按字节编址，地址线至少需？',o:['16 根','20 根','10 根','8 根'],a:'B',e:'1MB = 2^20 字节，需 20 根地址线寻址。'},
+ {t:'rk02',q:'全相联映射 Cache 的特点是？',o:['每个主存块只能放固定 Cache 行','可放入任意 Cache 行、冲突缺失小但查找慢','无需比较 tag','命中率最低'],a:'B',e:'全相联：主存块可放入任意行，冲突缺失最小，但需比较所有行 tag，硬件复杂、查找慢。'},
+ {t:'rk03',q:'关于 DMA 方式，正确的是？',o:['DMA 传输时 CPU 完全不参与','由专用控制器在内存与外设间直接传输，CPU 仅做启动与收尾','DMA 比中断方式更慢','DMA 只能用于键盘'],a:'B',e:'DMA 由 DMAC 控制总线直接在内存与外设间传数，CPU 只做初始化和收尾，传输过程不占 CPU。'},
+ {t:'rk03',q:'CPU 响应中断后首先做的是？',o:['直接执行中断服务程序','关中断并保存断点','重新取指','切换到用户态'],a:'B',e:'响应中断后硬件先关中断、保存断点（PC 等）入栈，再转向中断向量。'},
+ {t:'rk04',q:'编译方式相对解释方式的主要特点是？',o:['边翻译边执行','先整体翻译为目标程序再执行、运行效率高','不需要词法分析','只能用于脚本语言'],a:'B',e:'编译一次性生成目标代码，执行快、可脱离编译器运行；解释逐句执行、灵活但慢。'},
+ {t:'rk05',q:'对 n 个元素快速排序，平均时间复杂度是？',o:['O(n)','O(n log n)','O(n^2)','O(log n)'],a:'B',e:'快排平均 O(n log n)，最坏（已序）退化为 O(n^2)。'},
+ {t:'rk05',q:'在有序数组上二分查找，时间复杂度为？',o:['O(n)','O(n log n)','O(log n)','O(1)'],a:'C',e:'每次折半，O(log n)。'},
+ {t:'rk05',q:'平衡二叉树（AVL）插入后通过旋转恢复平衡，目的是？',o:['减小树高保证查找 O(log n)','增加节点数','避免叶子节点','加快插入速度'],a:'A',e:'AVL 旋转保持左右子树高度差 ≤1，树高约 log n，查找稳定 O(log n)。'},
+ {t:'rk06',q:'信号量 S 初值为 1，执行一次 P(S) 后 S =？',o:['1','0','2','-1'],a:'B',e:'P 操作 S=S-1；初值 1 → 0，表示资源已被占用。'},
+ {t:'rk06',q:'进程从运行态转为就绪态的典型原因是？',o:['等待 I/O','时间片用完','被唤醒','刚创建完成'],a:'B',e:'时间片耗尽或被更高优先级抢占 → 运行转就绪；等待 I/O 是运行转阻塞。'},
+ {t:'rk07',q:'分页存储管理的主要优点是？',o:['无内部碎片','消除外部碎片、内存利用率高','按逻辑意义划分','不需要地址转换'],a:'B',e:'分页按固定大小分配，消除外部碎片（仅页内少量内部碎片），提高内存利用率。'},
+ {t:'rk07',q:'虚拟存储器的理论基础是？',o:['Cache 原理','程序局部性（时间+空间）','流水线','并行处理'],a:'B',e:'基于局部性原理，只把当前需要的页调入内存，其余驻外存。'},
+ {t:'rk08',q:'采用位示图管理磁盘空闲块，其作用是？',o:['加快文件检索','用一位表示一块忙/闲，便于分配与回收','管理目录结构','给文件加密'],a:'B',e:'位示图每位对应一块，0/1 表示忙/闲，分配回收高效。'},
+ {t:'rk09',q:'TCP 协议位于 TCP/IP 模型的哪一层？',o:['网络接口层','网际层','传输层','应用层'],a:'C',e:'TCP/UDP 在传输层，提供端到端可靠/不可靠传输。'},
+ {t:'rk09',q:'下列属于网络层协议的是？',o:['HTTP','TCP','IP','FTP'],a:'C',e:'IP 在网络层（网际层）负责寻址与路由；TCP 传输层，HTTP/FTP 应用层。'},
+ {t:'rk10',q:'数据模型的三要素是？',o:['数据结构、数据操作、完整性约束','实体、属性、联系','外模式、模式、内模式','表、视图、索引'],a:'A',e:'数据模型 = 数据结构 + 数据操作 + 完整性约束。'},
+ {t:'rk10',q:'两级映像（外模式/模式、模式/内模式）的主要作用是？',o:['提高查询速度','保证数据的逻辑独立性与物理独立性','减少冗余','简化 SQL'],a:'B',e:'外模式/模式映像保逻辑独立性；模式/内模式映像保物理独立性。'},
+ {t:'rk11',q:'DBMS 不负责以下哪项？',o:['数据定义','数据操纵','数据运行管理（并发/恢复）','决定业务逻辑'],a:'D',e:'DBMS 提供定义、操纵、运行管理、存储管理等；业务逻辑由应用层决定。'},
+ {t:'rk11',q:'以下属于 DBMS 核心组成部分的是？',o:['查询处理器与存储管理器','仅磁盘阵列','仅网卡','仅操作系统'],a:'A',e:'DBMS 通常由查询处理器、存储管理器（含缓冲区、索引、事务管理）等组成。'},
+ {t:'rk12',q:'关系代数中从表中选择满足条件的行，使用的运算符是？',o:['投影 π','选择 σ','连接 ⋈','除 ÷'],a:'B',e:'σ 为选择（行筛选），π 为投影（列筛选）。'},
+ {t:'rk12',q:'自然连接（⋈）等价于？',o:['笛卡尔积','对公共属性做等值选择后再投影去掉重复列','并运算','差运算'],a:'B',e:'自然连接 = 先按公共属性等值连接（笛卡尔积+选择），再去掉重复列（投影）。'},
+ {t:'rk12',q:'查询「选修了全部课程的学生」，关系代数需用到？',o:['并','差','除 ÷','交'],a:'C',e:'「全部/任意」语义用除运算表达：学生 ÷ 课程。'},
+ {t:'rk13',q:'元组关系演算以什么为基本变量？',o:['域','元组','属性值','表名'],a:'B',e:'元组演算以元组变量为单位（{t | P(t)}）；域演算以域变量为单位。'},
+ {t:'rk14',q:'定义主键约束 PRIMARY KEY 主要保证？',o:['列值唯一且非空','允许空值','仅加速查询','仅用于外键'],a:'A',e:'PRIMARY KEY 强制唯一且非空，标识实体。'},
+ {t:'rk14',q:'外键（FOREIGN KEY）约束的作用是？',o:['保证本表列唯一','建立两表间引用完整性','提升查询速度','定义默认值'],a:'B',e:'外键保证引用完整性：子表值须存在于父表被引用列。'},
+ {t:'rk15',q:'删除表中所有行但保留表结构，应使用？',o:['DROP TABLE','DELETE FROM 表','ALTER TABLE','RENAME'],a:'B',e:'DELETE FROM 删行保留表结构；DROP TABLE 删表。'},
+ {t:'rk15',q:'内连接（INNER JOIN）的结果是？',o:['两表所有行','满足连接条件的匹配行','仅左表行','左表全 + 右表匹配'],a:'B',e:'内连接只返回满足连接条件的匹配行。'},
+ {t:'rk16',q:'统计各部门人数，应使用？',o:['SELECT dept, COUNT(*) FROM emp GROUP BY dept','SELECT COUNT(*) FROM emp','SELECT dept FROM emp','SELECT SUM(*)'],a:'A',e:'GROUP BY dept 分组后 COUNT(*) 计各组行数。'},
+ {t:'rk16',q:'HAVING 子句的作用是？',o:['筛选单行','对分组聚合结果进行筛选','定义连接条件','排序'],a:'B',e:'HAVING 作用于分组后的聚合结果（WHERE 作用于分组前的单行）。'},
+ {t:'rk17',q:'视图（VIEW）的主要作用不包括？',o:['提供逻辑独立性','简化复杂查询','提高数据存储效率','实现行列级安全控制'],a:'C',e:'视图不存数据（仅定义），不会提高存储效率；它能简化查询、保逻辑独立、做权限控制。'},
+ {t:'rk17',q:'授予用户查询权限的 SQL 是？',o:['GRANT SELECT ON 表 TO 用户','REVOKE SELECT ON 表','DENY SELECT','GIVE SELECT'],a:'A',e:'GRANT 授权，REVOKE 收回权限。'},
+ {t:'rk18',q:'触发器（TRIGGER）的特点是？',o:['由用户显式调用','由 INSERT/UPDATE/DELETE 事件自动触发','等同于视图','只用于查询'],a:'B',e:'触发器依附于表，由 DML 事件自动激活，常用于审计/约束。'},
+ {t:'rk18',q:'存储过程相对逐条 SQL 的优势是？',o:['无需编译','在服务端预编译、减少网络交互','不能传参','只能返回表'],a:'B',e:'存储过程在服务端一次编译多次执行，降低网络往返，提升性能。'},
+ {t:'rk19',q:'一个学生可选多门课、一门课可被多学生选，E-R 中应为？',o:['1:1','1:n','m:n','无联系'],a:'C',e:'学生 ↔ 课程 是多对多（m:n）。'},
+ {t:'rk19',q:'m:n 联系转换为关系模式时，应？',o:['并入任一端实体','独立建表并含两端主键作为外键','仅留一端主键','不需处理'],a:'B',e:'m:n 联系须独立成表，属性含两端实体主键作外键 + 联系自身属性。'},
+ {t:'rk20',q:'求候选键常用属性闭包，其目的是？',o:['找外键','由一组属性能函数决定全体属性的最小集即候选键','计算范式级别','建索引'],a:'B',e:'若属性集闭包覆盖全体属性，则该集是超键；极小超键即候选键。'},
+ {t:'rk20',q:'R(A,B,C)，函数依赖 AB→C、C→B，候选键是？',o:['A','AB','AC','BC'],a:'C',e:'AC 闭包：A,C →（C→B）得 A,B,C 覆盖全体且极小，故候选键 AC。'},
+ {t:'rk21',q:'存在「非主属性对码的部分函数依赖」，违反的是？',o:['1NF','2NF','3NF','BCNF'],a:'B',e:'部分依赖（非主属→码的真子集）违反 2NF；消除后达 2NF。'},
+ {t:'rk21',q:'范式约束强度从高到低依次是？',o:['BCNF ≥ 3NF ≥ 2NF ≥ 1NF','1NF ≥ 2NF ≥ 3NF ≥ BCNF','3NF ≥ BCNF ≥ 2NF ≥ 1NF','无顺序'],a:'A',e:'约束强度 BCNF 最强，依次 3NF、2NF、1NF（1NF 仅要求原子值，最弱）。'},
+ {t:'rk21',q:'好的模式分解应满足？',o:['任意拆分','既无损连接又保持函数依赖','只保持依赖','只保持连接'],a:'B',e:'理想分解同时满足无损连接（自然连接可还原原关系）与保持函数依赖。'},
+ {t:'rk22',q:'事务的原子性（Atomicity）指？',o:['多个事务并发互不干扰','事务要么全做要么全不做','数据永久保存','处于一致状态'],a:'B',e:'原子性：事务是不可分最小单位，全成功或全回滚。'},
+ {t:'rk22',q:'持久性（Durability）指？',o:['并发互不干扰','一旦提交结果永久有效（即使故障）','原子性','一致性'],a:'B',e:'持久性：提交后写入稳定存储，故障也不丢失。'},
+ {t:'rk23',q:'一级封锁协议（事务结束前不释放 X 锁）解决的是？',o:['丢失修改','不可重复读','幻读','死锁'],a:'A',e:'一级协议（写前加 X 锁直到结束）防止两事务同时改同一数据导致的丢失修改。'},
+ {t:'rk23',q:'并发操作可能引起的三类问题不包括？',o:['丢失修改','不可重复读','读脏数据','查询加速'],a:'D',e:'并发问题：丢失修改、不可重复读、读脏数据（幻读属不可重复读特例）。'},
+ {t:'rk24',q:'以下属于死锁预防策略的是？',o:['允许等待成环','一次性分配全部资源（破坏请求与保持）','定期检测等待图','事后回滚'],a:'B',e:'预防=破坏四必要条件之一，如静态分配（一次性申请全部资源）破坏「请求与保持」。'},
+ {t:'rk24',q:'死锁检测常用？',o:['银行家算法（避免）','资源分配图/等待图中是否存在环路','提高优先级','增加 CPU'],a:'B',e:'检测通过资源分配图/等待图找环；银行家算法是避免而非检测。'},
+ {t:'rk25',q:'数据库恢复的基础是？',o:['索引','冗余（日志/备份）','视图','触发器'],a:'B',e:'恢复依赖冗余：日志（redo/undo）+ 备份。'},
+ {t:'rk25',q:'检查点（checkpoint）机制的作用是？',o:['加快查询','减少恢复时需重做的日志量','建立索引','数据加密'],a:'B',e:'检查点记录已刷盘状态，恢复时只需从最后一个检查点之后重做，缩短恢复时间。'},
+ {t:'rk26',q:'为加速经常用于 WHERE 过滤的列，通常建立？',o:['视图','索引','触发器','存储过程'],a:'B',e:'索引（如 B+树）加速点查与范围查询。'},
+ {t:'rk26',q:'数据库安全的「最小权限原则」指？',o:['给用户全部权限','仅授予完成工作所必需的最小权限','禁用所有账号','只用管理员'],a:'B',e:'最小权限降低越权与误用风险。'},
+ {t:'rk27',q:'以下属于 NoSQL 列族存储的是？',o:['Redis','HBase','MongoDB','Neo4j'],a:'B',e:'HBase 是列族（BigTable 类）；Redis 键值、MongoDB 文档、Neo4j 图。'},
+ {t:'rk27',q:'分布式数据库 CAP 理论指出，分区容忍下只能兼顾？',o:['CA','CP 或 AP','三者全得','无取舍'],a:'B',e:'网络分区 P 不可避免时，只能在一致性 C 与可用性 A 间取舍（CP/AP）。'},
+ {t:'rk28',q:'以下属于典型软件过程模型的是？',o:['瀑布模型','ER 模型','关系模型','索引模型'],a:'A',e:'瀑布、增量、螺旋、敏捷属软件过程模型；ER 是数据建模方法。'},
+ {t:'rk28',q:'黑盒测试主要关注？',o:['内部代码结构','功能是否符合规格（输入输出）','语句覆盖','分支覆盖'],a:'B',e:'黑盒不看内部实现，按规格验证功能；白盒关注代码覆盖。'},
+ {t:'rk29',q:'软件著作权自何日起产生？',o:['开发完成日','发表日','登记日','销售日'],a:'A',e:'我国软件著作权自软件开发完成之日起自动产生，登记为自愿确权。'},
+ {t:'rk29',q:'以下属于协会/团体标准代号的是？',o:['GB（国标）','ISO（国际）','IEEE（协会）','QB（企标）'],a:'C',e:'IEEE 是电气电子工程师协会标准（团体标准）；GB 国标、QB 企标、ISO 国际。'}
+];
+const RK_STORE='bb-ruankao-quiz-v1';
+function rkLoad(){try{return JSON.parse(localStorage.getItem(RK_STORE))||{}}catch(e){return{}}}
+function rkSave(o){try{localStorage.setItem(RK_STORE,JSON.stringify(o))}catch(e){}}
+// 掌握度：该知识点下各题分数 = 正确基础分 × 新鲜度（遗忘衰减），未测=0
+function rkTopicMastery(tid){
+  const st=rkLoad(); const qs=RK_QUIZ.map((q,i)=>i).filter(i=>RK_QUIZ[i].t===tid);
+  if(!qs.length) return null;
+  let sum=0;
+  qs.forEach(i=>{
+    const c=st.cards&&st.cards[i];
+    if(!c||c.lastResult===undefined){ sum+=0; return; }
+    const correct=c.lastResult===true;
+    let fresh=1;
+    if(c.lastCorrect){ const days=genDiffDays(c.lastCorrect,genTodayISO()); const iv=Math.max(1,c.interval||1); if(days>iv) fresh=Math.max(0.2,1-(days-iv)/(iv*2+1)); }
+    let base=correct?0.65:0.1; if(correct) base+=0.35*Math.min(1,(c.reps||1)/3);
+    sum+=base*fresh;
+  });
+  return Math.round(sum/qs.length*100);
+}
+function rkOverallMastery(){
+  let s=0; RK_TOPICS.forEach(t=>{const m=rkTopicMastery(t.id); if(m!==null) s+=m;});
+  return s/RK_TOPICS.length;
+}
+// 间隔重复：记录一次作答结果，更新卡片状态
+function rkRecordAnswer(qIndex, correct){
+  const st=rkLoad(); if(!st.cards)st.cards={}; if(!st.answers)st.answers={};
+  const card=st.cards[qIndex]||{reps:0,interval:0,lapses:0};
+  const today=genTodayISO();
+  if(correct){
+    card.reps=(card.reps||0)+1;
+    if(card.reps===1) card.interval=1;
+    else if(card.reps===2) card.interval=6;
+    else card.interval=Math.round((card.interval||6)*2.0);
+    card.due=genAddDays(today,card.interval);
+    card.lastCorrect=today; card.lapses=0;
+  } else {
+    card.reps=0; card.interval=0; card.due=today; card.lapses=(card.lapses||0)+1; card.lastWrong=today;
+  }
+  card.lastResult=correct;
+  st.cards[qIndex]=card; st.answers[qIndex]=correct?RK_QUIZ[qIndex].a:null;
+  rkSave(st);
+}
+function rkRenderMastery(){
+  const bar=document.getElementById('ruankao-masteryBar'), lbl=document.getElementById('ruankao-masteryLabel');
+  if(!bar||!lbl) return;
+  const st=rkLoad(); const tested=Object.keys(st.answers||{}).length;
+  if(!tested){ lbl.textContent='📊 综合掌握度 —（先做几道题测一测）'; bar.style.width='0%'; bar.style.background=''; return; }
+  const m=Math.round(rkOverallMastery());
+  lbl.textContent='📊 综合掌握度 '+m+'%（基于 '+tested+' 次实测）';
+  bar.style.width=m+'%'; bar.style.background=m>=70?'var(--green)':m>=40?'var(--yellow)':'var(--red)';
+}
+function rkRenderDueStrip(){
+  const strip=document.getElementById('ruankao-dueStrip'); if(!strip) return;
+  const st=rkLoad(); const today=genTodayISO(); const out=[];
+  RK_TOPICS.forEach(t=>{
+    const qs=RK_QUIZ.map((q,i)=>i).filter(i=>RK_QUIZ[i].t===t.id);
+    let due=false; qs.forEach(i=>{const c=st.cards&&st.cards[i]; if(c&&c.due&&c.due<=today&&c.lastResult!==true) due=true;});
+    const m=rkTopicMastery(t.id);
+    if(due||(m!==null&&m<60)) out.push({id:t.id,name:t.name,m,m:rkTopicMastery(t.id),due});
+  });
+  out.sort((a,b)=>(b.due?1:0)-(a.due?1:0)||((a.m==null?999:a.m)-(b.m==null?999:b.m)));
+  if(!out.length){ strip.innerHTML=''; return; }
+  strip.innerHTML=out.map(o=>'<span class="rk-chip'+(o.due?' due':'')+'" data-topic="'+o.id+'" title="点击测试">'+escH(o.name)+' <b class="m">'+(o.m!==null?o.m+'%':'未测')+'</b></span>').join('');
+  strip.querySelectorAll('.rk-chip').forEach(c=>c.onclick=()=>rkOpenTest(c.dataset.topic));
+}
+let rkSession=null;
+function rkOpenTest(topicId){
+  const list=RK_QUIZ.map((q,i)=>i).filter(i=> topicId==='all'?true:RK_QUIZ[i].t===topicId);
+  const st=rkLoad();
+  list.sort((a,b)=>{
+    const sa=st.cards&&st.cards[a], sb=st.cards&&st.cards[b];
+    const da=(sa&&sa.due&&sa.due<=genTodayISO()&&sa.lastResult!==true)?0:1;
+    const db=(sb&&sb.due&&sb.due<=genTodayISO()&&sb.lastResult!==true)?0:1;
+    return da-db;
+  });
+  rkSession={list, idx:0, _picks:{}};
+  const modal=document.getElementById('rk-quiz-modal');
+  document.getElementById('rk-modal-topic').textContent = topicId==='all' ? '全量自测（'+list.length+' 题）' : ((RK_TOPICS.find(t=>t.id===topicId)||{}).name||topicId);
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+  rkRenderQ();
+}
+function rkCloseModal(){
+  const modal=document.getElementById('rk-quiz-modal'); modal.classList.remove('open');
+  document.body.style.overflow=''; rkSession=null;
+  rkRenderMastery(); rkRenderDueStrip();
+}
+function rkRenderQ(){
+  const root=document.getElementById('rk-quiz-body'); if(!root||!rkSession) return;
+  const list=rkSession.list, pos=rkSession.idx, i=list[pos], q=RK_QUIZ[i];
+  const pick=rkSession._picks[pos]; const answered=pick!==undefined;
+  const correct=answered&&pick===q.a;
+  const opts=q.o.map((o,k)=>{
+    const L='ABCD'[k]; let cls='rk-opt';
+    if(answered){ if(L===q.a) cls+=' correct'; else if(L===pick) cls+=' wrong'; }
+    return '<button class="'+cls+'" data-pick="'+L+'"'+(answered?' disabled':'')+'>'+L+'．'+escH(o)+'</button>';
+  }).join('');
+  let r=0,w=0; for(let p=0;p<=pos;p++){const pk=rkSession._picks[p]; if(pk===undefined)continue; if(pk===RK_QUIZ[list[p]].a)r++; else w++;}
+  const pct=Math.round(pos/list.length*100);
+  let fb='';
+  if(answered) fb='<div class="rk-feedback '+(correct?'correct':'wrong')+'"><b>'+(correct?'✅ 回答正确':'❌ 回答错误，正确答案 '+q.a)+'</b> ｜ '+escH(q.e)+'</div>';
+  const isLast=pos>=list.length-1;
+  root.innerHTML=
+    '<div class="rk-hud"><div>📍 第 <b>'+(pos+1)+'</b> / '+list.length+' 题</div>'+
+    '<div class="progress"><span style="width:'+pct+'%"></span></div>'+
+    '<div style="color:var(--green)">✅ '+r+'</div><div style="color:var(--red)">❌ '+w+'</div></div>'+
+    '<div class="rk-q-text">'+escH(q.q)+'</div>'+opts+fb+
+    '<div class="rk-nav"><button class="ghost" id="rk-prev"'+(pos===0?' disabled':'')+'>← 上一题</button>'+
+    (answered?(isLast?'<button id="rk-finish">查看成绩 →</button>':'<button id="rk-next">下一题 →</button>'):'<span style="font-size:12px;color:var(--text-3)">选一个答案看解析</span>')+
+    '</div>';
+  root.querySelectorAll('.rk-opt').forEach(b=>{ if(b.disabled)return; b.addEventListener('click',()=>rkAnswer(i,b.dataset.pick)); });
+  const prev=root.querySelector('#rk-prev'); if(prev&&!prev.disabled) prev.onclick=()=>{rkSession.idx--;rkRenderQ();};
+  const next=root.querySelector('#rk-next'); if(next) next.onclick=()=>{rkSession.idx++;rkRenderQ();};
+  const fin=root.querySelector('#rk-finish'); if(fin) fin.onclick=rkFinish;
+}
+function rkAnswer(i,letter){
+  if(!rkSession) return; const pos=rkSession.idx;
+  const firstTime=rkSession._picks[pos]===undefined;
+  rkSession._picks[pos]=letter;
+  if(firstTime) rkRecordAnswer(i, letter===RK_QUIZ[i].a);
+  rkRenderQ();
+}
+function rkFinish(){
+  const root=document.getElementById('rk-quiz-body'); if(!root||!rkSession) return;
+  const list=rkSession.list; let r=0,w=0;
+  list.forEach((qi,p)=>{const pk=rkSession._picks[p]; if(pk===undefined)return; if(pk===RK_QUIZ[qi].a)r++; else w++;});
+  const acc=Math.round(r/list.length*100);
+  const weak=[...new Set(list.map(i=>RK_QUIZ[i].t))].map(id=>({id,name:(RK_TOPICS.find(t=>t.id===id)||{}).name,m:rkTopicMastery(id)})).filter(x=>x.m!==null&&x.m<70).sort((a,b)=>a.m-b.m);
+  rkRenderMastery(); rkRenderDueStrip();
+  root.innerHTML='<div class="rk-results"><div class="trophy">'+(acc>=80?'🏆':acc>=60?'🎯':'📚')+'</div>'+
+    '<h3>本轮完成</h3><div class="score">'+acc+'%</div><div class="score-label">正确率 · '+r+' / '+list.length+' 题答对</div>'+
+    (weak.length?'<div style="text-align:left;margin-top:14px"><div style="font-size:12px;color:var(--text-3);font-weight:700;margin-bottom:6px">仍需巩固（点击复习）</div>'+weak.map(t=>'<div class="rk-chip" data-topic="'+t.id+'">'+escH(t.name)+' <b class="m">'+t.m+'%</b></div>').join('')+'</div>':'<div style="margin-top:14px;color:var(--green);font-weight:700">全部达标 🎉</div>')+
+    '<div class="rk-nav" style="justify-content:center"><button id="rk-close">完成</button></div></div>';
+  root.querySelectorAll('.rk-chip').forEach(c=>c.onclick=()=>rkOpenTest(c.dataset.topic));
+  root.querySelector('#rk-close').onclick=rkCloseModal;
+}
+function rkInit(){
+  if(!document.getElementById('rk-quiz-modal')){
+    const m=document.createElement('div'); m.id='rk-quiz-modal';
+    m.innerHTML='<div class="rk-modal-backdrop"></div><div class="rk-modal-card"><div class="rk-modal-head"><div class="rk-modal-title">🎯 <span id="rk-modal-topic"></span></div><button class="rk-modal-close" id="rk-modal-close" type="button">✕</button></div><div id="rk-quiz-body"></div></div>';
+    document.body.appendChild(m);
+    m.querySelector('.rk-modal-backdrop').onclick=rkCloseModal;
+    m.querySelector('#rk-modal-close').onclick=rkCloseModal;
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&m.classList.contains('open')) rkCloseModal(); });
+  }
+  document.querySelectorAll('.topic-test').forEach(b=>b.onclick=()=>rkOpenTest(b.dataset.topic));
+  const all=document.getElementById('rk-all-test'); if(all) all.onclick=()=>rkOpenTest('all');
+  rkRenderMastery(); rkRenderDueStrip();
+}
+rkInit();
 
 /* ============================================================
    每日学习中心：日期驱动，合并 计划 + 阅读(PDF/笔记) + 做题 + 视频
