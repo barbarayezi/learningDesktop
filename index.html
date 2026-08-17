@@ -625,6 +625,16 @@ pre code{background:none;padding:0}
 .dc-tags{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap}
 .dc-tag{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--surface-2);color:var(--text-2)}
 .dc-tag.stage{background:var(--accent-soft);color:var(--accent);font-weight:600}
+/* ---- 通用阶段（ruankao/datadev/cdgp）日任务卡片 ---- */
+.dc-dayhead{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.dc-dayhead-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dc-wd{font-size:20px;font-weight:700;color:var(--text)}
+.dc-dnum{font-size:13.5px;color:var(--text-3)}
+.dc-stage-tag{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);white-space:nowrap}
+.dc-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.dc-step{display:flex;flex-direction:column;gap:5px;padding:13px 15px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.dc-step b{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:7px}
+.dc-step div{font-size:14.5px;color:var(--text);line-height:1.65}
 .dc-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-2);cursor:pointer;background:var(--surface-2);padding:9px 14px;border-radius:10px;border:1px solid var(--border)}
 .dc-check input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
 .dc-goal{font-size:17px;margin:18px 0 8px}
@@ -5121,13 +5131,13 @@ function genRenderDay(prefix,iso){
   const strip=e.dayEl.querySelector('.gen-weekstrip');
   if(strip) strip.querySelectorAll('.week-chip').forEach(c=>c.classList.toggle('active', Number(c.dataset.w)===day.w));
   const card=e.dayEl.querySelector('.gen-card'); if(!card)return;
-  card.innerHTML='<div class="dc-dayhead"><span class="dc-wd">'+day.wd+'</span><span class="dc-dnum">Day '+day.day+' · '+iso+'</span><span class="dc-week">'+escH(wk.meta)+'</span></div>'
+  card.innerHTML='<div class="dc-dayhead"><div class="dc-dayhead-main"><span class="dc-wd">'+day.wd+'</span><span class="dc-dnum">Day '+day.day+' · '+iso+'</span><span class="dc-stage-tag">'+escH(wk.meta)+'</span></div><label class="dc-check"><input type="checkbox" class="gen-daycheck" '+(done?'checked':'')+'> 今日完成打卡</label></div>'
     +'<div class="dc-steps">'
     +'<div class="dc-step"><b>🎯 今日目标</b><div>'+escH(wk.meta)+'</div></div>'
     +'<div class="dc-step"><b>📺 看课 / 教程</b><div>'+escH(wk.watch||'（本周无专属视频，复习已学）')+'</div></div>'
     +'<div class="dc-step"><b>📖 阅读 / 划重点</b><div>'+escH(wk.read||'（见本周任务）')+'</div></div>'
     +'<div class="dc-step"><b>✍️ 自测 / 动手</b><div>'+escH(wk.self||'（勾选下方知识清单对应项）')+'</div></div>'
-    +'</div>'+review+'<label class="dc-check"><input type="checkbox" class="gen-daycheck" '+(done?'checked':'')+'> 今日完成打卡</label>';
+    +'</div>'+review;
   const chk=card.querySelector('.gen-daycheck');
   chk.onchange=()=>{ const s=genLoad(prefix,'daily'); if(chk.checked)s[iso]=true; else delete s[iso]; genSave(prefix,'daily',s); const pc=document.getElementById(prefix+'-done'); if(pc)pc.textContent=Object.values(s).filter(Boolean).length+' / '+e.totalDays; const heat=e.dayEl.querySelector('.gen-heat'); if(heat){const sp=heat.querySelector('[data-iso="'+iso+'"]'); if(sp){sp.classList.toggle('hl-done',chk.checked); sp.classList.toggle('hl-todo',!chk.checked);} } if(typeof renderProgress==='function')renderProgress(); };
 }
