@@ -2710,7 +2710,28 @@ var cloud = {
   }
 };
 
-// 初始化：匿名登录 → 从云端加载数据到 localStorage
+// 解析存储值：JSON 字符串还原，非 JSON 原样返回
+function parseVal(v){ try { return JSON.parse(v); } catch(e){ return v; } }
+
+// 深合并：把 b（本地，用户最新操作）合并进 a（云端），对象按 key 递归、数组取去重并集、标量/类型不符时 b 优先
+function deepMerge(a, b){
+  if (Array.isArray(a) && Array.isArray(b)) {
+    var seen={}, out=[];
+    a.concat(b).forEach(function(x){ var k=JSON.stringify(x); if(!seen[k]){ seen[k]=1; out.push(x); } });
+    return out;
+  }
+  if (a && typeof a==='object' && !Array.isArray(a) && b && typeof b==='object' && !Array.isArray(b)) {
+    var res={};
+    Object.keys(a).forEach(function(k){ res[k]=a[k]; });
+    Object.keys(b).forEach(function(k){
+      res[k] = (res[k]===undefined) ? b[k] : deepMerge(res[k], b[k]);
+    });
+    return res;
+  }
+  return b; // 标量或类型不符：本地（b）优先
+}
+
+// 初始化：匿名登录 → 从云端加载数据，与本地「深合并」后写回（不再整块覆盖）
 (async function initCloud() {
   try {
     var loginResult = await cloudbaseAnonLogin();
@@ -2723,7 +2744,10 @@ var cloud = {
     if (result.error) throw result.error;
     if (result.data) {
       result.data.forEach(function(row) {
-        localStorage.setItem(row.key, JSON.stringify(row.value));
+        var cv = parseVal(row.value);
+        var lv = parseVal(localStorage.getItem(row.key));
+        var merged = lv ? deepMerge(cv, lv) : cv;
+        _origSetItem(row.key, JSON.stringify(merged));
       });
     }
     cloudReady = true;
@@ -2733,18 +2757,31 @@ var cloud = {
   }
 })();
 
-// 拦截 localStorage.setItem，同步写入云端
+// 拦截 localStorage.setItem：写入本地后，异步「拉云端→与本地深合并→回写」，避免多设备同时编辑互相覆盖
 var _origSetItem = localStorage.setItem.bind(localStorage);
+var _syncBusy = {};
+var _syncDirty = {};
+function syncKeyToCloud(key){
+  _syncBusy[key] = true;
+  cloud.from('user_data').select('key,value').then(function(res){
+    var cloudRow = (res.data||[]).filter(function(r){ return r.key===key; })[0];
+    var localVal = parseVal(localStorage.getItem(key));
+    var merged = cloudRow ? deepMerge(parseVal(cloudRow.value), localVal) : localVal;
+    return cloud.from('user_data').upsert({
+      key: key,
+      value: merged,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'key' });
+  }).catch(function(){}).finally(function(){
+    _syncBusy[key] = false;
+    if (_syncDirty[key]) { _syncDirty[key] = false; syncKeyToCloud(key); }
+  });
+}
 localStorage.setItem = function(key, value) {
   _origSetItem(key, value);
-  if (!cloudReady) return;
-  try {
-    cloud.from('user_data').upsert({
-      key: key,
-      value: JSON.parse(value),
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'key' }).catch(function(){});
-  } catch (e) {}
+  if (!cloudReady || key==='__ld_test__') return;
+  if (_syncBusy[key]) { _syncDirty[key] = true; return; }
+  syncKeyToCloud(key);
 };
 
 // 拦截 localStorage.removeItem
