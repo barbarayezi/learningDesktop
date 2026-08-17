@@ -15,4 +15,12 @@
 - **CodeBuddy 的 Bash 环境无法持久化后台服务**：`nohup` / `setsid` / `run_in_background` 起的进程会在用户下一轮提问时被回收；`launchctl load` / `launchctl bootstrap gui/501` 因当前命令没有 GUI 登录会话权限报 `Input/output error`。
 - **正确常驻方式**：在 Mac Mini 自带「终端」App 里执行 `launchctl load ~/Library/LaunchAgents/com.barbara.learningdesktop.proxy.plist`（该 plist 已建好，含 `KeepAlive`：崩溃自动重启 + 登录自启）。CodeBuddy 这边只能"本轮内"临时拉起服务。
 - 排查"打不开"的顺序：① 服务是否在跑（`lsof -nP -iTCP:8080 -sTCP:LISTEN`）；② 访问 IP 是否等于本机当前 `ifconfig` 的 IP（DHCP 会变，旧 `192.168.103.37` 已失效，当前 `192.168.71.53`）；③ 浏览器是否装代理插件把该 IP 拐走（需设直连/bypass，系统级代理已确认 Disabled）；④ macOS 防火墙是否弹窗需允许 python 入站。
-- 注意 `proxy_server.py` 内 CloudBase API key 有效期至 2025-08-15（已过期）：静态页面不受影响，但 `/api/*` 数据库功能会失败，需换新 key。
+- `proxy_server.py` 内 `CLOUDBASE_KEY`(JWT) 名义上 2025-08-15 已过期，但它实际是死代码：`proxy_request` 只把浏览器匿名登录拿到的临时 Bearer token 原样转发给 CloudBase，并不会调用这个静态 key。因此 2026-08-17 实测 `/api/*` 匿名登录+读 `user_data` 表仍可正常 HTTP 200。
+
+## 前端渲染铁律 —— 不再让单点错误整页空白（2026-08-17 立）
+- 本项目 `index.html` 是单一超大 `<script>` 文件。任何顶层未捕获异常都会在该点中断脚本，导致**热力图、每日学习卡、B站视频表等全部空白**。
+- 血的教训（2026-08-17 晚两次白屏）：① 把 `_origSetItem` 拦截器定义放到 `initCloud` 之后；② 在 `const WEEKS` 定义之前立即执行访问 `WEEKS` 的 IIFE。
+- **从今以后的原则**：所有「启动期」调用/事件绑定/DOM 初始化必须走 `safe(label, fn)`；新增任何 boot 点时，先问自己「如果这段抛错，会不会中断后面整个脚本」。
+- 当前已加固的入口（2026-08-17 最终）：`initCloud` 自含 try/catch；主题切换、阶段导航条、侧边栏、搜索、日期/周切换、热力图、今日学习卡、B站视频表、资讯、关注源、`initChecks`/`initLadder`/`initPhdPath`/`initDataDev` 均已 `safe()` 隔离。
+- 错误展示：`reportErr()` 会在页面底部生成固定红色横幅，列出出错的子模块及调用栈，其它模块继续正常渲染。
+- 验证方法：每次改动后用 Chrome headless 截图（`--window-size=1280,2600`）确认 ① 无底部红条；② 热力图、今日学习卡、B站视频表、侧边栏均可见。必要时做受控崩溃测试（临时在某函数首行 `throw`）。
