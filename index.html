@@ -2636,6 +2636,25 @@ Date: [Month] [Year]</code></pre>
   try { localStorage = fake; } catch(e){}
 })();
 
+/* ---------- 渲染容错层：任一子系统报错只提示、绝不连累整页空白 ----------
+   本页是单一 <script> 大文件，任意顶层语句抛出未捕获异常都会中断后续所有渲染，
+   导致热力图/日历/视频表整体消失。所有「启动期」调用必须走 safe()，
+   并保留全局错误横幅，让问题可见、可控。 */
+function reportErr(label, e){
+  var d=document.getElementById('__errlog');
+  if(!d){
+    d=document.createElement('div'); d.id='__errlog';
+    d.style='position:fixed;z-index:99999;left:0;right:0;bottom:0;background:#c0392b;color:#fff;padding:8px 12px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;max-height:42vh;overflow:auto;box-shadow:0 -2px 10px rgba(0,0,0,.35)';
+    (document.body||document.documentElement).appendChild(d);
+    d.textContent='⚠️ 下列模块渲染出错（其它模块不受影响，页面仍可正常使用）：\n';
+  }
+  var msg = (e&&e.message) ? e.message : (e&&e.stack) ? String(e.stack) : String(e);
+  d.textContent += '• '+label+'：'+msg+'\n';
+}
+function safe(label, fn){ try { return fn(); } catch(e){ console.error('['+label+']', e); reportErr(label, e); return null; } }
+window.addEventListener('error', function(ev){ reportErr('全局', ev.error||ev.message); });
+window.addEventListener('unhandledrejection', function(ev){ reportErr('Promise', (ev.reason&&(ev.reason.stack||ev.reason.message))||ev.reason); });
+
 /* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
 var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
 var API_PROXY = window.location.origin + "/api";
@@ -2799,10 +2818,12 @@ localStorage.removeItem = function(key) {
 const html=document.documentElement;
 const saved=localStorage.getItem('bb-theme');
 if(saved)html.setAttribute('data-theme',saved);
-document.getElementById('themeBtn').onclick=()=>{
-  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);localStorage.setItem('bb-theme',next);
-};
+safe('主题切换绑定', function(){
+  document.getElementById('themeBtn').onclick=()=>{
+    const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+    html.setAttribute('data-theme',next);localStorage.setItem('bb-theme',next);
+  };
+});
 
 /* ---------- Nav ---------- */
 const crumbs=document.getElementById('crumbs');
@@ -2879,7 +2900,7 @@ function maybeSwitchStageByDate(iso){
 }
 
 /* 初始化阶段导航条 */
-renderStageBars('cdga-daily');
+safe('阶段导航条', function(){ renderStageBars('cdga-daily'); });
 
 /* tab 切换通用函数 */
 function initTabs(wrapId){
@@ -2920,11 +2941,14 @@ document.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dat
 const sidebar=document.getElementById('sidebar'),scrim=document.getElementById('scrim');
 function openSidebar(){sidebar.classList.add('open');scrim.classList.add('show');}
 function closeSidebar(){sidebar.classList.remove('open');scrim.classList.remove('show');}
-document.getElementById('menuBtn').onclick=openSidebar;
-scrim.onclick=closeSidebar;
+safe('侧边栏绑定', function(){
+  document.getElementById('menuBtn').onclick=openSidebar;
+  scrim.onclick=closeSidebar;
+});
 
 /* ---------- Search ---------- */
-document.getElementById('search').addEventListener('input',function(){
+const _searchEl=document.getElementById('search');
+if(_searchEl)_searchEl.addEventListener('input',function(){
   const q=this.value.trim().toLowerCase();
   document.querySelectorAll('.nav-item').forEach(n=>{
     const t=(n.textContent||'').toLowerCase();
@@ -2957,7 +2981,7 @@ function setCheckState(i, checked){
   if(cb){ cb.checked=checked; cb.closest('.chk-row')&&cb.closest('.chk-row').classList.toggle('done',checked); }
   updateProgress();
 }
-(function initChecks(){
+function initChecks(){
   const state=loadChecks();
   document.querySelectorAll('#cdga-check .chk').forEach((c,i)=>{
     c.checked=!!state[i];
@@ -2965,7 +2989,8 @@ function setCheckState(i, checked){
     c.closest('.chk-row').classList.toggle('done',c.checked);
   });
   updateProgress();
-})();
+}
+safe('知识点清单初始化', initChecks);
 
 /* ---------- Video schedule check-in (CDGA daily center) ---------- */
 const VKEY='bb-video-checks';
@@ -3053,7 +3078,7 @@ function renderVideoToday(){
 (function(){
   // renderVideoRows/renderVideoWeek 现在依赖 WEEKS[i] 取视频链接；WEEKS 在更后面定义，延迟到当前脚本执行完再初始化
   setTimeout(function(){
-    renderVideoRows();
+    safe('B站视频打卡行', renderVideoRows);
     const state=loadVideo();
     document.querySelectorAll('#videoChecks .vchk').forEach(c=>{
       const i=+c.dataset.i;c.checked=!!state[i];
@@ -3061,7 +3086,7 @@ function renderVideoToday(){
       c.closest('tr').classList.toggle('vdone',!!state[i]);
     });
     updateVideoProgress();
-    renderVideoWeek();renderVideoToday();
+    safe('本周视频卡', renderVideoWeek); safe('今日视频卡', renderVideoToday);
     const dims=document.querySelectorAll('.vb-dims .dim-btn');
     dims.forEach(b=>b.addEventListener('click',()=>{
       dims.forEach(x=>x.classList.remove('active'));b.classList.add('active');
@@ -3078,7 +3103,7 @@ function renderVideoToday(){
 const LADDER_KEY='bb-ladder-checks';
 function loadLadder(){try{return JSON.parse(localStorage.getItem(LADDER_KEY))||{}}catch(e){return{}}}
 function saveLadder(o){localStorage.setItem(LADDER_KEY,JSON.stringify(o))}
-(function initLadder(){
+function initLadder(){
   const state=loadLadder();
   document.querySelectorAll('#ladder-checks input[type=checkbox]').forEach(c=>{
     const k=c.dataset.key;
@@ -3091,7 +3116,8 @@ function saveLadder(o){localStorage.setItem(LADDER_KEY,JSON.stringify(o))}
     c.closest('label').classList.toggle('checked',c.checked);
   });
   updateLadderProgress();
-})();
+}
+safe('进阶阶梯初始化', initLadder);
 function updateLadderProgress(){
   const all=document.querySelectorAll('#ladder-checks input[type=checkbox]');
   if(!all.length)return;
@@ -3123,7 +3149,7 @@ function updatePhdProgress(){
   const ct=document.getElementById('phdCTotal');if(ct)ct.textContent=cAll.length;
   const cd=document.getElementById('phdCDone');if(cd)cd.textContent=cDone;
 }
-(function initPhdPath(){
+function initPhdPath(){
   const state=loadPhd();
   document.querySelectorAll('.phd-tasks input[type="checkbox"]').forEach(c=>{
     const k=c.dataset.pk;
@@ -3134,13 +3160,14 @@ function updatePhdProgress(){
     });
   });
   updatePhdProgress();
-})();
+}
+safe('博士路径初始化', initPhdPath);
 
 /* ---------- Data-Dev checklist ---------- */
 const DATADEV_KEY='bb-datadev-checks';
 function loadDataDev(){try{return JSON.parse(localStorage.getItem(DATADEV_KEY))||{}}catch(e){return{}}}
 function saveDataDev(o){localStorage.setItem(DATADEV_KEY,JSON.stringify(o))}
-(function initDataDev(){
+function initDataDev(){
   const state=loadDataDev();
   document.querySelectorAll('#datadev-checks input[type=checkbox]').forEach(c=>{
     const k=c.dataset.key;
@@ -3153,7 +3180,8 @@ function saveDataDev(o){localStorage.setItem(DATADEV_KEY,JSON.stringify(o))}
     c.closest('label').classList.toggle('checked',c.checked);
   });
   updateDataDevProgress();
-})();
+}
+safe('数据开发清单初始化', initDataDev);
 function updateDataDevProgress(){
   const all=document.querySelectorAll('#datadev-checks input[type=checkbox]');
   if(!all.length)return;
@@ -4891,11 +4919,13 @@ function openQuiz(domain,mode){
     setTimeout(()=>{const els=[].slice.call(document.querySelectorAll('#quiz-list .quiz-domain'));const t=els.find(e=>e.textContent===domain);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},60);
   } else { window.scrollTo({top:0}); }
 }
-dayDate.onchange=()=>{ renderDay(dayDate.value); maybeSwitchStageByDate(dayDate.value); };
-document.getElementById('dayPrev').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)-1);
-document.getElementById('dayNext').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)+1);
-document.getElementById('dayStart').onclick=()=>{dayDate.value='2026-08-15';renderDay('2026-08-15');};
-weekStrip.onclick=e=>{const c=e.target.closest('.week-chip');if(c){const wk=WEEKS.find(w=>w.w==c.dataset.w);dayDate.value=wk.start;renderDay(wk.start);}};
+safe('日期/周切换绑定', function(){
+  dayDate.onchange=()=>{ renderDay(dayDate.value); maybeSwitchStageByDate(dayDate.value); };
+  document.getElementById('dayPrev').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)-1);
+  document.getElementById('dayNext').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)+1);
+  document.getElementById('dayStart').onclick=()=>{dayDate.value='2026-08-15';renderDay('2026-08-15');};
+  weekStrip.onclick=e=>{const c=e.target.closest('.week-chip');if(c){const wk=WEEKS.find(w=>w.w==c.dataset.w);dayDate.value=wk.start;renderDay(wk.start);}};
+});
 /* ---------- 我的进度聚合 ---------- */
 function getStore(key){try{return JSON.parse(localStorage.getItem(key))||{}}catch(e){return{}}}
 function countChecked(sectionId){
@@ -5000,11 +5030,11 @@ function buildDailyArticles(){
   return pool;
 }
 const DAILY_ARTICLES=buildDailyArticles();
-buildHeat();
-renderDay(TODAY_ISO);
-refreshHeat();
-document.querySelector('.brand').onclick=()=>showPage('home');
-showPage('daily');
+safe('热力图', buildHeat);
+safe('今日学习卡', function(){ renderDay(TODAY_ISO); });
+safe('热力图刷新', refreshHeat);
+safe('品牌导航绑定', function(){ document.querySelector('.brand').onclick=()=>showPage('home'); });
+safe('打开默认页', function(){ showPage('daily'); });
 
 const NEWS_SEEN_KEY='cdga-news-seen';
 function newsGetSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(NEWS_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
@@ -5076,7 +5106,7 @@ function renderNews(){
     if(mk){ const id=mk.dataset.id; const seen=newsGetSeen(); if(seen.has(id)) seen.delete(id); else seen.add(id); localStorage.setItem(NEWS_SEEN_KEY, JSON.stringify([...seen])); renderNews(); }
   }); }
   if(list){ list.addEventListener('input',e=>{ const ta=e.target.closest('.js-note'); if(ta){ notes[ta.dataset.id]=ta.value; saveNotes(); } }); }
-  renderNews();
+  safe('资讯列表', renderNews);
 })();
 /* ---------- 关注源 ---------- */
 let srcCat='all';
@@ -5114,7 +5144,7 @@ function focusNewsFeed(){ const b=document.getElementById('newsBlock'); if(b) b.
     const card=e.target.closest('.src-card');
     if(card){ const nm=card.dataset.name; const s=(window.SOURCES||[]).find(x=>x.name===nm); const acc=s?(s.accounts||[]):[]; if(newsAccounts && newsAccounts.join()===acc.join()){ newsAccounts=null; } else { newsAccounts=acc.length?acc:null; } renderSources(); renderNews(); focusNewsFeed(); return; }
   });
-  renderSources();
+  safe('关注源', renderSources);
 })();
 
 /* ===================== 通用每日中心（软考/数据开发证/CDGP 共用，独立于 CDGA） ===================== */
