@@ -156,6 +156,8 @@ pre code{background:none;padding:0}
 .vcard-row{display:flex;gap:10px;padding:6px 0;border-top:1px solid var(--border)}
 .vcard-row .vtag{flex:0 0 132px;font-weight:700;color:var(--accent);font-size:13px}
 .vcard-sub{margin-top:8px;color:var(--text-2);font-size:13px;line-height:1.6}
+.vlink{color:var(--accent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.vlink:hover{color:var(--accent-2)}
 .vweek-btn{margin-top:12px;font:inherit;font-weight:700;padding:8px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer}
 .vweek-btn.done{background:var(--green);border-color:var(--green);color:#fff}
 .chk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 6px}
@@ -2999,6 +3001,11 @@ const VIDEO_WEEKS=[
  [26,'2/6–2/12','冲刺','只看错题本 + 术语表','模拟考 + 临考清单（视频停看，保状态）'],
 ];
 function vParse(md){const p=md.split('/').map(Number);const y=(p[0]>=8?2026:2027);return new Date(y+'-'+String(p[0]).padStart(2,'0')+'-'+String(p[1]).padStart(2,'0'));}
+// 把视频池里的第一条视频 URL 包成可点击链接；没 URL 则保留纯文字
+function vlink(text, pool){
+  const url = (pool && pool[0] && pool[0][1]) || '';
+  return url ? '<a class="vlink" href="'+escH(url)+'" target="_blank" rel="noopener">'+escH(text)+' <span style="font-size:.85em;opacity:.7">↗</span></a>' : escH(text);
+}
 function vIdxForToday(){const t=new Date();for(let i=0;i<VIDEO_WEEKS.length;i++){const parts=VIDEO_WEEKS[i][1].split('–');const s=vParse(parts[0]),e=vParse(parts[1]);if(t>=s&&t<=e)return i;}const iso=t.toLocaleDateString('sv');return iso<'2026-08-15'?0:VIDEO_WEEKS.length-1;}
 function updateVideoProgress(){
   const all=document.querySelectorAll('#videoChecks .vchk');
@@ -3010,9 +3017,12 @@ function updateVideoProgress(){
 function renderVideoRows(){
   const tb=document.getElementById('videoRows');if(!tb)return;
   const state=loadVideo();
-  tb.innerHTML=VIDEO_WEEKS.map((x,i)=>`<tr class="${state[i]?'vdone':''}" data-i="${i}">
-    <td>W${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${escH(x[3])}</td><td>${escH(x[4])}</td>
-    <td class="vcell"><input type="checkbox" class="vchk" data-i="${i}" ${state[i]?'checked':''}></td></tr>`).join('');
+  tb.innerHTML=VIDEO_WEEKS.map((x,i)=>{
+    const wk=WEEKS[i]||{};
+    return `<tr class="${state[i]?'vdone':''}" data-i="${i}">
+    <td>W${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${vlink(x[3], wk.vWorkVideos)}</td><td>${vlink(x[4], wk.vWeekendVideos)}</td>
+    <td class="vcell"><input type="checkbox" class="vchk" data-i="${i}" ${state[i]?'checked':''}></td></tr>`;
+  }).join('');
 }
 function syncVideoChecks(){
   const state=loadVideo();
@@ -3020,11 +3030,11 @@ function syncVideoChecks(){
 }
 function renderVideoWeek(){
   const card=document.getElementById('videoWeekCard');if(!card)return;
-  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const done=!!loadVideo()[i];
+  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const wk=WEEKS[i]||{};const done=!!loadVideo()[i];
   card.innerHTML=`<div class="vcard">
     <div class="vcard-head">📅 本周：W${x[0]} · ${x[1]} · ${x[2]}</div>
-    <div class="vcard-row"><span class="vtag">工作日晚上</span><span>${escH(x[3])}</span></div>
-    <div class="vcard-row"><span class="vtag">周末</span><span>${escH(x[4])}</span></div>
+    <div class="vcard-row"><span class="vtag">工作日晚上</span><span>${vlink(x[3], wk.vWorkVideos)}</span></div>
+    <div class="vcard-row"><span class="vtag">周末</span><span>${vlink(x[4], wk.vWeekendVideos)}</span></div>
     <button class="vweek-btn ${done?'done':''}" id="vWeekBtn" type="button">${done?'✅ 本周已完成':'✅ 标记本周视频完成'}</button>
   </div>`;
   const b=document.getElementById('vWeekBtn');
@@ -3032,12 +3042,13 @@ function renderVideoWeek(){
 }
 function renderVideoToday(){
   const card=document.getElementById('videoTodayCard');if(!card)return;
-  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const t=new Date();const dow=t.getDay();
+  const i=vIdxForToday();const x=VIDEO_WEEKS[i];const wk=WEEKS[i]||{};const t=new Date();const dow=t.getDay();
   const weekend=(dow===0||dow===6);const task=weekend?x[4]:x[3];const lab=weekend?'周末（系统课/专栏）':'工作日晚上（碎片/短视频）';
+  const taskPool=weekend?wk.vWeekendVideos:wk.vWorkVideos;
   card.innerHTML=`<div class="vcard">
     <div class="vcard-head">🕒 今日（${t.toLocaleDateString('sv')} · 周${'日一二三四五六'[dow]}）属于 W${x[0]}</div>
-    <div class="vcard-row"><span class="vtag">${lab}</span><span>${escH(task)}</span></div>
-    <div class="vcard-sub">本周目标：工作日晚上 — ${escH(x[3])} ｜ 周末 — ${escH(x[4])}</div>
+    <div class="vcard-row"><span class="vtag">${lab}</span><span>${vlink(task, taskPool)}</span></div>
+    <div class="vcard-sub">本周目标：工作日晚上 — ${vlink(x[3], wk.vWorkVideos)} ｜ 周末 — ${vlink(x[4], wk.vWeekendVideos)}</div>
   </div>`;
 }
 (function(){
