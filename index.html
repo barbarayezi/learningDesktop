@@ -4415,7 +4415,8 @@ function summarizePlan(items){
 
 function renderDay(iso){
   let d=DAILY_BY_ISO[iso];
-  if(!d){ iso = iso < '2026-08-15' ? '2026-08-15' : '2027-02-12'; d=DAILY_BY_ISO[iso]; dayDate.value=iso; }
+  if(!d){ iso = iso < '2026-08-15' ? '2026-08-15' : '2027-02-12'; d=DAILY_BY_ISO[iso]; }
+  if(dayDate) dayDate.value=iso;
   const role=DAY_ROLES[d.i];
   const dom=d.domains;
   const termDom = dom[0]==='all' ? '十一、数据管理概述' : dom[0];
@@ -4924,7 +4925,7 @@ function buildDailyArticles(){
 }
 const DAILY_ARTICLES=buildDailyArticles();
 buildHeat();
-renderDay('2026-08-15');
+renderDay(TODAY_ISO);
 refreshHeat();
 document.querySelector('.brand').onclick=()=>showPage('home');
 showPage('daily');
