@@ -192,6 +192,27 @@ pre code{background:none;padding:0}
 /* ---- 软考知识点掌握度测试 ---- */
 .chk-row .topic-test{margin-left:auto;flex:0 0 auto;align-self:center;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:7px;font-size:12px;padding:3px 9px;cursor:pointer;line-height:1.5;white-space:nowrap}
 .chk-row .topic-test:hover{opacity:.85}
+
+/* ---- 读博路径决策看板 ---- */
+.decision-board{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:16px 18px;margin:14px 0 22px;box-shadow:var(--shadow)}
+.db-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.db-head h2{margin:0;font-size:17px}
+.db-tag{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:20px;padding:3px 12px;white-space:nowrap}
+.db-intro{font-size:13px;color:var(--text-2);line-height:1.6;margin:8px 0 14px}
+.db-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.db-card{border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:var(--surface-2)}
+.db-card.db-base{border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.db-card.db-a{border-color:color-mix(in srgb,var(--green) 35%,transparent)}
+.db-card.db-b{border-color:color-mix(in srgb,#7c5cff 35%,transparent)}
+.db-card h3{margin:0 0 4px;font-size:14.5px}
+.db-sub{font-size:12px;color:var(--text-3);margin:0 0 8px}
+.db-card.db-base .progress > i{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.db-card.db-a .progress > i{background:var(--green)}
+.db-card.db-b .progress > i{background:#7c5cff}
+.db-hint{font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;margin-top:10px;line-height:1.5}
+.db-card .chk-row{padding:6px 8px;font-size:13px}
+.db-card .chk-row:last-child{margin-bottom:0}
+@media(max-width:760px){.db-cols{grid-template-columns:1fr}}
 .chk-row.done .topic-test{background:var(--surface);color:var(--accent)}
 .rk-mastery{margin:6px 0 12px;padding:12px 14px;background:var(--surface-2);border-radius:12px}
 .rk-mastery-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 8px}
@@ -2198,6 +2219,52 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
 
         <div class="tab-content active" id="phd-plan-panel">
 
+<!-- ===== 决策看板：路径分叉 ===== -->
+<div class="decision-board">
+  <div class="db-head">
+    <h2>🧭 读博路径决策看板</h2>
+    <span class="db-tag">未到分叉点 · 先建地基</span>
+  </div>
+  <p class="db-intro">两条路共用同一份研究资产，分叉点约 <b>2027 下半年</b>。现在只打共同地基，等信号清晰再选。下方勾选「共同地基」进度，并随时记下两条路各自的「倾向信号」。</p>
+  <div class="db-cols">
+    <div class="db-card db-base">
+      <h3>🏗️ 共同地基（未来 12 个月）</h3>
+      <div class="progress"><i id="phd-baseBar"></i></div>
+      <div class="progress-label" id="phd-baseLabel">已完成 0 / 4</div>
+      <div id="phd-base-list">
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>① 电力 IoT 数据补值 → 论文 / 软著</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>② N=1 健康数据 → 持续积累</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>③ 数据工程能力 (CDGA / CDGP)</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>④ 读文献 + 建领域连接</span></label>
+      </div>
+    </div>
+    <div class="db-card db-a">
+      <h3>🟢 路径 A：交大非全工程博士</h3>
+      <p class="db-sub">主线：能源互联网时序数据治理</p>
+      <div class="progress"><i id="phd-ABar"></i></div>
+      <div class="progress-label" id="phd-ALabel">信号亮起 0 / 3</div>
+      <div id="phd-A-list">
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>单位主管愿当行业导师</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>论文落在数据工程 / 电力信息化</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>读到交大导师论文有共鸣</span></label>
+      </div>
+      <div class="db-hint">信号亮起 → 收敛到方向③，正式请托第 2 封推荐人</div>
+    </div>
+    <div class="db-card db-b">
+      <h3>🟣 路径 B：创新 / 交叉项目</h3>
+      <p class="db-sub">主线：第一人称数据科学 / N=1</p>
+      <div class="progress"><i id="phd-BBar"></i></div>
+      <div class="progress-label" id="phd-BLabel">信号亮起 0 / 3</div>
+      <div id="phd-B-list">
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>想跳槽 / 现单位不支持读博</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>论文更适合交叉 / 数字健康</span></label>
+        <label class="chk-row"><input type="checkbox" class="gchk"> <span>遇到赏识"杂兴趣"的导师 / 项目</span></label>
+      </div>
+      <div class="db-hint">信号亮起 → 让"杂兴趣"成护城河，转投交叉项目</div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== 一、时间线 ===== -->
 <h2>一、时间线</h2>
         <div class="timeline">
@@ -2243,7 +2310,7 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
 <h2>四、要准备什么？</h2>
         <div class="progress"><i id="phd-chkBar"></i></div>
         <div class="progress-label" id="phd-chkLabel">已准备 0 / 10</div>
-        <ul>
+        <ul id="phd-mat-list">
           <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P01"> <span>博士研究生报名表（网报生成）</span></label></li>
           <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P02"> <span><b>国外学历学位认证书（CSCSE）</b> ← 日本硕士必需</span></label></li>
           <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P03"> <span>硕士/本科学位证、毕业证（复印件+核验）</span></label></li>
@@ -2689,7 +2756,12 @@ function showPage(id){
   document.querySelector('.content').scrollTo({top:0});
   if(id==='my-progress')renderProgress();
   if(id==='cdga-res'){renderNews();renderSources();}
-  if(id==='phd')initGenChecks('phd','phd-plan-panel');
+  if(id==='phd'){
+    initGenChecks('phd','phd-mat-list');
+    initDecisionGroup('base','phd-base-list','phd-baseBar','phd-baseLabel','已完成');
+    initDecisionGroup('A','phd-A-list','phd-ABar','phd-ALabel','信号亮起');
+    initDecisionGroup('B','phd-B-list','phd-BBar','phd-BLabel','信号亮起');
+  }
   window.scrollTo({top:0});
   closeSidebar();
   // 阶段切换后刷新阶段导航条高亮
@@ -4813,6 +4885,21 @@ function initGenChecks(prefix,pageId){
   });
   refresh();
 }
+
+/* 读博路径决策看板：分组独立持久化（共同地基 + 两条路信号） */
+function initDecisionGroup(key,listId,barId,labelId,labelPrefix){
+  var root=document.getElementById(listId); if(!root)return;
+  var all=root.querySelectorAll('.gchk'); if(!all.length)return;
+  var st=genLoad('phddecision',key);
+  var bar=document.getElementById(barId), lbl=document.getElementById(labelId);
+  function refresh(){var done=0; for(var k in st){if(st[k])done++;} if(bar)bar.style.width=(done/all.length*100)+'%'; if(lbl)lbl.textContent=(labelPrefix||'已完成')+' '+done+' / '+all.length;}
+  all.forEach(function(c,i){
+    c.checked=!!st[i]; var row=c.closest('.chk-row'); if(row)row.classList.toggle('done',c.checked);
+    c.addEventListener('change',function(){ st[i]=c.checked; genSave('phddecision',key,st); if(row)row.classList.toggle('done',c.checked); refresh(); });
+  });
+  refresh();
+}
+
 function genDue(prefix){
   const dt=genLoad(prefix,'check-dates'), st=genLoad(prefix,'check'); const cycles=[3,7,14,30,60,90]; const due=[]; const today=new Date(genTodayISO()+'T00:00:00');
   Object.keys(dt).forEach(k=>{ if(st[k]!==true)return; const past=new Date(dt[k]+'T00:00:00'); const days=Math.floor((today-past)/86400000); if(days<0)return; let cyc=null; for(const c of cycles){if(days>=c-1&&days<=c+1){cyc=c;break;}} if(cyc!==null)due.push({i:Number(k),days,cycle:cyc}); });
