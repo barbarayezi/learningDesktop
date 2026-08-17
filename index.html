@@ -2241,17 +2241,19 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
 
 <!-- ===== 四、材料清单 ===== -->
 <h2>四、要准备什么？</h2>
+        <div class="progress"><i id="phd-chkBar"></i></div>
+        <div class="progress-label" id="phd-chkLabel">已准备 0 / 10</div>
         <ul>
-          <li>☐ 博士研究生报名表（网报生成）</li>
-          <li>☐ <b>国外学历学位认证书（CSCSE）</b> ← 日本硕士必需</li>
-          <li>☐ 硕士/本科学位证、毕业证（复印件+核验）</li>
-          <li>☐ 硕士成绩单、学位论文（整本）</li>
-          <li>☐ 单位人事部门同意报考证明</li>
-          <li>☐ <b>两位专家推荐信</b>（1 封强制=硕士导师 + 1 封当前领域） → 详解下一节 📌</li>
-          <li>☐ 研究计划书 / 攻读博士科学研究计划</li>
-          <li>☐ 外语水平证明（CET-6 / 雅思 / 托福 / N1）</li>
-          <li>☐ 科研成果（论文、专利、软著、项目证明）</li>
-          <li>☐ CDGA / CDGP 职业资格证书（加分）</li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P01"> <span>博士研究生报名表（网报生成）</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P02"> <span><b>国外学历学位认证书（CSCSE）</b> ← 日本硕士必需</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P03"> <span>硕士/本科学位证、毕业证（复印件+核验）</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P04"> <span>硕士成绩单、学位论文（整本）</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P05"> <span>单位人事部门同意报考证明</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P06"> <span><b>两位专家推荐信</b>（1 封强制=硕士导师 + 1 封当前领域） → 详解下一节 📌</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P07"> <span>研究计划书 / 攻读博士科学研究计划</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P08"> <span>外语水平证明（CET-6 / 雅思 / 托福 / N1）</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P09"> <span>科研成果（论文、专利、软著、项目证明）</span></label></li>
+          <li><label class="chk-row"><input type="checkbox" class="gchk" data-pk="P10"> <span>CDGA / CDGP 职业资格证书（加分）</span></label></li>
         </ul>
 
 <!-- ===== 五、推荐信（重点难点） ===== -->
@@ -2687,6 +2689,7 @@ function showPage(id){
   document.querySelector('.content').scrollTo({top:0});
   if(id==='my-progress')renderProgress();
   if(id==='cdga-res'){renderNews();renderSources();}
+  if(id==='phd')initGenChecks('phd','phd-plan-panel');
   window.scrollTo({top:0});
   closeSidebar();
   // 阶段切换后刷新阶段导航条高亮
@@ -4806,7 +4809,7 @@ function initGenChecks(prefix,pageId){
   function refresh(){const done=Object.values(st).filter(Boolean).length; if(bar)bar.style.width=(done/all.length*100)+'%'; if(lbl)lbl.textContent='已掌握 '+done+' / '+all.length;}
   all.forEach((c,i)=>{
     c.checked=!!st[i]; const row=c.closest('.chk-row'); if(row)row.classList.toggle('done',c.checked);
-    c.addEventListener('change',()=>{ st[i]=c.checked; genSave(prefix,'check',st); if(c.checked)dt[i]=genTodayISO(); else delete dt[i]; genSave(prefix,'check-dates',dt); if(row)row.classList.toggle('done',c.checked); refresh(); if(GEN[prefix])genRenderDay(prefix, GEN[prefix].dayEl.querySelector('.gen-date').value); });
+    c.addEventListener('change',()=>{ st[i]=c.checked; genSave(prefix,'check',st); if(c.checked)dt[i]=genTodayISO(); else delete dt[i]; genSave(prefix,'check-dates',dt); if(row)row.classList.toggle('done',c.checked); refresh(); if(typeof GEN!=='undefined'&&GEN[prefix])genRenderDay(prefix, GEN[prefix].dayEl.querySelector('.gen-date').value); });
   });
   refresh();
 }
