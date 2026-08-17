@@ -10,3 +10,6 @@ __pycache__/
 # 本地临时碎片
 Find
 Find/
+.workbuddy/*.png
+.workbuddy/*.jpg
+.workbuddy/screenshot_*.js
