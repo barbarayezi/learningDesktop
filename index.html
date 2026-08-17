@@ -4440,10 +4440,12 @@ function renderDay(iso){
         .filter(({q})=>q.d===filter)
         .filter(({i})=>practice.answers[i]).length;
     };
+    // 只放「当天要做」的题：
+    //  · 普通日 = 按本周域刷题（刷题[域名]/看题[域名]）
+    //  · 准备/通读等早期日(dom=all) = 轻量「看全部题(建立题感)」，不是模拟考
+    //  · 冲刺模拟考日(dom=all 且非早期) = 全量刷题(本身就是当天任务)
     const _earlySet={准备:1,通读:1,'高分精学':1,'中分精学':1,'低分精学':1};
     const earlyStage = !!_earlySet[d.stage];
-    const tipEarly = '<div class="dc-tip">📘 现在还是 <b>W1 建立题感</b> 阶段。外部题库先收藏/浏览即可，不用硬刷；真正每天要定量刷外部题，从 <b>W21 冲刺阶段</b> 开始。</div>';
-    const tipFull  = '<div class="dc-tip">🎯 <b>冲刺/全量阶段</b>，按进度作答，不必一天全答完；进度自动保存。</div>';
     const out = [];
     dom.forEach(k=>{
       if(k==='all'){
@@ -4451,7 +4453,7 @@ function renderDay(iso){
           out.push(`<button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题（建立题感）</button>`);
         } else {
           const done=answered('all');
-          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题 <span class="dc-prog">${done} / ${QUIZ_TOTAL} 题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
+          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         }
       } else {
         const cnt=QUIZ.filter(q=>q.d===k).length;
@@ -4460,11 +4462,6 @@ function renderDay(iso){
         out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       }
     });
-    // 外部题库入口（不搬运题目，只追踪合法免费资源的完成进度）
-    const extProg=getExtProgress();
-    const extDone=Object.values(extProg).filter(v=>v>0).length;
-    out.push(`<button class="dc-btn ghost" data-extbanks>🌐 外部题库打卡 <span class="dc-prog">${extDone}/${EXT_BANKS.length} 已刷</span></button>`);
-    if(earlyStage) out.push(tipEarly); else out.push(tipFull);
     return out.join('');
   })();
   const resChips=renderResChips(RES_ORDER);
@@ -4609,12 +4606,6 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
-  dayCard.querySelectorAll('[data-extbanks]').forEach(b=>b.onclick=()=>{
-    quizMode='external'; localStorage.setItem('cdga-quiz-mode','external');
-    showPage('cdga-quiz'); applyQuizMode();
-    const el=document.getElementById('cdga-quiz');
-    if(el) window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
-  });
   // 折叠：P2/P3 组
   dayCard.querySelectorAll('[data-fold]').forEach(btn=>{
     btn.onclick=()=>{
