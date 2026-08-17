@@ -80,8 +80,8 @@ a{color:var(--accent);text-decoration:none}
 }
 .icon-btn:hover{color:var(--accent)}
 .page-wrap{padding:30px 26px 80px;max-width:920px;margin:0 auto;width:100%}
-.page{display:none;animation:fade .25s ease}
-.page.active{display:block}
+.page{display:none}
+.page.active{display:block;animation:fade .25s ease forwards}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ---------- Home ---------- */
@@ -2126,25 +2126,6 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <label class="chk-row" data-topic="rk29"><input type="checkbox" class="gchk"><span>标准化与知识产权、专业英语</span><button class="topic-test" type="button" data-topic="rk29" title="测试这个知识点">🎯 测</button></label>
         </div>
 
-      <!-- DATADEV DAILY · 数据开发每日学习中心 -->
-      <section class="page" id="datadev-daily">
-        <h1 class="doc-title">📅 每日学习中心 · 数据开发阶段</h1>
-        <div class="doc-sub">CDGA 考后、软考后的工程实战冲刺：先阿里云 ACP 大数据（开发方向）→ 再 Databricks DE Associate，约 13 周（2027-05-15 → 2027-08-07）。选日期打开当天任务，打卡自动保存本机。ACP：在线实验+上机，100 分 80 分过；Databricks：45 选择、90 分钟、$200、70% 过、2 年有效。大纲以官方当年公告为准；本页为唯一来源。</div>
-        <div class="stage-bar" data-stage-for="datadev-daily"></div>
-        <div class="heat-title">📊 打卡日历（<span id="datadev-total">91</span> 天 · 点格子跳到那天）</div>
-        <div class="gen-heat" style="margin:8px 0 14px"></div>
-        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <input type="date" class="gen-date">
-          <button class="gen-prev" type="button">← 前一天</button>
-          <button class="gen-next" type="button">后一天 →</button>
-          <button class="gen-start" type="button">回到第一天</button>
-          <span id="datadev-done" style="margin-left:auto;color:var(--muted)"></span>
-        </div>
-        <div class="gen-card"></div>
-        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 看课/实验 → 阅读 → 自测/动手 → 打卡。工作日约 1–1.5h（平台文档+选择题），周末约 2.5–3h（动手实验/写 SQL+Pipeline）。ACP 重 MaxCompute/DataWorks/Flink 实操；Databricks 重 Spark SQL/Delta/Lakehouse 实战。进度存本机。</div>
-      </section>
-
         <!-- 数据开发自查 -->
         <div class="tab-content" id="datadev-check-list">
         <div class="progress"><i id="datadev-chkBar"></i></div>
@@ -2176,25 +2157,6 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <label class="chk-row"><input type="checkbox" class="gchk"><span>Unity Catalog（catalog.schema.table、GRANT/REVOKE/行级安全/血缘）</span></label>
         <label class="chk-row"><input type="checkbox" class="gchk"><span>Lakeflow Jobs/DLT 编排；CI/CD（Repos/DABs/CLI）</span></label>
         </div>
-
-      <!-- CDGP DAILY · CDGP每日学习中心 -->
-      <section class="page" id="cdgp-daily">
-        <h1 class="doc-title">📅 每日学习中心 · CDGP 阶段</h1>
-        <div class="doc-sub">CDGA 之后、数据开发证之后顺延启动（2027-08-08 → 2028-02-07，约 26 周）。线下闭卷笔试 130 分钟、100 分 60 分过；单选 10 题(10)+多选 15 题(30)+论述 6 题(60)，三部分各自 ≥40%。论述题是核心战场。选日期打开当天任务，打卡自动保存本机。</div>
-        <div class="stage-bar" data-stage-for="cdgp-daily"></div>
-        <div class="heat-title">📊 打卡日历（<span id="cdgp-total">182</span> 天 · 点格子跳到那天）</div>
-        <div class="gen-heat" style="margin:8px 0 14px"></div>
-        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <input type="date" class="gen-date">
-          <button class="gen-prev" type="button">← 前一天</button>
-          <button class="gen-next" type="button">后一天 →</button>
-          <button class="gen-start" type="button">回到第一天</button>
-          <span id="cdgp-done" style="margin-left:auto;color:var(--muted)"></span>
-        </div>
-        <div class="gen-card"></div>
-        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 精读 DMBOK → 收集案例 → 论述练笔/选择题 → 打卡。工作日约 1–1.5h，周末约 2.5–3h（重点在「每天 1–2 道论述、15 分钟内写完、对照答案自评」）。前段知识深化、后段真题演练；各知识域备 1–2 个分析框架 + 思维导图。进度存本机。</div>
-      </section>
 
         <!-- CDGP 自查 -->
         <div class="tab-content" id="cdgp-check-list">
@@ -2228,6 +2190,44 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <label class="chk-row"><input type="checkbox" class="gchk"><span>多选题拆解干扰（语境关系图、概念片段分散）</span></label>
         <label class="chk-row"><input type="checkbox" class="gchk"><span>三部分各自 ≥40%：单选争取 8+、多选争取 22+、论述 ≥30</span></label>
         </div>
+      </section>
+
+      <!-- DATADEV DAILY · 数据开发每日学习中心 -->
+      <section class="page" id="datadev-daily">
+        <h1 class="doc-title">📅 每日学习中心 · 数据开发阶段</h1>
+        <div class="doc-sub">CDGA 考后、软考后的工程实战冲刺：先阿里云 ACP 大数据（开发方向）→ 再 Databricks DE Associate，约 13 周（2027-05-15 → 2027-08-07）。选日期打开当天任务，打卡自动保存本机。ACP：在线实验+上机，100 分 80 分过；Databricks：45 选择、90 分钟、$200、70% 过、2 年有效。大纲以官方当年公告为准；本页为唯一来源。</div>
+        <div class="stage-bar" data-stage-for="datadev-daily"></div>
+        <div class="heat-title">📊 打卡日历（<span id="datadev-total">91</span> 天 · 点格子跳到那天）</div>
+        <div class="gen-heat" style="margin:8px 0 14px"></div>
+        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <input type="date" class="gen-date">
+          <button class="gen-prev" type="button">← 前一天</button>
+          <button class="gen-next" type="button">后一天 →</button>
+          <button class="gen-start" type="button">回到第一天</button>
+          <span id="datadev-done" style="margin-left:auto;color:var(--muted)"></span>
+        </div>
+        <div class="gen-card"></div>
+        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 看课/实验 → 阅读 → 自测/动手 → 打卡。工作日约 1–1.5h（平台文档+选择题），周末约 2.5–3h（动手实验/写 SQL+Pipeline）。ACP 重 MaxCompute/DataWorks/Flink 实操；Databricks 重 Spark SQL/Delta/Lakehouse 实战。进度存本机。</div>
+      </section>
+
+      <!-- CDGP DAILY · CDGP每日学习中心 -->
+      <section class="page" id="cdgp-daily">
+        <h1 class="doc-title">📅 每日学习中心 · CDGP 阶段</h1>
+        <div class="doc-sub">CDGA 之后、数据开发证之后顺延启动（2027-08-08 → 2028-02-07，约 26 周）。线下闭卷笔试 130 分钟、100 分 60 分过；单选 10 题(10)+多选 15 题(30)+论述 6 题(60)，三部分各自 ≥40%。论述题是核心战场。选日期打开当天任务，打卡自动保存本机。</div>
+        <div class="stage-bar" data-stage-for="cdgp-daily"></div>
+        <div class="heat-title">📊 打卡日历（<span id="cdgp-total">182</span> 天 · 点格子跳到那天）</div>
+        <div class="gen-heat" style="margin:8px 0 14px"></div>
+        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <input type="date" class="gen-date">
+          <button class="gen-prev" type="button">← 前一天</button>
+          <button class="gen-next" type="button">后一天 →</button>
+          <button class="gen-start" type="button">回到第一天</button>
+          <span id="cdgp-done" style="margin-left:auto;color:var(--muted)"></span>
+        </div>
+        <div class="gen-card"></div>
+        <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 精读 DMBOK → 收集案例 → 论述练笔/选择题 → 打卡。工作日约 1–1.5h，周末约 2.5–3h（重点在「每天 1–2 道论述、15 分钟内写完、对照答案自评」）。前段知识深化、后段真题演练；各知识域备 1–2 个分析框架 + 思维导图。进度存本机。</div>
       </section>
 
       <!-- PHD PLAN -->
