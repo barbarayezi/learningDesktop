@@ -346,6 +346,21 @@ pre code{background:none;padding:0}
 .pc-opt.wrong .letter{background:var(--red);color:#fff;border-color:var(--red)}
 .pc-opt.showright{border-color:var(--green)}
 
+/* ---------- External Question Banks ---------- */
+.ext-bank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:8px 0 18px}
+.ext-bank-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.ext-bank-card.done{border-color:var(--green);background:var(--green-soft)}
+.ext-bank-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ext-bank-tag{font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:3px 9px}
+.ext-bank-count{font-size:12px;color:var(--text-3)}
+.ext-bank-card h4{margin:0 0 6px;font-size:15px;color:var(--text)}
+.ext-bank-card p{font-size:12.5px;color:var(--text-2);line-height:1.6;margin:0 0 14px}
+.ext-bank-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.ext-bank-counter{display:inline-flex;gap:4px}
+.ext-count-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
+.ext-count-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ext-count-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 /* ---------- Ladder Page (CDGA → CDGP → CDGE) ---------- */
 .ladder-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;
@@ -1304,6 +1319,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <div class="mode-toggle" role="tablist" aria-label="练习模式切换">
           <button class="active" data-mode="study" role="tab" aria-selected="true">📖 学习模式 <span class="num">看题 · 全部可见</span></button>
           <button data-mode="practice" role="tab" aria-selected="false">🎯 刷题模式 <span class="num">逐题作答 · 进度保存</span></button>
+          <button data-mode="external" role="tab" aria-selected="false">🌐 外部题库 <span class="num">免费资源打卡</span></button>
         </div>
 
         <!-- 学习模式：保留原有按域分组 + 折叠展开答案 -->
@@ -1315,6 +1331,9 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 
         <!-- 刷题模式：隐藏答案，做题后即时反馈 + 进度持久化 -->
         <div id="quiz-practice" hidden></div>
+
+        <!-- 外部题库：不搬运题目，只做合法免费资源入口 + 打卡追踪 -->
+        <div id="quiz-external" hidden></div>
       </section>
 
 
@@ -3468,16 +3487,75 @@ function bindPracticeEvents(){
   });
 }
 
+/* ---------- 外部题库入口 + 打卡追踪 ---------- */
+function getExtProgress(){ try{ return JSON.parse(localStorage.getItem(EXT_BANK_STORE))||{}; }catch(e){ return {}; } }
+function setExtProgress(id,cnt){
+  const p=getExtProgress();
+  p[id]=Math.max(0, Math.min(3, parseInt(cnt,10)||0));
+  try{ localStorage.setItem(EXT_BANK_STORE, JSON.stringify(p)); }catch(e){}
+}
+function openExtBank(url){
+  if(!url){ quizMode='practice'; localStorage.setItem('cdga-quiz-mode','practice'); applyQuizMode(); return; }
+  window.open(url,'_blank','noopener,noreferrer');
+}
+function renderExtBanks(){
+  const box=document.getElementById('quiz-external'); if(!box) return;
+  const p=getExtProgress();
+  const total=EXT_BANKS.length;
+  const done=EXT_BANKS.filter(b=>(p[b.id]||0)>0).length;
+  const pct=total?Math.round(done/total*100):0;
+  box.innerHTML=`
+    <div class="callout tip">以下均为<b>合法免费</b>的外部资源入口，本站<b>不搬运题目</b>。点击「去刷题」会新开标签页；回来后点「已刷 N 遍」打卡，进度自动保存。</div>
+    <div class="practice-hud" style="margin-bottom:18px">
+      <div class="stat">🌐 已打卡 <b>${done}</b> / ${total} 个资源</div>
+      <div class="progress" title="${pct}%"><span style="width:${pct}%"></span></div>
+    </div>
+    <div class="ext-bank-grid">
+      ${EXT_BANKS.map(b=>{
+        const cnt=p[b.id]||0;
+        return `
+        <div class="ext-bank-card ${cnt>0?'done':''}">
+          <div class="ext-bank-head">
+            <span class="ext-bank-tag">${escH(b.type)}</span>
+            <span class="ext-bank-count">${escH(b.count)} 题/资源</span>
+          </div>
+          <h4>${escH(b.name)}</h4>
+          <p>${escH(b.desc)}</p>
+          <div class="ext-bank-actions">
+            <button class="pc-btn ${b.url?'':'primary'}" data-ext-url="${b.url?escH(b.url):''}">${b.url?'去刷题 →':'打开本站错题本'}</button>
+            <div class="ext-bank-counter">
+              ${[0,1,2,3].map(n=>`<button class="ext-count-btn ${cnt===n?'active':''}" data-ext="${escH(b.id)}" data-cnt="${n}">${n===0?'未刷':n+'遍'}</button>`).join('')}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="doc-sub" style="border:none;margin-top:22px">建议：刷题阶段（W21 起）每天从希赛 50 题中抽 10 道；冲刺阶段把本站错题本和希赛模拟卷各过一遍。</div>
+  `;
+  box.querySelectorAll('[data-ext-url]').forEach(btn=>{
+    btn.addEventListener('click',()=>openExtBank(btn.dataset.extUrl));
+  });
+  box.querySelectorAll('[data-ext][data-cnt]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      setExtProgress(btn.dataset.ext, +btn.dataset.cnt);
+      renderExtBanks();
+    });
+  });
+}
+
 // 初始化：根据持久化的模式渲染
 function applyQuizMode(){
   document.getElementById('quiz-study').hidden = quizMode!=='study';
   document.getElementById('quiz-practice').hidden = quizMode!=='practice';
+  const extEl=document.getElementById('quiz-external');
+  if(extEl) extEl.hidden = quizMode!=='external';
   document.querySelectorAll('.mode-toggle button').forEach(b=>{
     const on=b.dataset.mode===quizMode;
     b.classList.toggle('active',on);
     b.setAttribute('aria-selected',on?'true':'false');
   });
   if(quizMode==='study') renderStudyMode();
+  else if(quizMode==='external') renderExtBanks();
   else { loadPractice(); renderPractice(); }
 }
 
@@ -3798,20 +3876,98 @@ const RES={
 };
 const RES_ORDER=['sohu','notes','oval','sogeti','damaPdf','dgiPdf'];
 const TERMS={
-  '一、数据治理':['治理 ⊂ 管理（治理=决策监督，管理=执行）','CDO=组织数据资产责任人；Data Steward=标准执行者/质量守门人'],
-  '二、数据质量':['质量六维度：准确性/完整性/一致性/唯一性/及时性/有效性','根因分析：溯源而非只清洗表象'],
-  '三、元数据管理':['业务元数据=业务含义/口径；技术元数据=结构/类型/位置','血缘 Lineage=追踪来源与加工路径、做影响分析'],
-  '四、数据仓库与BI':['Inmon 范式化 vs Kimball 维度化','ETL 先转换后加载 / ELT 先加载后转换；ODS→DWS 分层'],
-  '五、参考数据和主数据':['参考数据=受控分类值集；主数据=核心业务实体','MDM 模式：注册/集中/共存/整合'],
-  '六、数据建模与设计':['概念→逻辑→物理（抽象度递减）','范式化去冗余；维度建模面向 OLAP 分析'],
-  '七、数据架构':['EDM 企业数据模型=全局蓝图','DFD 数据流图=系统间流转；须对齐业务架构'],
-  '八、数据安全':['分类分级=差异化保护基础','脱敏保护非生产环境；最小权限原则'],
-  '九、大数据和数据科学':['大数据 5V：Volume/Velocity/Variety/Veracity/Value','挖掘=从数据中发现模式与知识'],
-  '十、成熟度评估':['成熟度模型：CMMI / DAMA-DMM','五级：无意识→被动→主动→已管理→优化'],
-  '十一、数据管理概述':['数据是企业资产，具价值需管理','生命周期：创建→存储→使用→共享→归档/销毁'],
-  '十二、数据处理伦理':['伦理原则：透明/负责/尊重隐私','DMBOK2R 新增 AI 伦理（隐私与公平性）'],
-  '十三、其余低分域':['Data Owner=业务含义与定义；Custodian=技术实现与保管','变革管理=培育数据文化推动落地']
+  '一、数据治理':[
+    '治理 ⊂ 管理：治理=决策/监督/政策，管理=执行/落地',
+    'CDO=组织数据资产责任人；Data Steward=标准执行者/质量守门人',
+    '数据治理委员会=决策与监督机构，不编写具体 ETL 代码',
+    '数据治理成熟度评估：识别差距、指导改进，不直接创收'
+  ],
+  '二、数据质量':[
+    '质量六维度：准确性/完整性/一致性/唯一性/及时性/有效性',
+    '根因分析：溯源治理，而非只做表面清洗',
+    '数据质量是业务问题，不只是 IT 问题',
+    '数据剖析（Profiling）是发现质量问题的常用手段'
+  ],
+  '三、元数据管理':[
+    '业务元数据=业务含义/口径；技术元数据=结构/类型/位置',
+    '血缘 Lineage=追踪来源与加工路径、做影响分析',
+    '操作元数据=访问频率、作业运行状态等运行信息',
+    '元数据目录/数据目录是消费元数据的主要入口'
+  ],
+  '四、数据仓库与BI':[
+    'Inmon 范式化 vs Kimball 维度化',
+    'ETL 先转换后加载；ELT 先加载后转换；ODS→DWS 分层',
+    '维度建模：事实表存度量，维度表存描述属性',
+    'ODS 贴近源系统、保留细节；DWS 面向主题汇总'
+  ],
+  '五、参考数据和主数据':[
+    '参考数据=受控分类值集；主数据=核心业务实体',
+    'MDM 模式：注册/集中/共存/整合',
+    '主数据管理目标：跨系统共享一致的核心实体数据',
+    '户号↔合同映射属于主数据治理（统一标识）'
+  ],
+  '六、数据建模与设计':[
+    '概念→逻辑→物理（抽象度递减）',
+    '范式化去冗余；维度建模面向 OLAP 分析',
+    'ER 图描述实体及实体间关系',
+    '逻辑模型独立于 DBMS；物理模型考虑存储/性能'
+  ],
+  '七、数据架构':[
+    'EDM 企业数据模型=全局数据资产蓝图',
+    'DFD 数据流图=展示数据在系统间流转',
+    '数据架构须与业务/应用/技术架构对齐',
+    '企业数据架构落地=数据标准+数据模型+数据流'
+  ],
+  '八、数据安全':[
+    '分类分级=差异化保护基础',
+    '脱敏保护非生产环境；最小权限原则',
+    '个人信息保护合规依据《个保法》《数据安全法》',
+    '数据安全不仅是技术问题，也是治理与流程问题'
+  ],
+  '九、大数据和数据科学':[
+    '大数据 5V：Volume/Velocity/Variety/Veracity/Value',
+    '挖掘=从数据中发现模式与知识',
+    '高时效性时序数据（如 15 分钟账单）体现 Velocity',
+    '数据科学 = 领域知识 + 数学统计 + 编程/工程'
+  ],
+  '十、成熟度评估':[
+    '成熟度模型：CMMI / DAMA-DMM',
+    '五级：无意识→被动→主动→已管理→优化',
+    '评估输出最常用于制定改进路线图',
+    '成熟度评估应周期性复评，驱动持续改进'
+  ],
+  '十一、数据管理概述':[
+    '数据是企业资产，具价值需管理',
+    '生命周期：创建→存储→使用→共享→归档/销毁',
+    'DAMA 数据管理 11 大知识领域 + 大数据/数据科学等',
+    '数据管理战略必须与业务战略对齐'
+  ],
+  '十二、数据处理伦理':[
+    '伦理原则：透明/负责/尊重隐私',
+    'DMBOK2R 新增 AI 伦理（隐私与公平性）',
+    '数据处理伦理不仅是合规，更是信任与责任',
+    '算法公平性、数据偏见是 AI 伦理关键议题'
+  ],
+  '十三、其余低分域':[
+    'Data Owner=业务含义与定义；Custodian=技术实现与保管',
+    '变革管理=培育数据文化、推动治理落地',
+    '数据存储与操作关注数据库管理与备份恢复',
+    '数据集成与互操作关注 ETL、数据交换与共享'
+  ]
 };
+
+/* ============================================================
+   外部免费题库索引（不搬运题目，只做入口 + 打卡追踪）
+   ============================================================ */
+const EXT_BANKS=[
+  {id:'educity-dama',name:'希赛网 CDGA 专区',url:'https://www.educity.cn/dama/',count:'50+',type:'免费视频/PDF',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总。需免费注册后下载。'},
+  {id:'educity-tiku',name:'希赛 CDGA 在线模拟题',url:'https://www.educity.cn/dama/',count:'每日/章节',type:'在线题库',desc:'在希赛 CDGA 专区找「章节练习 / 模拟试卷」，部分免费，适合刷题阶段按周补充。'},
+  {id:'dama-china',name:'DAMA China 官方资料',url:'http://www.dama-china.org/',count:'样题/大纲',type:'官方',desc:'考试大纲、授权培训信息、官方样题风格最接近真实考试。'},
+  {id:'bilibili-cdga',name:'B站 CDGA 模拟题/真题讲解',url:'https://search.bilibili.com/all?keyword=CDGA%E6%A8%A1%E6%8B%9F%E9%A2%98',count:'若干',type:'视频解析',desc:'搜索关键词「CDGA 模拟题/真题讲解」，免费视频逐题解析。'},
+  {id:'local-wrong',name:'本站错题本',url:null,count:'动态',type:'内部',desc:'在「刷题模式」中做完题后自动生成的错题回顾，考前必重刷。'}
+];
+const EXT_BANK_STORE='cdga-ext-banks-v1';
+
 const DAY_ROLES=[
   {t:'周末大块精学',h:'用 2–3h 看系统课/专栏，做完整精学 + 更新思维导图'},
   {t:'周末复盘',h:'本周内容复盘 + 更新思维导图 / 错题本'},
@@ -4261,7 +4417,11 @@ function renderDay(iso){
   const role=DAY_ROLES[d.i];
   const dom=d.domains;
   const termDom = dom[0]==='all' ? '十一、数据管理概述' : dom[0];
-  const terms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
+  const allTerms=TERMS[termDom]||['（本周无专属术语，复习已有术语卡）'];
+  // 同一周内，按星期几轮换展示该域的 2 条术语，让术语卡每天更新且覆盖更多要点
+  const dayIndex = new Date(iso).getDay();
+  const terms=[];
+  for(let i=0;i<2;i++) terms.push(allTerms[(dayIndex*2+i)%allTerms.length]);
   const isSun = d.wd==='周日';
   const wkndVids = d.vWeekendVideos||[];
   const videoTask = !d.isWeekend ? d.vWork : (isSun ? ('【周日·复盘消化】'+d.vWeekend) : d.vWeekend);
@@ -4297,6 +4457,10 @@ function renderDay(iso){
         out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       }
     });
+    // 外部题库入口（不搬运题目，只追踪合法免费资源的完成进度）
+    const extProg=getExtProgress();
+    const extDone=Object.values(extProg).filter(v=>v>0).length;
+    out.push(`<button class="dc-btn ghost" data-extbanks>🌐 外部题库打卡 <span class="dc-prog">${extDone}/${EXT_BANKS.length} 已刷</span></button>`);
     if(earlyStage) out.push(tipEarly); else out.push(tipFull);
     return out.join('');
   })();
@@ -4442,6 +4606,12 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  dayCard.querySelectorAll('[data-extbanks]').forEach(b=>b.onclick=()=>{
+    quizMode='external'; localStorage.setItem('cdga-quiz-mode','external');
+    showPage('cdga-quiz'); applyQuizMode();
+    const el=document.getElementById('cdga-quiz');
+    if(el) window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
+  });
   // 折叠：P2/P3 组
   dayCard.querySelectorAll('[data-fold]').forEach(btn=>{
     btn.onclick=()=>{
