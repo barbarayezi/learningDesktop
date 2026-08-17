@@ -7,7 +7,7 @@
 <style>
 :root{
   --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f1f3f9; --border:#e6e9f0;
-  --text:#1f2433; --text-2:#5b6378; --text-3:#8a91a6;
+  --text:#1f2433; --text-2:#5b6378; --text-3:#8a91a6; --muted:var(--text-3);
   --accent:#4f6ef7; --accent-soft:#eef1fe; --accent-2:#0fb5a6;
   --red:#e5484d; --red-soft:#fdecec; --yellow:#f5a623; --yellow-soft:#fdf3e0;
   --green:#30a46c; --green-soft:#e7f6ee; --code-bg:#f3f4f8;
@@ -605,10 +605,13 @@ pre code{background:none;padding:0}
 .scrim.show{display:block}
 /* ===== 每日学习中心（选日期） ===== */
 .day-picker{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
-.dp-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dp-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .dp-controls input[type=date]{padding:9px 12px;border:1px solid var(--border);background:var(--surface-2);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit}
 .dp-controls button{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);border-radius:10px;padding:9px 14px;cursor:pointer;font-size:13.5px;font-weight:600;transition:.15s}
 .dp-controls button:hover{color:var(--accent);border-color:var(--accent)}
+.dp-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dp-count{font-size:13px;font-weight:700;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:6px 12px;white-space:nowrap}
+.dp-count b{color:var(--accent)}
 .dp-today{margin-left:auto}
 .week-strip{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .week-chip{font-size:12px;padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:.15s;white-space:nowrap}
@@ -2053,13 +2056,17 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <div class="stage-bar" data-stage-for="ruankao-daily"></div>
         <div class="heat-title">📊 打卡日历（<span id="ruankao-total">70</span> 天 · 点格子跳到那天）</div>
         <div class="gen-heat" style="margin:8px 0 14px"></div>
-        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <input type="date" class="gen-date">
-          <button class="gen-prev" type="button">← 前一天</button>
-          <button class="gen-next" type="button">后一天 →</button>
-          <button class="gen-start" type="button">回到第一天</button>
-          <span id="ruankao-done" style="margin-left:auto;color:var(--muted)"></span>
+        <div class="day-picker">
+          <div class="dp-controls">
+            <div class="dp-left">
+              <button class="gen-prev" type="button">← 前一天</button>
+              <input type="date" class="gen-date">
+              <button class="gen-next" type="button">后一天 →</button>
+              <button class="gen-start" type="button">回到第一天</button>
+            </div>
+            <span id="ruankao-done" class="dp-count"></span>
+          </div>
+          <div class="gen-weekstrip week-strip"></div>
         </div>
         <div class="gen-card"></div>
         <div class="callout tip" style="margin-top:16px">📐 每日五步节奏（长期不变）：目标 → 看课 → 阅读 → 自测 → 打卡。工作日约 1h（教程章节 + 上午选择题），周末约 2–3h（下午案例动手写 + 整套真题）。进度存本机、离线可用。</div>
@@ -2199,13 +2206,17 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <div class="stage-bar" data-stage-for="datadev-daily"></div>
         <div class="heat-title">📊 打卡日历（<span id="datadev-total">91</span> 天 · 点格子跳到那天）</div>
         <div class="gen-heat" style="margin:8px 0 14px"></div>
-        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <input type="date" class="gen-date">
-          <button class="gen-prev" type="button">← 前一天</button>
-          <button class="gen-next" type="button">后一天 →</button>
-          <button class="gen-start" type="button">回到第一天</button>
-          <span id="datadev-done" style="margin-left:auto;color:var(--muted)"></span>
+        <div class="day-picker">
+          <div class="dp-controls">
+            <div class="dp-left">
+              <button class="gen-prev" type="button">← 前一天</button>
+              <input type="date" class="gen-date">
+              <button class="gen-next" type="button">后一天 →</button>
+              <button class="gen-start" type="button">回到第一天</button>
+            </div>
+            <span id="datadev-done" class="dp-count"></span>
+          </div>
+          <div class="gen-weekstrip week-strip"></div>
         </div>
         <div class="gen-card"></div>
         <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 看课/实验 → 阅读 → 自测/动手 → 打卡。工作日约 1–1.5h（平台文档+选择题），周末约 2.5–3h（动手实验/写 SQL+Pipeline）。ACP 重 MaxCompute/DataWorks/Flink 实操；Databricks 重 Spark SQL/Delta/Lakehouse 实战。进度存本机。</div>
@@ -2218,13 +2229,17 @@ DAMA 正在推进 **DMBOK 3.0**，是现代化更新而非推翻基础：核心"
         <div class="stage-bar" data-stage-for="cdgp-daily"></div>
         <div class="heat-title">📊 打卡日历（<span id="cdgp-total">182</span> 天 · 点格子跳到那天）</div>
         <div class="gen-heat" style="margin:8px 0 14px"></div>
-        <div class="gen-weekstrip" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <input type="date" class="gen-date">
-          <button class="gen-prev" type="button">← 前一天</button>
-          <button class="gen-next" type="button">后一天 →</button>
-          <button class="gen-start" type="button">回到第一天</button>
-          <span id="cdgp-done" style="margin-left:auto;color:var(--muted)"></span>
+        <div class="day-picker">
+          <div class="dp-controls">
+            <div class="dp-left">
+              <button class="gen-prev" type="button">← 前一天</button>
+              <input type="date" class="gen-date">
+              <button class="gen-next" type="button">后一天 →</button>
+              <button class="gen-start" type="button">回到第一天</button>
+            </div>
+            <span id="cdgp-done" class="dp-count"></span>
+          </div>
+          <div class="gen-weekstrip week-strip"></div>
         </div>
         <div class="gen-card"></div>
         <div class="callout tip" style="margin-top:16px">📐 每日五步节奏：目标 → 精读 DMBOK → 收集案例 → 论述练笔/选择题 → 打卡。工作日约 1–1.5h，周末约 2.5–3h（重点在「每天 1–2 道论述、15 分钟内写完、对照答案自评」）。前段知识深化、后段真题演练；各知识域备 1–2 个分析框架 + 思维导图。进度存本机。</div>
