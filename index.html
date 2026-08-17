@@ -3153,6 +3153,20 @@ const QUIZ_DOMAINS=[...new Set(QUIZ.map(q=>q.d))];
 const QUIZ_TOTAL=QUIZ.length;
 const QUIZ_STORE='cdga-quiz-progress-v1';
 
+/* ============================================================
+   外部免费题库索引（不搬运题目，只做入口 + 打卡追踪）
+   注意：必须在 quizMode 初始化前定义，避免 applyQuizMode 调用
+   renderExtBanks 时访问 EXT_BANKS 出现暂时性死区（TDZ）错误。
+   ============================================================ */
+const EXT_BANKS=[
+  {id:'educity-dama',name:'希赛网 CDGA 专区',url:'https://www.educity.cn/dama/',count:'50+',type:'免费视频/PDF',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总。需免费注册后下载。'},
+  {id:'educity-tiku',name:'希赛 CDGA 在线模拟题',url:'https://www.educity.cn/dama/',count:'每日/章节',type:'在线题库',desc:'在希赛 CDGA 专区找「章节练习 / 模拟试卷」，部分免费，适合刷题阶段按周补充。'},
+  {id:'dama-china',name:'DAMA China 官方资料',url:'http://www.dama-china.org/',count:'样题/大纲',type:'官方',desc:'考试大纲、授权培训信息、官方样题风格最接近真实考试。'},
+  {id:'bilibili-cdga',name:'B站 CDGA 模拟题/真题讲解',url:'https://search.bilibili.com/all?keyword=CDGA%E6%A8%A1%E6%8B%9F%E9%A2%98',count:'若干',type:'视频解析',desc:'搜索关键词「CDGA 模拟题/真题讲解」，免费视频逐题解析。'},
+  {id:'local-wrong',name:'本站错题本',url:null,count:'动态',type:'内部',desc:'在「刷题模式」中做完题后自动生成的错题回顾，考前必重刷。'}
+];
+const EXT_BANK_STORE='cdga-ext-banks-v1';
+
 // 当前模式（持久化）
 let quizMode=localStorage.getItem('cdga-quiz-mode')||'study';
 
@@ -3955,18 +3969,6 @@ const TERMS={
     '数据集成与互操作关注 ETL、数据交换与共享'
   ]
 };
-
-/* ============================================================
-   外部免费题库索引（不搬运题目，只做入口 + 打卡追踪）
-   ============================================================ */
-const EXT_BANKS=[
-  {id:'educity-dama',name:'希赛网 CDGA 专区',url:'https://www.educity.cn/dama/',count:'50+',type:'免费视频/PDF',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总。需免费注册后下载。'},
-  {id:'educity-tiku',name:'希赛 CDGA 在线模拟题',url:'https://www.educity.cn/dama/',count:'每日/章节',type:'在线题库',desc:'在希赛 CDGA 专区找「章节练习 / 模拟试卷」，部分免费，适合刷题阶段按周补充。'},
-  {id:'dama-china',name:'DAMA China 官方资料',url:'http://www.dama-china.org/',count:'样题/大纲',type:'官方',desc:'考试大纲、授权培训信息、官方样题风格最接近真实考试。'},
-  {id:'bilibili-cdga',name:'B站 CDGA 模拟题/真题讲解',url:'https://search.bilibili.com/all?keyword=CDGA%E6%A8%A1%E6%8B%9F%E9%A2%98',count:'若干',type:'视频解析',desc:'搜索关键词「CDGA 模拟题/真题讲解」，免费视频逐题解析。'},
-  {id:'local-wrong',name:'本站错题本',url:null,count:'动态',type:'内部',desc:'在「刷题模式」中做完题后自动生成的错题回顾，考前必重刷。'}
-];
-const EXT_BANK_STORE='cdga-ext-banks-v1';
 
 const DAY_ROLES=[
   {t:'周末大块精学',h:'用 2–3h 看系统课/专栏，做完整精学 + 更新思维导图'},
