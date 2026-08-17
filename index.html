@@ -2733,6 +2733,42 @@ function deepMerge(a, b){
   return b; // 标量或类型不符：本地（b）优先
 }
 
+// 拦截 localStorage.setItem：写入本地后，异步「拉云端→与本地深合并→回写」，避免多设备同时编辑互相覆盖
+// 注意：必须先定义 _origSetItem，再执行 initCloud 中的深合并回写
+var _origSetItem = localStorage.setItem.bind(localStorage);
+var _origRemoveItem = localStorage.removeItem.bind(localStorage);
+var _syncBusy = {};
+var _syncDirty = {};
+function syncKeyToCloud(key){
+  _syncBusy[key] = true;
+  cloud.from('user_data').select('key,value').then(function(res){
+    var cloudRow = (res.data||[]).filter(function(r){ return r.key===key; })[0];
+    var localVal = parseVal(localStorage.getItem(key));
+    var merged = cloudRow ? deepMerge(parseVal(cloudRow.value), localVal) : localVal;
+    return cloud.from('user_data').upsert({
+      key: key,
+      value: merged,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'key' });
+  }).catch(function(){}).finally(function(){
+    _syncBusy[key] = false;
+    if (_syncDirty[key]) { _syncDirty[key] = false; syncKeyToCloud(key); }
+  });
+}
+localStorage.setItem = function(key, value) {
+  _origSetItem(key, value);
+  if (!cloudReady || key==='__ld_test__') return;
+  if (_syncBusy[key]) { _syncDirty[key] = true; return; }
+  syncKeyToCloud(key);
+};
+localStorage.removeItem = function(key) {
+  _origRemoveItem(key);
+  if (!cloudReady) return;
+  try {
+    cloud.from('user_data').delete().eq('key', key).catch(function(){});
+  } catch (e) {}
+};
+
 // 初始化：匿名登录 → 从云端加载数据，与本地「深合并」后写回（不再整块覆盖）
 (async function initCloud() {
   try {
@@ -2758,43 +2794,6 @@ function deepMerge(a, b){
     console.warn('⚠️ 云端连接失败，使用本地缓存:', e.message);
   }
 })();
-
-// 拦截 localStorage.setItem：写入本地后，异步「拉云端→与本地深合并→回写」，避免多设备同时编辑互相覆盖
-var _origSetItem = localStorage.setItem.bind(localStorage);
-var _syncBusy = {};
-var _syncDirty = {};
-function syncKeyToCloud(key){
-  _syncBusy[key] = true;
-  cloud.from('user_data').select('key,value').then(function(res){
-    var cloudRow = (res.data||[]).filter(function(r){ return r.key===key; })[0];
-    var localVal = parseVal(localStorage.getItem(key));
-    var merged = cloudRow ? deepMerge(parseVal(cloudRow.value), localVal) : localVal;
-    return cloud.from('user_data').upsert({
-      key: key,
-      value: merged,
-      updated_at: new Date().toISOString()
-    }, { onConflict: 'key' });
-  }).catch(function(){}).finally(function(){
-    _syncBusy[key] = false;
-    if (_syncDirty[key]) { _syncDirty[key] = false; syncKeyToCloud(key); }
-  });
-}
-localStorage.setItem = function(key, value) {
-  _origSetItem(key, value);
-  if (!cloudReady || key==='__ld_test__') return;
-  if (_syncBusy[key]) { _syncDirty[key] = true; return; }
-  syncKeyToCloud(key);
-};
-
-// 拦截 localStorage.removeItem
-var _origRemoveItem = localStorage.removeItem.bind(localStorage);
-localStorage.removeItem = function(key) {
-  _origRemoveItem(key);
-  if (!cloudReady) return;
-  try {
-    cloud.from('user_data').delete().eq('key', key).catch(function(){});
-  } catch (e) {}
-};
 
 /* ---------- Theme ---------- */
 const html=document.documentElement;
@@ -3052,26 +3051,29 @@ function renderVideoToday(){
   </div>`;
 }
 (function(){
-  renderVideoRows();
-  const state=loadVideo();
-  document.querySelectorAll('#videoChecks .vchk').forEach(c=>{
-    const i=+c.dataset.i;c.checked=!!state[i];
-    c.addEventListener('change',()=>{const s=loadVideo();s[i]=c.checked;saveVideo(s);syncVideoChecks();updateVideoProgress();});
-    c.closest('tr').classList.toggle('vdone',!!state[i]);
-  });
-  updateVideoProgress();
-  renderVideoWeek();renderVideoToday();
-  const dims=document.querySelectorAll('.vb-dims .dim-btn');
-  dims.forEach(b=>b.addEventListener('click',()=>{
-    dims.forEach(x=>x.classList.remove('active'));b.classList.add('active');
-    const d=b.dataset.dim;
-    document.getElementById('vbAll').hidden=(d!=='all');
-    document.getElementById('vbWeek').hidden=(d!=='week');
-    document.getElementById('vbToday').hidden=(d!=='today');
-    if(d==='week')renderVideoWeek();
-    if(d==='today')renderVideoToday();
-  }));
-  if(typeof updateProgress==='function')updateProgress();
+  // renderVideoRows/renderVideoWeek 现在依赖 WEEKS[i] 取视频链接；WEEKS 在更后面定义，延迟到当前脚本执行完再初始化
+  setTimeout(function(){
+    renderVideoRows();
+    const state=loadVideo();
+    document.querySelectorAll('#videoChecks .vchk').forEach(c=>{
+      const i=+c.dataset.i;c.checked=!!state[i];
+      c.addEventListener('change',()=>{const s=loadVideo();s[i]=c.checked;saveVideo(s);syncVideoChecks();updateVideoProgress();});
+      c.closest('tr').classList.toggle('vdone',!!state[i]);
+    });
+    updateVideoProgress();
+    renderVideoWeek();renderVideoToday();
+    const dims=document.querySelectorAll('.vb-dims .dim-btn');
+    dims.forEach(b=>b.addEventListener('click',()=>{
+      dims.forEach(x=>x.classList.remove('active'));b.classList.add('active');
+      const d=b.dataset.dim;
+      document.getElementById('vbAll').hidden=(d!=='all');
+      document.getElementById('vbWeek').hidden=(d!=='week');
+      document.getElementById('vbToday').hidden=(d!=='today');
+      if(d==='week')renderVideoWeek();
+      if(d==='today')renderVideoToday();
+    }));
+    if(typeof updateProgress==='function')updateProgress();
+  }, 0);
 })();
 const LADDER_KEY='bb-ladder-checks';
 function loadLadder(){try{return JSON.parse(localStorage.getItem(LADDER_KEY))||{}}catch(e){return{}}}
