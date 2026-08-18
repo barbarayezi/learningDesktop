@@ -96,9 +96,9 @@ window.ARTICLES = [
   "title": "2026年上海交通大学材料科学与工程学院博士研究生“舵手计划”申请通知",
   "account": "交大材料就业办",
   "date": "2026-03-29",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "认证体系"
+   "校内项目"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6CMwKCw-ihw8uKJ8KSXgNGlqXa8Fplpd99nmYgm6QyUZRCbKlq7w3ZbxrZ1f9OydrH6php2hiqebO_B7_7Y5r7b6i0yJ0C13AHRfWe1Te2FScHJc9vZRIgNtUPhRPedTsNVKAXoAAWyrk62gwd0zMIIdsG1Ssh2PVJaMKpFGmbUboyapxM-tDwvNG6TvTRXR71fuAKQyZFC089kyxDwoXvg..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%20%E5%B7%A5%E7%A8%8B%E5%8D%9A%E5%A3%AB%20%E7%94%B3%E8%AF%B7%20%E6%9D%A1%E4%BB%B6&token=41FE94B54957391C6E6B346D1CB1755E6EF699506A7F33B7",
   "points": [
@@ -323,9 +323,9 @@ window.ARTICLES = [
   "title": "诚邀青年才俊依托上海交大生物医学工程学院申报2023年度“博新计划”!",
   "account": "上海交通大学生物医学工程学院",
   "date": "2025-11-04",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "费用"
+   "博士后项目"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6CMwKCw-ihw8uKJ8KSXgNGlqXa8Fplpd9isc0nA9wCdfd-luKM5wvdlbPph07pKvL1te2Ih-iO-0QLiuw23LBzLJBnZrM_dYooJWAwgsi-_p-_PZbhYxyRfqOdy0fdAHIQCJhPcQCz8NO4Cfh_LcxA9tflCtTnG4y1U15DchkSi1igj2uyz-0d79ohd7uBhJxYdWUBHBYhHuq3X8EKMKOIA..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%20%E5%B7%A5%E7%A8%8B%E5%8D%9A%E5%A3%AB%20%E7%94%B3%E8%AF%B7%20%E6%9D%A1%E4%BB%B6&token=41FE94B54957391C6E6B346D1CB1755E6EF699506A7F33B7",
   "points": [
@@ -1529,10 +1529,9 @@ window.ARTICLES = [
   "title": "权威 | 上海交大2020年硕士研究生招生简章发布",
   "account": "上海交通大学",
   "date": "",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "考试时间",
-   "招生简章"
+   "硕士招生"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6r_iAcWsZR3AuKJ8KSXgNGlqXa8Fplpd9y1JOeniK0YPfl1vIFndksER7oAwmjyItkPD5kBE_KBtSddKp4Q47Jbzp12KzZO74ylmciKWRyWj-_mCrJglo4wHew3dNsllD1liAjqwCSTTYiquD-rL4LWK2OIaSvHwDEgGY0WCOSd3fSHjd8GLbzoND2jeb43dz6mYLD2cqmLHS-e4Yz84xMA..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%A0%94%E7%A9%B6%E7%94%9F%E6%8B%9B%E7%94%9F%E5%8A%9E&token=421353A4AFB3DCFB898ED08B230C1460892C5AD26A7F376D",
   "points": [
@@ -1549,10 +1548,9 @@ window.ARTICLES = [
   "title": "【权威发布】上海交通大学2019年硕士研究生招生简章",
   "account": "上海交通大学",
   "date": "",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "考试时间",
-   "招生简章"
+   "硕士招生"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6r_iAcWsZR3AuKJ8KSXgNGlqXa8Fplpd9y1JOeniK0YPfl1vIFndksER7oAwmjyItkPD5kBE_KBtSddKp4Q47JaPrsQNmHw6ne0-PnhwzQ8gWorzj9ZAM9-iH_kSFk7Ru5fK90uTruHeJgh7JthRtL71dqxJHPUfajzt6BONRaAQH5ZcKTG6XiH9nCtlezsAU5mNS1eYHipqE8RsmObDbtQ..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%A0%94%E7%A9%B6%E7%94%9F%E6%8B%9B%E7%94%9F%E5%8A%9E&token=421353A4AFB3DCFB898ED08B230C1460892C5AD26A7F376D",
   "points": [
@@ -1569,9 +1567,9 @@ window.ARTICLES = [
   "title": "【历史采撷】上海交大研究生教育的发展",
   "account": "上海交大研究生教育",
   "date": "",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "认证体系"
+   "校史"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6kb1JrOpzUOkuKJ8KSXgNGlqXa8Fplpd9ZmtiV2NRX-SjaiNOKnCYgTSYIIvl3ZmX5pIDSSD9F4WHbSeRJWyGbUXSk6x7hDLKT2OmwjaJwYM8J8InOsGJEmH2ARV0CCCuZLmG0y2nTlgzPsIyfQEU-02qGY9qgsRm0O6HyOOlghiWu-AIXnt2e7hWF62JT0w1Ux75O13Ub0x6VKrzu_4XKA..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E5%A4%A7%E7%A0%94%E7%A9%B6%E7%94%9F%E6%95%99%E8%82%B2&token=42135A394D503F186B6D3369C1FC66C36B512C586A7F376E",
   "points": [
@@ -1588,9 +1586,9 @@ window.ARTICLES = [
   "title": "刚刚,上海交大2023年硕士研究生入学考试复试基本分数线公布!",
   "account": "上海交大研究生教育",
   "date": "",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "复试"
+   "硕士招生"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6kb1JrOpzUOkuKJ8KSXgNGlqXa8Fplpd9ZmtiV2NRX-SjaiNOKnCYgTSYIIvl3ZmX5pIDSSD9F4WHbSeRJWyGbWZ9CIhw5x0b6dGVOklzS02sDgUChvTo_jI5l7upu0uMkLJ3mOWX-b_Xl6WTEDtDd-aDdFhK7KkakoXRInF9NoT8vxNIDoteuafOJ4ZBzoogUCKFX5ZbgAnm0CtGSSkZQQ..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E5%A4%A7%E7%A0%94%E7%A9%B6%E7%94%9F%E6%95%99%E8%82%B2&token=42135A394D503F186B6D3369C1FC66C36B512C586A7F376E",
   "points": [
@@ -1607,9 +1605,9 @@ window.ARTICLES = [
   "title": "【历史采撷】上海交大研究生教育的开端",
   "account": "上海交大研究生教育",
   "date": "",
-  "cat": "考博",
+  "cat": "资讯",
   "tags": [
-   "认证体系"
+   "校史"
   ],
   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS_SD-veulDm6kb1JrOpzUOkuKJ8KSXgNGlqXa8Fplpd9ZmtiV2NRX-SjaiNOKnCYgTSYIIvl3ZmX5pIDSSD9F4WHbSeRJWyGbTkp9a2B74keE0r4ExITXRnt5bDCvu9pVF-Z7sR-aGbCS7sP_xGKMc0gYv3DIK3DU5mq-nfDCr3ZU6YjdpOJJm9I2N3u156itEXRHpe_apS4P_WmcEmBdpdAe0f8bRARvQ..&type=2&query=%E4%B8%8A%E6%B5%B7%E4%BA%A4%E5%A4%A7%E7%A0%94%E7%A9%B6%E7%94%9F%E6%95%99%E8%82%B2&token=42135A394D503F186B6D3369C1FC66C36B512C586A7F376E",
   "points": [
