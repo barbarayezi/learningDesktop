@@ -15,7 +15,11 @@
 - **CodeBuddy 的 Bash 环境无法持久化后台服务**：`nohup` / `setsid` / `run_in_background` 起的进程会在用户下一轮提问时被回收；`launchctl load` / `launchctl bootstrap gui/501` 因当前命令没有 GUI 登录会话权限报 `Input/output error`。
 - **正确常驻方式**：在 Mac Mini 自带「终端」App 里执行 `launchctl load ~/Library/LaunchAgents/com.barbara.learningdesktop.proxy.plist`（该 plist 已建好，含 `KeepAlive`：崩溃自动重启 + 登录自启）。CodeBuddy 这边只能"本轮内"临时拉起服务。
 - 排查"打不开"的顺序：① 服务是否在跑（`lsof -nP -iTCP:8080 -sTCP:LISTEN`）；② 访问 IP 是否等于本机当前 `ifconfig` 的 IP（DHCP 会变，旧 `192.168.103.37` 已失效，当前 `192.168.71.53`）；③ 浏览器是否装代理插件把该 IP 拐走（需设直连/bypass，系统级代理已确认 Disabled）；④ macOS 防火墙是否弹窗需允许 python 入站。
-- `proxy_server.py` 内 `CLOUDBASE_KEY`(JWT) 名义上 2025-08-15 已过期，但它实际是死代码：`proxy_request` 只把浏览器匿名登录拿到的临时 Bearer token 原样转发给 CloudBase，并不会调用这个静态 key。因此 2026-08-17 实测 `/api/*` 匿名登录+读 `user_data` 表仍可正常 HTTP 200。
+- **跨设备云同步根因与修复（2026-08-18 定案）**：旧 `CLOUDBASE_KEY` 是一把 API-key JWT，有效期仅 1 小时且 `exp=2025-08-16 01:00Z`（已过期一年）；更致命的是 `proxy_request` **从没把密钥注入**转发请求 → 网关收不到凭证 → 匿名登录失败 → `cloudReady=false` → `localStorage.setItem` 拦截器 `if(!cloudReady) return` 导致数据**从不上报云端**，所以各设备各存各的 localStorage、互不连通。
+- **修复（commit `65e7d40`）**：① 换成用户从 CloudBase 控制台新生成的 **service_role 密钥**（`role=service_role`、永不过期 `exp=9999`、绕过 RLS）；② `proxy_request` 现在对**每次 `/api/*` 请求强制注入** `apikey: <KEY>` 与 `Authorization: Bearer <KEY>`（浏览器不持有密钥，服务端统一鉴权）；③ `index.html` 的 `initCloud` 改为「匿名登录失败不阻断，只要云端 select 通就 `cloudReady=true`」。
+- **已验证**：本地起测试代理(127.0.0.1:8099)对真实 CloudBase 网关跑通 GET 200（云端 `user_data` 表里**已有用户真实数据**：`cdga-daily-checks` 含 `2026-08-15/16/17` 打卡，说明历史进度没丢）/ upsert 201 / select 200 / delete 204。
+- **生效前提（关键）**：运行中的服务器(`192.168.103.37:8080`)仍跑旧代码，**必须在该机 `git pull` 并重启 `proxy_server.py`** 修复才生效；重启后 `cloudReady` 变 true，云端已有数据会合并回本地、后续写入会上云。
+- **安全提醒**：service_role 是项目全权限密钥，现硬编码在 git 跟踪的 `proxy_server.py` 中；若仓库为 public，应改为环境变量/`config.json`(gitignore) 或轮换密钥。
 
 ## 前端渲染铁律 —— 不再让单点错误整页空白（2026-08-17 立）
 - 本项目 `index.html` 是单一超大 `<script>` 文件。任何顶层未捕获异常都会在该点中断脚本，导致**热力图、每日学习卡、B站视频表等全部空白**。
