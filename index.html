@@ -2788,13 +2788,19 @@ localStorage.removeItem = function(key) {
   } catch (e) {}
 };
 
-// 初始化：匿名登录 → 从云端加载数据，与本地「深合并」后写回（不再整块覆盖）
+// 初始化：尝试匿名登录（可选，失败不影响）→ 用代理注入的 service_role key 拉云端数据，
+// 与本地「深合并」后写回（不再整块覆盖）。只要云端连通即视为就绪。
 (async function initCloud() {
   try {
-    var loginResult = await cloudbaseAnonLogin();
-    if (loginResult && loginResult.access_token) {
-      accessToken = loginResult.access_token;
-      console.log('匿名登录成功');
+    // 匿名登录仅为兼容旧逻辑；真正鉴权由服务端代理注入 service_role key 完成
+    try {
+      var loginResult = await cloudbaseAnonLogin();
+      if (loginResult && loginResult.access_token) {
+        accessToken = loginResult.access_token;
+        console.log('匿名登录成功');
+      }
+    } catch (le) {
+      console.warn('⚠️ 匿名登录跳过（代理已注入 service_role key）:', le.message);
     }
 
     var result = await cloud.from('user_data').select('key,value');
