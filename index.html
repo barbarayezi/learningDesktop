@@ -2657,7 +2657,11 @@ window.addEventListener('unhandledrejection', function(ev){ reportErr('Promise',
 
 /* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
 var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
-var API_PROXY = window.location.origin + "/api";
+// 同步代理地址：留空 = 同源 /api（家里 Mac 局域网模式，自动生效）；
+// 公网部署时在这里填入「公开代理地址」（如 CloudBase 云函数 / Cloudflare Worker URL），
+// 浏览器即可在任何网络直连该代理做云同步，彻底不依赖家里 Mac。
+var SYNC_PROXY_URL = "";
+var API_PROXY = SYNC_PROXY_URL || (window.location.origin + "/api");
 var REST_URL = API_PROXY + "/v1/rdb/rest";
 
 var cloudReady = false;
