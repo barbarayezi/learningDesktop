@@ -17,7 +17,15 @@ BIND = "0.0.0.0"
 
 # CloudBase PostgreSQL (Supabase-compatible) API
 CLOUDBASE_URL = "https://test-d5gf0o9ky7d34beaf.api.tcloudbasegateway.com"
-CLOUDBASE_KEY = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1YmNlNmNhLTUzN2ItNGE0Yy04Yzc3LThhYWYwYTdiNjVhYSJ9.eyJhdWQiOiJ0ZXN0LWQ1Z2YwbzlreTdkMzRiZWFmIiwiZXhwIjoyNTM0MDIzMDA3OTksImlhdCI6MTc4NzAxNjQxOSwiYXRfaGFzaCI6IlhVYWhZWVZSU2xDZjJEV19jTVRrNkEiLCJwcm9qZWN0X2lkIjoidGVzdC1kNWdmMG85a3k3ZDM0YmVhZiIsIm1ldGEiOnsicGxhdGZvcm0iOiJBcGlLZXkifSwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImFwaWtleSIsInByb3ZpZGVycyI6WyJhcGlrZXkiXX0sImFkbWluaXN0cmF0b3JfaWQiOiIyMDg4ODA5ODc5MDg2MDM5MDQwIiwidXNlcl90eXBlIjoiIiwiY2xpZW50X3R5cGUiOiJjbGllbnRfc2VydmVyIiwiaXNfc3lzdGVtX2FkbWluIjp0cnVlfQ.tJ-wbUZEfFob1pb7W8b85bnA6cbjVRhkx5DHkrCFhXc7zBlEfx61OjGCTStS5P26sd0N_Y-wwlwSJzsuhPn46Kryd3Hh9rJ-XP_IZ979db3DObOZJiVdSGygbuqCOLCxj7X5codLUPmgM7SY2z8-84-hTN_6Lx_GYeM-rmug7ROzGZLaYgl2mYtp_0Exi2uYiTmY6IiaCN42GimaRpd5X9y3lX5Xh6ph_iffmTDxqukxRTGhjtH9Jqtfnpvxe6czDtt554yhIqh7ZBtBVsnpeXt6TsrwFUHm5JQuygBtKE624hiqFZg8qcLUgGNR4Lh-PFv_QZgfSRdEc3uWKHtDqg"
+# 安全提醒：service_role 是项目级超级密钥，拥有绕过 RLS 的全部权限。
+# 明文密钥已从仓库移除，运行时必须通过环境变量 CLOUDBASE_SERVICE_KEY 注入
+# （本地：export CLOUDBASE_SERVICE_KEY=...；CloudBase 控制台「层管理 / 环境变量」）。
+CLOUDBASE_KEY = os.environ.get("CLOUDBASE_SERVICE_KEY")
+if not CLOUDBASE_KEY:
+    raise RuntimeError(
+        "环境变量 CLOUDBASE_SERVICE_KEY 未设置，代理无法启动。\n"
+        "请在 CloudBase 控制台重新生成 service_role 密钥，并通过环境变量注入后再运行本服务。"
+    )
 
 API_PREFIX = "/api/"
 

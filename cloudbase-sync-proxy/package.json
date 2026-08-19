@@ -1,0 +1,10 @@
+{
+  "name": "cloudbase-sync-proxy",
+  "version": "1.0.0",
+  "description": "CloudBase cloud function proxy for learningDesktop sync",
+  "main": "index.js",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "license": "MIT"
+}

@@ -13,3 +13,6 @@ Find/
 .workbuddy/*.png
 .workbuddy/*.jpg
 .workbuddy/screenshot_*.js
+# 云函数密钥建议通过环境变量注入，不提交到公开仓库
+cloudbase-sync-proxy/node_modules/
+
