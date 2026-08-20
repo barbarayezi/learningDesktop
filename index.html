@@ -961,6 +961,57 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 </style>
 </head>
 <body>
+<!-- 密码门 -->
+<div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+  <div style="text-align:center;color:#eee;max-width:360px;padding:2rem">
+    <div style="font-size:3rem;margin-bottom:0.5rem">🔐</div>
+    <h2 style="margin:0 0 0.5rem;font-size:1.4rem;color:#fff">备考资料中心</h2>
+    <p style="color:#888;font-size:0.9rem;margin:0 0 1.5rem">请输入访问密码</p>
+    <input id="loginPwd" type="password" placeholder="密码" autocomplete="off" style="width:100%;padding:12px 16px;border:1px solid #444;border-radius:8px;background:#2a2a3e;color:#fff;font-size:1rem;outline:none;box-sizing:border-box;text-align:center;letter-spacing:4px">
+    <p id="loginErr" style="color:#f87171;font-size:0.85rem;margin:0.5rem 0 0;min-height:1.2rem"></p>
+    <button id="loginBtn" style="width:100%;margin-top:0.5rem;padding:12px;border:none;border-radius:8px;background:#4f46e5;color:#fff;font-size:1rem;cursor:pointer;font-weight:600">进入</button>
+    <p style="color:#555;font-size:0.75rem;margin:1.5rem 0 0">忘记密码？联系管理员</p>
+  </div>
+</div>
+<script>
+(async function(){
+  var PWD_HASH = '50faa5aefac82927ba8fd9ad7cf5bcfbd4e4af052e2d1fb4c425c66455a810a5';
+  var SESSION_KEY = '_cdga_login';
+  var SESSION_DAYS = 7;
+
+  function getSession() {
+    try { var s = localStorage.getItem(SESSION_KEY); if (!s) return null; var d = JSON.parse(s); if (Date.now() - d.ts > SESSION_DAYS*86400000) { localStorage.removeItem(SESSION_KEY); return null; } return d; } catch(e) { return null; }
+  }
+  async function sha256(str) {
+    var buf = new TextEncoder().encode(str);
+    var hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  if (getSession()) {
+    document.getElementById('loginGate').style.display = 'none';
+    return;
+  }
+
+  var btn = document.getElementById('loginBtn');
+  var inp = document.getElementById('loginPwd');
+  var err = document.getElementById('loginErr');
+
+  btn.onclick = async function() {
+    var pwd = inp.value.trim();
+    if (!pwd) { err.textContent = '请输入密码'; return; }
+    var h = await sha256(pwd);
+    if (h === PWD_HASH) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ts: Date.now()}));
+      document.getElementById('loginGate').style.display = 'none';
+    } else {
+      err.textContent = '密码错误，请重试';
+      inp.value = '';
+    }
+  };
+  inp.onkeydown = function(e) { if (e.key === 'Enter') btn.click(); };
+})();
+</script>
 <div class="app">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
