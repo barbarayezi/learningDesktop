@@ -3893,7 +3893,23 @@ function setExtProgress(id,cnt){
   try{ localStorage.setItem(EXT_BANK_STORE, JSON.stringify(p)); }catch(e){}
 }
 function openExtBank(url){
-  if(!url){ quizMode='practice'; localStorage.setItem('cdga-quiz-mode','practice'); applyQuizMode(); return; }
+  if(!url){
+    quizMode='practice';
+    localStorage.setItem('cdga-quiz-mode','practice');
+    loadPractice();
+    const hasWrong=Object.keys(practice.answers).some(k=>{
+      const it=QUIZ[k]; return it && practice.answers[k]!==it.a;
+    });
+    if(hasWrong){
+      practice.domainFilter='wrong';
+      practice.currentIdx=0;
+      practice.finished=false;
+      savePractice();
+    }
+    applyQuizMode();
+    if(!hasWrong) alert('暂无错题可刷——先在「刷题模式」做题，答错的题会自动进入错题本。');
+    return;
+  }
   window.open(url,'_blank','noopener,noreferrer');
 }
 function renderExtBanks(){
