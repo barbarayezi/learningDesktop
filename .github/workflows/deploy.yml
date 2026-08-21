@@ -50,9 +50,8 @@ jobs:
 
       - name: Deploy to CloudBase
         env:
-          TENCENTCLOUD_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
-          TENCENTCLOUD_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
           TENCENTCLOUD_SECRETID: ${{ secrets.TCB_SECRET_ID }}
           TENCENTCLOUD_SECRETKEY: ${{ secrets.TCB_SECRET_KEY }}
         run: |
-          tcb hosting deploy . -e test-d5gf0o9ky7d34beaf
+          cloudbase login --key
+          cloudbase hosting deploy . -e test-d5gf0o9ky7d34beaf
