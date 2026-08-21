@@ -53,12 +53,16 @@ jobs:
           npm install @cloudbase/manager-node
           node -e "
           const CloudBase = require('@cloudbase/manager-node');
-          const { hosting } = new CloudBase({
+          const app = new CloudBase({
             secretId: process.env.TCB_SECRET_ID,
             secretKey: process.env.TCB_SECRET_KEY,
             envId: 'test-d5gf0o9ky7d34beaf'
           });
-          hosting.deploy({ localPath: '.', cloudPath: '/' }).then(r => {
+          console.log('Hosting methods:', Object.keys(app.hosting));
+          app.hosting.uploadFiles({
+            localPath: '.',
+            cloudPath: '/'
+          }).then(r => {
             console.log('✅ Deploy done:', JSON.stringify(r));
           }).catch(e => {
             console.error('❌', e.message);
