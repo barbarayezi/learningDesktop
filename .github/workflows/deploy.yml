@@ -45,9 +45,13 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Deploy static to Tencent CloudBase
-        uses: TencentCloudBase/cloudbase-action@v2
-        with:
-          secretId: ${{ secrets.TCB_SECRET_ID }}
-          secretKey: ${{ secrets.TCB_SECRET_KEY }}
-          envId: test-d5gf0o9ky7d34beaf
+      - name: Install CloudBase CLI
+        run: npm install -g @cloudbase/cli
+
+      - name: Login and Deploy to CloudBase
+        env:
+          SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
+        run: |
+          tcb login --apiKeyId "$SECRET_ID" --apiKeySecret "$SECRET_KEY"
+          tcb hosting deploy . -e test-d5gf0o9ky7d34beaf
