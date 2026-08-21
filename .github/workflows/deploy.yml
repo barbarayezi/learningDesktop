@@ -1,0 +1,42 @@
+name: Deploy to CloudBase Static Hosting
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '资料/**'
+      - 'articles.js'
+      - '.github/workflows/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # index.html 引用的是根目录 articles.js，但仓库里它在 资料/ 下；
+      # 复制到根目录，保证公网「资讯」tab 不会 404（也避免覆盖掉手动上传的版本）。
+      - name: Ensure root articles.js exists
+        run: |
+          if [ -f "资料/articles.js" ] && [ ! -f "articles.js" ]; then
+            cp "资料/articles.js" articles.js
+            echo "Copied 资料/articles.js -> articles.js"
+          fi
+
+      # 只部署站点文件。proxy_server.py / cloudbase-sync-proxy / .workbuddy / .git 等
+      # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
+      - name: Remove non-site files before upload
+        run: |
+          rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py 2>/dev/null || true
+          echo "Remaining files to deploy:"
+          ls -la
+
+      - name: Deploy static to Tencent CloudBase
+        uses: TencentCloudBase/cloudbase-action@v1
+        with:
+          secretId: ${{ secrets.TCB_SECRET_ID }}
+          secretKey: ${{ secrets.TCB_SECRET_KEY }}
+          envId: test-d5gf0o9ky7d34beaf-1469471831
+          staticSrcPath: .
