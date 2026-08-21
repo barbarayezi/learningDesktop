@@ -363,6 +363,36 @@ pre code{background:none;padding:0}
 .ext-count-btn:hover{border-color:var(--accent);color:var(--accent)}
 .ext-count-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
+/* ---------- Wrong Book (错题本) ---------- */
+.wb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.wb-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.wb-stat .v{font-size:24px;font-weight:800}
+.wb-stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.wb-actions{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 16px}
+.wb-dist{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.wb-dist-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.wb-dist-title{font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:8px}
+.wb-tag{display:inline-block;background:var(--surface-2);border-radius:8px;padding:3px 9px;margin:3px 4px 3px 0;font-size:13px}
+.wb-tag b{color:var(--accent)}
+.wb-muted{color:var(--text-3);font-size:13px}
+.wb-h3{font-size:15px;margin:18px 0 10px}
+.wb-list{display:flex;flex-direction:column;gap:10px}
+.wb-item{display:flex;justify-content:space-between;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;align-items:flex-start}
+.wb-item.graduated{opacity:.75;background:var(--green-soft)}
+.wb-item-main{flex:1;min-width:0}
+.wb-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:6px}
+.wb-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--text-3)}
+.wb-domain{background:var(--surface-2);border-radius:6px;padding:1px 8px}
+.wb-box{background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 8px;font-weight:600}
+.wb-item-side{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.wb-reason{font-size:12px;padding:3px 6px;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+.wb-btns{display:flex;gap:6px}
+.wb-redo,.wb-grad,.wb-ungrad{font-size:12px;padding:3px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
+.wb-grad{color:var(--green);border-color:var(--green)}
+.wb-grad:hover{background:var(--green);color:#fff}
+.wb-redo:hover,.wb-ungrad:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.wb-stats{grid-template-columns:repeat(2,1fr)}.wb-dist{grid-template-columns:1fr}.wb-item{flex-direction:column}}
+
 /* ---------- Ladder Page (CDGA → CDGP → CDGE) ---------- */
 .ladder-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;
@@ -1383,6 +1413,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
           <button class="active" data-mode="study" role="tab" aria-selected="true">📖 学习模式 <span class="num">看题 · 全部可见</span></button>
           <button data-mode="practice" role="tab" aria-selected="false">🎯 刷题模式 <span class="num">逐题作答 · 进度保存</span></button>
           <button data-mode="external" role="tab" aria-selected="false">🌐 外部题库 <span class="num">免费资源打卡</span></button>
+          <button data-mode="wrongbook" role="tab" aria-selected="false">📒 错题本 <span class="num">收纳 · 间隔重刷</span></button>
         </div>
 
         <!-- 学习模式：保留原有按域分组 + 折叠展开答案 -->
@@ -1397,6 +1428,9 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 
         <!-- 外部题库：不搬运题目，只做合法免费资源入口 + 打卡追踪 -->
         <div id="quiz-external" hidden></div>
+
+        <!-- 错题本：收纳元数据 + 艾宾浩斯/Leitner 间隔排程 + 毕业机制 -->
+        <div id="quiz-wrongbook" hidden></div>
       </section>
 
 
@@ -3576,6 +3610,7 @@ function loadPractice(){
       practice.pickSize=s.pickSize||5;
       practice.shuffle=s.shuffle!==false;
       practice.todaySeed=s.todaySeed||0;
+      practice.reviewSnapshot=s.reviewSnapshot||null;
     }
   }catch(e){}
 }
@@ -3584,7 +3619,8 @@ function savePractice(){
     answers:practice.answers, currentIdx:practice.currentIdx,
     domainFilter:practice.domainFilter, finished:practice.finished,
     pickSize:practice.pickSize, shuffle:practice.shuffle,
-    todaySeed:practice.todaySeed||0
+    todaySeed:practice.todaySeed||0,
+    reviewSnapshot:practice.reviewSnapshot||null
   }));}catch(e){}
 }
 function resetPractice(){
@@ -3601,6 +3637,11 @@ function practiceList(){
   if(practice.domainFilter==='wrong'){
     return QUIZ.map((q,i)=>({q,i}))
       .filter(({q,i})=>practice.answers[i] && practice.answers[i]!==q.a);
+  }
+  // 错题复习 session：用进入时固定的快照（避免答题升级盒级后列表动态缩短）
+  if(practice.domainFilter==='__wrong_today__'){
+    const snap=practice.reviewSnapshot||[];
+    return snap.map(i=>({q:QUIZ[i], i})).filter(x=>x.q);
   }
   // 普通模式：先按域筛池子
   const pool = practice.domainFilter==='all'
@@ -3802,7 +3843,13 @@ function bindPracticeEvents(){
       const list=practiceList();
       if(practice.finished) return;
       const item=list[practice.currentIdx];
-      practice.answers[item.i]=btn.dataset.pick;
+      const picked=btn.dataset.pick;
+      const isReview=practice.domainFilter==='__wrong_today__';
+      practice.answers[item.i]=picked;
+      // 错题复习 session：每题作答后更新盒级（答对升盒/答错回盒1/连对3次毕业）
+      if(isReview) markWrongReview(item.i, picked===item.q.a);
+      // 普通刷题答错：自动收录进错题本
+      else if(picked!==item.q.a) addWrong(item.i);
       savePractice(); renderPractice();
     });
   });
@@ -3894,24 +3941,205 @@ function setExtProgress(id,cnt){
 }
 function openExtBank(url){
   if(!url){
-    quizMode='practice';
-    localStorage.setItem('cdga-quiz-mode','practice');
-    loadPractice();
-    const hasWrong=Object.keys(practice.answers).some(k=>{
-      const it=QUIZ[k]; return it && practice.answers[k]!==it.a;
-    });
-    if(hasWrong){
-      practice.domainFilter='wrong';
-      practice.currentIdx=0;
-      practice.finished=false;
-      savePractice();
-    }
+    quizMode='wrongbook';
+    localStorage.setItem('cdga-quiz-mode','wrongbook');
     applyQuizMode();
-    if(!hasWrong) alert('暂无错题可刷——先在「刷题模式」做题，答错的题会自动进入错题本。');
     return;
   }
   window.open(url,'_blank','noopener,noreferrer');
 }
+
+/* ============================================================
+   错题本：收纳元数据 + 艾宾浩斯/Leitner 间隔排程 + 毕业机制
+   方法来源：艾宾浩斯遗忘曲线、Leitner 五盒系统、黄金三遍法、
+   12730/三阶复习法、SRS lapse 重置（详见错题本页内说明）
+   ============================================================ */
+const WRONG_STORE='cdga-wrong-book-v1';
+const WRONG_REASONS=[
+  {k:'concept', label:'概念不清', icon:'☆'},
+  {k:'careless', label:'粗心跳步', icon:'▲'},
+  {k:'misread', label:'审题失误', icon:'✎'},
+  {k:'timeout', label:'时间不足', icon:'○'},
+];
+// Leitner 五盒间隔（天）：盒1每天 → 盒5每16天
+const LEITNER=[1,2,4,8,16];
+function _todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function _daysBetween(a,b){ if(!a||!b) return 999; const t=Math.round((new Date(b)-new Date(a))/86400000); return t<0?0:t; }
+
+function loadWrongBook(){ try{ return JSON.parse(localStorage.getItem(WRONG_STORE))||{}; }catch(e){ return {}; } }
+function saveWrongBook(wb){ try{ localStorage.setItem(WRONG_STORE, JSON.stringify(wb)); }catch(e){} }
+
+// 刷题答错时收录/更新错题本
+function addWrong(idx){
+  const q=QUIZ[idx]; if(!q) return;
+  const wb=loadWrongBook();
+  const today=_todayISO();
+  if(!wb[idx]) wb[idx]={wrongAt:today, wrongCount:0, box:1, lastReview:today, reviewCount:0, streakCorrect:0, reason:null, graduated:false};
+  wb[idx].wrongCount=(wb[idx].wrongCount||0)+1;
+  wb[idx].box=1;            // 答错回盒1
+  wb[idx].streakCorrect=0;
+  wb[idx].lastReview=today;
+  wb[idx].graduated=false;
+  saveWrongBook(wb);
+}
+// 错题复习作答后更新盒级：答对升盒、答错回盒1、连续3次做对即毕业
+function markWrongReview(idx, correct){
+  const wb=loadWrongBook();
+  const e=wb[idx]; if(!e) return;
+  const today=_todayISO();
+  e.reviewCount=(e.reviewCount||0)+1;
+  e.lastReview=today;
+  if(correct){
+    e.streakCorrect=(e.streakCorrect||0)+1;
+    e.box=Math.min(5,(e.box||1)+1);
+    if(e.streakCorrect>=3) e.graduated=true;
+  } else {
+    e.box=1; e.streakCorrect=0; e.graduated=false;
+  }
+  saveWrongBook(wb);
+}
+function markGraduate(idx, val){
+  const wb=loadWrongBook();
+  if(!wb[idx]) return;
+  wb[idx].graduated=!!val;
+  if(val) wb[idx].streakCorrect=3;
+  saveWrongBook(wb);
+}
+function setWrongReason(idx, reason){
+  const wb=loadWrongBook();
+  if(!wb[idx]) return;
+  wb[idx].reason=reason||null;
+  saveWrongBook(wb);
+}
+// 今日到期的错题（基于盒级间隔）
+function wrongTodayList(){
+  const wb=loadWrongBook();
+  const today=_todayISO();
+  return Object.keys(wb).filter(k=>{
+    const e=wb[k];
+    if(e.graduated) return false;
+    return _daysBetween(e.lastReview, today) >= (LEITNER[(e.box||1)-1]||1);
+  }).map(k=>({q:QUIZ[+k], i:+k}));
+}
+function wrongActiveList(){
+  const wb=loadWrongBook();
+  return Object.keys(wb).filter(k=>!wb[k].graduated).map(k=>({q:QUIZ[+k], i:+k}));
+}
+// 进入错题复习 session（onlyIdx 可选；默认今日到期）
+function startWrongReview(onlyIdx){
+  let list;
+  if(Array.isArray(onlyIdx)) list=onlyIdx.map(i=>({q:QUIZ[i], i}));
+  else list=wrongTodayList();
+  if(list.length===0){ alert('今天没有到期的错题可复习～去「刷题模式」做题收错题吧。'); return; }
+  practice.domainFilter='__wrong_today__';
+  practice.reviewSnapshot=list.map(t=>t.i);   // 固定本次复习题（答题升级盒级不影响顺序）
+  practice.currentIdx=0; practice.finished=false;
+  list.forEach(t=>{ delete practice.answers[t.i]; }); // 清掉这些题旧作答，确保重做生效
+  savePractice();
+  quizMode='practice'; localStorage.setItem('cdga-quiz-mode','practice');
+  applyQuizMode();
+  window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+}
+// 渲染错题本 dashboard
+function renderWrongBook(){
+  const root=document.getElementById('quiz-wrongbook'); if(!root) return;
+  try{
+    const wb=loadWrongBook();
+    const active=wrongActiveList();
+    const graduated=Object.keys(wb).filter(k=>wb[k].graduated);
+    const todayList=wrongTodayList();
+    const total=Object.keys(wb).length;
+    const byDomain={}, byReason={};
+    active.forEach(({i})=>{
+      const e=wb[i], q=QUIZ[i];
+      if(q) byDomain[q.d]=(byDomain[q.d]||0)+1;
+      if(e.reason) byReason[e.reason]=(byReason[e.reason]||0)+1;
+    });
+    const domainHtml=Object.keys(byDomain).length
+      ? Object.keys(byDomain).map(d=>`<span class="wb-tag">${escH(d)} <b>${byDomain[d]}</b></span>`).join('')
+      : '<span class="wb-muted">暂无</span>';
+    const reasonHtml=Object.keys(byReason).length
+      ? Object.keys(byReason).map(r=>{const R=WRONG_REASONS.find(x=>x.k===r);return `<span class="wb-tag">${R?R.icon:'·'} ${escH(R?R.label:r)} <b>${byReason[r]}</b></span>`;}).join('')
+      : '<span class="wb-muted">暂无标注</span>';
+    root.innerHTML=`
+      <div class="callout tip">错题本采用 <b>Leitner 五盒 + 艾宾浩斯间隔</b>：刷题答错自动收进「盒1（每天复习）」，每次做对升一盒（间隔 1→2→4→8→16 天），连续做对 3 次即「毕业」移出。当天到期的错题自动排进「今日复习」。</div>
+      <div class="wb-stats">
+        <div class="wb-stat"><div class="v">${total}</div><div class="l">累计错题</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--red)">${active.length}</div><div class="l">在册未毕业</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--green)">${graduated.length}</div><div class="l">已毕业</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--accent)">${todayList.length}</div><div class="l">今日待复习</div></div>
+      </div>
+      <div class="wb-actions">
+        <button class="pc-btn primary" id="wb-review-today" ${todayList.length?'':'disabled'}>📅 开始今日复习（${todayList.length}）</button>
+        <button class="pc-btn" id="wb-review-all" ${active.length?'':'disabled'}>📚 重做全部在册（${active.length}）</button>
+      </div>
+      <div class="wb-dist">
+        <div class="wb-dist-block"><div class="wb-dist-title">按知识域分布</div>${domainHtml}</div>
+        <div class="wb-dist-block"><div class="wb-dist-title">按错因分布</div>${reasonHtml}</div>
+      </div>
+      <h3 class="wb-h3">在册错题（${active.length}）</h3>
+      <div class="wb-list">
+        ${active.length? active.map(({i})=>{
+          const e=wb[i], q=QUIZ[i];
+          const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
+          return `<div class="wb-item" data-i="${i}">
+            <div class="wb-item-main">
+              <div class="wb-q">#${i+1} ${escH(q?q.q:'')}</div>
+              <div class="wb-meta">
+                <span class="wb-domain">${escH(q?q.d:'')}</span>
+                <span class="wb-box">${boxLabel}</span>
+                <span class="wb-review">复习 ${e.reviewCount||0} 次 · 连对 ${e.streakCorrect||0}</span>
+                <span class="wb-date">末次 ${e.lastReview||'-'}</span>
+              </div>
+            </div>
+            <div class="wb-item-side">
+              <select class="wb-reason" data-i="${i}">
+                <option value="">错因未标</option>
+                ${WRONG_REASONS.map(r=>`<option value="${r.k}" ${e.reason===r.k?'selected':''}>${r.icon} ${r.label}</option>`).join('')}
+              </select>
+              <div class="wb-btns">
+                <button class="wb-redo" data-i="${i}">重做</button>
+                <button class="wb-grad" data-i="${i}">毕业</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('') : '<div class="wb-muted" style="padding:18px">还没有错题。去「刷题模式」做题，答错的会自动收进来。</div>'}
+      </div>
+      ${graduated.length?`<h3 class="wb-h3">已毕业（${graduated.length}）· 已掌握，可不再复习</h3>
+        <div class="wb-list">`+graduated.map(k=>{
+          const e=wb[k], q=QUIZ[k];
+          return `<div class="wb-item graduated" data-i="${k}">
+            <div class="wb-item-main"><div class="wb-q">#${+k+1} ${escH(q?q.q:'')}</div>
+            <div class="wb-meta"><span class="wb-domain">${escH(q?q.d:'')}</span><span class="wb-review">已连续做对，移出错题本</span></div></div>
+            <div class="wb-item-side"><button class="wb-ungrad" data-i="${k}">恢复</button></div>
+          </div>`;
+        }).join('')+`</div>`:''}
+    `;
+    root.querySelector('#wb-review-today')?.addEventListener('click',()=>startWrongReview());
+    root.querySelector('#wb-review-all')?.addEventListener('click',()=>startWrongReview(active.map(x=>x.i)));
+    root.querySelectorAll('.wb-reason').forEach(sel=>{
+      sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongBook(); });
+    });
+    root.querySelectorAll('.wb-redo').forEach(b=>{
+      b.addEventListener('click',()=>startWrongReview([+b.dataset.i]));
+    });
+    root.querySelectorAll('.wb-grad').forEach(b=>{
+      b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？毕业后将移出错题本。')){ markGraduate(+b.dataset.i,true); renderWrongBook(); } });
+    });
+    root.querySelectorAll('.wb-ungrad').forEach(b=>{
+      b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongBook(); });
+    });
+  }catch(err){
+    root.innerHTML='<div class="callout">错题本加载出错：'+escH(String(err))+'</div>';
+  }
+}
+
+// 每日中心「错题本复习」入口按钮（显示今日到期数）
+function wrongBookDailyBtn(){
+  let n=0; try{ n=wrongTodayList().length; }catch(e){}
+  return `<button class="dc-btn ${n?'':'ghost'}" id="dcWrongBook" title="进入错题本：按 Leitner 间隔自动排程今日应复习的错题">📒 错题本复习${n?` <span class="dc-prog">今日 ${n} 道到期</span>`:' <span class="dc-prog">暂无到期</span>'}</button>`;
+}
+
 function renderExtBanks(){
   const box=document.getElementById('quiz-external'); if(!box) return;
   const p=getExtProgress();
@@ -3963,6 +4191,8 @@ function applyQuizMode(){
   document.getElementById('quiz-practice').hidden = quizMode!=='practice';
   const extEl=document.getElementById('quiz-external');
   if(extEl) extEl.hidden = quizMode!=='external';
+  const wbEl=document.getElementById('quiz-wrongbook');
+  if(wbEl) wbEl.hidden = quizMode!=='wrongbook';
   document.querySelectorAll('.mode-toggle button').forEach(b=>{
     const on=b.dataset.mode===quizMode;
     b.classList.toggle('active',on);
@@ -3970,6 +4200,7 @@ function applyQuizMode(){
   });
   if(quizMode==='study') renderStudyMode();
   else if(quizMode==='external') renderExtBanks();
+  else if(quizMode==='wrongbook') renderWrongBook();
   else { loadPractice(); renderPractice(); }
 }
 
@@ -3978,6 +4209,11 @@ document.querySelectorAll('.mode-toggle button').forEach(b=>{
   b.addEventListener('click',()=>{
     quizMode=b.dataset.mode;
     localStorage.setItem('cdga-quiz-mode',quizMode);
+    if(quizMode==='practice' && practice.domainFilter==='__wrong_today__'){
+      practice.domainFilter='all';
+      practice.reviewSnapshot=null;
+      savePractice();
+    }
     applyQuizMode();
     window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
   });
@@ -4999,7 +5235,7 @@ function renderDay(iso){
      </div>
      <div class="dc-block">
        <h4>🎯 自测 / 做题</h4>
-       <div class="dc-links">${quizBtns}</div>
+       <div class="dc-links">${quizBtns}${wrongBookDailyBtn()}</div>
      </div>
       <div class="dc-block">
         <h4>🔤 术语卡</h4>
@@ -5021,6 +5257,7 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  dayCard.querySelector('#dcWrongBook')?.addEventListener('click',()=>{ quizMode='wrongbook'; localStorage.setItem('cdga-quiz-mode','wrongbook'); showPage('cdga-quiz'); applyQuizMode(); });
   // 折叠：P2/P3 组
   dayCard.querySelectorAll('[data-fold]').forEach(btn=>{
     btn.onclick=()=>{
