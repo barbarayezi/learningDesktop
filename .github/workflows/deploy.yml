@@ -45,13 +45,23 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Install CloudBase CLI
-        run: npm install -g @cloudbase/cli
-
-      - name: Deploy to CloudBase
+      - name: Deploy to CloudBase via SDK
         env:
-          TENCENTCLOUD_SECRETID: ${{ secrets.TCB_SECRET_ID }}
-          TENCENTCLOUD_SECRETKEY: ${{ secrets.TCB_SECRET_KEY }}
+          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
         run: |
-          cloudbase login --key
-          cloudbase hosting deploy . -e test-d5gf0o9ky7d34beaf
+          npm install @cloudbase/manager-node
+          node -e "
+          const CloudBase = require('@cloudbase/manager-node');
+          const { hosting } = new CloudBase({
+            secretId: process.env.TCB_SECRET_ID,
+            secretKey: process.env.TCB_SECRET_KEY,
+            envId: 'test-d5gf0o9ky7d34beaf'
+          });
+          hosting.deploy({ localPath: '.', cloudPath: '/' }).then(r => {
+            console.log('✅ Deploy done:', JSON.stringify(r));
+          }).catch(e => {
+            console.error('❌', e.message);
+            process.exit(1);
+          });
+          "
