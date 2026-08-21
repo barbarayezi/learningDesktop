@@ -45,27 +45,10 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Deploy to CloudBase via SDK
-        env:
-          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
-          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
-        run: |
-          npm install @cloudbase/manager-node
-          node -e "
-          const CloudBase = require('@cloudbase/manager-node');
-          const app = new CloudBase({
-            secretId: process.env.TCB_SECRET_ID,
-            secretKey: process.env.TCB_SECRET_KEY,
-            envId: 'test-d5gf0o9ky7d34beaf'
-          });
-          console.log('Hosting methods:', Object.keys(app.hosting));
-          app.hosting.uploadFiles({
-            localPath: '.',
-            cloudPath: '/'
-          }).then(r => {
-            console.log('✅ Deploy done:', JSON.stringify(r));
-          }).catch(e => {
-            console.error('❌', e.message);
-            process.exit(1);
-          });
-          "
+      - name: Deploy static to Tencent CloudBase
+        uses: TencentCloudBase/cloudbase-action@v1
+        with:
+          secretId: ${{ secrets.TCB_SECRET_ID }}
+          secretKey: ${{ secrets.TCB_SECRET_KEY }}
+          envId: test-d5gf0o9ky7d34beaf
+          staticSrcPath: .
