@@ -33,6 +33,18 @@ jobs:
           echo "Remaining files to deploy:"
           ls -la
 
+      # 提前校验 Secrets，避免 cloudbase-action 在缺密钥时 0.4 秒神秘失败（无法从日志看出原因）
+      - name: Pre-check Secrets (TCB_SECRET_ID / TCB_SECRET_KEY)
+        env:
+          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
+        run: |
+          ok=1
+          if [ -z "$TCB_SECRET_ID" ]; then echo "❌ TCB_SECRET_ID is missing — 请到仓库 Settings → Secrets → Actions 添加"; ok=0; fi
+          if [ -z "$TCB_SECRET_KEY" ]; then echo "❌ TCB_SECRET_KEY is missing — 请到仓库 Settings → Secrets → Actions 添加"; ok=0; fi
+          if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
+          echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
+
       - name: Deploy static to Tencent CloudBase
         uses: TencentCloudBase/cloudbase-action@v1
         with:
