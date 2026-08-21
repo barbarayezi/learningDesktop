@@ -3386,10 +3386,35 @@ const practice={
   answers:{},
   // 当前题目在 QUIZ 中的全局索引
   currentIdx:0,
-  // 按域筛选，all 表示全部
+  // 按域筛选，all 表示全部；'wrong' 表示只看错题
   domainFilter:'all',
-  finished:false
+  finished:false,
+  // ✨ 2026-08-21 刷题体验升级：
+  pickSize:5,         // 每日抽题数（all/域名 下生效，域内题数不足则全展示）
+  shuffle:true,       // 是否打乱顺序（默认开，避免凭位置记忆）
+  todaySeed:0         // 种子版本号：清空答案/切换洗牌时+1，保证"再来一轮"换题
 };
+
+// ✨ 日期 → 稳定种子（同一天刷出来顺序一样，跨日自然换）
+function _todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function _dateSeed(s){
+  let h=2166136261>>>0;
+  for(let i=0;i<s.length;i++){
+    h^=s.charCodeAt(i);
+    h=Math.imul(h,16777619)>>>0;
+  }
+  return h>>>0;
+}
+function _rngFrom(seed){
+  let s=seed>>>0;
+  return ()=>{
+    s=(Math.imul(s,1664525)+1013904223)>>>0;
+    return s/0x100000000;
+  };
+}
 
 function loadPractice(){
   try{
@@ -3399,24 +3424,52 @@ function loadPractice(){
       practice.currentIdx=s.currentIdx||0;
       practice.domainFilter=s.domainFilter||'all';
       practice.finished=!!s.finished;
+      practice.pickSize=s.pickSize||5;
+      practice.shuffle=s.shuffle!==false;
+      practice.todaySeed=s.todaySeed||0;
     }
   }catch(e){}
 }
 function savePractice(){
   try{localStorage.setItem(QUIZ_STORE,JSON.stringify({
     answers:practice.answers, currentIdx:practice.currentIdx,
-    domainFilter:practice.domainFilter, finished:practice.finished
+    domainFilter:practice.domainFilter, finished:practice.finished,
+    pickSize:practice.pickSize, shuffle:practice.shuffle,
+    todaySeed:practice.todaySeed||0
   }));}catch(e){}
 }
 function resetPractice(){
   practice.answers={}; practice.currentIdx=0;
-  practice.finished=false; savePractice(); renderPractice();
+  practice.finished=false;
+  // ✨ 加种子版本号 → 下次 practiceList() 用新种子重新洗牌，相当于"换一组题"
+  practice.todaySeed=(practice.todaySeed||0)+1;
+  savePractice(); renderPractice();
 }
 
-// 当前筛选下的题目列表
+// 当前筛选下的题目列表（带每日抽题 + 打乱）
 function practiceList(){
-  if(practice.domainFilter==='all') return QUIZ.map((q,i)=>({q,i}));
-  return QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d===practice.domainFilter);
+  // 错题模式：直接列出所有做错的题（不抽、不打乱）
+  if(practice.domainFilter==='wrong'){
+    return QUIZ.map((q,i)=>({q,i}))
+      .filter(({q,i})=>practice.answers[i] && practice.answers[i]!==q.a);
+  }
+  // 普通模式：先按域筛池子
+  const pool = practice.domainFilter==='all'
+    ? QUIZ.map((q,i)=>({q,i}))
+    : QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d===practice.domainFilter);
+  // ✨ 用今天日期 + 域名 + 种子版本号 当种子 → 同一天稳定，跨日自然换
+  const seed = _dateSeed(_todayISO()+':'+practice.domainFilter+':'+(practice.todaySeed||0));
+  const rng = _rngFrom(seed);
+  const arr = pool.slice();
+  if(practice.shuffle){
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(rng()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+  }
+  // 每日抽 N 道（池子够才抽，否则全展示）
+  const n = practice.pickSize||arr.length;
+  return arr.length>n ? arr.slice(0,n) : arr;
 }
 
 // 渲染：HUD + 题目卡片（或结果）
@@ -3456,6 +3509,9 @@ function renderPractice(){
       <div class="progress" title="${progressPct}% 已作答"><span style="width:${progressPct}%"></span></div>
       <div class="stat" style="color:var(--green)">✅ 对 <b>${right}</b></div>
       <div class="stat" style="color:var(--red)">❌ 错 <b>${done-right}</b></div>
+      <button class="pc-btn ghost" id="btn-shuffle" style="font-size:12px;padding:5px 10px;margin-left:8px" title="打乱顺序（避免凭位置记忆答案）">🔀 打乱 <b style="color:${practice.shuffle?'var(--green)':'var(--text-3)'}">${practice.shuffle?'开':'关'}</b></button>
+      ${(done-right)>0?`<button class="pc-btn" id="btn-wrong" style="font-size:12px;padding:5px 10px;background:var(--red);color:#fff;margin-left:6px" title="只看/重做你做错的题">📒 只刷错题 (${done-right})</button>`:''}
+      ${practice.domainFilter==='wrong'?`<button class="pc-btn ghost" id="btn-back-all" style="font-size:12px;padding:5px 10px;margin-left:6px">← 返回全部题</button>`:''}
     </div>
     <div class="domain-chips" id="dom-chips">
       <div class="domain-chip ${practice.domainFilter==='all'?'active':''}" data-d="all">全部 <span class="ct">${QUIZ_TOTAL}</span></div>
@@ -3619,6 +3675,26 @@ function bindPracticeEvents(){
   });
   root.querySelector('#btn-reset')?.addEventListener('click',()=>{
     if(confirm('确定清空刷题进度吗？此操作不可撤销。')) resetPractice();
+  });
+
+  // ✨ 2026-08-21 升级：打乱开关 / 错题重做 / 返回全部题
+  root.querySelector('#btn-shuffle')?.addEventListener('click',()=>{
+    practice.shuffle=!practice.shuffle;
+    practice.todaySeed=(practice.todaySeed||0)+1;   // 强制换一组种子
+    savePractice(); renderPractice();
+  });
+  root.querySelector('#btn-wrong')?.addEventListener('click',()=>{
+    if(!Object.keys(practice.answers).some(k=>{
+      const it=QUIZ[k]; return it && practice.answers[k]!==it.a;
+    })){ alert('暂无错题可刷——先把题做完吧～'); return; }
+    practice.domainFilter='wrong';
+    practice.currentIdx=0; practice.finished=false;
+    savePractice(); renderPractice();
+  });
+  root.querySelector('#btn-back-all')?.addEventListener('click',()=>{
+    practice.domainFilter='all';
+    practice.currentIdx=0; practice.finished=false;
+    savePractice(); renderPractice();
   });
 
   // 跳题
@@ -4626,13 +4702,14 @@ function renderDay(iso){
           out.push(`<button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题（建立题感）</button>`);
         } else {
           const done=answered('all');
-          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
+          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎲 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题 · 每日抽 ${Math.min(QUIZ_TOTAL,15)}</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         }
       } else {
         const cnt=QUIZ.filter(q=>q.d===k).length;
         const done=answered(k);
         const name=k.replace(/^[^、]+、/,'');
-        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        const pickCnt=Math.min(cnt,5);  // ✨ 每日抽 5 道（域内不足则全展示）
+        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎲 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       }
     });
     return out.join('');
