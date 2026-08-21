@@ -10,6 +10,17 @@
 - **提交方式**：在 learningDesktop 内直接 `git add -A && git commit && git push`（已配 tracking origin/main）。日常改 index.html 后直接 commit+push，无需再走 01_Projects。
 - 提交历史：2026-08-16 将学习桌面独立化为 git 仓库并推送 GitHub（main = 3925820）。
 
+## 公网部署（CloudBase 静态网站托管，2026-08-21 厘清）
+- 公网地址 `https://test-d5gf0o9ky7d34beaf-1469471831.tcloudbaseapp.com/`，即 CloudBase 静态网站托管，serve 的就是仓库里的 `index.html`（与本地/proxy 同源同文件）。**envId = `test-d5gf0o9ky7d34beaf-1469471831`**（静态托管默认域名前缀即 envId）。
+- **现已配 GitHub Actions 自动部署（2026-08-21 加）**：`.github/workflows/deploy.yml` 在 `push` 到 `main` 且改动命中 `index.html` / `资料/**` / `articles.js` / 工作流本身时，自动用 `TencentCloudBase/cloudbase-action@v1` 把 `index.html` + `资料/` 部署到 CloudBase 静态托管（envId 已硬编码在工作流里）。
+  - **前置：需在 GitHub 仓库 Settings → Secrets → Actions 配置 2 个密钥**：`TCB_SECRET_ID`、`TCB_SECRET_KEY`（腾讯云 CAM 访问密钥，控制台→访问管理→API密钥管理 获取；拥有 CloudBase 部署权限即可）。envId 已写在工作流 `with` 里，无需再配。
+  - 工作流里**部署前会 `rm -rf`**：`.git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py`，确保含 service_role 密钥的后端文件**绝不上公网**（比依赖 .cloudbaseignore 更可靠）。
+  - 工作流会把 `资料/articles.js` 复制到根目录 `articles.js`（因 `index.html` 引用的是根目录 articles.js，但仓库里它在 `资料/` 下），保证公网「资讯」tab 不 404。
+  - 手动部署仅作兜底：① 控制台覆盖 `index.html`；② CLI `tcb hosting deploy index.html -e test-d5gf0o9ky7d34beaf-1469471831`（需 `tcb login`）。
+- **安全提醒**：2026-08-21 加 Actions 前确认 `proxy_server.py` 自身不硬编码密钥（密钥走 `CLOUDBASE_SERVICE_KEY` 环境变量注入），但 `proxy_server.py` / `cloudbase-sync-proxy/` 仍属后端，工作流已排除。CAM 的 `TCB_SECRET_KEY` 是账号级密钥，建议用子账号最小权限钥；若仓库为 public 切勿明文提交。
+- **当前工作机（Windows）tcb 未登录**：2026-08-21 实测 `tcb env list` 报 `No valid identity information`，且 `tcb login` 需浏览器交互授权、沙箱无法完成 → 本机不能直接 deploy，需在已登录机器部署（或先本机 `tcb login`）。
+- 是否生效的验证：`curl` 公网 HTML 后 grep 新版特征串（如 `Ch2 数据处理伦理`）；旧版会含 `Ch3 数据治理（笔记/脑图）` / `Ch3 数据治理（二刷）`。
+
 ## 本地服务托管（proxy_server.py）· 环境坑（2026-08-17 补）
 - `proxy_server.py` 是 CDGA 学习桌面的本地静态服务器 + CloudBase API 代理，绑定 `0.0.0.0:8080`（监听所有网卡）。
 - **CodeBuddy 的 Bash 环境无法持久化后台服务**：`nohup` / `setsid` / `run_in_background` 起的进程会在用户下一轮提问时被回收；`launchctl load` / `launchctl bootstrap gui/501` 因当前命令没有 GUI 登录会话权限报 `Input/output error`。
