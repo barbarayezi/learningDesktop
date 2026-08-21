@@ -51,4 +51,3 @@ jobs:
           secretId: ${{ secrets.TCB_SECRET_ID }}
           secretKey: ${{ secrets.TCB_SECRET_KEY }}
           envId: test-d5gf0o9ky7d34beaf
-          staticSrcPath: .
