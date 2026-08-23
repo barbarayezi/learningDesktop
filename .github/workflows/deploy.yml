@@ -1,0 +1,56 @@
+name: Deploy to CloudBase Static Hosting
+# 2026-08-21 21:30 触发 Run #14：上次 Run #13 Deploy step 2 秒临时失败（cloudbase 服务端 race），
+# 同样的 v1 action + 同 envId 之前 Run #12 跑 1m27s 成功，故推一次重试。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '资料/**'
+      - 'articles.js'
+      - '.github/workflows/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # index.html 引用的是根目录 articles.js，但仓库里它在 资料/ 下；
+      # 复制到根目录，保证公网「资讯」tab 不会 404（也避免覆盖掉手动上传的版本）。
+      - name: Ensure root articles.js exists
+        run: |
+          if [ -f "资料/articles.js" ] && [ ! -f "articles.js" ]; then
+            cp "资料/articles.js" articles.js
+            echo "Copied 资料/articles.js -> articles.js"
+          fi
+
+      # 只部署站点文件。proxy_server.py / cloudbase-sync-proxy / .workbuddy / .git 等
+      # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
+      - name: Remove non-site files before upload
+        run: |
+          rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py 2>/dev/null || true
+          echo "Remaining files to deploy:"
+          ls -la
+
+      # 提前校验 Secrets，避免 cloudbase-action 在缺密钥时 0.4 秒神秘失败（无法从日志看出原因）
+      - name: Pre-check Secrets (TCB_SECRET_ID / TCB_SECRET_KEY)
+        env:
+          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
+        run: |
+          ok=1
+          if [ -z "$TCB_SECRET_ID" ]; then echo "❌ TCB_SECRET_ID is missing — 请到仓库 Settings → Secrets → Actions 添加"; ok=0; fi
+          if [ -z "$TCB_SECRET_KEY" ]; then echo "❌ TCB_SECRET_KEY is missing — 请到仓库 Settings → Secrets → Actions 添加"; ok=0; fi
+          if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
+          echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
+
+      - name: Deploy static to Tencent CloudBase
+        uses: TencentCloudBase/cloudbase-action@v1
+        with:
+          secretId: ${{ secrets.TCB_SECRET_ID }}
+          secretKey: ${{ secrets.TCB_SECRET_KEY }}
+          envId: test-d5gf0o9ky7d34beaf
+          staticSrcPath: .

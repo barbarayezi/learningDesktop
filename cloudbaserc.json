@@ -1,0 +1,16 @@
+{
+  "envId": "test-d5gf0o9ky7d34beaf",
+  "version": "2.0",
+  "framework": {
+    "name": "static",
+    "plugins": {
+      "static": {
+        "use": "@cloudbase/framework-plugin-website",
+        "inputs": {
+          "outputPath": ".",
+          "cloudPath": "/"
+        }
+      }
+    }
+  }
+}
