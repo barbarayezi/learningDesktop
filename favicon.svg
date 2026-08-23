@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="备考资料中心 favicon">
+  <title>备考资料中心 · Favicon</title>
+  <rect width="64" height="64" rx="14" fill="#4f6ef7"/>
+  <g fill="#ffffff">
+    <rect x="16" y="16" width="9" height="32" rx="2.5"/>
+    <path d="M28 16 H40 Q49 16 49 23 Q49 29 43 31 Q50 33 50 40 Q50 48 41 48 H28 Z M35 21 V29 H40 Q43 29 43 25 Q43 21 40 21 Z M35 34 V43 H40 Q44 43 44 38.5 Q44 34 40 34 Z"/>
+  </g>
+</svg>

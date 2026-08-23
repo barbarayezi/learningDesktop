@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="备考资料中心 logo">
+  <title>备考资料中心 · Logo</title>
+  <rect x="0" y="0" width="64" height="64" rx="18" fill="#4f6ef7"/>
+  <g fill="#ffffff">
+    <rect x="14" y="14" width="11" height="36" rx="3"/>
+    <path d="M28 14 H42 Q52 14 52 22 Q52 29 45 31 Q53 33 53 41 Q53 50 42 50 H28 Z M36 19 V29 H41 Q45 29 45 24 Q45 19 41 19 Z M36 35 V45 H41 Q46 45 46 40 Q46 35 41 35 Z"/>
+  </g>
+</svg>
