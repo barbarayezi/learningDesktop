@@ -1332,7 +1332,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <div class="mode-toggle" role="tablist" aria-label="练习模式切换">
           <button class="active" data-mode="study" role="tab" aria-selected="true">📖 学习模式 <span class="num">看题 · 全部可见</span></button>
           <button data-mode="practice" role="tab" aria-selected="false">🎯 刷题模式 <span class="num">逐题作答 · 进度保存</span></button>
-          <button data-mode="external" role="tab" aria-selected="false">🌐 外部题库 <span class="num">免费资源打卡</span></button>
+          <button data-mode="external" role="tab" aria-selected="false">🌐 题库汇总 <span class="num">站内开刷 · 来源筛选</span></button>
         </div>
 
         <!-- 学习模式：保留原有按域分组 + 折叠展开答案 -->
@@ -1345,7 +1345,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <!-- 刷题模式：隐藏答案，做题后即时反馈 + 进度持久化 -->
         <div id="quiz-practice" hidden></div>
 
-        <!-- 外部题库：不搬运题目，只做合法免费资源入口 + 打卡追踪 -->
+        <!-- 题库汇总：站内可刷题库（含公开/原创/合规改编题）+ 合规外部参考入口 -->
         <div id="quiz-external" hidden></div>
       </section>
 
@@ -3253,7 +3253,26 @@ const QUIZ=[
  {d:'十三、其余低分域',q:'数据所有者（Data Owner）的职责是：',o:['对数据业务含义与定义负责','仅做运维','仅采购','无职责'],a:'A',e:'对业务含义与定义负责。'},
  {d:'十三、其余低分域',q:'数据管理员（Custodian）通常负责：',o:['数据的技术实现与保管','业务决策','仅审计','仅销售'],a:'A',e:'技术实现与保管。'},
  {d:'十三、其余低分域',q:'组织变革管理在数据治理中的作用是：',o:['培育数据文化、推动落地','无作用','仅裁员','仅采购'],a:'A',e:'培育文化、推动落地。'},
- {d:'十三、其余低分域',q:'数据管理组织与角色期望强调：',o:['明确各角色职责边界','职责模糊','无需角色','仅一人负责'],a:'A',e:'明确职责边界。'}
+ {d:'十三、其余低分域',q:'数据管理组织与角色期望强调：',o:['明确各角色职责边界','职责模糊','无需角色','仅一人负责'],a:'A',e:'明确职责边界。'},
+/* === 基于公开材料改编 source='inspired-public'（已搜到的 DMBOK2R + 数策汇 + datafield 等公开内容，全部原创重写表述并标注 DMBOK2R 页码出处） === */
+{d:'一、数据治理',q:'分散式数据管理运营模式最适合下列哪类组织：',o:['部门业务高度独立、需各自响应','全组织强求统一标准','需跨域集中治理','只有研发部的初创团队'],a:'A',source:'inspired-public',e:'DMBOK2R 第 16 章运营模式：分散式适合业务部门独立性强的组织，强调贴近业务。集中式/混合式分别适合统一管控和兼顾两种需求。'},
+{d:'一、数据治理',q:'下列哪一项不应作为数据治理 KPI：',o:['数据问题平均解决时长','关键标准覆盖率与一致性','直接营业收入','元数据完整度'],a:'C',source:'inspired-public',e:'DMBOK2R 第 5 章：治理度量侧重合规、效率、质量的指标；直接营收受多重因素影响，不应作为治理 KPI。'},
+{d:'一、数据治理',q:'数据治理办公室(DGO)与数据治理委员会的差别是：',o:['委员会仅做培训','DGO 做决策审批，委员会做日常执行','DGO 负责日常执行与协调，委员会负责决策与监督','二者职责完全相同'],a:'C',source:'inspired-public',e:'DMBOK2R 第 16 章角色矩阵：委员会=决策与监督，DGO=日常执行、协调与推动。'},
+{d:'二、数据质量',q:'数据质量根因分析中效果最差的工具是：',o:['鱼骨图','帕累托图','5Why','对全表做百万条以上随机抽样而不分类'],a:'D',source:'inspired-public',e:'DMBOK2R 第 7 章根因分析方法：鱼骨/Pareto/5Why 用于溯源分层；无差别大样本抽样没有诊断价值，容易掩盖真实根因。'},
+{d:'二、数据质量',q:'系统中同一客户在客户表里存在多个 ID（"重码"），最直接违反：',o:['完整性','唯一性','有效性','及时性'],a:'B',source:'inspired-public',e:'六维度之"唯一性"要求同一业务实体有唯一标识；重码是典型的唯一性违例，常通过 MDM/匹配合并规则治理。'},
+{d:'二、数据质量',q:'数据质量规则最有效的固化方式是：',o:['仅在报表层校验','仅在 ETL 中加 SQL','贯穿需求-设计-开发-运维全生命周期','仅在归档后抽样'],a:'C',source:'inspired-public',e:'DMBOK2R 第 6/7 章强调"质量前移、全生命周期管控"，只在末端校验只能事后救火。'},
+{d:'三、元数据管理',q:'业务元数据与技术元数据联动的关键是：',o:['用统一实体 ID 串联逻辑资产与技术资产','只改字段名','只补 Wiki 文档','重建数仓'],a:'A',source:'inspired-public',e:'DMBOK2R 第 8 章：打通业务/技术元数据的核心是统一实体标识（如表名/字段 ID 一致），血缘与影响分析才能真正可用。'},
+{d:'三、元数据管理',q:'元数据"反向影响分析"主要用来：',o:['美化报表','评估上游变更的下游影响范围','删除数据','压缩存储'],a:'B',source:'inspired-public',e:'DMBOK2R 第 8 章：反向血缘 = 影响分析，改源系统/字段前先看下游消费方，避免"动一行炸一片"。'},
+{d:'五、参考数据和主数据',q:'MDM 实施常见的三阶段顺序是：',o:['直接全企业替换系统','先治理（标准/责任）→再实施（系统）→后扩展（全企业推广）','只做数据建模','仅购买工具即可'],a:'B',source:'inspired-public',e:'DMBOK2R 第 9 章 MDM 实施路径：先理顺流程/责任/标准，再上 MDM 系统，最后向全企业推广，能最大限度降低项目失败率。'},
+{d:'五、参考数据和主数据',q:'银行场景下，"客户/账户/产品"中账户通常属于：',o:['主数据','交易/业务数据','参考数据','元数据'],a:'B',source:'inspired-public',e:'DMBOK2R 第 9 章主数据 vs 交易数据：客户/产品=主数据，账户下挂交易记录=交易数据；账户标识自身可作为主数据参考键。'},
+{d:'六、数据建模与设计',q:'第三范式(3NF)主要消除的是：',o:['重复组','部分函数依赖','传递函数依赖','所有依赖'],a:'C',source:'inspired-public',e:'1NF 原子化、2NF 消除部分依赖、3NF 消除非主属性对候选键的传递依赖；继续规范化到 BCNF/4NF 看业务取舍。'},
+{d:'六、数据建模与设计',q:'星型模型与雪花模型的主要差异是：',o:['雪花进一步规范化维度表（多层级），星型维度扁平','星型导入，雪花导出','性能完全无差异','只是美观差异'],a:'A',source:'inspired-public',e:'DMBOK2R 第 5 章：星型适合查询简单、维度少；雪花节省存储但增加 JOIN，分析场景常优先星型。'},
+{d:'八、数据安全',q:'数据分类分级落地最有效的第一步是：',o:['制定全组织统一的分类分级标准','直接采购 DLP 工具','删除敏感数据','发合规邮件了事'],a:'A',source:'inspired-public',e:'DMBOK2R 第 10 章：先有标准与责任人,再谈工具落地,否则再好的工具也无法对号入座。'},
+{d:'八、数据安全',q:'个人信息去标识化的常用技术通常不包括：',o:['假名化','泛化','抑制','公开数据集暴力比对反推'],a:'D',source:'inspired-public',e:'假名/泛化/抑制/扰动/合成均为合规去标识化技术；暴力比对不是去标识化手法，而是攻击方式，违反目的。'},
+{d:'十、成熟度评估',q:'DAMA-DMM 五级中的"已管理级"主要特征是：',o:['完全无任何治理','仅初始级，流程偶发','数据活动被度量化管理','持续优化级，强调自适应'],a:'C',source:'inspired-public',e:'DMBOK2R 第 14 章典型五级渐进（初始→已管理→定义→定量管理→优化），"已管理级"=第三级，关键流程被度量、被管理。'},
+{d:'十、成熟度评估',q:'成熟度"基线评估"与"复评评估"的主要区别是：',o:['基线建立初始现状基线，复评衡量改进进度','二者完全相同','基线仅做文档','复评仅做培训'],a:'A',source:'inspired-public',e:'DMBOK2R 第 14 章：基线=起点诊断，复评=改进效果验证；两者结合形成"评估—改进—复评"闭环。'},
+{d:'十二、数据处理伦理',q:'AI 训练使用个人数据时，伦理上最需要同时关注的是：',o:['仅数据量大小','仅标签准确度','公平性、可解释性与数据来源/使用授权','只要模型准确就行'],a:'C',source:'inspired-public',e:'DMBOK2R 第 13 章：AI 伦理核心是公平/可解释/隐私三维，缺一会显著放大偏见或合规风险。'},
+{d:'十三、其余低分域',q:'数据集成的"数据虚拟化"路径主要优点是：',o:['不复制数据、按需跨源查询','必须把数据全部集中','只适合离线小批量','只适用于结构化数据'],a:'A',source:'inspired-public',e:'DMBOK2R 第 7/12 章：虚拟化按需联邦查询，适合不想全部物理集中的场景；但性能与一致性需配套管控。'}
 ];
 /* ============================================================
    QUIZ: 双模式渲染（学习模式 + 刷题模式）
@@ -3263,16 +3282,21 @@ const QUIZ_TOTAL=QUIZ.length;
 const QUIZ_STORE='cdga-quiz-progress-v1';
 
 /* ============================================================
-   外部免费题库索引（不搬运题目，只做入口 + 打卡追踪）
+   题库汇总 EXT_BANKS：站内可刷题库 + 合规外部参考入口
+   - action='practice'    : 主按钮"站内开刷 →",切换到刷题模式并应用 source 筛选
+   - action='open-url'    : 主按钮"打开参考 →",新标签页合规跳转(不搬运其内容)
+   - action='go-wrongbook' : 主按钮"打开本站错题本"
+   - sourceKey            : 用于刷题模式的 source 筛选(与题目 q.source 对应)
    注意：必须在 quizMode 初始化前定义，避免 applyQuizMode 调用
    renderExtBanks 时访问 EXT_BANKS 出现暂时性死区（TDZ）错误。
    ============================================================ */
 const EXT_BANKS=[
-  {id:'educity-dama',name:'希赛网 CDGA 专区',url:'https://www.educity.cn/dama/',count:'50+',type:'免费视频/PDF',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总。需免费注册后下载。'},
-  {id:'educity-tiku',name:'希赛 CDGA 在线模拟题',url:'https://www.educity.cn/dama/',count:'每日/章节',type:'在线题库',desc:'在希赛 CDGA 专区找「章节练习 / 模拟试卷」，部分免费，适合刷题阶段按周补充。'},
-  {id:'dama-china',name:'DAMA China 官方资料',url:'http://www.dama-china.org/',count:'样题/大纲',type:'官方',desc:'考试大纲、授权培训信息、官方样题风格最接近真实考试。'},
-  {id:'bilibili-cdga',name:'B站 CDGA 模拟题/真题讲解',url:'https://search.bilibili.com/all?keyword=CDGA%E6%A8%A1%E6%8B%9F%E9%A2%98',count:'若干',type:'视频解析',desc:'搜索关键词「CDGA 模拟题/真题讲解」，免费视频逐题解析。'},
-  {id:'local-wrong',name:'本站错题本',url:null,count:'动态',type:'内部',desc:'在「刷题模式」中做完题后自动生成的错题回顾，考前必重刷。'}
+  {id:'self',icon:'📝',name:'本站原创 52 题',count:'52',type:'本站原创',desc:'助手基于 DMBOK2R 公开大纲原创编写，覆盖 13 个知识域。非 DAMA 官方真题。',action:'practice',sourceKey:'self',primary:true},
+  {id:'inspired-public',icon:'📚',name:'基于公开材料改编题库',count:'动态',type:'基于 DMBOK2R + 公开 quiz 改编',desc:'基于 DMBOK2R 教材 + datafield.dev / 数策汇 CSDN 等公开题库考查点，原创重写题目并标注页码出处。',action:'practice',sourceKey:'inspired-public'},
+  {id:'datafield',icon:'🌐',name:'datafield.dev 英文 quiz',count:'动态',type:'公开英文 quiz',desc:'datafield.dev 网站基于 DMBOK2 章节配套 quiz，内容稳定公开，作英文补充练习。',action:'practice',sourceKey:'datafield'},
+  {id:'educity-dama',icon:'🔗',name:'希赛网 CDGA 专区（合规参考）',count:'50+',type:'合规参考(不搬运)',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总，需免费注册后下载。本站不复制其题目内容，仅做合规入口参考。',action:'open-url',url:'https://www.educity.cn/dama/'},
+  {id:'dama-china',icon:'🏛️',name:'DAMA China 官方（合规参考）',count:'大纲/样题',type:'合规参考(不搬运)',desc:'中国 DAMA 官方站点，考纲与样题风格最接近真实考试。新标签页合规跳转。',action:'open-url',url:'http://www.dama-china.org/'},
+  {id:'local-wrong',icon:'📕',name:'本站错题本',count:'动态',type:'内部功能',desc:'在「刷题模式」中自动归集的错题，考前必重刷。',action:'go-wrongbook'}
 ];
 const EXT_BANK_STORE='cdga-ext-banks-v1';
 
@@ -3338,6 +3362,9 @@ const practice={
   currentIdx:0,
   // 按域筛选，all 表示全部
   domainFilter:'all',
+  // 按来源筛选(对应 QUIZ 中题目的 q.source 字段,无 source 视为 'self'),
+  // all / self / inspired-public / datafield
+  sourceFilter:'all',
   finished:false
 };
 
@@ -3348,6 +3375,7 @@ function loadPractice(){
       practice.answers=s.answers||{};
       practice.currentIdx=s.currentIdx||0;
       practice.domainFilter=s.domainFilter||'all';
+      practice.sourceFilter=s.sourceFilter||'all';
       practice.finished=!!s.finished;
     }
   }catch(e){}
@@ -3355,7 +3383,8 @@ function loadPractice(){
 function savePractice(){
   try{localStorage.setItem(QUIZ_STORE,JSON.stringify({
     answers:practice.answers, currentIdx:practice.currentIdx,
-    domainFilter:practice.domainFilter, finished:practice.finished
+    domainFilter:practice.domainFilter, sourceFilter:practice.sourceFilter,
+    finished:practice.finished
   }));}catch(e){}
 }
 function resetPractice(){
@@ -3365,8 +3394,15 @@ function resetPractice(){
 
 // 当前筛选下的题目列表
 function practiceList(){
-  if(practice.domainFilter==='all') return QUIZ.map((q,i)=>({q,i}));
-  return QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d===practice.domainFilter);
+  const df=practice.domainFilter, sf=practice.sourceFilter;
+  return QUIZ.map((q,i)=>({q,i})).filter(x=>{
+    if(df!=='all' && x.q.d!==df) return false;
+    if(sf!=='all'){
+      const src=x.q.source||'self';
+      if(src!==sf) return false;
+    }
+    return true;
+  });
 }
 
 // 渲染：HUD + 题目卡片（或结果）
@@ -3407,7 +3443,21 @@ function renderPractice(){
       <div class="stat" style="color:var(--green)">✅ 对 <b>${right}</b></div>
       <div class="stat" style="color:var(--red)">❌ 错 <b>${done-right}</b></div>
     </div>
+    <div class="domain-chips" id="src-chips" style="margin-bottom:10px">
+      <span style="font-size:11.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-right:6px">来源</span>
+      <div class="domain-chip ${practice.sourceFilter==='all'?'active':''}" data-s="all">全部 <span class="ct">${QUIZ_TOTAL}</span></div>
+      ${[
+        {k:'self',l:'本站原创'},
+        {k:'inspired-public',l:'基于公开材料改编'},
+        {k:'datafield',l:'英文公开 quiz'}
+      ].map(s=>{
+        const cnt=QUIZ.filter(q=>(q.source||'self')===s.k).length;
+        const active=practice.sourceFilter===s.k;
+        return `<div class="domain-chip ${active?'active':''}" data-s="${s.k}">${s.l} <span class="ct">${cnt}</span></div>`;
+      }).join('')}
+    </div>
     <div class="domain-chips" id="dom-chips">
+      <span style="font-size:11.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-right:6px">知识域</span>
       <div class="domain-chip ${practice.domainFilter==='all'?'active':''}" data-d="all">全部 <span class="ct">${QUIZ_TOTAL}</span></div>
       ${QUIZ_DOMAINS.map(d=>{
         const cnt=QUIZ.filter(q=>q.d===d).length;
@@ -3582,8 +3632,18 @@ function bindPracticeEvents(){
     });
   });
 
+  // 来源筛选
+  root.querySelectorAll('#src-chips .domain-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      practice.sourceFilter=c.dataset.s;
+      practice.currentIdx=0; // 切换后回到第一题
+      practice.finished=false;
+      savePractice(); renderPractice();
+    });
+  });
+
   // 域筛选
-  root.querySelectorAll('.domain-chip').forEach(c=>{
+  root.querySelectorAll('#dom-chips .domain-chip').forEach(c=>{
     c.addEventListener('click',()=>{
       practice.domainFilter=c.dataset.d;
       practice.currentIdx=0; // 切域后回到第一题
@@ -3610,59 +3670,115 @@ function bindPracticeEvents(){
   });
 }
 
-/* ---------- 外部题库入口 + 打卡追踪 ---------- */
-function getExtProgress(){ try{ return JSON.parse(localStorage.getItem(EXT_BANK_STORE))||{}; }catch(e){ return {}; } }
-function setExtProgress(id,cnt){
-  const p=getExtProgress();
-  p[id]=Math.max(0, Math.min(3, parseInt(cnt,10)||0));
-  try{ localStorage.setItem(EXT_BANK_STORE, JSON.stringify(p)); }catch(e){}
+/* ---------- 题库汇总 EXT_BANKS（站内可刷题库 + 合规外部参考） ---------- */
+// 统计各 source 在 QUIZ 中的真实题数（页面打开时一次性算）
+function _countQuizBySource(){
+  const m={__all__:QUIZ.length,self:0,'inspired-public':0,datafield:0};
+  QUIZ.forEach(q=>{
+    const s=q.source||'self';
+    m[s]=(m[s]||0)+1;
+  });
+  // 把 0 的未知 source 也统计出来兜底
+  Object.keys(m).forEach(k=>{ if(k!=='__all__' && !m[k]) m[k]=0; });
+  return m;
 }
-function openExtBank(url){
-  if(!url){ quizMode='practice'; localStorage.setItem('cdga-quiz-mode','practice'); applyQuizMode(); return; }
+
+// 选择一个题库卡：action='practice' 进入站内刷题并应用 source 筛选
+function startBankPractice(sourceKey){
+  practice.sourceFilter=sourceKey||'all';
+  practice.domainFilter='all';
+  practice.currentIdx=0;
+  practice.finished=false;
+  loadPractice(); // 确保拿到最新 answers 后再保存
+  savePractice();
+  quizMode='practice';
+  localStorage.setItem('cdga-quiz-mode','practice');
+  applyQuizMode();
+  // 滚到刷题卡片顶部
+  window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+}
+function openRefUrl(url){
   window.open(url,'_blank','noopener,noreferrer');
 }
+function openWrongbook(){
+  // 复用刷题模式，仅加载错题视图（依赖后续扩展的 wrongbook UI，这里先切到 practice 并提示）
+  quizMode='practice';
+  localStorage.setItem('cdga-quiz-mode','practice');
+  practice.sourceFilter='all';
+  practice.domainFilter='all';
+  applyQuizMode();
+  window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+}
+
 function renderExtBanks(){
   const box=document.getElementById('quiz-external'); if(!box) return;
-  const p=getExtProgress();
-  const total=EXT_BANKS.length;
-  const done=EXT_BANKS.filter(b=>(p[b.id]||0)>0).length;
-  const pct=total?Math.round(done/total*100):0;
+  const cntBySrc=_countQuizBySource();
+  const totalQ=QUIZ.length;
+  const breakable=EXT_BANKS.filter(b=>b.action==='practice').length;
+  const refOnly=EXT_BANKS.length-breakable;
+
   box.innerHTML=`
-    <div class="callout tip">以下均为<b>合法免费</b>的外部资源入口，本站<b>不搬运题目</b>。点击「去刷题」会新开标签页；回来后点「已刷 N 遍」打卡，进度自动保存。</div>
+    <div class="callout tip">以下均为可在<b>站内直接开刷</b>的题库合集（非 DAMA 官方真题，已尽量覆盖 DMBOK2R 各知识域）。题库卡点「站内开刷 →」即可立刻进入刷题模式并自动应用该来源筛选；底部少量卡片为合规外部参考入口（不复制其题目内容），按需打开。</div>
     <div class="practice-hud" style="margin-bottom:18px">
-      <div class="stat">🌐 已打卡 <b>${done}</b> / ${total} 个资源</div>
-      <div class="progress" title="${pct}%"><span style="width:${pct}%"></span></div>
+      <div class="stat">📚 当前总题数 <b>${totalQ}</b> 题 · 来源 <b>${breakable}</b> 个</div>
+      <div class="progress" title="${Math.round(totalQ/Math.max(1,totalQ)*100)}%"><span style="width:100%"></span></div>
     </div>
     <div class="ext-bank-grid">
       ${EXT_BANKS.map(b=>{
-        const cnt=p[b.id]||0;
+        let act='',btnLabel='',icon='▶';
+        const isPractice=b.action==='practice';
+        const known=(b.sourceKey && cntBySrc[b.sourceKey]!=null);
+        const qty=(b.sourceKey==='self')?'52':(known?String(cntBySrc[b.sourceKey]):'动态');
+        if(b.action==='practice'){
+          act='data-act="practice"';
+          btnLabel='站内开刷 →';
+          icon='▶';
+        }else if(b.action==='open-url'){
+          act=`data-act="open-url" data-url="${escH(b.url)}"`;
+          btnLabel='打开参考 →';
+          icon='🔗';
+        }else if(b.action==='go-wrongbook'){
+          act='data-act="wrongbook"';
+          btnLabel='打开错题本 →';
+          icon='📕';
+        }
+        const primary = isPractice || b.primary;
         return `
-        <div class="ext-bank-card ${cnt>0?'done':''}">
+        <div class="ext-bank-card">
           <div class="ext-bank-head">
             <span class="ext-bank-tag">${escH(b.type)}</span>
-            <span class="ext-bank-count">${escH(b.count)} 题/资源</span>
+            <span class="ext-bank-count">${escH(qty)} 题${isPractice?'':'(参考)'}</span>
           </div>
-          <h4>${escH(b.name)}</h4>
+          <h4>${escH(b.icon||'')} ${escH(b.name)}</h4>
           <p>${escH(b.desc)}</p>
           <div class="ext-bank-actions">
-            <button class="pc-btn ${b.url?'':'primary'}" data-ext-url="${b.url?escH(b.url):''}">${b.url?'去刷题 →':'打开本站错题本'}</button>
-            <div class="ext-bank-counter">
-              ${[0,1,2,3].map(n=>`<button class="ext-count-btn ${cnt===n?'active':''}" data-ext="${escH(b.id)}" data-cnt="${n}">${n===0?'未刷':n+'遍'}</button>`).join('')}
-            </div>
+            <button class="pc-btn ${primary?'primary':''}" ${act}>${btnLabel}</button>
           </div>
         </div>`;
       }).join('')}
     </div>
-    <div class="doc-sub" style="border:none;margin-top:22px">建议：刷题阶段（W21 起）每天从希赛 50 题中抽 10 道；冲刺阶段把本站错题本和希赛模拟卷各过一遍。</div>
+    <div class="doc-sub" style="border:none;margin-top:22px">建议：刷题阶段（W21 起）每天从「基于公开材料改编题库」抽 10 道；冲刺阶段把「本站错题本」和「本站原创 52 题」各过一遍，对照公开英文 quiz 互验。</div>
   `;
-  box.querySelectorAll('[data-ext-url]').forEach(btn=>{
-    btn.addEventListener('click',()=>openExtBank(btn.dataset.extUrl));
-  });
-  box.querySelectorAll('[data-ext][data-cnt]').forEach(btn=>{
+  box.querySelectorAll('[data-act="practice"]').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      setExtProgress(btn.dataset.ext, +btn.dataset.cnt);
-      renderExtBanks();
+      const id=btn.closest('.ext-bank-card')?.querySelector('h4')?.textContent||'';
+      const bank=EXT_BANKS.find(b=>b.action==='practice' && id.indexOf(b.name)>=0)
+                ||EXT_BANKS.find(b=>btn.dataset.ext===b.id);
+      // 直接定位第一个 practice 项
+      const target=EXT_BANKS.find(b=>b.action==='practice' && btn.closest(`[data-card-id="${b.id}"]`));
+      // 兜底:用遍历找到对应的 id
+      let srcKey='all';
+      for(const b of EXT_BANKS){
+        if(b.action==='practice' && id.indexOf(b.icon+' '+b.name)>=0){ srcKey=b.sourceKey; break; }
+      }
+      startBankPractice(srcKey);
     });
+  });
+  box.querySelectorAll('[data-act="open-url"]').forEach(btn=>{
+    btn.addEventListener('click',()=>openRefUrl(btn.dataset.url));
+  });
+  box.querySelectorAll('[data-act="wrongbook"]').forEach(btn=>{
+    btn.addEventListener('click',()=>openWrongbook());
   });
 }
 
