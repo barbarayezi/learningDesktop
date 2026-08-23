@@ -363,6 +363,36 @@ pre code{background:none;padding:0}
 .ext-count-btn:hover{border-color:var(--accent);color:var(--accent)}
 .ext-count-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
+/* ---------- Wrong Book (错题本) ---------- */
+.wb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.wb-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.wb-stat .v{font-size:24px;font-weight:800}
+.wb-stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.wb-actions{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 16px}
+.wb-dist{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.wb-dist-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.wb-dist-title{font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:8px}
+.wb-tag{display:inline-block;background:var(--surface-2);border-radius:8px;padding:3px 9px;margin:3px 4px 3px 0;font-size:13px}
+.wb-tag b{color:var(--accent)}
+.wb-muted{color:var(--text-3);font-size:13px}
+.wb-h3{font-size:15px;margin:18px 0 10px}
+.wb-list{display:flex;flex-direction:column;gap:10px}
+.wb-item{display:flex;justify-content:space-between;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;align-items:flex-start}
+.wb-item.graduated{opacity:.75;background:var(--green-soft)}
+.wb-item-main{flex:1;min-width:0}
+.wb-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:6px}
+.wb-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--text-3)}
+.wb-domain{background:var(--surface-2);border-radius:6px;padding:1px 8px}
+.wb-box{background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 8px;font-weight:600}
+.wb-item-side{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.wb-reason{font-size:12px;padding:3px 6px;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+.wb-btns{display:flex;gap:6px}
+.wb-redo,.wb-grad,.wb-ungrad{font-size:12px;padding:3px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer}
+.wb-grad{color:var(--green);border-color:var(--green)}
+.wb-grad:hover{background:var(--green);color:#fff}
+.wb-redo:hover,.wb-ungrad:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.wb-stats{grid-template-columns:repeat(2,1fr)}.wb-dist{grid-template-columns:1fr}.wb-item{flex-direction:column}}
+
 /* ---------- Ladder Page (CDGA → CDGP → CDGE) ---------- */
 .ladder-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;
@@ -961,6 +991,56 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 </style>
 </head>
 <body>
+<!-- 密码门 -->
+<div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+  <div style="text-align:center;color:#eee;max-width:360px;padding:2rem">
+    <div style="font-size:3rem;margin-bottom:0.5rem">🔐</div>
+    <h2 style="margin:0 0 0.5rem;font-size:1.4rem;color:#fff">备考资料中心</h2>
+    <p style="color:#888;font-size:0.9rem;margin:0 0 1.5rem">请输入访问密码</p>
+    <input id="loginPwd" type="password" placeholder="密码" autocomplete="off" style="width:100%;padding:12px 16px;border:1px solid #444;border-radius:8px;background:#2a2a3e;color:#fff;font-size:1rem;outline:none;box-sizing:border-box;text-align:center;letter-spacing:4px">
+    <p id="loginErr" style="color:#f87171;font-size:0.85rem;margin:0.5rem 0 0;min-height:1.2rem"></p>
+    <button id="loginBtn" style="width:100%;margin-top:0.5rem;padding:12px;border:none;border-radius:8px;background:#4f46e5;color:#fff;font-size:1rem;cursor:pointer;font-weight:600">进入</button>
+  </div>
+</div>
+<script>
+(async function(){
+  var PWD_HASH = '50faa5aefac82927ba8fd9ad7cf5bcfbd4e4af052e2d1fb4c425c66455a810a5';
+  var SESSION_KEY = '_cdga_login';
+  var SESSION_DAYS = 7;
+
+  function getSession() {
+    try { var s = localStorage.getItem(SESSION_KEY); if (!s) return null; var d = JSON.parse(s); if (Date.now() - d.ts > SESSION_DAYS*86400000) { localStorage.removeItem(SESSION_KEY); return null; } return d; } catch(e) { return null; }
+  }
+  async function sha256(str) {
+    var buf = new TextEncoder().encode(str);
+    var hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  if (getSession()) {
+    document.getElementById('loginGate').style.display = 'none';
+    return;
+  }
+
+  var btn = document.getElementById('loginBtn');
+  var inp = document.getElementById('loginPwd');
+  var err = document.getElementById('loginErr');
+
+  btn.onclick = async function() {
+    var pwd = inp.value.trim();
+    if (!pwd) { err.textContent = '请输入密码'; return; }
+    var h = await sha256(pwd);
+    if (h === PWD_HASH) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ts: Date.now()}));
+      document.getElementById('loginGate').style.display = 'none';
+    } else {
+      err.textContent = '密码错误，请重试';
+      inp.value = '';
+    }
+  };
+  inp.onkeydown = function(e) { if (e.key === 'Enter') btn.click(); };
+})();
+</script>
 <div class="app">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
@@ -1226,7 +1306,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
           <li>建「17 域术语对照表」第一版。</li>
           <li>把「户号↔合同 mapping」「ODS 同步延迟」写成第一张案例卡。</li>
         </ol>
-        <div class="doc-sub" style="border:none;margin-top:24px">文档版本：v1 · 生成日期 2026-08-13 · 基于 DAMA 中国 CDGA 公开考纲与 DMBOK2R 整理。</div>
+        <div class="doc-sub" style="border:none;margin-top:24px">文档版本：v1.1 · 生成日期 2026-08-21 · 基于 DAMA 中国 CDGA 公开考纲与 DMBOK2R 整理。</div>
       </section>
 
       <!-- CDGA CHECKLIST -->
@@ -1332,21 +1412,25 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <div class="mode-toggle" role="tablist" aria-label="练习模式切换">
           <button class="active" data-mode="study" role="tab" aria-selected="true">📖 学习模式 <span class="num">看题 · 全部可见</span></button>
           <button data-mode="practice" role="tab" aria-selected="false">🎯 刷题模式 <span class="num">逐题作答 · 进度保存</span></button>
-          <button data-mode="external" role="tab" aria-selected="false">🌐 题库汇总 <span class="num">站内开刷 · 来源筛选</span></button>
+          <button data-mode="external" role="tab" aria-selected="false">🌐 题库汇总 <span class="num">247 题站内可刷</span></button>
+          <button data-mode="wrongbook" role="tab" aria-selected="false">📒 错题本 <span class="num">收纳 · 间隔重刷</span></button>
         </div>
 
         <!-- 学习模式：保留原有按域分组 + 折叠展开答案 -->
         <div id="quiz-study">
           <div class="callout tip">自测建议：按域抽题，每天从《26 周计划》当周重点域抽 5–10 题；错题归入错题本。正确率目标：高分域≥80%、中分域≥70%、低分域≥60%。</div>
           <div id="quiz-list"></div>
-          <div class="doc-sub" style="border:none;margin-top:24px">生成日期 2026-08-13 · 共 52 题 · 原创模拟，非官方真题，以 DMBOK2R 为准。</div>
+          <div class="doc-sub" style="border:none;margin-top:24px">生成日期 2026-08-23 · 共 247 题（52 原创 + 50 原创扩展 + 100 CSDN 公开 + 30 公开材料改编 + 15 英文公开 quiz）· 原创模拟，非官方真题，以 DMBOK2R 为准。</div>
         </div>
 
         <!-- 刷题模式：隐藏答案，做题后即时反馈 + 进度持久化 -->
         <div id="quiz-practice" hidden></div>
 
-        <!-- 题库汇总：站内可刷题库（含公开/原创/合规改编题）+ 合规外部参考入口 -->
+        <!-- 题库汇总：站内可刷题库合集（原创/公开改编/英文 quiz）+ 合规外部参考入口 -->
         <div id="quiz-external" hidden></div>
+
+        <!-- 错题本：收纳元数据 + 艾宾浩斯/Leitner 间隔排程 + 毕业机制 -->
+        <div id="quiz-wrongbook" hidden></div>
       </section>
 
 
@@ -2614,7 +2698,7 @@ Date: [Month] [Year]</code></pre>
   </main>
 </div>
 
-<script src="资料/articles.js"></script>
+<script src="articles.js"></script>
 <script>
 /* ---------- 本地存储兜底（防止 iframe/隐私模式等环境没有 localStorage 导致整段脚本崩溃） ---------- */
 (function(){
@@ -3254,7 +3338,156 @@ const QUIZ=[
  {d:'十三、其余低分域',q:'数据管理员（Custodian）通常负责：',o:['数据的技术实现与保管','业务决策','仅审计','仅销售'],a:'A',e:'技术实现与保管。'},
  {d:'十三、其余低分域',q:'组织变革管理在数据治理中的作用是：',o:['培育数据文化、推动落地','无作用','仅裁员','仅采购'],a:'A',e:'培育文化、推动落地。'},
  {d:'十三、其余低分域',q:'数据管理组织与角色期望强调：',o:['明确各角色职责边界','职责模糊','无需角色','仅一人负责'],a:'A',e:'明确职责边界。'},
-/* === 基于公开材料改编 source='inspired-public'（已搜到的 DMBOK2R + 数策汇 + datafield 等公开内容，全部原创重写表述并标注 DMBOK2R 页码出处） === */
+ {d:'十一、数据管理概述',q:'关于数据的描述，以下不正确的选项是哪项？',o:['数据是为了交付、控制、保护并提升数据和信息资产的价值，在其整个生命周期中制定计划、制度、规程和实践活动，并执行和监督的过程。','数据既是对其所代表的对象的解释，也是必须解释的对象','数据代表事实，是这个世界中与某个事实结合在一起的一种真实表达。','语境可被视为数据的表示系统，该系统包括一个公共词汇表和一系列组件之间的关系，如果知道这样一个系统的约定，就可解释其中的数据。这些数据通常记录在一种特殊类型的数据——元数据中。'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:1},
+ {d:'十一、数据管理概述',q:'关于数据治理和数据管理的关系，以下哪项是错误的描述？',o:['数据管理需要系统规划的设计技能、管理硬件和构建软件的高技术技能。','数据管理是为了交付、控制、保护并提升数据和信息资产的价值，在其整个生命周期中制定计划、制度、规程和实践活动，并执行和监督的过程。','数据管理利用数据分析理解问题和揭示数据的技能、通过定义和模型达成共识的语言技能、发现客户服务商机和实现目标的战略思维。','数据治理包含数据管理的全部过程'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:2},
+ {d:'十一、数据管理概述',q:'以下关于数据的特征，哪项是正确的？',o:['数据是不具有独特属性的资产','数据的价值不可以用经济术语来表示','管理数据意味着对数据的质量管理','管理数据不需要元数据'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:3},
+ {d:'十一、数据管理概述',q:'评估数据的价值需要在组织内部持续付出的一般性成本和各类收益，这不包括：',o:['获取和存储数据的成本','如果丢失更换数据需要的成本','数据丢失对组织的影响','数据的潜在销售价格减去数据成本'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:4},
+ {d:'十二、数据处理伦理',q:'以下哪部法律是个人隐私法中，最重要的法律？',o:['《隐私法》','《个人信息保护法》','《GDPR准则（欧盟通用数据保护条例）》','PIPEDA（个人信息保护及电子文件法）'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:5},
+ {d:'一、数据治理',q:'以下哪项不属于数据治理伦理的准则？',o:['尊重他人','行善','严格','公正'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:6},
+ {d:'一、数据治理',q:'关于数据治理伦理的四大支柱，描述不正确的选项是？',o:['面向未来的数据处理条例、尊重隐私权和数据保护权利','控制个人的自主权','确定个人信息处理的责任人','数据处理产品及服务设计及工程过程中的隐私意识'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:7},
+ {d:'一、数据治理',q:'开展数据治理需要在以下几个方面建立控制机制和流程，不包括：',o:['识别、收集、记录和更新的问题','各项活动的评估和跟踪','不需要记录利益相关方的观点和可选解决方案','将问题升级到更高权限级别'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:8},
+ {d:'一、数据治理',q:'数据治理程序不包括以下哪个：',o:['可持续发展','嵌入式','可度量','可追责'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:9},
+ {d:'一、数据治理',q:'关于数据资产估值，以下哪项是不正确的估值方法：',o:['替换成本','市场价值减去存储成本','通过交易数据或售卖数据，从数据（商务智能）中发现商机获得的收入价值','兼并或收购时作为企业资产的价值'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:10},
+ {d:'一、数据治理',q:'数据治理战略的交付物不包括：',o:['章程','运营框架和职责','实施路线图','人员明细表'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:11},
+ {d:'七、数据架构',q:'以下关于架构的定义，描述有误的一项是：',o:['架构是构建一个系统的艺术和科学，以及在此过程中形成的成果系统本身。','架构是对组件要素有组织的设计，旨在优化整个结果或系统的功能、性能、可行性、成本和用户体验','数据架构包括不同层级的模型、定义、数据流，这些通常被称为数据架构的构件','数据架构活动，包括影响企业数据架构的不同角色之间的协作、思维方式和技能'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:12},
+ {d:'七、数据架构',q:'以下哪项不属于数据架构的业务驱动因素：',o:['发现商机，帮助组织快速改变产品、服务和数据','将业务需求转换为数据和应用需求，以确保能够为业务流程处理提供有效数据','管理复杂数据和信息，并传递至整个企业','确保业务和IT技术保持一致'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:13},
+ {d:'七、数据架构',q:'总体数据架构实施不包括哪项活动：',o:['使用数据架构构件（主蓝图）来定义数据需求、指导数据整合、管控数据资产，确保数据项目投入与企业战略保持一致。','与参与改进业务或IT系统开发的利益相关方合作，学习并影响他们','确保数据架构活动具备充分的资金及人员','通过数据架构及通用的数据词汇，搭建企业数据语言'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:14},
+ {d:'七、数据架构',q:'将架构嵌入到项目中采用的方式有三种，不包括以下哪种：',o:['瀑布式','迭代方式','敏捷式','渐进式'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:15},
+ {d:'七、数据架构',q:'数据架构过程中使用的工具，不包括以下哪种：',o:['数据建模工具','资产管理软件','图形设计应用','数据血缘工具'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:16},
+ {d:'七、数据架构',q:'数据架构的度量指标的三类指标，以下哪项不是属于这三个分类：',o:['架构标准接受率','业务质量改进指标','业务价值度量指标','实施趋势'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:17},
+ {d:'六、数据建模与设计',q:'以下哪种属于非关系型数据库：',o:['Neo4J','DB2','Oracle','MySQL'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:18},
+ {d:'六、数据建模与设计',q:'在数据建模过程中，需要涉及各种数据类型，描述不正确的是：',o:['类别信息：用于对事物进行分类和分配事物类型的数据','资源信息：实施操作流程所需资源的基本数据','业务事件信息：在操作过程中创建的数据','详细交易信息：详细的交易信息一定通过销售系统生成'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:19},
+ {d:'六、数据建模与设计',q:'在建模中应该尽量避免以下哪种实体对应关系：',o:['1-1','1-N','N-N','N-1'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:20},
+ {d:'六、数据建模与设计',q:'一种概念建模语言，通常基于 Fact-Based Modeling 对象的特征，以及每个对象在每个事实中所扮演的角色来描述世界。属于以下哪种建模方式：',o:['关系建模','维度建模','基于事实建模','基于时间建模'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:21},
+ {d:'六、数据建模与设计',q:'一种建模方式，包含数据拱顶（Data Vault）和锚建模。属于以下哪种建模方式：',o:['关系建模','维度建模','基于事实建模','基于时间建模'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:22},
+ {d:'六、数据建模与设计',q:'以下哪种不属于非关系型数据库：',o:['传统数据库','键值数据库','列数据库','图数据库'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:23},
+ {d:'六、数据建模与设计',q:'数据库管理的三种模式中，以下哪个描述错误：',o:['概念模式体现了正在数据库中建模企业的真实世界视图，代表了企业当前的最佳模式或经营方式。','外模式是数据库管理系统的各个用户操作与特定需求相关企业模型的子集。','内模式描述了系统的各个用户操作与特定需求相关企业模型的子集','数据的机器视图由内模式描述，描述了企业信息的存储表示形式。'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:24},
+ {d:'六、数据建模与设计',q:'关于范式的描述，以下哪个错误：',o:['第一范式：确保每个实体都有一个主键','第二范式：确保每个实体都有最小的主键，每个属性都依赖于完整的主键','第三范式：确保每个实体都没有隐藏的主键，每个属性都不依赖于键值之外的任何属性','第二范式：将实体内部的依赖关系分解成二元关系，所有联结依赖部分主键。'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:25},
+ {d:'六、数据建模与设计',q:'关于逆向工程，描述正确的是以下哪个：',o:['物理数据建模是第二步，以了解现有系统的技术设计','逻辑数据建模是第二步，以记录现有系统满足业务的解决方案','概念数据建模是第一步，用于记录现有系统中的范围和关键术语。','概念数据建模是第一步，用于记录现有系统中的范围和关键术语。'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:26},
+ {d:'六、数据建模与设计',q:'数据建模过程中，使用的工具不包含以下哪种：',o:['数据建模工具','资产管理软件','数据分析软件','数据血缘工具'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:27},
+ {d:'十一、数据管理概述',q:'在数据管理的各个角色中，最广为人知和接受的是哪个角色？',o:['CDO','数据分析师','DBA','首席数据官'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:28},
+ {d:'十一、数据管理概述',q:'下列哪项不属于分布式数据库？',o:['关系型数据库','联邦数据库','区块链数据库','可视化/云计算平台'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:29},
+ {d:'七、数据架构',q:'数据处理类型中，ACID 类型是保证数据库事务可靠性不可或缺的约束，以下哪项不属于 ACID 的性质？',o:['原子性','一致性','持久性','完整性'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:30},
+ {d:'七、数据架构',q:'以下哪项描述是正确的？',o:['ACID 属性通常用于分布式数据库','BASE 属性通常用于数据湖','ACID 属性不可用于生产环境','生产环境都使用 BASE 属性'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:31},
+ {d:'七、数据架构',q:'CAP 原则是布鲁尔定理。CAP 定理指的是分布式系统不可能同时满足 ACID 的所有要求。以下哪项不属于 CAP 原则？',o:['一致性','可用性','分区容错','隔离性'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:32},
+ {d:'七、数据架构',q:'以下哪项不属于非生产环境？',o:['任何补丁或更新进行测试的第一场所','用于实验开发或者验证相关假设的数据，或者将用户自己开发的数据从外部获得的补充数据与生产数据进行合并的环境','处理所有生产业务流程发生的技术环境','质量测试的环境'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:33},
+ {d:'七、数据架构',q:'当归档数据不同步或不一致时，以下哪项处理方法不恰当：',o:['确定是否保留历史归档或有多少历史归档需要保留，不需要的历史归档可以清除','对于重大技术调整，在调整前将归档不恢复到原始系统、升级或迁移到新系统','对于源数据库结构发生更改的高价值归档数据，恢复归档，并对数据结构进行相应更改，用新结构重新归档','对于相对低价值的低频访问归档，在源系统的技术或结构发生改变时，保持旧系统的小版本，供有限的数据访问，并根据需要用旧系统的数据格式从归档中抽取数据。'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:34},
+ {d:'七、数据架构',q:'数据存储中使用的方法不包括：',o:['事实命名标准','在低阶环境中测试','物理命名标准','所有变更操作脚本化'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:35},
+ {d:'七、数据架构',q:'缓慢变化维（SCD）的处理方法通常分为三种方式，其中处理不恰当的是：',o:['直接覆盖源系统数据。','添加维度行，需要代理键的支持。','当有维度属性发生变化时，生成一条新的维度记录，主键是新分配的代理键，通过自然键可以和原维度记录保持关联。','添加属性列，来记录该属性变化前的值。'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:36},
+ {d:'七、数据架构',q:'以下数据存储的性能度量指标中，哪项不正确？',o:['事务频率和数量','查询性能','API 服务性能','有关数据检索时间的汇总统计'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:37},
+ {d:'八、数据安全',q:'数据安全过程中的 4A 原则，不包括以下哪项：',o:['访问','权限','审计','授权'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:38},
+ {d:'八、数据安全',q:'为保证数据安全，在最终系统中使用一些方式，使用户查看到的信息是脱敏的。这种方式属于以下哪种脱敏方式：',o:['不落地脱敏','落地脱敏','动态数据脱敏','静态数据脱敏'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:39},
+ {d:'八、数据安全',q:'有一种脱敏方法是应用一个随机因素，重要到使数据无法识别。这种方式属于以下哪种脱敏：',o:['时空变异','替换','数值变异','随机选择'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:40},
+ {d:'八、数据安全',q:'来自组织本身或从外部安全公司聘任的白帽黑客试图从外部侵入系统，识别系统漏洞。这种测试方法属于以下哪种：',o:['防火墙测试','渗透测试','白盒测试','黑盒测试'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:41},
+ {d:'八、数据安全',q:'设备安全标准中，以下哪项不属于设备安全：',o:['凭据安全','使用移动设备连接的访问策略','在便携式设备上存储数据','符合记录管理策略的设备数据擦除和处置'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:42},
+ {d:'十三、其余低分域',q:'数据集成和互操作（DII）解决方案中不包括以下哪项：',o:['数据迁移和转换','数据整合到数据中心或数据集市','将供应商的软件包集成到组织的应用系统框架中','安全策略和过程的规划、建立与执行'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:43},
+ {d:'十三、其余低分域',q:'在数据集成过程中，一般常用 ETL。在哪种情况下会使用 ELT（抽取、加载、转换）过程？',o:['目标系统比源系统或中间应用系统具有大的容量','目标系统比源系统或中间应用系统具有更强的转换能力','目标系统比源系统或中间应用系统具有更强的加载能力','目标系统比源系统或中间应用系统具有更强的抽取能力'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:44},
+ {d:'十三、其余低分域',q:'在变更数据捕获的过程中，采取的方法不包括以下哪种：',o:['源系统填入特定的数据元素','源系统进程在更改数据时被添加到一个简单的对象和标识符列表，然后用于控制抽取数据的选择','捕获到变更数据后，更新源系统变更列','源系统复制已经变化的数据'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:45},
+ {d:'十三、其余低分域',q:'数据安全工具中，以下哪项不属于数据安全的工具？',o:['杀毒软件','HTTPS','防火墙','安全补丁'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:46},
+ {d:'十三、其余低分域',q:'以下哪项不属于数据集成和互操作（DII）的基本职能：',o:['数据治理','数据整合到数据中心或集市','数据迁移和转换','数据中心分发'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:47},
+ {d:'十三、其余低分域',q:'数据集成和互操作（DII）的业务驱动因素不是以下哪项：',o:['对数据移动进行有效管理','维护管理成本','确保数据业务和IT的一致性','管理数据集成的复杂性'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:48},
+ {d:'十三、其余低分域',q:'数据集成的目标是以下哪项：',o:['及时以数据消费者所需的格式提供数据','将数据物理地或虚拟地合并到数据中心','通过开发共享模型和接口来降低管理解决方案的成本和复杂度','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:49},
+ {d:'十三、其余低分域',q:'设计数据集成解决方案中，不正确的描述是：',o:['包括所涉及数据结构的清单（持久和可传递、现有和必需）、数据流的编排和频率指示、法规、安全问题和补救措施','临时数据结构包括主数据管理中心、数据仓库和数据集市、操作型数据存储库','数据集成解决方案中的数据流必须做好设计和记录','持久化数据结构包括数据库'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r1',n:50},
+ {d:'十三、其余低分域',q:'文件和内容管理的目标不包括哪项？',o:['确保高效采集和使用非结构化数据和信息','确保结构化和非结构化数据之间的整合能力','遵守法律义务并达到客户预期','组织中的每个人都应在保护组织的未来方面发挥作用'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:1},
+ {d:'十三、其余低分域',q:'内容分发方式不包含哪项？',o:['推式','流式','拉式','交互式'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:2},
+ {d:'十三、其余低分域',q:'将逻辑内容转换为内容类型、属性和数据类型的过程属于哪项工作？',o:['内容管理','内容元数据','内容建模','内容分发'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:3},
+ {d:'十三、其余低分域',q:'关于文件和档案的描述，不正确的是？',o:['文件管理是档案管理的一部分','文件管理包括文件和档案的整个生命周期控制','档案生命周期：从创建到处置','只有部分文件才能称为档案'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:4},
+ {d:'十三、其余低分域',q:'文件管理的业务驱动因素不包含哪项？',o:['法规遵从性要求','诉讼响应能力和电子取证能力','数据安全要求','业务连续性要求'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:5},
+ {d:'十三、其余低分域',q:'关于内容管理工具的描述不正确的是？',o:['企业内容管理系统不包括档案管理系统','协作工具用于团队文件管理','XML 整合结构化数据到非结构化数据库','OWL 是 RDF 的词汇表扩展'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:6},
+ {d:'十三、其余低分域',q:'文件和内容治理的驱动因素是？',o:['法律和法规遵从','档案的合理处置','对电子取证的前瞻性准备','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:7},
+ {d:'十三、其余低分域',q:'衡量档案管理成功的标准不包括？',o:['用户文件被认定为公司档案的比例','公司档案得到控制的比例','档案应用保管规则的比例','ECM 项目数和用户满意度'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:8},
+ {d:'五、参考数据和主数据',q:'关于数据共享架构描述正确的是？',o:['注册表是主数据记录的索引','交易中心实现主数据访问和更新','混合模式是注册表和交易中心的混合','主数据在公共存储库中合并共享'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:9},
+ {d:'五、参考数据和主数据',q:'主数据管理的业务驱动因素不正确的是？',o:['满足组织数据需求','提高效率','管理数据集成的成本','管理数据质量'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:10},
+ {d:'五、参考数据和主数据',q:'主数据管理生命周期关键活动不包括？',o:['修正未正确匹配的实例','实现可信数据的跨程序访问','识别被反复引用的角色、组织等','强制使用主数据'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:11},
+ {d:'五、参考数据和主数据',q:'参考数据和主数据治理的度量指标不包括？',o:['支持商务智能活动','数据质量和遵从性','服务水平协议','数据变更活动'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:12},
+ {d:'四、数据仓库与BI',q:'数据仓库建设方法描述正确的是？',o:['数据仓库存储来自其他系统的数据','存储行为不包括整合数据以提升价值','数据仓库不便于访问和分析','组织不希望利益相关方访问可靠数据'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:13},
+ {d:'四、数据仓库与BI',q:'加载数据处理的方式包括？',o:['历史数据处理','批量变更数据捕获','准实时和实时数据加载','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:14},
+ {d:'四、数据仓库与BI',q:'数据仓库工具不正确的一项是？',o:['元数据存储库','数据资产管理软件','数据集成工具','商务智能工具'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:15},
+ {d:'四、数据仓库与BI',q:'数据仓库和商务智能治理的度量指标不正确的一项是？',o:['使用指标','主题域覆盖率','响应时间和性能指标','客户满意度'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:16},
+ {d:'四、数据仓库与BI',q:'可靠元数据管理的作用包括？',o:['提高数据可信度','增加战略信息价值','提高运营效率','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:17},
+ {d:'三、元数据管理',q:'管理不善导致的问题不包括？',o:['冗余数据和流程','重复的元数据存储','改进数据使用者和 IT 的沟通','不一致的数据定义'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:18},
+ {d:'三、元数据管理',q:'元数据的三种类型不包括？',o:['管理元数据','业务元数据','操作元数据','技术元数据'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:19},
+ {d:'三、元数据管理',q:'集中式元数据架构的缺点不包括？',o:['需同步元数据更改','分布式查询可能提高效率','维护成本高','验证自定义代码增加要求'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:20},
+ {d:'三、元数据管理',q:'分布式元数据架构的缺点不包括？',o:['不支持手动插入的元数据项','需统一展示不同系统的元数据','查询受源系统可用性影响','需自定义模块抽取元数据'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:21},
+ {d:'三、元数据管理',q:'不属于元数据架构类型的是？',o:['集中式','分布式','混合式','单一式'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:22},
+ {d:'三、元数据管理',q:'元数据管理活动描述不正确的是？',o:['加载、探测和标记数据资产','连接数据集元数据维护为 NoSQL 提供支持','未更新的元数据报告','记录与源的映射关系'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:23},
+ {d:'二、数据质量',q:'数据质量管理的业务驱动因素描述不正确的是？',o:['提高组织数据价值和利用机会','提高低质量数据的风险和成本','提高组织效率和生产力','降低低质量数据的风险和成本'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:24},
+ {d:'二、数据质量',q:'不属于数据质量维度的是？',o:['健壮性和灵活性不属于应变性','健壮性和灵活性属于应变性','一致性指模型语义一致性','一致性指跨实体属性的结构一致性'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:25},
+ {d:'二、数据质量',q:'不属于系统设计引起的问题是？',o:['未能执行参照完整性','未执行唯一性约束','编码不准确和分歧','变更的数据结构'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（DMBOK 11-数据质量：编码不准确属于数据输入问题，不是系统设计问题）',s:'csdn-r2',n:26},
+ {d:'二、数据质量',q:'属于数据处理与功能引起的问题是？',o:['数据输入接口','列表条目防止','过时的业务规则','业务流程变更'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（DMBOK 11 数据质量：业务规则过时属处理功能问题）',s:'csdn-r2',n:27},
+ {d:'二、数据质量',q:'关于数据剖析描述正确的是？',o:['不包括跨列分析','用于检查数据和评估质量','不使用统计技术发现数据质量','不能识别内容和结构模式'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:28},
+ {d:'二、数据质量',q:'初始数据质量评估 POC 的第一步是？',o:['定义评估目标','确定评估的数据','识别数据用途和使用者','记录不一致级别'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:29},
+ {d:'二、数据质量',q:'不属于数据质量活动的是？',o:['定义数据质量战略','识别关键数据和业务规则','执行最终数据质量评估','定义数据质量改进目标'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:30},
+ {d:'二、数据质量',q:'不属于数据质量工具的是？',o:['数据剖析工具','数据查询工具','建模和 ETL 工具','图形资产管理软件'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（图形资产管理软件不属 DQ 工具）',s:'csdn-r2',n:31},
+ {d:'二、数据质量',q:'有效数据质量指标不包括？',o:['可度量','业务相关','可接受','可改进'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（有效指标四要素：可度量+业务相关+可接受+被理解，可改进不是标准说法）',s:'csdn-r2',n:32},
+ {d:'九、大数据和数据科学',q:'大数据特征不包括？',o:['数据量大','数据准确性高','数据波动性大','数据更新快'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:33},
+ {d:'九、大数据和数据科学',q:'基于通用规则的机器学习类型是？',o:['监督学习','无监督学习','强化学习','无强化学习'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:34},
+ {d:'九、大数据和数据科学',q:'分析语义和情绪预测情景的数据科学方法是？',o:['机器学习','语义分析','预测分析','文本挖掘'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（语义+情绪→文本挖掘）',s:'csdn-r2',n:35},
+ {d:'九、大数据和数据科学',q:'数据混搭的描述是？',o:['规范分析','预测分析','数据混搭','数据可视化'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:36},
+ {d:'九、大数据和数据科学',q:'关于数据湖描述错误的是？',o:['数据科学家可挖掘分析的环境','原始数据的集中存储区域','一般用于分析型业务系统生产环境','数据仓库明细历史的备用存储'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:37},
+ {d:'十、成熟度评估',q:'能力成熟度评估中无意义的等级是？',o:['3级','2级','1级','0级'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:38},
+ {d:'十、成熟度评估',q:'成熟度评估报告结果包括？',o:['①②③','①②③④','①②③④⑤','②③④⑤'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:39},
+ {d:'十、成熟度评估',q:'数据成熟度治理的度量指标不包括？',o:['风险敞口','DMMA 过程监督','DMMA 评级','变革速度'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（DMMA 评级+变革速度属治理指标；过程监督不是度量指标）',s:'csdn-r2',n:40},
+ {d:'十三、其余低分域',q:'数据管理组织结构描述不正确的是？',o:['分散模式组织结构扁平','分散模式决策更困难','集中模式有明确决策人','联邦模式无需平衡业务自治与企业需求'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:41},
+ {d:'十三、其余低分域',q:'数据管理组织变更的成功关键因素不是？',o:['规避利益相关方','明确愿景','指导培训','高管支持'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:42},
+ {d:'十三、其余低分域',q:'数据架构师与数据质量分析师的角色分别是？',o:['IT 角色、IT 角色','混合角色、IT 角色','IT 角色、混合角色','混合角色、混合角色'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（DMBOK：架构师=IT 角色；DQ 分析师=混合角色）',s:'csdn-r2',n:43},
+ {d:'十三、其余低分域',q:'全球化组织管理最重要的是？',o:['遵守标准','同步流程','发展规模经济','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:44},
+ {d:'十三、其余低分域',q:'关于变革法则描述错误的是？',o:['组织不变革，人就变','人们不会抗拒变革','除非有人推动，否则变革止步','不考虑人的因素则变革容易'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:45},
+ {d:'十三、其余低分域',q:'变更进程的正确顺序是？',o:['(1)(2)(3)','(1)(3)(2)','(2)(1)(3)','(2)(3)(1)'],a:'A',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:46},
+ {d:'十三、其余低分域',q:'不属于科特变革管理八大误区的是？',o:['过于自满','未能建立指导联盟','创造短期收益','忽视将变革融入文化'],a:'C',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:47},
+ {d:'十三、其余低分域',q:'总体沟通计划的共性不包括？',o:['明确目标和期望结果','由关键消息构成','为受众量身定制','不通过媒介传达'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:48},
+ {d:'十三、其余低分域',q:'沟通计划的要素包括？',o:['信息','受众','风格','以上全部'],a:'D',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883',s:'csdn-r2',n:49},
+ {d:'十三、其余低分域',q:'DMMA 对文化的积极影响不包括？',o:['介绍数据管理概念','减少实施项目成本','厘清利益相关方角色','强调数据作为关键资产'],a:'B',e:'网友回忆版 · CC BY-SA 4.0 · weixin_44586883 · 答案推断：推断（DMMA 本身不直接减少实施项目成本；其他三项均是文化影响）',s:'csdn-r2',n:50},
+ {d:'一、数据治理',q:'数据治理的定义强调的是？',o:['仅合规存档','仅采购软件','仅技术运维','在数据管理和使用层面进行规划、监督和控制'],a:'D',e:'数据治理是对数据管理和使用进行规划、监督与控制的活动。',s:'original',n:1},
+ {d:'一、数据治理',q:'数据治理委员会的组成通常不包括？',o:['仅外部竞争对手','业务高管','数据所有者','IT负责人'],a:'A',e:'治理委员会由组织内部高管与各干系人组成。',s:'original',n:2},
+ {d:'一、数据治理',q:'数据治理的核心目标之一是？',o:['增加数据冗余','确保数据被恰当地管理并创造价值','仅合规存档','消除所有IT系统'],a:'B',e:'治理目标是使数据被有效管理并发挥业务价值。',s:'original',n:3},
+ {d:'一、数据治理',q:'数据治理与数据管理的关系是？',o:['治理确保管理活动方向正确、受监督','二者无关','治理等于管理','管理包含治理'],a:'A',e:'治理为管理提供方向、监督与问责机制。',s:'original',n:4},
+ {d:'一、数据治理',q:'数据治理框架通常包含？',o:['仅服务器','仅文档模板','原则、组织、政策、流程、指标','仅软件工具'],a:'C',e:'框架包含原则/组织/政策/流程/度量。',s:'original',n:5},
+ {d:'二、数据质量',q:'数据质量维度“准确性”是指？',o:['数据格式美观','数据正确反映真实世界','数据量最大','数据最新'],a:'B',e:'准确性=数据正确描述真实对象/事件。',s:'original',n:6},
+ {d:'二、数据质量',q:'以下不属于数据质量维度的是？',o:['数据颜色','完整性','一致性','及时性'],a:'A',e:'颜色不是数据质量维度。',s:'original',n:7},
+ {d:'二、数据质量',q:'数据质量问题的根本原因通常来自？',o:['仅硬件','源系统、流程、人员、技术多方面','仅天气','仅网络故障'],a:'B',e:'质量问题多源于流程与数据源头。',s:'original',n:8},
+ {d:'二、数据质量',q:'数据质量管理的核心活动包括？',o:['仅删除脏数据','仅备份','定义标准、测量、监控、改进','仅加密'],a:'C',e:'含定义/测量/监控/改进闭环。',s:'original',n:9},
+ {d:'三、元数据管理',q:'元数据是指？',o:['硬件配置','网络拓扑','数据库本身','关于数据的数据'],a:'D',e:'元数据是描述数据的数据。',s:'original',n:10},
+ {d:'三、元数据管理',q:'以下属于技术元数据的是？',o:['员工姓名','表结构、字段类型、ETL映射','销售额','客户地址'],a:'B',e:'技术元数据描述数据结构与处理。',s:'original',n:11},
+ {d:'三、元数据管理',q:'业务元数据通常包含？',o:['磁盘容量','IP地址','CPU型号','业务定义、口径、负责人'],a:'D',e:'业务元数据描述业务含义与口径。',s:'original',n:12},
+ {d:'三、元数据管理',q:'元数据存储库（Metadata Repository）的作用是？',o:['仅做备份','集中管理元数据、支持血缘与影响分析','仅归档','仅加密'],a:'B',e:'存储库支撑血缘/影响分析。',s:'original',n:13},
+ {d:'四、数据仓库与BI',q:'数据仓库的主要特征是？',o:['仅缓存','仅消息队列','仅日志','面向主题、集成、相对稳定、反映历史'],a:'D',e:'Inmon 定义四特征。',s:'original',n:14},
+ {d:'四、数据仓库与BI',q:'维度建模中的“事实表”存储？',o:['仅维度名称','业务过程的可度量数值','仅主键','仅注释'],a:'B',e:'事实表存度量值。',s:'original',n:15},
+ {d:'四、数据仓库与BI',q:'星型模型中，事实表通过什么与维度表关联？',o:['外键','仅索引','仅视图','仅触发器'],a:'A',e:'通过外键关联维度表。',s:'original',n:16},
+ {d:'四、数据仓库与BI',q:'BI（商业智能）的主要目的是？',o:['仅发送邮件','支持决策分析','仅存储文件','仅加密'],a:'B',e:'BI 支撑管理决策。',s:'original',n:17},
+ {d:'五、参考数据和主数据',q:'主数据（Master Data）是指？',o:['仅备份','一次性日志','临时缓存','跨系统共享的核心业务实体数据'],a:'D',e:'主数据是核心共享业务实体。',s:'original',n:18},
+ {d:'五、参考数据和主数据',q:'参考数据（Reference Data）通常用来？',o:['存储交易流水','缓存会话','记录日志','对数据进行分类和编码（如国家代码）'],a:'D',e:'参考数据用于分类与编码。',s:'original',n:19},
+ {d:'五、参考数据和主数据',q:'MDM（主数据管理）的目标包括？',o:['仅加密','增加冗余','统一、准确、权威的主数据视图','删除所有数据'],a:'C',e:'MDM 提供统一权威视图。',s:'original',n:20},
+ {d:'五、参考数据和主数据',q:'以下属于主数据的是？',o:['客户、产品、供应商','系统日志','临时文件','缓存'],a:'A',e:'客户/产品/供应商是典型主数据。',s:'original',n:21},
+ {d:'五、参考数据和主数据',q:'主数据管理的典型模式不包括？',o:['共存式','注册式','完全随机分布','集中式'],a:'C',e:'随机分布不是 MDM 模式。',s:'original',n:22},
+ {d:'六、数据建模与设计',q:'概念模型主要描述？',o:['业务实体及关系（ER）','物理存储参数','索引结构','磁盘阵列'],a:'A',e:'概念模型描述业务实体关系。',s:'original',n:23},
+ {d:'六、数据建模与设计',q:'规范化（Normalization）的主要目的是？',o:['增加冗余','删除索引','加密字段','减少数据冗余、避免更新异常'],a:'D',e:'规范化消除冗余与更新异常。',s:'original',n:24},
+ {d:'六、数据建模与设计',q:'第三范式（3NF）要求？',o:['无主键','消除传递依赖','允许任意冗余','仅第一列唯一'],a:'B',e:'3NF 消除传递依赖。',s:'original',n:25},
+ {d:'六、数据建模与设计',q:'逻辑模型与物理模型的区别在于？',o:['物理模型考虑存储、索引、性能','均不涉及实体','二者完全相同','逻辑模型管硬件'],a:'A',e:'物理模型考虑实现细节。',s:'original',n:26},
+ {d:'七、数据架构',q:'数据架构的主要交付物包括？',o:['数据模型、数据流、数据资产目录','仅服务器清单','仅发票','仅网线图'],a:'A',e:'架构含模型/流/目录。',s:'original',n:27},
+ {d:'七、数据架构',q:'企业数据架构与IT架构的关系是？',o:['数据架构是企业架构的重要组成部分','数据架构包含IT架构','IT架构仅指网络','二者无关'],a:'A',e:'数据架构属企业架构一部分。',s:'original',n:28},
+ {d:'七、数据架构',q:'数据流图（DFD）用于描述？',o:['硬件温度','股票价格','数据在系统间的流动与处理','员工工资'],a:'C',e:'DFD 描述数据流动。',s:'original',n:29},
+ {d:'七、数据架构',q:'数据资产目录的作用是？',o:['仅删除','仅加密','仅备份','盘点并管理组织数据资产'],a:'D',e:'目录用于数据资产盘点。',s:'original',n:30},
+ {d:'八、数据安全',q:'数据安全的目标包括？',o:['仅备份','仅压缩','机密性、完整性、可用性（CIA）','仅美观'],a:'C',e:'CIA 三属性。',s:'original',n:31},
+ {d:'八、数据安全',q:'以下属于“机密性”控制措施的是？',o:['增大字体','删除日志','加密、访问控制','提高亮度'],a:'C',e:'加密与访问控制保障机密性。',s:'original',n:32},
+ {d:'八、数据安全',q:'数据分级分类的目的是？',o:['统一不区分','仅加密全部','按敏感度实施差异化保护','仅公开全部'],a:'C',e:'分级分类实现差异化防护。',s:'original',n:33},
+ {d:'八、数据安全',q:'最小权限原则是指？',o:['权限越大越好','无需权限','全员管理员','用户仅获完成工作所需的最小权限'],a:'D',e:'最小权限降低风险。',s:'original',n:34},
+ {d:'八、数据安全',q:'以下属于数据脱敏常用方法的是？',o:['提高分辨率','公开全部','增加冗余','掩码替换、泛化、加密'],a:'D',e:'脱敏含 masking/泛化等。',s:'original',n:35},
+ {d:'九、大数据和数据科学',q:'大数据的“4V”特征通常指？',o:['仅颜色','仅速度','Volume、Velocity、Variety、Veracity','仅大小'],a:'C',e:'4V=体量/速度/多样/真实。',s:'original',n:36},
+ {d:'九、大数据和数据科学',q:'数据科学的主要任务是？',o:['从数据中提取知识与预测','仅加密','仅删除','仅存储'],a:'A',e:'数据科学重在洞察与预测。',s:'original',n:37},
+ {d:'九、大数据和数据科学',q:'以下属于非结构化数据的是？',o:['CSV','关系表','Excel','文本、图像、音视频'],a:'D',e:'文本/图像属非结构化。',s:'original',n:38},
+ {d:'九、大数据和数据科学',q:'机器学习与传统规则系统的区别在于？',o:['完全手工写死规则','不能预测','不需要数据','从数据中自动学习规律'],a:'D',e:'ML 从数据中学习规律。',s:'original',n:39},
+ {d:'十、成熟度评估',q:'数据管理成熟度模型通常将等级划分为？',o:['仅随机','初始级→可重复→已定义→已管理→优化级','仅两级','无等级'],a:'B',e:'典型五级模型。',s:'original',n:40},
+ {d:'十、成熟度评估',q:'成熟度评估的主要作用是？',o:['仅评分','识别差距、制定改进路线','仅排名','仅罚款'],a:'B',e:'评估用于找差距定路线。',s:'original',n:41},
+ {d:'十、成熟度评估',q:'评估数据管理成熟度时通常关注？',o:['仅硬件','组织、流程、技术、数据本身','仅工资','仅股价'],a:'B',e:'多维度综合评估。',s:'original',n:42},
+ {d:'十、成熟度评估',q:'提升成熟度的最优策略是？',o:['仅买工具','什么都不做','全部同时推翻','结合业务价值优先改进关键域'],a:'D',e:'按业务价值优先级推进。',s:'original',n:43},
+ {d:'十一、数据管理概述',q:'DAMA 数据管理知识体系（DMBOK）涵盖？',o:['仅数据库','数据治理及多个核心知识领域','仅网络','仅硬件'],a:'B',e:'DMBOK 含治理+核心知识域。',s:'original',n:44},
+ {d:'十一、数据管理概述',q:'数据被视为？',o:['无价值副产品','仅技术细节','组织资产，具有价值需管理','仅合规负担'],a:'C',e:'数据是有价值的企业资产。',s:'original',n:45},
+ {d:'十一、数据管理概述',q:'数据生命周期通常涵盖？',o:['仅创建','创建、存储、使用、共享、归档/销毁','无周期','仅删除'],a:'B',e:'全生命周期管理。',s:'original',n:46},
+ {d:'十二、数据处理伦理',q:'数据处理伦理的四大支柱通常包括？',o:['尊重、行善、公正、透明问责','仅美观','仅利润','仅速度'],a:'A',e:'伦理四支柱。',s:'original',n:47},
+ {d:'十二、数据处理伦理',q:'知情同意原则要求？',o:['强制使用','数据收集使用前告知并获得同意','无需告知','偷偷收集'],a:'B',e:'知情同意是基本伦理。',s:'original',n:48},
+ {d:'十二、数据处理伦理',q:'以下属于隐私保护法规的是？',o:['仅税法','仅交通法','仅商法','《个人信息保护法》'],a:'D',e:'个保法保护个人信息。',s:'original',n:49},
+ {d:'十二、数据处理伦理',q:'算法偏见可能带来？',o:['歧视性决策与合规风险','无影响','完全公平','仅提速'],a:'A',e:'偏见导致歧视与风险。',s:'original',n:50},
 {d:'一、数据治理',q:'分散式数据管理运营模式最适合下列哪类组织：',o:['部门业务高度独立、需各自响应','全组织强求统一标准','需跨域集中治理','只有研发部的初创团队'],a:'A',source:'inspired-public',e:'DMBOK2R 第 16 章运营模式：分散式适合业务部门独立性强的组织，强调贴近业务。集中式/混合式分别适合统一管控和兼顾两种需求。'},
 {d:'一、数据治理',q:'下列哪一项不应作为数据治理 KPI：',o:['数据问题平均解决时长','关键标准覆盖率与一致性','直接营业收入','元数据完整度'],a:'C',source:'inspired-public',e:'DMBOK2R 第 5 章：治理度量侧重合规、效率、质量的指标；直接营收受多重因素影响，不应作为治理 KPI。'},
 {d:'一、数据治理',q:'数据治理办公室(DGO)与数据治理委员会的差别是：',o:['委员会仅做培训','DGO 做决策审批，委员会做日常执行','DGO 负责日常执行与协调，委员会负责决策与监督','二者职责完全相同'],a:'C',source:'inspired-public',e:'DMBOK2R 第 16 章角色矩阵：委员会=决策与监督，DGO=日常执行、协调与推动。'},
@@ -3312,22 +3545,40 @@ const QUIZ_STORE='cdga-quiz-progress-v1';
 
 /* ============================================================
    题库汇总 EXT_BANKS：站内可刷题库 + 合规外部参考入口
-   - action='practice'    : 主按钮"站内开刷 →",切换到刷题模式并应用 source 筛选
-   - action='open-url'    : 主按钮"打开参考 →",新标签页合规跳转(不搬运其内容)
-   - action='go-wrongbook' : 主按钮"打开本站错题本"
-   - sourceKey            : 用于刷题模式的 source 筛选(与题目 q.source 对应)
+   - action='practice'    : 主按钮"站内开刷 →"，切刷题模式并应用 source 筛选
+   - action='open-url'    : 主按钮"打开参考 →"，新标签页合规跳转(不搬运内容)
+   - action='go-wrongbook': 主按钮"打开错题本 →"，切到错题本 tab
+   - sourceKey            : 刷题模式 source 筛选值(经 qSource 归一化)
    注意：必须在 quizMode 初始化前定义，避免 applyQuizMode 调用
    renderExtBanks 时访问 EXT_BANKS 出现暂时性死区（TDZ）错误。
    ============================================================ */
 const EXT_BANKS=[
-  {id:'self',icon:'📝',name:'本站原创 52 题',count:'52',type:'本站原创',desc:'助手基于 DMBOK2R 公开大纲原创编写，覆盖 13 个知识域。非 DAMA 官方真题。',action:'practice',sourceKey:'self',primary:true},
-  {id:'inspired-public',icon:'📚',name:'基于公开材料改编题库',count:'动态',type:'基于 DMBOK2R + 公开 quiz 改编',desc:'基于 DMBOK2R 教材 + datafield.dev / 数策汇 CSDN 等公开题库考查点，原创重写题目并标注页码出处。',action:'practice',sourceKey:'inspired-public'},
-  {id:'datafield',icon:'🌐',name:'datafield.dev 英文 quiz',count:'动态',type:'公开英文 quiz',desc:'datafield.dev 网站基于 DMBOK2 章节配套 quiz，内容稳定公开，作英文补充练习。',action:'practice',sourceKey:'datafield'},
-  {id:'educity-dama',icon:'🔗',name:'希赛网 CDGA 专区（合规参考）',count:'50+',type:'合规参考(不搬运)',desc:'免费试听视频 + 《核心考点精练50题》PDF + 必背要点汇总，需免费注册后下载。本站不复制其题目内容，仅做合规入口参考。',action:'open-url',url:'https://www.educity.cn/dama/'},
-  {id:'dama-china',icon:'🏛️',name:'DAMA China 官方（合规参考）',count:'大纲/样题',type:'合规参考(不搬运)',desc:'中国 DAMA 官方站点，考纲与样题风格最接近真实考试。新标签页合规跳转。',action:'open-url',url:'http://www.dama-china.org/'},
-  {id:'local-wrong',icon:'📕',name:'本站错题本',count:'动态',type:'内部功能',desc:'在「刷题模式」中自动归集的错题，考前必重刷。',action:'go-wrongbook'}
+  {id:'self',icon:'📝',name:'本站原创 52 题',count:'52',type:'本站原创',desc:'基于 DMBOK2R 公开大纲原创编写，覆盖 13 个知识域。',action:'practice',sourceKey:'self',primary:true},
+  {id:'original',icon:'✍️',name:'原创扩展 50 题',count:'50',type:'本站原创扩展',desc:'基于教材原创扩展，覆盖主要知识域（2026-08-21 会话并入）。',action:'practice',sourceKey:'original'},
+  {id:'csdn-public',icon:'📰',name:'CSDN 公开整理 100 题',count:'100',type:'公开整理稿(CC BY-SA)',desc:'来自 CSDN 用户公开整理稿，题目标注 CC BY-SA 与出处作者。',action:'practice',sourceKey:'csdn-public'},
+  {id:'inspired-public',icon:'📚',name:'基于公开材料改编 30 题',count:'30',type:'基于 DMBOK2R + 公开 quiz 改编',desc:'基于 DMBOK2R 教材 + datafield.dev 等公开考查点原创重写并标注页码出处。',action:'practice',sourceKey:'inspired-public'},
+  {id:'datafield',icon:'🌐',name:'datafield.dev 英文 quiz 15 题',count:'15',type:'公开英文 quiz',desc:'datafield.dev 基于 DMBOK2 章节 quiz（英文），作双语补充练习。',action:'practice',sourceKey:'datafield'},
+  {id:'educity-dama',icon:'🔗',name:'希赛网 CDGA 专区（合规参考）',count:'50+',type:'合规参考(不搬运)',desc:'免费试听视频 + 必背要点等，需免费注册。本站不复制其题目内容，仅作合规入口参考。',action:'open-url',url:'https://www.educity.cn/dama/'},
+  {id:'dama-china',icon:'🏛️',name:'DAMA China 官方（合规参考）',count:'大纲/样题',type:'合规参考(不搬运)',desc:'中国 DAMA 官方站点，考纲与样题风格最接近真实考试。',action:'open-url',url:'http://www.dama-china.org/'},
+  {id:'local-wrong',icon:'📕',name:'本站错题本',count:'动态',type:'内部功能',desc:'刷题答错自动收录，Leitner 间隔排程复习，毕业出册。',action:'go-wrongbook'}
 ];
 const EXT_BANK_STORE='cdga-ext-banks-v1';
+
+// 统一题目来源归一化：source:'inspired-public'/'datafield' > s:'original'/'csdn-r1'/'csdn-r2' > self
+function qSource(q){ return q.source || (q.s==='original'?'original':(q.s==='csdn-r1'||q.s==='csdn-r2')?'csdn-public':(q.s||'self')); }
+// 来源筛选 chips 配置（与 qSource 输出对齐）
+const QUIZ_SOURCE_CHIPS=[
+  {k:'self',l:'本站原创'},
+  {k:'original',l:'原创扩展'},
+  {k:'csdn-public',l:'CSDN 公开'},
+  {k:'inspired-public',l:'基于公开材料改编'},
+  {k:'datafield',l:'英文公开 quiz'}
+];
+function _countQuizBySource(){
+  const m={__all__:QUIZ.length};
+  QUIZ.forEach(q=>{ const s=qSource(q); m[s]=(m[s]||0)+1; });
+  return m;
+}
 
 // 当前模式（持久化）
 let quizMode=localStorage.getItem('cdga-quiz-mode')||'study';
@@ -3389,13 +3640,37 @@ const practice={
   answers:{},
   // 当前题目在 QUIZ 中的全局索引
   currentIdx:0,
-  // 按域筛选，all 表示全部
+  // 按域筛选，all 表示全部；'wrong' 表示只看错题
   domainFilter:'all',
-  // 按来源筛选(对应 QUIZ 中题目的 q.source 字段,无 source 视为 'self'),
-  // all / self / inspired-public / datafield
-  sourceFilter:'all',
-  finished:false
+  finished:false,
+  // ✨ 2026-08-21 刷题体验升级：
+  pickSize:5,         // 每日抽题数（all/域名 下生效，域内题数不足则全展示）
+  shuffle:true,       // 是否打乱顺序（默认开，避免凭位置记忆）
+  todaySeed:0,        // 种子版本号：清空答案/切换洗牌时+1，保证"再来一轮"换题
+  // ✨ 2026-08-23 来源筛选：all 或 qSource 输出（self/original/csdn-public/inspired-public/datafield）
+  sourceFilter:'all'
 };
+
+// ✨ 日期 → 稳定种子（同一天刷出来顺序一样，跨日自然换）
+function _todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function _dateSeed(s){
+  let h=2166136261>>>0;
+  for(let i=0;i<s.length;i++){
+    h^=s.charCodeAt(i);
+    h=Math.imul(h,16777619)>>>0;
+  }
+  return h>>>0;
+}
+function _rngFrom(seed){
+  let s=seed>>>0;
+  return ()=>{
+    s=(Math.imul(s,1664525)+1013904223)>>>0;
+    return s/0x100000000;
+  };
+}
 
 function loadPractice(){
   try{
@@ -3404,34 +3679,66 @@ function loadPractice(){
       practice.answers=s.answers||{};
       practice.currentIdx=s.currentIdx||0;
       practice.domainFilter=s.domainFilter||'all';
-      practice.sourceFilter=s.sourceFilter||'all';
       practice.finished=!!s.finished;
+      practice.pickSize=s.pickSize||5;
+      practice.shuffle=s.shuffle!==false;
+      practice.todaySeed=s.todaySeed||0;
+      practice.reviewSnapshot=s.reviewSnapshot||null;
+      practice.sourceFilter=s.sourceFilter||'all';
     }
   }catch(e){}
 }
 function savePractice(){
   try{localStorage.setItem(QUIZ_STORE,JSON.stringify({
     answers:practice.answers, currentIdx:practice.currentIdx,
-    domainFilter:practice.domainFilter, sourceFilter:practice.sourceFilter,
-    finished:practice.finished
+    domainFilter:practice.domainFilter, finished:practice.finished,
+    pickSize:practice.pickSize, shuffle:practice.shuffle,
+    todaySeed:practice.todaySeed||0,
+    reviewSnapshot:practice.reviewSnapshot||null,
+    sourceFilter:practice.sourceFilter||'all'
   }));}catch(e){}
 }
 function resetPractice(){
   practice.answers={}; practice.currentIdx=0;
-  practice.finished=false; savePractice(); renderPractice();
+  practice.finished=false;
+  // ✨ 加种子版本号 → 下次 practiceList() 用新种子重新洗牌，相当于"换一组题"
+  practice.todaySeed=(practice.todaySeed||0)+1;
+  savePractice(); renderPractice();
 }
 
-// 当前筛选下的题目列表
+// 当前筛选下的题目列表（带每日抽题 + 打乱）
 function practiceList(){
-  const df=practice.domainFilter, sf=practice.sourceFilter;
-  return QUIZ.map((q,i)=>({q,i})).filter(x=>{
-    if(df!=='all' && x.q.d!==df) return false;
-    if(sf!=='all'){
-      const src=x.q.source||'self';
-      if(src!==sf) return false;
+  // 错题模式：直接列出所有做错的题（不抽、不打乱）
+  if(practice.domainFilter==='wrong'){
+    return QUIZ.map((q,i)=>({q,i}))
+      .filter(({q,i})=>practice.answers[i] && practice.answers[i]!==q.a);
+  }
+  // 错题复习 session：用进入时固定的快照（避免答题升级盒级后列表动态缩短）
+  if(practice.domainFilter==='__wrong_today__'){
+    const snap=practice.reviewSnapshot||[];
+    return snap.map(i=>({q:QUIZ[i], i})).filter(x=>x.q);
+  }
+  // 普通模式：先按域筛池子，再按来源筛（sourceFilter 只在普通/每日抽题模式生效）
+  let pool = practice.domainFilter==='all'
+    ? QUIZ.map((q,i)=>({q,i}))
+    : QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d===practice.domainFilter);
+  if(practice.sourceFilter && practice.sourceFilter!=='all'){
+    pool = pool.filter(x=>qSource(x.q)===practice.sourceFilter);
+  }
+  if(pool.length===0) return [];
+  // ✨ 用今天日期 + 域名 + 来源 + 种子版本号 当种子 → 同一天稳定，跨日自然换
+  const seed = _dateSeed(_todayISO()+':'+practice.domainFilter+':'+(practice.sourceFilter||'all')+':'+(practice.todaySeed||0));
+  const rng = _rngFrom(seed);
+  const arr = pool.slice();
+  if(practice.shuffle){
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(rng()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
     }
-    return true;
-  });
+  }
+  // 每日抽 N 道（池子够才抽，否则全展示）
+  const n = practice.pickSize||arr.length;
+  return arr.length>n ? arr.slice(0,n) : arr;
 }
 
 // 渲染：HUD + 题目卡片（或结果）
@@ -3471,16 +3778,15 @@ function renderPractice(){
       <div class="progress" title="${progressPct}% 已作答"><span style="width:${progressPct}%"></span></div>
       <div class="stat" style="color:var(--green)">✅ 对 <b>${right}</b></div>
       <div class="stat" style="color:var(--red)">❌ 错 <b>${done-right}</b></div>
+      <button class="pc-btn ghost" id="btn-shuffle" style="font-size:12px;padding:5px 10px;margin-left:8px" title="打乱顺序（避免凭位置记忆答案）">🔀 打乱 <b style="color:${practice.shuffle?'var(--green)':'var(--text-3)'}">${practice.shuffle?'开':'关'}</b></button>
+      ${(done-right)>0?`<button class="pc-btn" id="btn-wrong" style="font-size:12px;padding:5px 10px;background:var(--red);color:#fff;margin-left:6px" title="只看/重做你做错的题">📒 只刷错题 (${done-right})</button>`:''}
+      ${practice.domainFilter==='wrong'?`<button class="pc-btn ghost" id="btn-back-all" style="font-size:12px;padding:5px 10px;margin-left:6px">← 返回全部题</button>`:''}
     </div>
     <div class="domain-chips" id="src-chips" style="margin-bottom:10px">
       <span style="font-size:11.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-right:6px">来源</span>
       <div class="domain-chip ${practice.sourceFilter==='all'?'active':''}" data-s="all">全部 <span class="ct">${QUIZ_TOTAL}</span></div>
-      ${[
-        {k:'self',l:'本站原创'},
-        {k:'inspired-public',l:'基于公开材料改编'},
-        {k:'datafield',l:'英文公开 quiz'}
-      ].map(s=>{
-        const cnt=QUIZ.filter(q=>(q.source||'self')===s.k).length;
+      ${QUIZ_SOURCE_CHIPS.map(s=>{
+        const cnt=QUIZ.filter(q=>qSource(q)===s.k).length;
         const active=practice.sourceFilter===s.k;
         return `<div class="domain-chip ${active?'active':''}" data-s="${s.k}">${s.l} <span class="ct">${cnt}</span></div>`;
       }).join('')}
@@ -3626,7 +3932,13 @@ function bindPracticeEvents(){
       const list=practiceList();
       if(practice.finished) return;
       const item=list[practice.currentIdx];
-      practice.answers[item.i]=btn.dataset.pick;
+      const picked=btn.dataset.pick;
+      const isReview=practice.domainFilter==='__wrong_today__';
+      practice.answers[item.i]=picked;
+      // 错题复习 session：每题作答后更新盒级（答对升盒/答错回盒1/连对3次毕业）
+      if(isReview) markWrongReview(item.i, picked===item.q.a);
+      // 普通刷题答错：自动收录进错题本
+      else if(picked!==item.q.a) addWrong(item.i);
       savePractice(); renderPractice();
     });
   });
@@ -3650,6 +3962,26 @@ function bindPracticeEvents(){
     if(confirm('确定清空刷题进度吗？此操作不可撤销。')) resetPractice();
   });
 
+  // ✨ 2026-08-21 升级：打乱开关 / 错题重做 / 返回全部题
+  root.querySelector('#btn-shuffle')?.addEventListener('click',()=>{
+    practice.shuffle=!practice.shuffle;
+    practice.todaySeed=(practice.todaySeed||0)+1;   // 强制换一组种子
+    savePractice(); renderPractice();
+  });
+  root.querySelector('#btn-wrong')?.addEventListener('click',()=>{
+    if(!Object.keys(practice.answers).some(k=>{
+      const it=QUIZ[k]; return it && practice.answers[k]!==it.a;
+    })){ alert('暂无错题可刷——先把题做完吧～'); return; }
+    practice.domainFilter='wrong';
+    practice.currentIdx=0; practice.finished=false;
+    savePractice(); renderPractice();
+  });
+  root.querySelector('#btn-back-all')?.addEventListener('click',()=>{
+    practice.domainFilter='all';
+    practice.currentIdx=0; practice.finished=false;
+    savePractice(); renderPractice();
+  });
+
   // 跳题
   root.querySelectorAll('.pc-jump-dot').forEach(d=>{
     d.addEventListener('click',()=>{
@@ -3665,8 +3997,7 @@ function bindPracticeEvents(){
   root.querySelectorAll('#src-chips .domain-chip').forEach(c=>{
     c.addEventListener('click',()=>{
       practice.sourceFilter=c.dataset.s;
-      practice.currentIdx=0; // 切换后回到第一题
-      practice.finished=false;
+      practice.currentIdx=0; practice.finished=false;
       savePractice(); renderPractice();
     });
   });
@@ -3699,44 +4030,218 @@ function bindPracticeEvents(){
   });
 }
 
-/* ---------- 题库汇总 EXT_BANKS（站内可刷题库 + 合规外部参考） ---------- */
-// 统计各 source 在 QUIZ 中的真实题数（页面打开时一次性算）
-function _countQuizBySource(){
-  const m={__all__:QUIZ.length,self:0,'inspired-public':0,datafield:0};
-  QUIZ.forEach(q=>{
-    const s=q.source||'self';
-    m[s]=(m[s]||0)+1;
-  });
-  // 把 0 的未知 source 也统计出来兜底
-  Object.keys(m).forEach(k=>{ if(k!=='__all__' && !m[k]) m[k]=0; });
-  return m;
-}
-
-// 选择一个题库卡：action='practice' 进入站内刷题并应用 source 筛选
+/* ---------- 题库汇总 EXT_BANKS：站内开刷 / 合规参考 / 错题本 ---------- */
+// 选择题库卡：切到刷题模式并应用 source 筛选
 function startBankPractice(sourceKey){
   practice.sourceFilter=sourceKey||'all';
   practice.domainFilter='all';
-  practice.currentIdx=0;
-  practice.finished=false;
-  loadPractice(); // 确保拿到最新 answers 后再保存
+  practice.currentIdx=0; practice.finished=false;
+  practice.todaySeed=(practice.todaySeed||0)+1; // 换组种子，避免沿用旧顺序
   savePractice();
   quizMode='practice';
   localStorage.setItem('cdga-quiz-mode','practice');
   applyQuizMode();
-  // 滚到刷题卡片顶部
   window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
 }
 function openRefUrl(url){
   window.open(url,'_blank','noopener,noreferrer');
 }
 function openWrongbook(){
-  // 复用刷题模式，仅加载错题视图（依赖后续扩展的 wrongbook UI，这里先切到 practice 并提示）
-  quizMode='practice';
-  localStorage.setItem('cdga-quiz-mode','practice');
-  practice.sourceFilter='all';
-  practice.domainFilter='all';
+  quizMode='wrongbook';
+  localStorage.setItem('cdga-quiz-mode','wrongbook');
   applyQuizMode();
   window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+}
+
+/* ============================================================
+   错题本：收纳元数据 + 艾宾浩斯/Leitner 间隔排程 + 毕业机制
+   方法来源：艾宾浩斯遗忘曲线、Leitner 五盒系统、黄金三遍法、
+   12730/三阶复习法、SRS lapse 重置（详见错题本页内说明）
+   ============================================================ */
+const WRONG_STORE='cdga-wrong-book-v1';
+const WRONG_REASONS=[
+  {k:'concept', label:'概念不清', icon:'☆'},
+  {k:'careless', label:'粗心跳步', icon:'▲'},
+  {k:'misread', label:'审题失误', icon:'✎'},
+  {k:'timeout', label:'时间不足', icon:'○'},
+];
+// Leitner 五盒间隔（天）：盒1每天 → 盒5每16天
+const LEITNER=[1,2,4,8,16];
+function _todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function _daysBetween(a,b){ if(!a||!b) return 999; const t=Math.round((new Date(b)-new Date(a))/86400000); return t<0?0:t; }
+
+function loadWrongBook(){ try{ return JSON.parse(localStorage.getItem(WRONG_STORE))||{}; }catch(e){ return {}; } }
+function saveWrongBook(wb){ try{ localStorage.setItem(WRONG_STORE, JSON.stringify(wb)); }catch(e){} }
+
+// 刷题答错时收录/更新错题本
+function addWrong(idx){
+  const q=QUIZ[idx]; if(!q) return;
+  const wb=loadWrongBook();
+  const today=_todayISO();
+  if(!wb[idx]) wb[idx]={wrongAt:today, wrongCount:0, box:1, lastReview:today, reviewCount:0, streakCorrect:0, reason:null, graduated:false};
+  wb[idx].wrongCount=(wb[idx].wrongCount||0)+1;
+  wb[idx].box=1;            // 答错回盒1
+  wb[idx].streakCorrect=0;
+  wb[idx].lastReview=today;
+  wb[idx].graduated=false;
+  saveWrongBook(wb);
+}
+// 错题复习作答后更新盒级：答对升盒、答错回盒1、连续3次做对即毕业
+function markWrongReview(idx, correct){
+  const wb=loadWrongBook();
+  const e=wb[idx]; if(!e) return;
+  const today=_todayISO();
+  e.reviewCount=(e.reviewCount||0)+1;
+  e.lastReview=today;
+  if(correct){
+    e.streakCorrect=(e.streakCorrect||0)+1;
+    e.box=Math.min(5,(e.box||1)+1);
+    if(e.streakCorrect>=3) e.graduated=true;
+  } else {
+    e.box=1; e.streakCorrect=0; e.graduated=false;
+  }
+  saveWrongBook(wb);
+}
+function markGraduate(idx, val){
+  const wb=loadWrongBook();
+  if(!wb[idx]) return;
+  wb[idx].graduated=!!val;
+  if(val) wb[idx].streakCorrect=3;
+  saveWrongBook(wb);
+}
+function setWrongReason(idx, reason){
+  const wb=loadWrongBook();
+  if(!wb[idx]) return;
+  wb[idx].reason=reason||null;
+  saveWrongBook(wb);
+}
+// 今日到期的错题（基于盒级间隔）
+function wrongTodayList(){
+  const wb=loadWrongBook();
+  const today=_todayISO();
+  return Object.keys(wb).filter(k=>{
+    const e=wb[k];
+    if(e.graduated) return false;
+    return _daysBetween(e.lastReview, today) >= (LEITNER[(e.box||1)-1]||1);
+  }).map(k=>({q:QUIZ[+k], i:+k}));
+}
+function wrongActiveList(){
+  const wb=loadWrongBook();
+  return Object.keys(wb).filter(k=>!wb[k].graduated).map(k=>({q:QUIZ[+k], i:+k}));
+}
+// 进入错题复习 session（onlyIdx 可选；默认今日到期）
+function startWrongReview(onlyIdx){
+  let list;
+  if(Array.isArray(onlyIdx)) list=onlyIdx.map(i=>({q:QUIZ[i], i}));
+  else list=wrongTodayList();
+  if(list.length===0){ alert('今天没有到期的错题可复习～去「刷题模式」做题收错题吧。'); return; }
+  practice.domainFilter='__wrong_today__';
+  practice.reviewSnapshot=list.map(t=>t.i);   // 固定本次复习题（答题升级盒级不影响顺序）
+  practice.currentIdx=0; practice.finished=false;
+  list.forEach(t=>{ delete practice.answers[t.i]; }); // 清掉这些题旧作答，确保重做生效
+  savePractice();
+  quizMode='practice'; localStorage.setItem('cdga-quiz-mode','practice');
+  applyQuizMode();
+  window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
+}
+// 渲染错题本 dashboard
+function renderWrongBook(){
+  const root=document.getElementById('quiz-wrongbook'); if(!root) return;
+  try{
+    const wb=loadWrongBook();
+    const active=wrongActiveList();
+    const graduated=Object.keys(wb).filter(k=>wb[k].graduated);
+    const todayList=wrongTodayList();
+    const total=Object.keys(wb).length;
+    const byDomain={}, byReason={};
+    active.forEach(({i})=>{
+      const e=wb[i], q=QUIZ[i];
+      if(q) byDomain[q.d]=(byDomain[q.d]||0)+1;
+      if(e.reason) byReason[e.reason]=(byReason[e.reason]||0)+1;
+    });
+    const domainHtml=Object.keys(byDomain).length
+      ? Object.keys(byDomain).map(d=>`<span class="wb-tag">${escH(d)} <b>${byDomain[d]}</b></span>`).join('')
+      : '<span class="wb-muted">暂无</span>';
+    const reasonHtml=Object.keys(byReason).length
+      ? Object.keys(byReason).map(r=>{const R=WRONG_REASONS.find(x=>x.k===r);return `<span class="wb-tag">${R?R.icon:'·'} ${escH(R?R.label:r)} <b>${byReason[r]}</b></span>`;}).join('')
+      : '<span class="wb-muted">暂无标注</span>';
+    root.innerHTML=`
+      <div class="callout tip">错题本采用 <b>Leitner 五盒 + 艾宾浩斯间隔</b>：刷题答错自动收进「盒1（每天复习）」，每次做对升一盒（间隔 1→2→4→8→16 天），连续做对 3 次即「毕业」移出。当天到期的错题自动排进「今日复习」。</div>
+      <div class="wb-stats">
+        <div class="wb-stat"><div class="v">${total}</div><div class="l">累计错题</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--red)">${active.length}</div><div class="l">在册未毕业</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--green)">${graduated.length}</div><div class="l">已毕业</div></div>
+        <div class="wb-stat"><div class="v" style="color:var(--accent)">${todayList.length}</div><div class="l">今日待复习</div></div>
+      </div>
+      <div class="wb-actions">
+        <button class="pc-btn primary" id="wb-review-today" ${todayList.length?'':'disabled'}>📅 开始今日复习（${todayList.length}）</button>
+        <button class="pc-btn" id="wb-review-all" ${active.length?'':'disabled'}>📚 重做全部在册（${active.length}）</button>
+      </div>
+      <div class="wb-dist">
+        <div class="wb-dist-block"><div class="wb-dist-title">按知识域分布</div>${domainHtml}</div>
+        <div class="wb-dist-block"><div class="wb-dist-title">按错因分布</div>${reasonHtml}</div>
+      </div>
+      <h3 class="wb-h3">在册错题（${active.length}）</h3>
+      <div class="wb-list">
+        ${active.length? active.map(({i})=>{
+          const e=wb[i], q=QUIZ[i];
+          const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
+          return `<div class="wb-item" data-i="${i}">
+            <div class="wb-item-main">
+              <div class="wb-q">#${i+1} ${escH(q?q.q:'')}</div>
+              <div class="wb-meta">
+                <span class="wb-domain">${escH(q?q.d:'')}</span>
+                <span class="wb-box">${boxLabel}</span>
+                <span class="wb-review">复习 ${e.reviewCount||0} 次 · 连对 ${e.streakCorrect||0}</span>
+                <span class="wb-date">末次 ${e.lastReview||'-'}</span>
+              </div>
+            </div>
+            <div class="wb-item-side">
+              <select class="wb-reason" data-i="${i}">
+                <option value="">错因未标</option>
+                ${WRONG_REASONS.map(r=>`<option value="${r.k}" ${e.reason===r.k?'selected':''}>${r.icon} ${r.label}</option>`).join('')}
+              </select>
+              <div class="wb-btns">
+                <button class="wb-redo" data-i="${i}">重做</button>
+                <button class="wb-grad" data-i="${i}">毕业</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('') : '<div class="wb-muted" style="padding:18px">还没有错题。去「刷题模式」做题，答错的会自动收进来。</div>'}
+      </div>
+      ${graduated.length?`<h3 class="wb-h3">已毕业（${graduated.length}）· 已掌握，可不再复习</h3>
+        <div class="wb-list">`+graduated.map(k=>{
+          const e=wb[k], q=QUIZ[k];
+          return `<div class="wb-item graduated" data-i="${k}">
+            <div class="wb-item-main"><div class="wb-q">#${+k+1} ${escH(q?q.q:'')}</div>
+            <div class="wb-meta"><span class="wb-domain">${escH(q?q.d:'')}</span><span class="wb-review">已连续做对，移出错题本</span></div></div>
+            <div class="wb-item-side"><button class="wb-ungrad" data-i="${k}">恢复</button></div>
+          </div>`;
+        }).join('')+`</div>`:''}
+    `;
+    root.querySelector('#wb-review-today')?.addEventListener('click',()=>startWrongReview());
+    root.querySelector('#wb-review-all')?.addEventListener('click',()=>startWrongReview(active.map(x=>x.i)));
+    root.querySelectorAll('.wb-reason').forEach(sel=>{
+      sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongBook(); });
+    });
+    root.querySelectorAll('.wb-redo').forEach(b=>{
+      b.addEventListener('click',()=>startWrongReview([+b.dataset.i]));
+    });
+    root.querySelectorAll('.wb-grad').forEach(b=>{
+      b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？毕业后将移出错题本。')){ markGraduate(+b.dataset.i,true); renderWrongBook(); } });
+    });
+    root.querySelectorAll('.wb-ungrad').forEach(b=>{
+      b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongBook(); });
+    });
+  }catch(err){
+    root.innerHTML='<div class="callout">错题本加载出错：'+escH(String(err))+'</div>';
+  }
+}
+
+// 每日中心「错题本复习」入口按钮（显示今日到期数）
+function wrongBookDailyBtn(){
+  let n=0; try{ n=wrongTodayList().length; }catch(e){}
+  return `<button class="dc-btn ${n?'':'ghost'}" id="dcWrongBook" title="进入错题本：按 Leitner 间隔自动排程今日应复习的错题">📒 错题本复习${n?` <span class="dc-prog">今日 ${n} 道到期</span>`:' <span class="dc-prog">暂无到期</span>'}</button>`;
 }
 
 function renderExtBanks(){
@@ -3744,34 +4249,21 @@ function renderExtBanks(){
   const cntBySrc=_countQuizBySource();
   const totalQ=QUIZ.length;
   const breakable=EXT_BANKS.filter(b=>b.action==='practice').length;
-  const refOnly=EXT_BANKS.length-breakable;
-
   box.innerHTML=`
-    <div class="callout tip">以下均为可在<b>站内直接开刷</b>的题库合集（非 DAMA 官方真题，已尽量覆盖 DMBOK2R 各知识域）。题库卡点「站内开刷 →」即可立刻进入刷题模式并自动应用该来源筛选；底部少量卡片为合规外部参考入口（不复制其题目内容），按需打开。</div>
+    <div class="callout tip">以下均为可在<b>站内直接开刷</b>的题库合集（非 DAMA 官方真题，已尽量覆盖 DMBOK2R 各知识域）。题库卡点「站内开刷 →」即进入刷题模式并自动应用该来源筛选；底部少量卡片为合规外部参考入口（不复制其题目内容），按需打开。</div>
     <div class="practice-hud" style="margin-bottom:18px">
-      <div class="stat">📚 当前总题数 <b>${totalQ}</b> 题 · 来源 <b>${breakable}</b> 个</div>
-      <div class="progress" title="${Math.round(totalQ/Math.max(1,totalQ)*100)}%"><span style="width:100%"></span></div>
+      <div class="stat">📚 当前总题数 <b>${totalQ}</b> 题 · 可刷来源 <b>${breakable}</b> 个</div>
+      <div class="progress" title="100%"><span style="width:100%"></span></div>
     </div>
     <div class="ext-bank-grid">
       ${EXT_BANKS.map(b=>{
-        let act='',btnLabel='',icon='▶';
         const isPractice=b.action==='practice';
         const known=(b.sourceKey && cntBySrc[b.sourceKey]!=null);
-        const qty=(b.sourceKey==='self')?'52':(known?String(cntBySrc[b.sourceKey]):'动态');
-        if(b.action==='practice'){
-          act='data-act="practice"';
-          btnLabel='站内开刷 →';
-          icon='▶';
-        }else if(b.action==='open-url'){
-          act=`data-act="open-url" data-url="${escH(b.url)}"`;
-          btnLabel='打开参考 →';
-          icon='🔗';
-        }else if(b.action==='go-wrongbook'){
-          act='data-act="wrongbook"';
-          btnLabel='打开错题本 →';
-          icon='📕';
-        }
-        const primary = isPractice || b.primary;
+        const qty=known?String(cntBySrc[b.sourceKey]):(b.count||'动态');
+        let act='',btnLabel='',cls=isPractice?'primary':'';
+        if(b.action==='practice'){ act=`data-act="practice" data-src="${b.sourceKey}"`; btnLabel='站内开刷 →'; }
+        else if(b.action==='open-url'){ act=`data-act="open-url" data-url="${escH(b.url)}"`; btnLabel='打开参考 →'; }
+        else if(b.action==='go-wrongbook'){ act='data-act="wrongbook"'; btnLabel='打开错题本 →'; }
         return `
         <div class="ext-bank-card">
           <div class="ext-bank-head">
@@ -3781,27 +4273,15 @@ function renderExtBanks(){
           <h4>${escH(b.icon||'')} ${escH(b.name)}</h4>
           <p>${escH(b.desc)}</p>
           <div class="ext-bank-actions">
-            <button class="pc-btn ${primary?'primary':''}" ${act}>${btnLabel}</button>
+            <button class="pc-btn ${cls}" ${act}>${btnLabel}</button>
           </div>
         </div>`;
       }).join('')}
     </div>
-    <div class="doc-sub" style="border:none;margin-top:22px">建议：刷题阶段（W21 起）每天从「基于公开材料改编题库」抽 10 道；冲刺阶段把「本站错题本」和「本站原创 52 题」各过一遍，对照公开英文 quiz 互验。</div>
+    <div class="doc-sub" style="border:none;margin-top:22px">建议：刷题阶段（W21 起）每天从「基于公开材料改编」或「CSDN 公开」抽 10 道；冲刺阶段把「本站错题本」和「本站原创」各过一遍，对照「英文公开 quiz」互验。</div>
   `;
   box.querySelectorAll('[data-act="practice"]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const id=btn.closest('.ext-bank-card')?.querySelector('h4')?.textContent||'';
-      const bank=EXT_BANKS.find(b=>b.action==='practice' && id.indexOf(b.name)>=0)
-                ||EXT_BANKS.find(b=>btn.dataset.ext===b.id);
-      // 直接定位第一个 practice 项
-      const target=EXT_BANKS.find(b=>b.action==='practice' && btn.closest(`[data-card-id="${b.id}"]`));
-      // 兜底:用遍历找到对应的 id
-      let srcKey='all';
-      for(const b of EXT_BANKS){
-        if(b.action==='practice' && id.indexOf(b.icon+' '+b.name)>=0){ srcKey=b.sourceKey; break; }
-      }
-      startBankPractice(srcKey);
-    });
+    btn.addEventListener('click',()=>startBankPractice(btn.dataset.src||'all'));
   });
   box.querySelectorAll('[data-act="open-url"]').forEach(btn=>{
     btn.addEventListener('click',()=>openRefUrl(btn.dataset.url));
@@ -3817,6 +4297,8 @@ function applyQuizMode(){
   document.getElementById('quiz-practice').hidden = quizMode!=='practice';
   const extEl=document.getElementById('quiz-external');
   if(extEl) extEl.hidden = quizMode!=='external';
+  const wbEl=document.getElementById('quiz-wrongbook');
+  if(wbEl) wbEl.hidden = quizMode!=='wrongbook';
   document.querySelectorAll('.mode-toggle button').forEach(b=>{
     const on=b.dataset.mode===quizMode;
     b.classList.toggle('active',on);
@@ -3824,6 +4306,7 @@ function applyQuizMode(){
   });
   if(quizMode==='study') renderStudyMode();
   else if(quizMode==='external') renderExtBanks();
+  else if(quizMode==='wrongbook') renderWrongBook();
   else { loadPractice(); renderPractice(); }
 }
 
@@ -3832,6 +4315,11 @@ document.querySelectorAll('.mode-toggle button').forEach(b=>{
   b.addEventListener('click',()=>{
     quizMode=b.dataset.mode;
     localStorage.setItem('cdga-quiz-mode',quizMode);
+    if(quizMode==='practice' && practice.domainFilter==='__wrong_today__'){
+      practice.domainFilter='all';
+      practice.reviewSnapshot=null;
+      savePractice();
+    }
     applyQuizMode();
     window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
   });
@@ -4233,7 +4721,7 @@ const DAY_ROLES=[
   {t:'案例 / 画图练习',h:'画一张图或写一张案例卡（血缘 / 分层 / 模型）'},
   {t:'自测 + 错题整理',h:'从自测题抽 1–2 题写出答案与理由，归错题本'}
 ];const WEEKS=[
- {w:1,start:'2026-08-15',end:'2026-08-21',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch1 概述入门 + Ch3 数据治理（24min，精读 2 天）+ #3 数语《数据治理与数据中台架构》补充',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷',vWorkVideos:[['Ch1 数据管理概述',U.c1,'精读',15,'P1'],['Ch3 数据治理（精读）',U.c3,'精读',24,'P1'],['#3 数语·数据治理与数据中台架构',U.b3,'浏览',90,'P2'],['Ch3 数据治理（二刷）',U.c3,'二刷',24,'P1'],['Ch3 数据治理（笔记/脑图）',U.c3,'背诵',24,'P1']],vWeekendVideos:[['#3 数语·数据治理（周末深啃）',U.b3,'精读',150,'P2'],['Ch3 二刷 + 治理案例卡',U.c3,'背诵',30,'P3']]},
+ {w:1,start:'2026-08-15',end:'2026-08-21',stage:'通读',focus:'数据治理',domains:['一、数据治理'],milestone:'能口述治理框架要素',vWork:'Ch1 概述 + Ch3 数据治理精读 + #3 数语治理架构 + Ch2 数据处理伦理 + Ch4 数据架构（每天一个独立视频）',vWeekend:'#3 数语《数据治理与数据中台架构》(2–3h) + Ch3 二刷巩固',vWorkVideos:[['Ch1 数据管理概述',U.c1,'精读',15,'P1'],['Ch3 数据治理（精读）',U.c3,'精读',24,'P1'],['#3 数语·数据治理与数据中台架构',U.b3,'浏览',90,'P2'],['Ch2 数据处理伦理',U.c2,'精读',20,'P1'],['Ch4 数据架构',U.c4,'精读',18,'P1']],vWeekendVideos:[['#3 数语·数据治理（周末深啃）',U.b3,'精读',150,'P2'],['Ch3 二刷 + 治理案例卡',U.c3,'背诵',30,'P3']]},
  {w:2,start:'2026-08-22',end:'2026-08-28',stage:'通读',focus:'数据质量、元数据',domains:['二、数据质量','三、元数据管理'],milestone:'说出质量六维度名称',vWork:'Ch13 数据质量（22min）+ Ch12 元数据管理（15min）',vWeekend:'#2 尚硅谷 Atlas 元数据 (2–3h) + Ch13/12 二刷',vWorkVideos:[['Ch13 数据质量',U.c13,'精读',22,'P1'],['Ch12 元数据',U.c12,'精读',15,'P1']],vWeekendVideos:[['#2 尚硅谷·元数据',U.b2,'精读',150,'P2'],['#6 资产目录',U.b6,'浏览',60,'P3']]},
  {w:3,start:'2026-08-29',end:'2026-09-04',stage:'通读',focus:'数仓BI、参考主数据',domains:['四、数据仓库与BI','五、参考数据和主数据'],milestone:'说出 ODS/DWS 分层含义',vWork:'Ch11 数据仓库（18min）+ Ch10 主数据（19min）',vWeekend:'#1 哈喽鹏程数仓课挑章 (2–3h) + cv12/cv13 专栏',vWorkVideos:[['Ch11 数据仓库',U.c11,'精读',18,'P1'],['Ch10 参考主数据',U.c10,'精读',19,'P1']],vWeekendVideos:[['#1 哈喽鹏程·数仓',U.b1,'浏览',120,'P3'],['cv12 数仓+质量',U.cv12,'浏览',30,'P3']]},
  {w:4,start:'2026-09-05',end:'2026-09-11',stage:'通读',focus:'数据建模、数据架构',domains:['六、数据建模与设计','七、数据架构'],milestone:'区分概念/逻辑/物理模型',vWork:'Ch5 数据建模与设计（29min，分两天）+ Ch4 数据架构（18min）',vWeekend:'#5 数语《数据模型》+ #4 数语《数据标准》(2–3h)',vWorkVideos:[['Ch5 数据建模',U.c5,'精读',29,'P1'],['Ch4 数据架构',U.c4,'精读',18,'P1']],vWeekendVideos:[['#5 数语·数据模型',U.b5,'精读',90,'P2'],['#4 数语·数据标准',U.b4,'浏览',60,'P3']]},
@@ -4721,13 +5209,14 @@ function renderDay(iso){
           out.push(`<button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题（建立题感）</button>`);
         } else {
           const done=answered('all');
-          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎯 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
+          out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎲 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题 · 每日抽 ${Math.min(QUIZ_TOTAL,15)}</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         }
       } else {
         const cnt=QUIZ.filter(q=>q.d===k).length;
         const done=answered(k);
         const name=k.replace(/^[^、]+、/,'');
-        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎯 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        const pickCnt=Math.min(cnt,5);  // ✨ 每日抽 5 道（域内不足则全展示）
+        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎲 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       }
     });
     return out.join('');
@@ -4852,7 +5341,7 @@ function renderDay(iso){
      </div>
      <div class="dc-block">
        <h4>🎯 自测 / 做题</h4>
-       <div class="dc-links">${quizBtns}</div>
+       <div class="dc-links">${quizBtns}${wrongBookDailyBtn()}</div>
      </div>
       <div class="dc-block">
         <h4>🔤 术语卡</h4>
@@ -4874,6 +5363,7 @@ function renderDay(iso){
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
   dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  dayCard.querySelector('#dcWrongBook')?.addEventListener('click',()=>{ quizMode='wrongbook'; localStorage.setItem('cdga-quiz-mode','wrongbook'); showPage('cdga-quiz'); applyQuizMode(); });
   // 折叠：P2/P3 组
   dayCard.querySelectorAll('[data-fold]').forEach(btn=>{
     btn.onclick=()=>{
