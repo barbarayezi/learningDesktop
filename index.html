@@ -4654,8 +4654,8 @@ function renderWrongbookSummary(){
   const acc=total?Math.round(right/total*100):0;
   const elapsed=Date.now()-S.startTime;
   const today=_todayISO();
-  // 若本轮是「今日到期」入口且已完成，标记今日错题复习已完成，供每日中心展示视觉反馈
-  if(S.scopeLabel==='今日到期' && total>0) saveWbDailyDone(true);
+  // 标记今日错题复习已完成：从「今日到期」入口完成，或完成后今日已无到期题
+  if(total>0 && (S.scopeLabel==='今日到期' || wrongTodayList().length===0)) saveWbDailyDone(true);
   const gradCount=list.filter(t=>S.results[t.i]&&S.results[t.i].graduated).length;
   const rows=list.map(t=>{
     const r=S.results[t.i]||{correct:false,boxBefore:1,boxAfter:1,graduated:false};
@@ -4719,10 +4719,11 @@ function renderWrongbookSummary(){
 function wrongBookDailyBtn(){
   let n=0; try{ n=wrongTodayList().length; }catch(e){}
   const done=isWbDailyDone();
-  if(done){
-    return `<button class="dc-btn success" id="dcWrongBook" title="今日错题复习已完成，仍可点击进入浏览/刷题">✅ 错题本复习 <span class="dc-prog">今日已复习${n?' · 剩 '+n+' 道到期':''}</span></button>`;
+  // 今日已无到期题，或已主动完成一轮，都视为今日任务完成
+  if(n===0 || done){
+    return `<button class="dc-btn success" id="dcWrongBook" title="今日错题复习任务已完成，仍可点击进入浏览/刷题">✅ 错题本复习 <span class="dc-prog">今日已复习${n?' · 剩 '+n+' 道到期':''}</span></button>`;
   }
-  return `<button class="dc-btn ${n?'':'ghost'}" id="dcWrongBook" title="进入错题本：按 Leitner 间隔自动排程今日应复习的错题">📒 错题本复习${n?` <span class="dc-prog">今日 ${n} 道到期</span>`:' <span class="dc-prog">暂无到期</span>'}</button>`;
+  return `<button class="dc-btn" id="dcWrongBook" title="进入错题本：按 Leitner 间隔自动排程今日应复习的错题">📒 错题本复习 <span class="dc-prog">今日 ${n} 道到期</span></button>`;
 }
 
 function renderExtBanks(){
