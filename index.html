@@ -4185,6 +4185,7 @@ function startBankPractice(sourceKey){
   practice.sourceFilter=sourceKey||'all';
   practice.domainFilter='all';
   practice.currentIdx=0; practice.finished=false;
+  practice.answers={}; // 从题库汇总卡进入也清空旧作答，确保每轮可重新做
   practice.todaySeed=(practice.todaySeed||0)+1; // 换组种子，避免沿用旧顺序
   savePractice();
   quizMode='practice';
@@ -5037,7 +5038,7 @@ const U={
   c9:'https://www.bilibili.com/video/BV1WESWBwEhB/', // Ch9 文档和内容管理 (12:03)
   c10:'https://www.bilibili.com/video/BV1viSWBSEmj/',// Ch10 参考数据和主数据 (19:32)
   c11:'https://www.bilibili.com/video/BV1AVmEBVEfn/',// Ch11 数据仓库和商务智能 (18:56)
-  c12:'https://www.bilibili.com/video/BV1p5mEBkESv/',// Ch12 元数据管理 (15:51)
+  c12:'https://www.bilibili.com/video/BV14t4y1Z7Hg/',// Ch12 元数据管理 (老姜在渝 · 12:17)
   c13:'https://www.bilibili.com/video/BV1hZm7BWET9/',// Ch13 数据质量管理 (22:54)
   c14:'https://www.bilibili.com/video/BV1Q7mkBoEdk/',// Ch14 大数据和数据科学
   c15:'https://www.bilibili.com/video/BV1qtmrBwEbm/',// Ch15 数据管理成熟度评估
@@ -5484,7 +5485,7 @@ const VIDEO_DUR={
   "BV1WESWBwEhB":723,
   "BV1viSWBSEmj":1172,
   "BV1AVmEBVEfn":1136,
-  "BV1p5mEBkESv":951,
+  "BV14t4y1Z7Hg":737,
   "BV1hZm7BWET9":1374,
   "BV1Q7mkBoEdk":1217,
   "BV1qtmrBwEbm":713,
@@ -5986,6 +5987,11 @@ document.getElementById('readerMask').onclick=e=>{if(e.target.id==='readerMask')
 function openQuiz(domain,mode){
   practice.domainFilter=(domain&&QUIZ_DOMAINS.includes(domain))?domain:'all';
   practice.currentIdx=0; practice.finished=false;
+  // 从每日卡片/题库卡重新进入「刷题」时，清空旧作答并换种子，保证每一轮都是全新可答
+  if(mode==='practice'){
+    practice.answers={};
+    practice.todaySeed=(practice.todaySeed||0)+1;
+  }
   quizMode=mode||'practice'; localStorage.setItem('cdga-quiz-mode',quizMode);
   savePractice(); showPage('cdga-quiz'); applyQuizMode();
   if(mode==='study' && domain && domain!=='all'){
