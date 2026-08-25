@@ -1,7 +1,7 @@
 name: Deploy to CloudBase Static Hosting
-# 2026-08-25 重写：老 action（TencentCloudBase/cloudbase-action@v1, node12）
-# 在 node24 runner 上登录失败「无有效身份信息」，改用腾讯云官方 CLI（@cloudbase/cli / tcb）
-# 的 CI 非交互登录方式，报错更清晰、可控。
+# 2026-08-25 重写：老 action（TencentCloudBase/cloudbase-action@v1, node12）在 node24 runner
+# 上登录失败「无有效身份信息」，改用腾讯云官方 CLI（@cloudbase/cli / tcb）的 CI 非交互登录。
+# envId 以 `tcb env list` 实测为准：test-d5gf0o9ky7d34beaf（无后缀，后缀数字属于默认域名不属于 envId）。
 
 on:
   push:
@@ -30,7 +30,6 @@ jobs:
 
       # 只部署站点文件。proxy_server.py / cloudbase-sync-proxy / .workbuddy / .git 等
       # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
-      # 同时删除 cloudbaserc.json（其 envId 为短版、不完整，避免 tcb 误用）。
       - name: Remove non-site files before upload
         run: |
           rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json 2>/dev/null || true
@@ -57,35 +56,23 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Login, Diagnose & Deploy
+      - name: Login CloudBase & Deploy to Static Hosting
         env:
           TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
           TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
-          TCB_ENV_ID: test-d5gf0o9ky7d34beaf-1469471831
+          TCB_ENV_ID: test-d5gf0o9ky7d34beaf
         run: |
           set +e
-          echo "=== tcb version ==="
-          tcb --version
-          echo "=== login ==="
           tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
-          echo "=== tcb env list (该密钥可见的环境) ==="
-          tcb env list --verbose 2>&1 | tee /tmp/envlist.txt
-          # 暴露 env 列表，核对真实 envId
-          sed 's/^/ENVLIST: /' /tmp/envlist.txt | while IFS= read -r l; do echo "::error::$l"; done
-          echo "=== tcb env use (验证 envId 可访问) ==="
-          tcb env use "$TCB_ENV_ID" 2>&1 | tee /tmp/envuse.txt
-          sed 's/^/ENVUSE: /' /tmp/envuse.txt | while IFS= read -r l; do echo "::error::$l"; done
-          echo "=== tcb hosting list (--env-id) ==="
-          tcb hosting list --env-id "$TCB_ENV_ID" --verbose 2>&1 | tee /tmp/hostlist.txt
-          echo "=== tcb hosting deploy (--env-id) ==="
-          tcb hosting deploy . --env-id "$TCB_ENV_ID" --yes --verbose 2>&1 | tee /tmp/deploy.log
+          tcb env use "$TCB_ENV_ID"
+          tcb hosting deploy . --env-id "$TCB_ENV_ID" --yes 2>&1 | tee /tmp/deploy.log
           rc=${PIPESTATUS[0]}
-          echo "=== full logs ==="
-          cat /tmp/envlist.txt /tmp/envuse.txt /tmp/hostlist.txt /tmp/deploy.log
+          cat /tmp/deploy.log
           if [ "$rc" -ne 0 ]; then
             echo "::error::DEPLOY_FAILED rc=$rc"
-            grep -iE "DescribeStaticStore|InvalidParameter|fail|denied|invalid|unauthorized|无|失败|权限|身份|error|not found|NotExist|forbidden|AuthFailure|AccessDenied|ResourceNotFound|StaticStore|code|RequestId|message" /tmp/envlist.txt /tmp/envuse.txt /tmp/hostlist.txt /tmp/deploy.log | head -60 | while IFS= read -r line; do
+            grep -iE "DescribeStaticStore|InvalidParameter|fail|denied|AuthFailure|AccessDenied|ResourceNotFound|code|message|RequestId" /tmp/deploy.log | head -30 | while IFS= read -r line; do
               echo "::error::$line"
             done
             exit $rc
           fi
+          echo "🎉 部署成功"
