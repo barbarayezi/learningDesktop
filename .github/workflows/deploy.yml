@@ -63,9 +63,24 @@ jobs:
           TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
           TCB_ENV_ID: test-d5gf0o9ky7d34beaf-1469471831
         run: |
-          echo "--- tcb version ---"
-          tcb --version
-          echo "--- login ---"
-          tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
-          echo "--- hosting deploy ---"
-          tcb hosting deploy . -e "$TCB_ENV_ID" --yes
+          set +e
+          {
+            echo "=== tcb version ==="
+            tcb --version
+            echo "=== login ==="
+            tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
+            echo "=== hosting deploy ==="
+            tcb hosting deploy . -e "$TCB_ENV_ID" --yes
+          } > /tmp/deploy.log 2>&1
+          rc=$?
+          echo "================ DEPLOY LOG ================"
+          cat /tmp/deploy.log
+          echo "============================================"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::DEPLOY_FAILED rc=$rc"
+            # 把关键错误行暴露成 annotation，便于无日志权限时排查
+            grep -iE "error|fail|denied|invalid|unauthorized|无|失败|权限|身份" /tmp/deploy.log | head -20 | while read -r line; do
+              echo "::error::$line"
+            done
+            exit $rc
+          fi
