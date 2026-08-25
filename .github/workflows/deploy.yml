@@ -57,29 +57,29 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Login CloudBase & Deploy to Static Hosting
+      - name: Login, Diagnose & Deploy
         env:
           TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
           TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
           TCB_ENV_ID: test-d5gf0o9ky7d34beaf-1469471831
         run: |
           set +e
-          {
-            echo "=== tcb version ==="
-            tcb --version
-            echo "=== login ==="
-            tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
-            echo "=== hosting deploy ==="
-            tcb hosting deploy . -e "$TCB_ENV_ID" --yes
-          } > /tmp/deploy.log 2>&1
-          rc=$?
-          echo "================ DEPLOY LOG ================"
-          cat /tmp/deploy.log
-          echo "============================================"
+          echo "=== tcb version ==="
+          tcb --version
+          echo "=== login ==="
+          tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
+          echo "=== tcb env list (该密钥可见的环境) ==="
+          tcb env list 2>&1 | tee /tmp/envlist.txt
+          echo "=== tcb hosting list (静态托管文件) ==="
+          tcb hosting list -e "$TCB_ENV_ID" 2>&1 | tee /tmp/hostlist.txt
+          echo "=== tcb hosting deploy ==="
+          tcb hosting deploy . -e "$TCB_ENV_ID" --yes 2>&1 | tee /tmp/deploy.log
+          rc=${PIPESTATUS[0]}
+          echo "=== full logs ==="
+          cat /tmp/envlist.txt /tmp/hostlist.txt /tmp/deploy.log
           if [ "$rc" -ne 0 ]; then
             echo "::error::DEPLOY_FAILED rc=$rc"
-            # 把关键错误行暴露成 annotation，便于无日志权限时排查
-            grep -iE "error|fail|denied|invalid|unauthorized|无|失败|权限|身份" /tmp/deploy.log | head -20 | while read -r line; do
+            grep -iE "DescribeStaticStore|fail|denied|invalid|unauthorized|无|失败|权限|身份|error|not found|NotExist|forbidden|AuthFailure" /tmp/envlist.txt /tmp/hostlist.txt /tmp/deploy.log | head -40 | while IFS= read -r line; do
               echo "::error::$line"
             done
             exit $rc
