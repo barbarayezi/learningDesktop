@@ -4113,7 +4113,21 @@ function bindPracticeEvents(){
     if(practice.currentIdx<list.length-1){practice.currentIdx++;savePractice();renderPractice();}
   });
   root.querySelector('#btn-finish')?.addEventListener('click',()=>{
-    practice.finished=true;savePractice();renderPractice();
+    practice.finished=true;
+    // 标记今日普通刷题完成（逐域；错题本走自己的 daily-done 逻辑，这里跳过）
+    const df=practice.domainFilter;
+    if(df && df!=='wrong' && df!=='__wrong_today__'){
+      if(df==='all'){
+        // 全量模拟考完成：标记所有常规域 + 整体 all 标记
+        QUIZ.map(q=>q.d).filter((v,i,a)=>a.indexOf(v)===i).forEach(dk=>{
+          if(dk!=='wrong' && dk!=='__wrong_today__') saveQuizDailyDone(dk);
+        });
+        saveQuizDailyDone('__all__');
+      } else {
+        saveQuizDailyDone(df);
+      }
+    }
+    savePractice();renderPractice();
   });
   root.querySelector('#btn-reset')?.addEventListener('click',()=>{
     if(confirm('确定清空刷题进度吗？此操作不可撤销。')) resetPractice();
@@ -4297,6 +4311,24 @@ function saveWbDailyDone(done){
 }
 function isWbDailyDone(){ return loadWbDailyDone().done; }
 function clearWbDailyDone(){ saveWbDailyDone(false); }
+// 普通刷题「今日已刷题」逐域完成态（仿错题本 daily-done 模式，但按域记录）
+const QUIZ_DAILY_DONE_KEY='cdga-quiz-daily-done-v1';
+function loadQuizDailyDone(){
+  try{ const d=JSON.parse(localStorage.getItem(QUIZ_DAILY_DONE_KEY)||'{}'); if(d&&d.date===_todayISO()) return d; }catch(e){}
+  return {date:_todayISO(), done:{}};
+}
+function saveQuizDailyDone(domainKey){
+  const d=loadQuizDailyDone();
+  d.done[domainKey]=true;
+  localStorage.setItem(QUIZ_DAILY_DONE_KEY, JSON.stringify(d));
+}
+function isQuizDailyDone(domainKey){
+  const d=loadQuizDailyDone();
+  return !!(d.done && d.done[domainKey]);
+}
+function clearQuizDailyDone(){
+  localStorage.setItem(QUIZ_DAILY_DONE_KEY, JSON.stringify({date:_todayISO(), done:{}}));
+}
 // 进入错题复习 session（onlyIdx 可选；默认今日到期）
 function startWrongReview(onlyIdx){
   let list;
@@ -5689,10 +5721,15 @@ function renderDay(iso){
       if(k==='all'){
         if(earlyStage){
           out.push(`<button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题（建立题感）</button>`);
+        } else if(isQuizDailyDone('__all__')){
+          out.push(`<button class="dc-btn success" data-quiz="all" data-mode="practice">✅ 全量刷题（模拟考）<span class="dc-prog">今日已刷题</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         } else {
           const done=answered('all');
           out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎲 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题 · 每日抽 ${Math.min(QUIZ_TOTAL,15)}</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         }
+      } else if(isQuizDailyDone(k)){
+        const name=k.replace(/^[^、]+、/,'');
+        out.push(`<button class="dc-btn success" data-quiz="${k}" data-mode="practice">✅ 刷题 ${name} <span class="dc-prog">今日已刷题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       } else {
         const cnt=QUIZ.filter(q=>q.d===k).length;
         const done=answered(k);
