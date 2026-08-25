@@ -1,6 +1,7 @@
 name: Deploy to CloudBase Static Hosting
-# 2026-08-21 21:30 触发 Run #14：上次 Run #13 Deploy step 2 秒临时失败（cloudbase 服务端 race），
-# 同样的 v1 action + 同 envId 之前 Run #12 跑 1m27s 成功，故推一次重试。
+# 2026-08-25 重写：老 action（TencentCloudBase/cloudbase-action@v1, node12）
+# 在 node24 runner 上登录失败「无有效身份信息」，改用腾讯云官方 CLI（@cloudbase/cli / tcb）
+# 的 CI 非交互登录方式，报错更清晰、可控。
 
 on:
   push:
@@ -29,13 +30,22 @@ jobs:
 
       # 只部署站点文件。proxy_server.py / cloudbase-sync-proxy / .workbuddy / .git 等
       # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
+      # 同时删除 cloudbaserc.json（其 envId 为短版、不完整，避免 tcb 误用）。
       - name: Remove non-site files before upload
         run: |
-          rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py 2>/dev/null || true
+          rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json 2>/dev/null || true
           echo "Remaining files to deploy:"
           ls -la
 
-      # 提前校验 Secrets，避免 cloudbase-action 在缺密钥时 0.4 秒神秘失败（无法从日志看出原因）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install CloudBase CLI
+        run: npm install -g @cloudbase/cli
+
+      # 提前校验 Secrets，避免 tcb 在缺密钥时给出难懂的报错。
       - name: Pre-check Secrets (TCB_SECRET_ID / TCB_SECRET_KEY)
         env:
           TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
@@ -47,10 +57,15 @@ jobs:
           if [ "$ok" -ne 1 ]; then echo "⛔ 部署中止：缺少 CloudBase 凭证"; exit 1; fi
           echo "✅ TCB_SECRET_ID / TCB_SECRET_KEY 均已注入，继续部署"
 
-      - name: Deploy static to Tencent CloudBase
-        uses: TencentCloudBase/cloudbase-action@v1
-        with:
-          secretId: ${{ secrets.TCB_SECRET_ID }}
-          secretKey: ${{ secrets.TCB_SECRET_KEY }}
-          envId: test-d5gf0o9ky7d34beaf
-          staticSrcPath: .
+      - name: Login CloudBase & Deploy to Static Hosting
+        env:
+          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
+          TCB_ENV_ID: test-d5gf0o9ky7d34beaf-1469471831
+        run: |
+          echo "--- tcb version ---"
+          tcb --version
+          echo "--- login ---"
+          tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
+          echo "--- hosting deploy ---"
+          tcb hosting deploy . -e "$TCB_ENV_ID" --yes
