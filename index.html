@@ -398,6 +398,150 @@ pre code{background:none;padding:0}
 .wb-redo:hover,.wb-ungrad:hover{border-color:var(--accent);color:var(--accent)}
 @media(max-width:640px){.wb-stats{grid-template-columns:repeat(2,1fr)}.wb-dist{grid-template-columns:1fr}.wb-item{flex-direction:column}}
 
+/* ---------- WrongBook sub-mode tabs ---------- */
+.wb-subtabs{display:flex;gap:6px;margin:6px 0 18px;padding:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;width:fit-content}
+.wb-subtab{font-size:13px;font-weight:600;padding:7px 16px;border-radius:8px;background:transparent;border:none;color:var(--text-2);cursor:pointer;transition:all .15s}
+.wb-subtab:hover{color:var(--text)}
+.wb-subtab.active{background:var(--surface);color:var(--accent);box-shadow:var(--shadow)}
+.wb-subtab .ct{display:inline-block;margin-left:6px;font-size:11px;font-weight:600;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:1px 8px}
+.wb-subtab.active .ct{background:var(--accent);color:#fff}
+.wb-view[hidden]{display:none}
+
+/* ---------- WrongBook 刷题模式：选题页 ---------- */
+.wb-sel-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:16px}
+.wb-sel-h{font-size:15px;font-weight:700;margin:0 0 12px;color:var(--text)}
+.wb-sel-h .h-num{color:var(--accent);margin-left:6px}
+.wb-presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.wb-preset{border:1.5px solid var(--border);border-radius:11px;padding:12px 14px;background:var(--surface-2);cursor:pointer;text-align:left;transition:all .15s;font-size:13px;color:var(--text-2)}
+.wb-preset:hover:not(.disabled){border-color:var(--accent);background:var(--surface);transform:translateY(-1px)}
+.wb-preset.disabled{opacity:.5;cursor:not-allowed}
+.wb-preset .pl{font-weight:700;color:var(--text);font-size:14px;margin-bottom:2px}
+.wb-preset .ps{font-size:11.5px;color:var(--text-3)}
+.wb-preset .pn{font-size:18px;font-weight:800;color:var(--accent);margin-top:4px}
+.wb-filter-row{margin-top:14px;padding-top:14px;border-top:1px dashed var(--border)}
+.wb-filter-row .fr-h{font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.wb-filter-tags{display:flex;flex-wrap:wrap;gap:6px}
+.wb-ftag{font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .15s}
+.wb-ftag:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+.wb-ftag.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wb-ftag .ct{font-size:10.5px;opacity:.75;margin-left:4px}
+.wb-sel-cta{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.wb-sel-summary{font-size:13px;color:var(--text-2)}
+.wb-sel-summary b{color:var(--accent);font-size:16px}
+.wb-start-btn{font-size:14px;font-weight:700;padding:10px 24px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.wb-start-btn:hover:not(:disabled){background:var(--accent-2);transform:translateY(-1px)}
+.wb-start-btn:disabled{background:var(--text-3);cursor:not-allowed;opacity:.6}
+
+/* ---------- WrongBook 刷题模式：答题页 ---------- */
+.wb-prac-hud{display:grid;grid-template-columns:1fr 2fr auto auto;gap:14px;align-items:center;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:11px;margin:0 0 14px;font-size:13px}
+.wb-prac-hud .hud-cell{color:var(--text-2);white-space:nowrap}
+.wb-prac-hud .hud-cell b{color:var(--text);font-weight:700;margin:0 2px}
+.wb-prac-hud .hud-bar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.wb-prac-hud .hud-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .25s}
+.wb-prac-hud .hud-pill{font-size:11px;font-weight:600;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:3px 9px}
+.wb-prac-hud .hud-exit{background:none;border:1px solid var(--border);color:var(--text-3);font-size:12px;padding:4px 10px;border-radius:7px;cursor:pointer}
+.wb-prac-hud .hud-exit:hover{color:var(--red);border-color:var(--red)}
+
+.wb-prac-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:14px}
+.wb-prac-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.wb-prac-head .ph-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wb-prac-head .ph-right{display:flex;gap:6px;align-items:center;font-size:11.5px;color:var(--text-3)}
+.wb-prac-box{font-size:11.5px;font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:3px 9px}
+.wb-prac-domain{font-size:11.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.wb-prac-q{font-size:16px;font-weight:600;line-height:1.65;margin:0 0 18px;color:var(--text)}
+.wb-prac-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:6px}
+.wb-prac-opt{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  border:1.5px solid var(--border);border-radius:10px;cursor:pointer;
+  font-size:14px;background:var(--surface-2);transition:all .15s;text-align:left;width:100%;
+}
+.wb-prac-opt:hover:not(.locked){border-color:var(--accent);background:var(--surface);transform:translateY(-1px)}
+.wb-prac-opt .letter{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--text-2);background:var(--surface);flex:0 0 auto;transition:all .15s}
+.wb-prac-opt .text{flex:1;line-height:1.5}
+.wb-prac-opt.selected{border-color:var(--accent);background:var(--accent-soft)}
+.wb-prac-opt.selected .letter{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wb-prac-opt.locked{cursor:default;opacity:.85;transform:none}
+.wb-prac-opt.correct{border-color:var(--green);background:var(--green-soft)}
+.wb-prac-opt.correct .letter{background:var(--green);color:#fff;border-color:var(--green)}
+.wb-prac-opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.wb-prac-opt.wrong .letter{background:var(--red);color:#fff;border-color:var(--red)}
+.wb-prac-opt.showright{border-color:var(--green);background:rgba(34,197,94,.04)}
+
+.wb-prac-explain{margin-top:16px;padding:14px 16px;border-radius:10px;background:var(--surface-2);border-left:3px solid var(--accent);font-size:13px;line-height:1.65}
+.wb-prac-explain.correct{border-left-color:var(--green);background:var(--green-soft)}
+.wb-prac-explain.wrong{border-left-color:var(--red);background:var(--red-soft)}
+.wb-prac-explain .ex-tag{display:inline-block;font-size:11px;font-weight:700;border-radius:99px;padding:2px 9px;margin-right:8px}
+.wb-prac-explain.correct .ex-tag{background:var(--green);color:#fff}
+.wb-prac-explain.wrong .ex-tag{background:var(--red);color:#fff}
+.wb-prac-explain .ex-q{font-weight:700;margin-bottom:6px;color:var(--text)}
+.wb-prac-explain .ex-a{color:var(--text-2);margin-top:4px}
+.wb-prac-explain .ex-a b{color:var(--text);font-weight:700}
+.wb-prac-actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px dashed var(--border);flex-wrap:wrap;gap:10px}
+.wb-prac-submit{font-size:14px;font-weight:700;padding:10px 22px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:all .15s}
+.wb-prac-submit:hover:not(:disabled){background:var(--accent-2)}
+.wb-prac-submit:disabled{background:var(--text-3);cursor:not-allowed;opacity:.6}
+.wb-prac-next{font-size:14px;font-weight:700;padding:10px 22px;border-radius:10px;background:var(--green);color:#fff;border:none;cursor:pointer;transition:all .15s}
+.wb-prac-next:hover{filter:brightness(1.08)}
+.wb-prac-reason{margin-top:14px;padding:10px 14px;background:var(--surface-2);border-radius:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--text-2)}
+.wb-prac-reason .rl{font-weight:600;color:var(--text-3)}
+.wb-prac-reason label{cursor:pointer;display:inline-flex;gap:4px;align-items:center;padding:3px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--border);font-size:12px}
+.wb-prac-reason input{accent-color:var(--accent)}
+.wb-prac-reason label:has(input:checked){background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:600}
+
+/* ---------- WrongBook 刷题模式：总结页 ---------- */
+.wb-sum-hero{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:16px;padding:28px 30px;margin-bottom:18px;box-shadow:var(--shadow)}
+.wb-sum-hero h2{margin:0 0 6px;font-size:22px}
+.wb-sum-hero .sub{opacity:.85;font-size:13px;margin-bottom:18px}
+.wb-sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+.wb-sum-cell{background:rgba(255,255,255,.18);border-radius:11px;padding:12px 14px;text-align:center;backdrop-filter:blur(6px)}
+.wb-sum-cell .v{font-size:24px;font-weight:800;line-height:1.2}
+.wb-sum-cell .l{font-size:11.5px;opacity:.85;margin-top:3px}
+
+.wb-sec{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:14px;box-shadow:var(--shadow)}
+.wb-sec-h{font-size:14px;font-weight:700;margin:0 0 12px;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+.wb-sec-h .num{font-size:12px;color:var(--text-3);font-weight:500}
+
+.wb-next-table{width:100%;border-collapse:collapse;font-size:13px}
+.wb-next-table th{font-size:11.5px;color:var(--text-3);font-weight:700;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em}
+.wb-next-table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+.wb-next-table tr:last-child td{border-bottom:none}
+.wb-next-table .qi{color:var(--text-2);font-size:13px;line-height:1.4;max-width:520px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wb-next-table .qi b{color:var(--text)}
+.wb-next-table .box-before{color:var(--text-3);font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.wb-next-table .box-after{color:var(--text);font-weight:700;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.wb-next-table .box-up{color:var(--green);font-weight:700}
+.wb-next-table .box-down{color:var(--red);font-weight:700}
+.wb-next-table .box-grad{color:var(--green);font-weight:800}
+.wb-next-table .next-date{font-weight:700;color:var(--accent);font-size:12.5px}
+.wb-next-table .next-date.soon{color:var(--red)}
+.wb-next-table .next-date.later{color:var(--text-3)}
+.wb-next-table .ok-pill,.wb-next-table .no-pill{display:inline-block;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 8px;margin-left:4px}
+.wb-next-table .ok-pill{background:var(--green-soft);color:var(--green)}
+.wb-next-table .no-pill{background:var(--red-soft);color:var(--red)}
+
+.wb-sum-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.wb-sum-btns button{font-size:13px;padding:9px 18px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-weight:600}
+.wb-sum-btns .primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wb-sum-btns .primary:hover{background:var(--accent-2)}
+.wb-sum-btns button:hover:not(.primary){border-color:var(--accent);color:var(--accent)}
+
+.wb-celebrate{padding:20px 22px;border-radius:14px;background:linear-gradient(135deg,var(--green-soft),var(--accent-soft));border:1px solid var(--green);margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wb-celebrate .emo{font-size:36px}
+.wb-celebrate .txt{flex:1;min-width:0}
+.wb-celebrate .ttl{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px}
+.wb-celebrate .desc{font-size:13px;color:var(--text-2);line-height:1.5}
+
+@media(max-width:720px){
+  .wb-prac-hud{grid-template-columns:1fr 1fr;gap:10px}
+  .wb-prac-hud .hud-bar{grid-column:span 2}
+  .wb-sum-grid{grid-template-columns:repeat(2,1fr)}
+  .wb-next-table{font-size:12px}
+  .wb-next-table .qi{max-width:280px}
+  .wb-subtabs{width:100%}
+  .wb-subtab{flex:1;text-align:center}
+  .wb-subtab .ct{display:block;margin:2px 0 0}
+}
+
 /* ---------- Ladder Page (CDGA → CDGP → CDGE) ---------- */
 .ladder-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;
@@ -4149,98 +4293,377 @@ function startWrongReview(onlyIdx){
   applyQuizMode();
   window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
 }
-// 渲染错题本 dashboard
+// ===== 错题本：浏览模式 + 刷题模式（Leitner 五盒 + 艾宾浩斯间隔） =====
+const WB_SUBMODE_KEY='cdga-wb-submode-v1';
+function loadWbSubMode(){ try{ const v=localStorage.getItem(WB_SUBMODE_KEY); return (v==='browse'||v==='practice')?v:'browse'; }catch(e){ return 'browse'; } }
+function saveWbSubMode(m){ try{ localStorage.setItem(WB_SUBMODE_KEY, m); }catch(e){} }
+let wbSubMode=loadWbSubMode();
+let wbSession=null;
+function _addDays(iso,n){ const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function _fmtDur(ms){ const s=Math.max(0,Math.round(ms/1000)); const m=Math.floor(s/60); return m+':'+String(s%60).padStart(2,'0'); }
+
+// 入口：进行中 session 接管整页（选题/答题/总结）；否则渲染 sub-tab（浏览 / 刷题）
 function renderWrongBook(){
   const root=document.getElementById('quiz-wrongbook'); if(!root) return;
   try{
-    const wb=loadWrongBook();
-    const active=wrongActiveList();
-    const graduated=Object.keys(wb).filter(k=>wb[k].graduated);
-    const todayList=wrongTodayList();
-    const total=Object.keys(wb).length;
-    const byDomain={}, byReason={};
-    active.forEach(({i})=>{
-      const e=wb[i], q=QUIZ[i];
-      if(q) byDomain[q.d]=(byDomain[q.d]||0)+1;
-      if(e.reason) byReason[e.reason]=(byReason[e.reason]||0)+1;
-    });
-    const domainHtml=Object.keys(byDomain).length
-      ? Object.keys(byDomain).map(d=>`<span class="wb-tag">${escH(d)} <b>${byDomain[d]}</b></span>`).join('')
-      : '<span class="wb-muted">暂无</span>';
-    const reasonHtml=Object.keys(byReason).length
-      ? Object.keys(byReason).map(r=>{const R=WRONG_REASONS.find(x=>x.k===r);return `<span class="wb-tag">${R?R.icon:'·'} ${escH(R?R.label:r)} <b>${byReason[r]}</b></span>`;}).join('')
-      : '<span class="wb-muted">暂无标注</span>';
+    if(wbSession){
+      if(wbSession.phase==='select') return renderWrongbookSelect();
+      if(wbSession.phase==='practice') return renderWrongbookPractice();
+      if(wbSession.phase==='summary') return renderWrongbookSummary();
+    }
     root.innerHTML=`
-      <div class="callout tip">错题本采用 <b>Leitner 五盒 + 艾宾浩斯间隔</b>：刷题答错自动收进「盒1（每天复习）」，每次做对升一盒（间隔 1→2→4→8→16 天），连续做对 3 次即「毕业」移出。当天到期的错题自动排进「今日复习」。</div>
-      <div class="wb-stats">
-        <div class="wb-stat"><div class="v">${total}</div><div class="l">累计错题</div></div>
-        <div class="wb-stat"><div class="v" style="color:var(--red)">${active.length}</div><div class="l">在册未毕业</div></div>
-        <div class="wb-stat"><div class="v" style="color:var(--green)">${graduated.length}</div><div class="l">已毕业</div></div>
-        <div class="wb-stat"><div class="v" style="color:var(--accent)">${todayList.length}</div><div class="l">今日待复习</div></div>
+      <div class="wb-subtabs">
+        <button class="wb-subtab ${wbSubMode==='browse'?'active':''}" data-wb="browse">📖 浏览模式</button>
+        <button class="wb-subtab ${wbSubMode==='practice'?'active':''}" data-wb="practice">🎯 刷题模式</button>
       </div>
-      <div class="wb-actions">
-        <button class="pc-btn primary" id="wb-review-today" ${todayList.length?'':'disabled'}>📅 开始今日复习（${todayList.length}）</button>
-        <button class="pc-btn" id="wb-review-all" ${active.length?'':'disabled'}>📚 重做全部在册（${active.length}）</button>
-      </div>
-      <div class="wb-dist">
-        <div class="wb-dist-block"><div class="wb-dist-title">按知识域分布</div>${domainHtml}</div>
-        <div class="wb-dist-block"><div class="wb-dist-title">按错因分布</div>${reasonHtml}</div>
-      </div>
-      <h3 class="wb-h3">在册错题（${active.length}）</h3>
-      <div class="wb-list">
-        ${active.length? active.map(({i})=>{
-          const e=wb[i], q=QUIZ[i];
-          const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
-          return `<div class="wb-item" data-i="${i}">
-            <div class="wb-item-main">
-              <div class="wb-q">#${i+1} ${escH(q?q.q:'')}</div>
-              <div class="wb-meta">
-                <span class="wb-domain">${escH(q?q.d:'')}</span>
-                <span class="wb-box">${boxLabel}</span>
-                <span class="wb-review">复习 ${e.reviewCount||0} 次 · 连对 ${e.streakCorrect||0}</span>
-                <span class="wb-date">末次 ${e.lastReview||'-'}</span>
-              </div>
-            </div>
-            <div class="wb-item-side">
-              <select class="wb-reason" data-i="${i}">
-                <option value="">错因未标</option>
-                ${WRONG_REASONS.map(r=>`<option value="${r.k}" ${e.reason===r.k?'selected':''}>${r.icon} ${r.label}</option>`).join('')}
-              </select>
-              <div class="wb-btns">
-                <button class="wb-redo" data-i="${i}">重做</button>
-                <button class="wb-grad" data-i="${i}">毕业</button>
-              </div>
-            </div>
-          </div>`;
-        }).join('') : '<div class="wb-muted" style="padding:18px">还没有错题。去「刷题模式」做题，答错的会自动收进来。</div>'}
-      </div>
-      ${graduated.length?`<h3 class="wb-h3">已毕业（${graduated.length}）· 已掌握，可不再复习</h3>
-        <div class="wb-list">`+graduated.map(k=>{
-          const e=wb[k], q=QUIZ[k];
-          return `<div class="wb-item graduated" data-i="${k}">
-            <div class="wb-item-main"><div class="wb-q">#${+k+1} ${escH(q?q.q:'')}</div>
-            <div class="wb-meta"><span class="wb-domain">${escH(q?q.d:'')}</span><span class="wb-review">已连续做对，移出错题本</span></div></div>
-            <div class="wb-item-side"><button class="wb-ungrad" data-i="${k}">恢复</button></div>
-          </div>`;
-        }).join('')+`</div>`:''}
-    `;
-    root.querySelector('#wb-review-today')?.addEventListener('click',()=>startWrongReview());
-    root.querySelector('#wb-review-all')?.addEventListener('click',()=>startWrongReview(active.map(x=>x.i)));
-    root.querySelectorAll('.wb-reason').forEach(sel=>{
-      sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongBook(); });
+      <div class="wb-view" id="wb-view"></div>`;
+    root.querySelectorAll('.wb-subtab').forEach(b=>{
+      b.addEventListener('click',()=>{ wbSubMode=b.dataset.wb; saveWbSubMode(wbSubMode); renderWrongBook(); });
     });
-    root.querySelectorAll('.wb-redo').forEach(b=>{
-      b.addEventListener('click',()=>startWrongReview([+b.dataset.i]));
-    });
-    root.querySelectorAll('.wb-grad').forEach(b=>{
-      b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？毕业后将移出错题本。')){ markGraduate(+b.dataset.i,true); renderWrongBook(); } });
-    });
-    root.querySelectorAll('.wb-ungrad').forEach(b=>{
-      b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongBook(); });
-    });
+    if(wbSubMode==='browse') renderWrongbookBrowse();
+    else renderWrongbookPracticeLanding();
   }catch(err){
     root.innerHTML='<div class="callout">错题本加载出错：'+escH(String(err))+'</div>';
   }
+}
+
+// —— 浏览模式：统计 + 列表 + 毕业管理 + 进入刷题入口 ——
+function renderWrongbookBrowse(){
+  const view=document.getElementById('wb-view'); if(!view) return;
+  const wb=loadWrongBook();
+  const active=wrongActiveList();
+  const graduated=Object.keys(wb).filter(k=>wb[k].graduated);
+  const todayList=wrongTodayList();
+  const total=Object.keys(wb).length;
+  const byDomain={}, byReason={};
+  active.forEach(({i})=>{ const e=wb[i], q=QUIZ[i]; if(q) byDomain[q.d]=(byDomain[q.d]||0)+1; if(e.reason) byReason[e.reason]=(byReason[e.reason]||0)+1; });
+  const domainHtml=Object.keys(byDomain).length? Object.keys(byDomain).map(d=>`<span class="wb-tag">${escH(d)} <b>${byDomain[d]}</b></span>`).join('') : '<span class="wb-muted">暂无</span>';
+  const reasonHtml=Object.keys(byReason).length? Object.keys(byReason).map(r=>{const R=WRONG_REASONS.find(x=>x.k===r);return `<span class="wb-tag">${R?R.icon:'·'} ${escH(R?R.label:r)} <b>${byReason[r]}</b></span>`;}).join('') : '<span class="wb-muted">暂无标注</span>';
+  view.innerHTML=`
+    <div class="callout tip">错题本采用 <b>Leitner 五盒 + 艾宾浩斯间隔</b>：刷题答错自动收进「盒1（每天复习）」，每次做对升一盒（间隔 1→2→4→8→16 天），连续做对 3 次即「毕业」移出。当天到期的错题自动排进「今日复习」。</div>
+    <div class="wb-stats">
+      <div class="wb-stat"><div class="v">${total}</div><div class="l">累计错题</div></div>
+      <div class="wb-stat"><div class="v" style="color:var(--red)">${active.length}</div><div class="l">在册未毕业</div></div>
+      <div class="wb-stat"><div class="v" style="color:var(--green)">${graduated.length}</div><div class="l">已毕业</div></div>
+      <div class="wb-stat"><div class="v" style="color:var(--accent)">${todayList.length}</div><div class="l">今日待复习</div></div>
+    </div>
+    <div class="wb-actions">
+      <button class="pc-btn primary" id="wb-enter-practice">🎯 进入刷题模式</button>
+    </div>
+    <div class="wb-dist">
+      <div class="wb-dist-block"><div class="wb-dist-title">按知识域分布</div>${domainHtml}</div>
+      <div class="wb-dist-block"><div class="wb-dist-title">按错因分布</div>${reasonHtml}</div>
+    </div>
+    <h3 class="wb-h3">在册错题（${active.length}）</h3>
+    <div class="wb-list">
+      ${active.length? active.map(({i})=>{
+        const e=wb[i], q=QUIZ[i];
+        const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
+        return `<div class="wb-item" data-i="${i}">
+          <div class="wb-item-main">
+            <div class="wb-q">#${i+1} ${escH(q?q.q:'')}</div>
+            <div class="wb-meta">
+              <span class="wb-domain">${escH(q?q.d:'')}</span>
+              <span class="wb-box">${boxLabel}</span>
+              <span class="wb-review">复习 ${e.reviewCount||0} 次 · 连对 ${e.streakCorrect||0}</span>
+              <span class="wb-date">末次 ${e.lastReview||'-'}</span>
+            </div>
+          </div>
+          <div class="wb-item-side">
+            <select class="wb-reason" data-i="${i}">
+              <option value="">错因未标</option>
+              ${WRONG_REASONS.map(r=>`<option value="${r.k}" ${e.reason===r.k?'selected':''}>${r.icon} ${r.label}</option>`).join('')}
+            </select>
+            <div class="wb-btns">
+              <button class="wb-redo" data-i="${i}">重做</button>
+              <button class="wb-grad" data-i="${i}">毕业</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('') : '<div class="wb-muted" style="padding:18px">还没有错题。去「刷题模式」做题，答错的会自动收进来。</div>'}
+    </div>
+    ${graduated.length?`<h3 class="wb-h3">已毕业（${graduated.length}）· 已掌握，可不再复习</h3>
+      <div class="wb-list">`+graduated.map(k=>{
+        const e=wb[k], q=QUIZ[k];
+        return `<div class="wb-item graduated" data-i="${k}">
+          <div class="wb-item-main"><div class="wb-q">#${+k+1} ${escH(q?q.q:'')}</div>
+          <div class="wb-meta"><span class="wb-domain">${escH(q?q.d:'')}</span><span class="wb-review">已连续做对，移出错题本</span></div></div>
+          <div class="wb-item-side"><button class="wb-ungrad" data-i="${k}">恢复</button></div>
+        </div>`;
+      }).join('')+`</div>`:''}
+  `;
+  view.querySelector('#wb-enter-practice')?.addEventListener('click',()=>{ wbSubMode='practice'; saveWbSubMode(wbSubMode); renderWrongBook(); });
+  view.querySelectorAll('.wb-reason').forEach(sel=>{ sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongbookBrowse(); }); });
+  view.querySelectorAll('.wb-redo').forEach(b=>{ b.addEventListener('click',()=>startWrongbookSession([{q:QUIZ[+b.dataset.i], i:+b.dataset.i}], '单题重做')); });
+  view.querySelectorAll('.wb-grad').forEach(b=>{ b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？毕业后将移出错题本。')){ markGraduate(+b.dataset.i,true); renderWrongbookBrowse(); } }); });
+  view.querySelectorAll('.wb-ungrad').forEach(b=>{ b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongbookBrowse(); }); });
+}
+
+// —— 刷题模式 landing：选本轮范围 ——
+function renderWrongbookPracticeLanding(){
+  const view=document.getElementById('wb-view'); if(!view) return;
+  const today=wrongTodayList(), active=wrongActiveList();
+  view.innerHTML=`
+    <div class="wb-sel-card">
+      <h3 class="wb-sel-h">🎯 错题刷题模式 <span class="h-num">Leitner 五盒</span></h3>
+      <p class="wb-muted">选本轮要刷的范围，开始后会<b>逐题作答、即时判分</b>，并按间隔自动升级盒级（答对升盒→间隔变长；答错回盒1→明天再刷）。</p>
+      <div class="wb-presets">
+        <button class="wb-preset ${today.length?'':'disabled'}" id="wb-pre-today" ${today.length?'':'disabled'}>
+          <div class="pl">📅 仅刷今日到期</div><div class="ps">按间隔该复习了</div><div class="pn">${today.length} 道</div>
+        </button>
+        <button class="wb-preset ${active.length?'':'disabled'}" id="wb-pre-all" ${active.length?'':'disabled'}>
+          <div class="pl">📚 重做全部在册</div><div class="ps">未毕业全部</div><div class="pn">${active.length} 道</div>
+        </button>
+        <button class="wb-preset" id="wb-pre-custom">
+          <div class="pl">🔧 按条件自定义</div><div class="ps">按盒 / 知识域 / 错因</div><div class="pn">${active.length} 道</div>
+        </button>
+      </div>
+      <div class="wb-sel-cta">
+        <button class="wb-start-btn" id="wb-to-browse" style="background:var(--surface-2);color:var(--text-2)">← 返回浏览模式</button>
+        <div class="wb-sel-summary">先选范围开始</div>
+      </div>
+    </div>`;
+  view.querySelector('#wb-pre-today')?.addEventListener('click',()=>startWrongbookSession(today.map(t=>({q:t.q,i:t.i})), '今日到期'));
+  view.querySelector('#wb-pre-all')?.addEventListener('click',()=>startWrongbookSession(active.map(t=>({q:t.q,i:t.i})), '全部在册'));
+  view.querySelector('#wb-pre-custom')?.addEventListener('click',()=>startWrongbookSession(active.map(t=>({q:t.q,i:t.i})), '自定义筛选'));
+  view.querySelector('#wb-to-browse')?.addEventListener('click',()=>{ wbSubMode='browse'; saveWbSubMode(wbSubMode); renderWrongBook(); });
+}
+
+// 进入一轮练习：建立 session 并进入选题页
+function startWrongbookSession(list, scopeLabel){
+  if(!list || !list.length){ alert('没有符合条件的错题，先去「刷题模式」或「浏览模式」做题收错题吧。'); return; }
+  wbSession={
+    list: list.map(t=>({q:t.q, i:t.i})),
+    idx:0, answers:{}, results:{}, startTime:Date.now(), perStart:Date.now(),
+    finished:false, phase:'select', scopeLabel: scopeLabel||'自定义',
+    filter:{ box:'all', domain:'all', reason:'all' }
+  };
+  renderWrongBook();
+}
+
+// 选题页：按盒 / 知识域 / 错因 筛选
+function renderWrongbookSelect(){
+  const root=document.getElementById('quiz-wrongbook'); if(!root) return;
+  const S=wbSession; const wb=loadWrongBook();
+  const domains=[...new Set(S.list.map(t=>t.q&&t.q.d).filter(Boolean))];
+  const boxes=[...new Set(S.list.map(t=>{const e=wb[t.i]; return e?(e.box||1):1;}))].sort((a,b)=>a-b);
+  const reasons=[...new Set(S.list.map(t=>{const e=wb[t.i]; return e&&e.reason?e.reason:null;}).filter(Boolean))];
+  const f=S.filter;
+  const filtered=S.list.filter(t=>{
+    const e=wb[t.i]||{};
+    if(f.box!=='all' && (e.box||1)!==+f.box) return false;
+    if(f.domain!=='all' && t.q && t.q.d!==f.domain) return false;
+    if(f.reason!=='all' && (e.reason||null)!==f.reason) return false;
+    return true;
+  });
+  const reasonRow = reasons.length? `
+    <div class="wb-filter-row">
+      <div class="fr-h">错因</div>
+      <div class="wb-filter-tags" data-f="reason">
+        <button class="wb-ftag ${f.reason==='all'?'active':''}" data-v="all">全部</button>
+        ${reasons.map(r=>{const R=WRONG_REASONS.find(x=>x.k===r);return `<button class="wb-ftag ${f.reason===r?'active':''}" data-v="${r}">${R?R.icon+' ':''}${escH(R?R.label:r)}</button>`;}).join('')}
+      </div>
+    </div>` : '';
+  root.innerHTML=`
+    <div class="wb-sel-card">
+      <h3 class="wb-sel-h">🎯 ${escH(S.scopeLabel)} <span class="h-num">选题</span></h3>
+      <div class="wb-filter-row">
+        <div class="fr-h">盒级（间隔）</div>
+        <div class="wb-filter-tags" data-f="box">
+          <button class="wb-ftag ${f.box==='all'?'active':''}" data-v="all">全部</button>
+          ${boxes.map(b=>`<button class="wb-ftag ${f.box===String(b)?'active':''}" data-v="${b}">盒${b} · 每${LEITNER[b-1]}天</button>`).join('')}
+        </div>
+      </div>
+      <div class="wb-filter-row">
+        <div class="fr-h">知识域</div>
+        <div class="wb-filter-tags" data-f="domain">
+          <button class="wb-ftag ${f.domain==='all'?'active':''}" data-v="all">全部</button>
+          ${domains.map(d=>`<button class="wb-ftag ${f.domain===d?'active':''}" data-v="${escH(d)}">${escH(d)}</button>`).join('')}
+        </div>
+      </div>
+      ${reasonRow}
+      <div class="wb-sel-cta">
+        <button class="wb-start-btn" id="wb-sel-back" style="background:var(--surface-2);color:var(--text-2)">← 返回</button>
+        <div class="wb-sel-summary">已选 <b>${filtered.length}</b> / ${S.list.length} 道</div>
+        <button class="wb-start-btn" id="wb-start" ${filtered.length?'':'disabled'}>开始刷题（${filtered.length}）</button>
+      </div>
+    </div>`;
+  root.querySelector('#wb-sel-back').addEventListener('click',()=>{ wbSession=null; renderWrongBook(); });
+  root.querySelectorAll('.wb-filter-tags').forEach(group=>{
+    group.addEventListener('click',(ev)=>{
+      const btn=ev.target.closest('.wb-ftag'); if(!btn) return;
+      const fl=group.dataset.f; S.filter[fl]=btn.dataset.v; renderWrongbookSelect();
+    });
+  });
+  root.querySelector('#wb-start').addEventListener('click',()=>{
+    if(!filtered.length) return;
+    S.list=filtered.map(t=>({q:t.q,i:t.i}));
+    S.idx=0; S.answers={}; S.results={}; S.perStart=Date.now();
+    S.phase='practice'; renderWrongBook();
+  });
+}
+
+// 答题页：逐题作答、即时判分、更新盒级
+function renderWrongbookPractice(){
+  const root=document.getElementById('quiz-wrongbook'); if(!root) return;
+  const S=wbSession; const list=S.list;
+  if(S.idx>=list.length) S.idx=list.length-1;
+  if(S.idx<0) S.idx=0;
+  const item=list[S.idx]; const q=item.q;
+  if(!q){ S.finished=true; S.phase='summary'; return renderWrongBook(); }
+  const i=item.i;
+  const userAns=S.answers[i];
+  const res=S.results[i];
+  const graded = !!res;
+  const answeredCount=Object.keys(S.answers).filter(k=>S.answers[k]).length;
+  const rightCount=Object.keys(S.results).filter(k=>S.results[k].correct).length;
+  const acc = answeredCount? Math.round(rightCount/answeredCount*100):0;
+  const total=list.length;
+  const e=loadWrongBook()[i]||{};
+  const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
+  const pct=total?Math.round(answeredCount/total*100):0;
+  const up = res && res.boxAfter>res.boxBefore;
+  const down = res && res.boxAfter<res.boxBefore;
+  root.innerHTML=`
+    <div class="wb-prac-hud">
+      <div class="hud-cell">第 <b>${S.idx+1}</b>/${total} 题 · 正确率 <b>${acc}%</b> · ⏱${_fmtDur(Date.now()-S.startTime)}</div>
+      <div class="hud-bar"><span style="width:${pct}%"></span></div>
+      <div class="hud-pill">${boxLabel}</div>
+      <button class="hud-exit" id="wb-exit">✕ 退出</button>
+    </div>
+    <div class="wb-prac-card">
+      <div class="wb-prac-head">
+        <div class="ph-left"><span class="wb-prac-domain">${escH(q.d||'')}</span><span class="wb-prac-box">${boxLabel}</span></div>
+        <div class="ph-right">盒级进度 ${e.box||1}/5</div>
+      </div>
+      <div class="wb-prac-q">${escH(q.q)}</div>
+      <div class="wb-prac-opts">
+        ${q.o.map((o,k)=>{
+          const L='ABCD'[k];
+          let cls='wb-prac-opt';
+          if(graded){
+            cls+=' locked';
+            if(L===q.a) cls+=' correct';
+            if(L===userAns && L!==q.a) cls+=' wrong';
+          } else if(userAns===L){
+            cls+=' selected';
+          }
+          return `<button class="${cls}" data-pick="${L}" ${graded?'disabled':''}>
+            <span class="letter">${L}</span><span class="text">${escH(o)}</span>
+          </button>`;
+        }).join('')}
+      </div>
+      ${graded?`
+        <div class="wb-prac-explain ${res&&res.correct?'correct':'wrong'}">
+          <div class="ex-q">${res&&res.correct?'✅ 回答正确，已升级盒级':'❌ 回答错误，正确答案是 '+q.a}</div>
+          <div class="ex-a"><b>解析：</b>${escH(q.e||'（暂无解析）')}</div>
+          <div class="ex-a">盒级变化：盒${res.boxBefore} → 盒${res.boxAfter}${res.graduated?' · 🎓 已毕业，移出错题本':(up?'（升盒，间隔变长）':down?'（回盒1，明天再刷）':'')}</div>
+        </div>`:''}
+      <div class="wb-prac-actions">
+        ${graded
+          ? (S.idx===total-1
+              ? `<button class="wb-prac-next" id="wb-finish">查看成绩 →</button>`
+              : `<button class="wb-prac-next" id="wb-next">下一题 →</button>`)
+          : `<button class="wb-prac-submit" id="wb-submit" ${userAns?'':'disabled'}>提交答案</button>`}
+      </div>
+    </div>`;
+  root.querySelector('#wb-exit').addEventListener('click',()=>{ if(confirm('退出本轮刷题？进度将不计入成绩。')){ wbSession=null; renderWrongBook(); } });
+  if(!graded){
+    root.querySelectorAll('.wb-prac-opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{ S.answers[i]=btn.dataset.pick; renderWrongbookPractice(); });
+    });
+    root.querySelector('#wb-submit')?.addEventListener('click',()=>{
+      if(!S.answers[i]) return;
+      const ok=(S.answers[i]===q.a);
+      const r=submitWbAnswer(i, S.answers[i], ok);
+      S.results[i]={ correct:ok, boxBefore:r.boxBefore, boxAfter:r.boxAfter, graduated:r.graduated, ans:S.answers[i], time:Date.now()-S.perStart };
+      S.perStart=Date.now();
+      renderWrongBook();
+    });
+  } else {
+    const goNext=()=>{ if(S.idx>=total-1){ S.finished=true; S.phase='summary'; renderWrongBook(); } else { S.idx++; renderWrongBook(); } };
+    root.querySelector('#wb-next')?.addEventListener('click',goNext);
+    root.querySelector('#wb-finish')?.addEventListener('click',goNext);
+  }
+}
+
+// 提交：更新错题本盒级（答对升盒 / 答错回盒1 / 连对3次毕业），返回盒级变化
+function submitWbAnswer(idx, ans, ok){
+  const q=QUIZ[idx]; if(!q) return {boxBefore:1,boxAfter:1,graduated:false};
+  const wb=loadWrongBook(); const e=wb[idx];
+  const boxBefore = e? (e.box||1) : 1;
+  markWrongReview(idx, ok);
+  const wb2=loadWrongBook(); const e2=wb2[idx];
+  const boxAfter = e2? (e2.box||1) : 1;
+  return { boxBefore, boxAfter, graduated: e2? !!e2.graduated:false };
+}
+
+// 成绩总结页：成绩单 + 盒级变化表 + 下次复习时间表 + 复习建议
+function renderWrongbookSummary(){
+  const root=document.getElementById('quiz-wrongbook'); if(!root) return;
+  const S=wbSession; const list=S.list;
+  const total=list.length;
+  const right=Object.keys(S.results).filter(k=>S.results[k].correct).length;
+  const wrong=total-right;
+  const acc=total?Math.round(right/total*100):0;
+  const elapsed=Date.now()-S.startTime;
+  const today=_todayISO();
+  const gradCount=list.filter(t=>S.results[t.i]&&S.results[t.i].graduated).length;
+  const rows=list.map(t=>{
+    const r=S.results[t.i]||{correct:false,boxBefore:1,boxAfter:1,graduated:false};
+    const nd = r.graduated? '已毕业' : _addDays(today, LEITNER[(r.boxAfter||1)-1]);
+    const soon = !r.graduated && LEITNER[(r.boxAfter||1)-1]<=2;
+    const later = !r.graduated && LEITNER[(r.boxAfter||1)-1]>=8;
+    const up = r.boxAfter>r.boxBefore, down=r.boxAfter<r.boxBefore;
+    return `<tr>
+      <td>#${t.i+1}</td>
+      <td class="qi">${escH((t.q&&t.q.q)||'')}</td>
+      <td>${r.correct?'<span class="ok-pill">✅</span>':'<span class="no-pill">❌</span>'}</td>
+      <td><span class="box-before">盒${r.boxBefore}</span> → <span class="box-after ${up?'box-up':down?'box-down':''}">盒${r.boxAfter}</span>${r.graduated?' <span class="box-grad">🎓</span>':''}</td>
+      <td class="next-date ${soon?'soon':later?'later':''}">${nd}</td>
+    </tr>`;
+  }).join('');
+  let advice;
+  if(acc>=90) advice='🏆 本轮正确率极高，说明这些题已基本掌握，可放心让它们按更长间隔（盒4/盒5）复习，少花时间、保持手感即可。';
+  else if(acc>=60) advice='👍 整体掌握不错，但仍有少量薄弱点。把「答错回盒1」的题留到明天同一轮再刷，重点攻克。';
+  else advice='⚠️ 正确率偏低，说明这些知识域仍不牢固。建议今天再刷 1–2 轮，并回到「浏览模式」标注错因、看解析。';
+  const wrongIdxs=list.filter(t=>S.results[t.i]&&!S.results[t.i].correct).map(t=>t.i);
+  root.innerHTML=`
+    ${acc>=90?`<div class="wb-celebrate"><div class="emo">🎓</div><div class="txt"><div class="ttl">掌握得很扎实！</div><div class="desc">本轮正确率 ${acc}%，可放心拉长复习间隔。</div></div></div>`:''}
+    <div class="wb-sum-hero">
+      <h2>本轮刷题完成 🎉</h2>
+      <div class="sub">${right} 对 / ${wrong} 错 · 用时 ${_fmtDur(elapsed)} · 正确率 ${acc}%</div>
+    </div>
+    <div class="wb-sum-grid">
+      <div class="wb-sum-cell"><div class="v">${right}</div><div class="l">答对</div></div>
+      <div class="wb-sum-cell"><div class="v">${wrong}</div><div class="l">答错</div></div>
+      <div class="wb-sum-cell"><div class="v">${gradCount}</div><div class="l">本轮毕业</div></div>
+      <div class="wb-sum-cell"><div class="v">${acc}%</div><div class="l">正确率</div></div>
+    </div>
+    <div class="wb-sec">
+      <div class="wb-sec-h">📅 下次复习时间表 <span class="num">按 Leitner 间隔自动排程</span></div>
+      <table class="wb-next-table">
+        <thead><tr><th>题</th><th>题目</th><th>结果</th><th>盒级</th><th>下次复习</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="wb-sec">
+      <div class="wb-sec-h">💡 复习节奏建议</div>
+      <div class="callout tip">${advice}</div>
+    </div>
+    <div class="wb-sum-btns">
+      <button class="primary" id="wb-again">🔁 再来一轮（同范围）</button>
+      ${wrongIdxs.length?`<button id="wb-wrongonly">🎯 只刷本轮错题（${wrongIdxs.length}）</button>`:''}
+      <button id="wb-tobrowse">📖 返回浏览模式</button>
+    </div>`;
+  root.querySelector('#wb-again').addEventListener('click',()=>{
+    S.idx=0; S.answers={}; S.results={}; S.startTime=Date.now(); S.perStart=Date.now(); S.finished=false; S.phase='practice'; renderWrongBook();
+  });
+  root.querySelector('#wb-wrongonly')?.addEventListener('click',()=>{
+    const wl=wrongIdxs.map(i=>({q:QUIZ[i], i}));
+    startWrongbookSession(wl, '本轮错题');
+  });
+  root.querySelector('#wb-tobrowse').addEventListener('click',()=>{ wbSession=null; wbSubMode='browse'; saveWbSubMode(wbSubMode); renderWrongBook(); });
 }
 
 // 每日中心「错题本复习」入口按钮（显示今日到期数）
