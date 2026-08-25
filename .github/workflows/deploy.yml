@@ -69,17 +69,17 @@ jobs:
           echo "=== login ==="
           tcb login --apiKeyId "$TCB_SECRET_ID" --apiKey "$TCB_SECRET_KEY"
           echo "=== tcb env list (该密钥可见的环境) ==="
-          tcb env list 2>&1 | tee /tmp/envlist.txt
+          tcb env list --verbose 2>&1 | tee /tmp/envlist.txt
           echo "=== tcb hosting list (静态托管文件) ==="
-          tcb hosting list -e "$TCB_ENV_ID" 2>&1 | tee /tmp/hostlist.txt
+          tcb hosting list -e "$TCB_ENV_ID" --verbose 2>&1 | tee /tmp/hostlist.txt
           echo "=== tcb hosting deploy ==="
-          tcb hosting deploy . -e "$TCB_ENV_ID" --yes 2>&1 | tee /tmp/deploy.log
+          tcb hosting deploy . -e "$TCB_ENV_ID" --yes --verbose 2>&1 | tee /tmp/deploy.log
           rc=${PIPESTATUS[0]}
           echo "=== full logs ==="
           cat /tmp/envlist.txt /tmp/hostlist.txt /tmp/deploy.log
           if [ "$rc" -ne 0 ]; then
             echo "::error::DEPLOY_FAILED rc=$rc"
-            grep -iE "DescribeStaticStore|fail|denied|invalid|unauthorized|无|失败|权限|身份|error|not found|NotExist|forbidden|AuthFailure" /tmp/envlist.txt /tmp/hostlist.txt /tmp/deploy.log | head -40 | while IFS= read -r line; do
+            grep -iE "DescribeStaticStore|fail|denied|invalid|unauthorized|无|失败|权限|身份|error|not found|NotExist|forbidden|AuthFailure|AccessDenied|ResourceNotFound|StaticStore|code|RequestId|message" /tmp/envlist.txt /tmp/hostlist.txt /tmp/deploy.log | head -60 | while IFS= read -r line; do
               echo "::error::$line"
             done
             exit $rc
