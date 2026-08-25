@@ -10,19 +10,20 @@
 - **提交方式**：在 learningDesktop 内直接 `git add -A && git commit && git push`（已配 tracking origin/main）。日常改 index.html 后直接 commit+push，无需再走 01_Projects。
 - 提交历史：2026-08-16 将学习桌面独立化为 git 仓库并推送 GitHub（main = 3925820）。
 
-## 公网部署（CloudBase 静态网站托管，2026-08-21 厘清）
-- 公网地址 `https://test-d5gf0o9ky7d34beaf-1469471831.tcloudbaseapp.com/`，即 CloudBase 静态网站托管，serve 的就是仓库里的 `index.html`（与本地/proxy 同源同文件）。**envId = `test-d5gf0o9ky7d34beaf-1469471831`**（静态托管默认域名前缀即 envId）。
-- **GitHub Actions 自动部署（2026-08-21 加，commit `5e9932c` 创建）**：`.github/workflows/deploy.yml` 在 `push` 到 `main` 且改动命中 `index.html` / `资料/**` / `articles.js` / 工作流本身时，自动用 `TencentCloudBase/cloudbase-action@v1` 把 `index.html` + `资料/` 部署到 CloudBase 静态托管（envId 已硬编码在工作流里）。
-  - **🔴 状态：从未真正成功过**（2026-08-21 18:47 验证）。两次运行（run id `32467059162`、`32474603130`）均 `conclusion=failure`，Step 5「Deploy static to Tencent CloudBase」0.4 秒挂掉、无子步骤错误信息 → 根因是 **GitHub 仓库 Settings → Secrets 没配** `TCB_SECRET_ID` / `TCB_SECRET_KEY`（用户一直以为自己配好了，实际工作记忆写「已配好」但 Actions 页从未看到绿勾）。修复：在 https://github.com/barbarayezi/learningDesktop/settings/secrets/actions 加两条密钥，然后重跑失败 run 即可。
-  - **Secrets 名（必须一字不差）**：`TCB_SECRET_ID`、`TCB_SECRET_KEY`（与工作流 `with:` 字段对齐）。
-  - **密钥权限**：腾讯云 CAM API 密钥（控制台→访问管理→API密钥管理），需对该 envId 有 CloudBase 部署权限。建议**用子账号+最小权限**（不要用主账号），因为 `repository.private: false`。
-  - 工作流里**部署前会 `rm -rf`**：`.git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py`，确保含 service_role 密钥的后端文件**绝不上公网**（比依赖 .cloudbaseignore 更可靠）。
-  - 工作流会把 `资料/articles.js` 复制到根目录 `articles.js`（因 `index.html` 引用的是根目录 articles.js，但仓库里它在 `资料/` 下），保证公网「资讯」tab 不 404。
-  - 手动部署仅作兜底：① 控制台覆盖 `index.html`；② CLI `tcb hosting deploy index.html -e test-d5gf0o9ky7d34beaf-1469471831`（需 `tcb login`）。
-- **安全提醒**：2026-08-21 加 Actions 前确认 `proxy_server.py` 自身不硬编码密钥（密钥走 `CLOUDBASE_SERVICE_KEY` 环境变量注入），但 `proxy_server.py` / `cloudbase-sync-proxy/` 仍属后端，工作流已排除。CAM 的 `TCB_SECRET_KEY` 是账号级密钥，建议用子账号最小权限钥；若仓库为 public 切勿明文提交。
-- **当前工作机（Windows）tcb 未登录**：2026-08-21 实测 `tcb env list` 报 `No valid identity information`，且 `tcb login` 需浏览器交互授权、沙箱无法完成 → 本机不能直接 deploy，需在已登录机器部署（或先本机 `tcb login`）。
-- 是否生效的验证：`curl` 公网 HTML 后 grep 新版特征串（如 `Ch2 数据处理伦理`）；旧版会含 `Ch3 数据治理（笔记/脑图）` / `Ch3 数据治理（二刷）`；**更全面**：必须看到公网上存在 `资料/03_机构免费资料/*.pdf`、`资料/03_机构免费资料/*.md`、`资料/03_机构免费资料/*.html` 等至少 5 个子目录文件，仅 index.html 200 不能算通（此次故障中「index.html 200 + 资料/ 全 404」曾伪装成「在跑但文件丢了」）。
-- **「Actions 已配」验收铁律**：任何改动 deploy.yml / 加了 secrets / 改 push 路径后，必须在同回合**轮询 GitHub Actions API**（GET `/actions/runs?per_page=1`）确认 `conclusion=success`，再写「已配好」。记忆陷阱：把「我以为配了」写成「已配好」是 8-21 翻车主因。
+## 公网部署（CloudBase 静态网站托管，2026-08-25 厘清并修通）
+- 公网地址 `https://test-d5gf0o9ky7d34beaf-1469471831.tcloudbaseapp.com/`，即 CloudBase 静态网站托管，serve 的就是仓库里的 `index.html`（与本地/proxy 同源同文件）。
+  - **⚠️ envId 真实值 = `test-d5gf0o9ky7d34beaf`（无后缀）**。公网默认域名里的 `-1469471831` 是 CloudBase 默认域名后缀（来自 appId/uin），**不属于 envId**。过去多次把域名后缀当 envId 传入，导致 `DescribeStaticStore` 报 `InvalidParameter`。**权威 envId 以 `tcb env list` 实测为准**（该密钥可见环境即 `test-d5gf0o9ky7d34beaf`，状态 Normal，region ap-shanghai）。
+- **GitHub Actions 自动部署**：`.github/workflows/deploy.yml` 在 `push` 到 `main` 且改动命中 `index.html` / `资料/**` / `articles.js` / 工作流本身时自动部署。
+  - **🔴 历史坑（2026-08-21→08-25）**：最初用 `TencentCloudBase/cloudbase-action@v1`（node12），在 GitHub node24 runner 上登录失败「无有效身份信息」；中间一度误把域名后缀塞进 envId 又引出 `DescribeStaticStore: InvalidParameter`；并曾误以为 Secrets 没配。
+  - **✅ 2026-08-25 修好并首次 success（run 29, commit `01dc60b`）**：部署步骤改为**腾讯云官方 CLI**——`npm i -g @cloudbase/cli` → `tcb login --apiKeyId $TCB_SECRET_ID --apiKey $TCB_SECRET_KEY` → `tcb env use $TCB_ENV_ID` → `tcb hosting deploy . --env-id $TCB_ENV_ID --yes`。环境参数必须用 `--env-id`（tcb V3 全局选项），`-e` 不被 hosting 子命令识别。
+  - **Secrets 名（一字不差）**：`TCB_SECRET_ID`、`TCB_SECRET_KEY`（用户已在仓库 Settings → Secrets → Actions 配好，2026-08-25 验证 Pre-check 通过）。密钥为子账号 CAM 密钥，对该 envId 有 CloudBase 权限（env list/use/hosting 均通）。
+  - 工作流部署前 `rm -rf`：`.git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json`，确保含 service_role 密钥的后端文件**绝不上公网**（cloudbaserc.json 含错误短版 envId，一并删掉、改用 --env-id 显式指定）。
+  - 工作流会把 `资料/articles.js` 复制到根目录 `articles.js`（因 `index.html` 引用根目录 articles.js，但仓库里它在 `资料/` 下），保证公网「资讯」tab 不 404。
+  - 手动部署兜底（需本机 `tcb login` 已登录）：`tcb hosting deploy . -e test-d5gf0o9ky7d34beaf --yes`。
+- **安全提醒**：CAM 的 `TCB_SECRET_KEY` 是账号级密钥，仓库为 public，切勿明文提交；建议子账号最小权限。proxy_server.py / cloudbase-sync-proxy 仍属后端，工作流已排除。
+- **当前工作机（Windows）tcb 未登录**：沙箱无法完成 `tcb login` 浏览器交互，本机不能直接 deploy；公网部署走 GitHub Actions 即可（2026-08-25 实测 `tcb env list` 通过 CI 正常返回，确认密钥有效）。
+- 是否生效的验证：`curl -s 公网URL | grep 特征串`；Ch12 链接修复后公网应出现 `BV14t4y1Z7Hg`、消失 `BV1p5mEBkESv`；更严：确认公网上存在 `资料/03_机构免费资料/*.pdf` 等 ≥5 个子目录文件，仅 index.html 200 不能算通。
+- **「Actions 已配」验收铁律**：任何改动 deploy.yml / 加 secrets / 改 push 路径后，必须在同回合**轮询 GitHub Actions API**（GET `/actions/runs?per_page=1`）确认 `conclusion=success`，再写「已配好」。记忆陷阱：把「我以为配了」写成「已配好」是 8-21 翻车主因。
 
 ## 本地服务托管（proxy_server.py）· 环境坑（2026-08-17 补）
 - `proxy_server.py` 是 CDGA 学习桌面的本地静态服务器 + CloudBase API 代理，绑定 `0.0.0.0:8080`（监听所有网卡）。

@@ -840,6 +840,8 @@ pre code{background:none;padding:0}
 .dc-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 13px;border-radius:9px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-weight:600;transition:.15s;margin:3px 0}
 .dc-btn:hover{opacity:.9}
 .dc-btn.ghost{background:var(--surface);color:var(--accent)}
+.dc-btn.success{background:var(--green);border-color:var(--green);color:#fff}
+.dc-btn.success:hover{opacity:.92}
 .dc-prog{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em}
 .dc-btn.ghost .dc-prog{background:var(--bg-2);color:var(--text-2)}
 .dc-tip{font-size:12.5px;color:var(--text-3);line-height:1.6;margin:10px 0 0;padding:9px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid var(--accent)}
@@ -3105,6 +3107,7 @@ function showPage(id){
   crumbs.innerHTML = '备考资料中心 / '+(grp?'<b>'+grp+'</b> / ':'')+'<b>'+(titles[id]||'')+'</b>';
   document.querySelector('.content').scrollTo({top:0});
   if(id==='my-progress')renderProgress();
+  if(EXAM_STAGES.some(s=>s.id===id)){ renderDay(dayDate.value || TODAY_ISO); }
   if(id==='cdga-res'){renderNews();renderSources();}
   if(id==='phd'){
     initGenChecks('phd','phd-mat-list');
@@ -4284,6 +4287,16 @@ function wrongActiveList(){
   const wb=loadWrongBook();
   return Object.keys(wb).filter(k=>!wb[k].graduated).map(k=>({q:QUIZ[+k], i:+k}));
 }
+const WB_DAILY_DONE_KEY='cdga-wb-daily-done-v1';
+function loadWbDailyDone(){
+  try{ const d=JSON.parse(localStorage.getItem(WB_DAILY_DONE_KEY)||'{}'); if(d&&d.date===_todayISO()) return d; }catch(e){}
+  return {date:_todayISO(), done:false};
+}
+function saveWbDailyDone(done){
+  localStorage.setItem(WB_DAILY_DONE_KEY, JSON.stringify({date:_todayISO(), done:!!done}));
+}
+function isWbDailyDone(){ return loadWbDailyDone().done; }
+function clearWbDailyDone(){ saveWbDailyDone(false); }
 // 进入错题复习 session（onlyIdx 可选；默认今日到期）
 function startWrongReview(onlyIdx){
   let list;
@@ -4641,6 +4654,8 @@ function renderWrongbookSummary(){
   const acc=total?Math.round(right/total*100):0;
   const elapsed=Date.now()-S.startTime;
   const today=_todayISO();
+  // 若本轮是「今日到期」入口且已完成，标记今日错题复习已完成，供每日中心展示视觉反馈
+  if(S.scopeLabel==='今日到期' && total>0) saveWbDailyDone(true);
   const gradCount=list.filter(t=>S.results[t.i]&&S.results[t.i].graduated).length;
   const rows=list.map(t=>{
     const r=S.results[t.i]||{correct:false,boxBefore:1,boxAfter:1,graduated:false};
@@ -4700,9 +4715,13 @@ function renderWrongbookSummary(){
   root.querySelector('#wb-tobrowse').addEventListener('click',()=>{ wbSession=null; wbSubMode='browse'; saveWbSubMode(wbSubMode); renderWrongBook(); });
 }
 
-// 每日中心「错题本复习」入口按钮（显示今日到期数）
+// 每日中心「错题本复习」入口按钮（显示今日到期数 / 完成状态）
 function wrongBookDailyBtn(){
   let n=0; try{ n=wrongTodayList().length; }catch(e){}
+  const done=isWbDailyDone();
+  if(done){
+    return `<button class="dc-btn success" id="dcWrongBook" title="今日错题复习已完成，仍可点击进入浏览/刷题">✅ 错题本复习 <span class="dc-prog">今日已复习${n?' · 剩 '+n+' 道到期':''}</span></button>`;
+  }
   return `<button class="dc-btn ${n?'':'ghost'}" id="dcWrongBook" title="进入错题本：按 Leitner 间隔自动排程今日应复习的错题">📒 错题本复习${n?` <span class="dc-prog">今日 ${n} 道到期</span>`:' <span class="dc-prog">暂无到期</span>'}</button>`;
 }
 
