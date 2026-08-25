@@ -431,6 +431,11 @@ pre code{background:none;padding:0}
 .wb-start-btn{font-size:14px;font-weight:700;padding:10px 24px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
 .wb-start-btn:hover:not(:disabled){background:var(--accent-2);transform:translateY(-1px)}
 .wb-start-btn:disabled{background:var(--text-3);cursor:not-allowed;opacity:.6}
+.wb-requeue-row{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px 14px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:11px}
+.wb-requeue-row input{margin-top:2px;width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex:0 0 auto}
+.wb-requeue-row label{cursor:pointer;font-size:13px;color:var(--text);line-height:1.5}
+.wb-requeue-row label b{color:var(--accent);font-weight:700}
+.wb-requeue-row .rr-desc{display:block;font-size:11.5px;color:var(--text-3);margin-top:2px;line-height:1.45}
 
 /* ---------- WrongBook 刷题模式：答题页 ---------- */
 .wb-prac-hud{display:grid;grid-template-columns:1fr 2fr auto auto;gap:14px;align-items:center;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:11px;margin:0 0 14px;font-size:13px}
@@ -4431,13 +4436,19 @@ function renderWrongbookPracticeLanding(){
 }
 
 // 进入一轮练习：建立 session 并进入选题页
-function startWrongbookSession(list, scopeLabel){
+// requeue=true 时启用「即时重刷」：本轮答错的题自动排到队尾再刷一遍，直到答对才离开本轮
+function startWrongbookSession(list, scopeLabel, requeue){
   if(!list || !list.length){ alert('没有符合条件的错题，先去「刷题模式」或「浏览模式」做题收错题吧。'); return; }
+  const items=list.map(t=>({q:t.q, i:t.i}));
   wbSession={
-    list: list.map(t=>({q:t.q, i:t.i})),
+    list: items,
+    queue: items.slice(),           // 本轮呈现队列（即时重刷时会在尾部追加）
     idx:0, answers:{}, results:{}, startTime:Date.now(), perStart:Date.now(),
     finished:false, phase:'select', scopeLabel: scopeLabel||'自定义',
-    filter:{ box:'all', domain:'all', reason:'all' }
+    filter:{ box:'all', domain:'all', reason:'all' },
+    requeue: (requeue===false? false : true),  // 默认开启即时重刷
+    requeueCount:{},                // 每题被重刷的次数（用于封顶，避免死循环）
+    seq:0                           // 本轮已呈现题序（含重刷）
   };
   renderWrongBook();
 }
@@ -4483,6 +4494,12 @@ function renderWrongbookSelect(){
         </div>
       </div>
       ${reasonRow}
+      <div class="wb-requeue-row">
+        <input type="checkbox" id="wb-requeue" ${S.requeue?'checked':''}>
+        <label for="wb-requeue">🔁 <b>即时重刷</b>（推荐）
+          <span class="rr-desc">本轮答错的题会自动排到队尾，等其他题刷完后再来一遍，直到连续答对才离开本轮。最多重刷 3 次，防止死循环。</span>
+        </label>
+      </div>
       <div class="wb-sel-cta">
         <button class="wb-start-btn" id="wb-sel-back" style="background:var(--surface-2);color:var(--text-2)">← 返回</button>
         <div class="wb-sel-summary">已选 <b>${filtered.length}</b> / ${S.list.length} 道</div>
@@ -4496,10 +4513,13 @@ function renderWrongbookSelect(){
       const fl=group.dataset.f; S.filter[fl]=btn.dataset.v; renderWrongbookSelect();
     });
   });
+  root.querySelector('#wb-requeue')?.addEventListener('change',(e)=>{ S.requeue=e.target.checked; });
   root.querySelector('#wb-start').addEventListener('click',()=>{
     if(!filtered.length) return;
     S.list=filtered.map(t=>({q:t.q,i:t.i}));
+    S.queue=filtered.map(t=>({q:t.q,i:t.i}));
     S.idx=0; S.answers={}; S.results={}; S.perStart=Date.now();
+    S.requeueCount={}; S.seq=0;
     S.phase='practice'; renderWrongBook();
   });
 }
@@ -4507,27 +4527,28 @@ function renderWrongbookSelect(){
 // 答题页：逐题作答、即时判分、更新盒级
 function renderWrongbookPractice(){
   const root=document.getElementById('quiz-wrongbook'); if(!root) return;
-  const S=wbSession; const list=S.list;
-  if(S.idx>=list.length) S.idx=list.length-1;
-  if(S.idx<0) S.idx=0;
-  const item=list[S.idx]; const q=item.q;
-  if(!q){ S.finished=true; S.phase='summary'; return renderWrongBook(); }
-  const i=item.i;
+  const S=wbSession;
+  // 队列已空 → 进入总结
+  if(!S.queue || S.queue.length===0){ S.finished=true; S.phase='summary'; return renderWrongBook(); }
+  const item=S.queue[0]; const q=item.q; const i=item.i;
+  if(!q){ S.queue.shift(); return renderWrongBook(); }
   const userAns=S.answers[i];
   const res=S.results[i];
   const graded = !!res;
-  const answeredCount=Object.keys(S.answers).filter(k=>S.answers[k]).length;
-  const rightCount=Object.keys(S.results).filter(k=>S.results[k].correct).length;
-  const acc = answeredCount? Math.round(rightCount/answeredCount*100):0;
-  const total=list.length;
+  const answeredDistinct=Object.keys(S.results).filter(k=>S.results[k]).length;
+  const rightCount=Object.keys(S.results).filter(k=>S.results[k]&&S.results[k].correct).length;
+  const acc = answeredDistinct? Math.round(rightCount/answeredDistinct*100):0;
+  const total=S.list.length;
   const e=loadWrongBook()[i]||{};
   const boxLabel='盒'+(e.box||1)+' · 每'+LEITNER[(e.box||1)-1]+'天';
-  const pct=total?Math.round(answeredCount/total*100):0;
+  const pct=total?Math.round(answeredDistinct/total*100):0;
   const up = res && res.boxAfter>res.boxBefore;
   const down = res && res.boxAfter<res.boxBefore;
+  const rqTimes = S.requeueCount[i]||0;
+  const isLast = S.queue.length===1;  // 当前题是队列里最后一题 → 提交后本轮结束
   root.innerHTML=`
     <div class="wb-prac-hud">
-      <div class="hud-cell">第 <b>${S.idx+1}</b>/${total} 题 · 正确率 <b>${acc}%</b> · ⏱${_fmtDur(Date.now()-S.startTime)}</div>
+      <div class="hud-cell">第 <b>${S.seq+1}</b> 题 · 队列剩 <b>${S.queue.length}</b> · 正确率 <b>${acc}%</b> · ⏱${_fmtDur(Date.now()-S.startTime)}</div>
       <div class="hud-bar"><span style="width:${pct}%"></span></div>
       <div class="hud-pill">${boxLabel}</div>
       <button class="hud-exit" id="wb-exit">✕ 退出</button>
@@ -4535,7 +4556,7 @@ function renderWrongbookPractice(){
     <div class="wb-prac-card">
       <div class="wb-prac-head">
         <div class="ph-left"><span class="wb-prac-domain">${escH(q.d||'')}</span><span class="wb-prac-box">${boxLabel}</span></div>
-        <div class="ph-right">盒级进度 ${e.box||1}/5</div>
+        <div class="ph-right">${S.requeue && rqTimes>0 ? `🔁 本轮第 ${rqTimes+1} 次刷这题 · ` : ''}盒级进度 ${e.box||1}/5</div>
       </div>
       <div class="wb-prac-q">${escH(q.q)}</div>
       <div class="wb-prac-opts">
@@ -4556,13 +4577,13 @@ function renderWrongbookPractice(){
       </div>
       ${graded?`
         <div class="wb-prac-explain ${res&&res.correct?'correct':'wrong'}">
-          <div class="ex-q">${res&&res.correct?'✅ 回答正确，已升级盒级':'❌ 回答错误，正确答案是 '+q.a}</div>
+          <div class="ex-q">${res&&res.correct?'✅ 回答正确，已升级盒级':'❌ 回答错误，正确答案是 '+q.a}${S.requeue && !res.correct ? ' · 🔁 已排到队尾，待会儿再刷一遍' : ''}</div>
           <div class="ex-a"><b>解析：</b>${escH(q.e||'（暂无解析）')}</div>
           <div class="ex-a">盒级变化：盒${res.boxBefore} → 盒${res.boxAfter}${res.graduated?' · 🎓 已毕业，移出错题本':(up?'（升盒，间隔变长）':down?'（回盒1，明天再刷）':'')}</div>
         </div>`:''}
       <div class="wb-prac-actions">
         ${graded
-          ? (S.idx===total-1
+          ? (isLast
               ? `<button class="wb-prac-next" id="wb-finish">查看成绩 →</button>`
               : `<button class="wb-prac-next" id="wb-next">下一题 →</button>`)
           : `<button class="wb-prac-submit" id="wb-submit" ${userAns?'':'disabled'}>提交答案</button>`}
@@ -4582,7 +4603,18 @@ function renderWrongbookPractice(){
       renderWrongBook();
     });
   } else {
-    const goNext=()=>{ if(S.idx>=total-1){ S.finished=true; S.phase='summary'; renderWrongBook(); } else { S.idx++; renderWrongBook(); } };
+    // 提交判分后点「下一题/查看成绩」：出队；若答错且开启即时重刷，且未超 3 次，则排到队尾再刷一遍
+    const goNext=()=>{
+      const cur=S.queue[0];
+      S.queue.shift();
+      if(cur && S.results[cur.i] && !S.results[cur.i].correct && S.requeue){
+        const cnt=(S.requeueCount[cur.i]||0);
+        if(cnt<3){ S.queue.push(cur); S.requeueCount[cur.i]=cnt+1; delete S.answers[cur.i]; delete S.results[cur.i]; }
+      }
+      S.seq++;
+      if(S.queue.length===0){ S.finished=true; S.phase='summary'; renderWrongBook(); }
+      else { renderWrongBook(); }
+    };
     root.querySelector('#wb-next')?.addEventListener('click',goNext);
     root.querySelector('#wb-finish')?.addEventListener('click',goNext);
   }
@@ -4658,11 +4690,12 @@ function renderWrongbookSummary(){
       <button id="wb-tobrowse">📖 返回浏览模式</button>
     </div>`;
   root.querySelector('#wb-again').addEventListener('click',()=>{
-    S.idx=0; S.answers={}; S.results={}; S.startTime=Date.now(); S.perStart=Date.now(); S.finished=false; S.phase='practice'; renderWrongBook();
+    S.queue=S.list.map(t=>({q:t.q,i:t.i}));
+    S.idx=0; S.answers={}; S.results={}; S.startTime=Date.now(); S.perStart=Date.now(); S.finished=false; S.phase='practice'; S.seq=0; S.requeueCount={}; renderWrongBook();
   });
   root.querySelector('#wb-wrongonly')?.addEventListener('click',()=>{
     const wl=wrongIdxs.map(i=>({q:QUIZ[i], i}));
-    startWrongbookSession(wl, '本轮错题');
+    startWrongbookSession(wl, '本轮错题', S.requeue);
   });
   root.querySelector('#wb-tobrowse').addEventListener('click',()=>{ wbSession=null; wbSubMode='browse'; saveWbSubMode(wbSubMode); renderWrongBook(); });
 }
