@@ -3839,7 +3839,11 @@ const practice={
   shuffle:true,       // 是否打乱顺序（默认开，避免凭位置记忆）
   todaySeed:0,        // 种子版本号：清空答案/切换洗牌时+1，保证"再来一轮"换题
   // ✨ 2026-08-23 来源筛选：all 或 qSource 输出（self/original/csdn-public/inspired-public/datafield）
-  sourceFilter:'all'
+  sourceFilter:'all',
+  // ✨ 2026-08-26 防重复：每日抽题优先抽「未答过的题」，全答过再回退到已答。
+  //     解决"刷了几遍老是同几道题"的问题，配合「全答完一遍自动毕业」。
+  //     默认开；用户在刷题页右上角可一键切换。
+  antiRepeat:true
 };
 
 // ✨ 日期 → 稳定种子（同一天刷出来顺序一样，跨日自然换）
@@ -3876,6 +3880,7 @@ function loadPractice(){
       practice.todaySeed=s.todaySeed||0;
       practice.reviewSnapshot=s.reviewSnapshot||null;
       practice.sourceFilter=s.sourceFilter||'all';
+      practice.antiRepeat=s.antiRepeat!==false;  // 默认开
     }
   }catch(e){}
 }
@@ -3886,7 +3891,8 @@ function savePractice(){
     pickSize:practice.pickSize, shuffle:practice.shuffle,
     todaySeed:practice.todaySeed||0,
     reviewSnapshot:practice.reviewSnapshot||null,
-    sourceFilter:practice.sourceFilter||'all'
+    sourceFilter:practice.sourceFilter||'all',
+    antiRepeat:practice.antiRepeat
   }));}catch(e){}
 }
 function resetPractice(){
@@ -3920,6 +3926,35 @@ function practiceList(){
   // ✨ 用今天日期 + 域名 + 来源 + 种子版本号 当种子 → 同一天稳定，跨日自然换
   const seed = _dateSeed(_todayISO()+':'+practice.domainFilter+':'+(practice.sourceFilter||'all')+':'+(practice.todaySeed||0));
   const rng = _rngFrom(seed);
+  // ✨ 2026-08-26 防重复：把池子拆成「未答」+「已答」，优先抽未答的，全答过再回退到已答
+  //    仅在「普通域刷题」下生效（wrong / __wrong_today__ 走自己专属路径，不参与）
+  if(practice.antiRepeat){
+    const unans=[], done=[];
+    pool.forEach(x=>{ (practice.answers[x.i] ? done : unans).push(x); });
+    if(unans.length>0){
+      // 未答池：洗牌后取前 N
+      if(practice.shuffle){
+        for(let i=unans.length-1;i>0;i--){
+          const j=Math.floor(rng()*(i+1));
+          [unans[i],unans[j]]=[unans[j],unans[i]];
+        }
+      }
+      const n = practice.pickSize||unans.length;
+      const out = unans.slice(0, n);
+      // 未答不够 N 道 → 从已答池里补足（也洗牌）
+      if(out.length<n && done.length>0){
+        if(practice.shuffle){
+          for(let i=done.length-1;i>0;i--){
+            const j=Math.floor(rng()*(i+1));
+            [done[i],done[j]]=[done[j],done[i]];
+          }
+        }
+        out.push(...done.slice(0, n-out.length));
+      }
+      return out;
+    }
+    // unans=0 → 整域都已答过：回退到原始行为（已答池里抽 N 道）
+  }
   const arr = pool.slice();
   if(practice.shuffle){
     for(let i=arr.length-1;i>0;i--){
@@ -3970,6 +4005,7 @@ function renderPractice(){
       <div class="stat" style="color:var(--green)">✅ 对 <b>${right}</b></div>
       <div class="stat" style="color:var(--red)">❌ 错 <b>${done-right}</b></div>
       <button class="pc-btn ghost" id="btn-shuffle" style="font-size:12px;padding:5px 10px;margin-left:8px" title="打乱顺序（避免凭位置记忆答案）">🔀 打乱 <b style="color:${practice.shuffle?'var(--green)':'var(--text-3)'}">${practice.shuffle?'开':'关'}</b></button>
+      <button class="pc-btn ghost" id="btn-anti" style="font-size:12px;padding:5px 10px;margin-left:6px" title="防重复：每日优先抽未答过的题，全答完一遍再回退（默认开）">🆕 防重复 <b style="color:${practice.antiRepeat?'var(--green)':'var(--text-3)'}">${practice.antiRepeat?'开':'关'}</b></button>
       ${(done-right)>0?`<button class="pc-btn" id="btn-wrong" style="font-size:12px;padding:5px 10px;background:var(--red);color:#fff;margin-left:6px" title="只看/重做你做错的题">📒 只刷错题 (${done-right})</button>`:''}
       ${practice.domainFilter==='wrong'?`<button class="pc-btn ghost" id="btn-back-all" style="font-size:12px;padding:5px 10px;margin-left:6px">← 返回全部题</button>`:''}
     </div>
@@ -4171,6 +4207,11 @@ function bindPracticeEvents(){
   root.querySelector('#btn-shuffle')?.addEventListener('click',()=>{
     practice.shuffle=!practice.shuffle;
     practice.todaySeed=(practice.todaySeed||0)+1;   // 强制换一组种子
+    savePractice(); renderPractice();
+  });
+  // ✨ 2026-08-26 防重复开关：开→每日从「未答过的题」里抽；关→原始行为
+  root.querySelector('#btn-anti')?.addEventListener('click',()=>{
+    practice.antiRepeat=!practice.antiRepeat;
     savePractice(); renderPractice();
   });
   root.querySelector('#btn-wrong')?.addEventListener('click',()=>{
@@ -5803,17 +5844,26 @@ function renderDay(iso){
           const done=answered('all');
           out.push(`<button class="dc-btn" data-quiz="all" data-mode="practice">🎲 全量刷题（模拟考）<span class="dc-prog">${done} / ${QUIZ_TOTAL} 题 · 每日抽 ${Math.min(QUIZ_TOTAL,15)}</span></button><button class="dc-btn ghost" data-quiz="all" data-mode="study">📖 看全部题</button>`);
         }
-      } else if(isQuizDailyDone(k)){
-        const name=k.replace(/^[^、]+、/,'');
-        out.push(`<button class="dc-btn success" data-quiz="${k}" data-mode="practice">✅ 刷题 ${name} <span class="dc-prog">今日已刷题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
       } else {
         const cnt=QUIZ.filter(q=>q.d===k).length;
         const done=answered(k);
         const name=k.replace(/^[^、]+、/,'');
         const pickCnt=Math.min(cnt,5);  // ✨ 每日抽 5 道（域内不足则全展示）
-        out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🎲 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        const allCovered = done >= cnt;  // ✨ 该域历史已全覆盖一遍
+        if(isQuizDailyDone(k)){
+          out.push(`<button class="dc-btn success" data-quiz="${k}" data-mode="practice">✅ 刷题 ${name} <span class="dc-prog">今日已刷题</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        } else if(allCovered){
+          out.push(`<button class="dc-btn success" data-quiz="${k}" data-mode="practice">🏆 复习 ${name} <span class="dc-prog">${done}/${cnt} · 已全刷一遍</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        } else {
+          out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🆕 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · 优先未答 · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+        }
       }
     });
+    // ✨ 2026-08-26 防重复说明：仅在「未全答完」时显示一次
+    const anyUncovered = dom.some(k=>k!=='all' && answered(k) < QUIZ.filter(q=>q.d===k).length);
+    if(anyUncovered && practice.antiRepeat){
+      out.push(`<div class="dc-prog" style="margin-top:6px;font-size:11.5px;color:var(--text-3)">🆕 防重复模式开启：每天优先刷「未答过的题」，全答完一遍再回退。刷题页可一键关闭。</div>`);
+    }
     return out.join('');
   })();
   const resChips=renderResChips(RES_ORDER);
@@ -6243,8 +6293,11 @@ document.getElementById('readerMask').onclick=e=>{if(e.target.id==='readerMask')
 function openQuiz(domain,mode){
   practice.domainFilter=(domain&&QUIZ_DOMAINS.includes(domain))?domain:'all';
   practice.currentIdx=0; practice.finished=false;
-  // 从每日卡片/题库卡重新进入「刷题」时，清空旧作答并换种子，保证每一轮都是全新可答
-  if(mode==='practice'){
+  // 从每日卡片/题库卡重新进入「刷题」时：
+  //  · 防重复开：保留历史作答（practice.answers），让 practiceList 知道哪些题已答过；
+  //               也不换种子（每天稳定出同一批「未答优先」题，避免同一日重复出题）
+  //  · 防重复关：清空旧作答 + 加种子版本号 → 换一组全新题目（保持原行为）
+  if(mode==='practice' && !practice.antiRepeat){
     practice.answers={};
     practice.todaySeed=(practice.todaySeed||0)+1;
   }
