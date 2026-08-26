@@ -193,6 +193,40 @@ pre code{background:none;padding:0}
 .dc-review-btns button{padding:4px 9px;border-radius:7px;border:1px solid var(--border);background:var(--surface-2);cursor:pointer;font-size:12px;font-family:inherit}
 .dc-review-btns button.ok{background:var(--green);color:#fff;border-color:var(--green)}
 .dc-review-btns button.bad{background:var(--red);color:#fff;border-color:var(--red)}
+/* === 复习卡盲测 / 三档评分 (2026-08-26) === */
+.dc-review-item{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 12px;background:var(--surface);border-radius:9px;font-size:13.5px;line-height:1.45;border:1px solid transparent;transition:border-color .25s}
+.dc-review-item.revealed{border-color:var(--green)}
+.dc-review-item.no-a{background:rgba(255,107,107,.05)}
+.dc-review-q{flex:1 1 280px;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.dc-review-q .q-text{font-weight:600;color:var(--text)}
+.dc-review-reveal{padding:5px 11px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;flex:0 0 auto;transition:transform .15s}
+.dc-review-reveal:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.dc-review-a{flex:0 0 100%;margin-top:4px;padding:10px 12px;border-radius:8px;background:var(--surface-2);border:1px dashed var(--yellow)}
+.dc-review-a .a-label{color:var(--text-3);font-size:12px;font-weight:600;margin-right:4px}
+.dc-review-a .a-text{color:var(--text);font-weight:600}
+.dc-review-btns-3{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.dc-review-btns-3 button{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12.5px;font-family:inherit;font-weight:600;color:var(--text);transition:all .15s}
+.dc-review-btns-3 button.ok3{background:var(--green);color:#fff;border-color:var(--green)}
+.dc-review-btns-3 button.part{background:var(--yellow);color:#333;border-color:var(--yellow)}
+.dc-review-btns-3 button.bad{background:var(--red);color:#fff;border-color:var(--red)}
+.dc-review-btns-3 button:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.dc-review-btns-3 button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.dc-review-hint{font-size:12px;color:var(--text-3);margin:8px 0 0;padding:6px 8px;border-left:3px solid var(--yellow);background:rgba(255,193,7,.05);border-radius:0 6px 6px 0}
+.dc-no-answer-tag{font-size:11.5px;color:var(--red);font-weight:600;padding:3px 8px;background:rgba(255,107,107,.1);border-radius:6px}
+/* === 关键概念勾选盲测 (2026-08-26) === */
+.dc-concept-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:7px 4px;border-bottom:1px dashed var(--border);transition:background .25s}
+.dc-concept-row.done{opacity:.65}
+.dc-concept-row.no-a{background:rgba(255,107,107,.04)}
+.dc-concept-row .dc-concept{flex:1 1 220px;min-width:0;display:flex;align-items:center;gap:8px;cursor:pointer}
+.dc-concept-row .dc-concept input[type=checkbox]{flex:0 0 auto;width:16px;height:16px;cursor:pointer}
+.dc-concept-row .dc-concept input[type=checkbox]:disabled{cursor:not-allowed;opacity:.45}
+.dc-concept-q{font-size:13.5px;color:var(--text)}
+.dc-concept-row.done .dc-concept-q{text-decoration:line-through;color:var(--text-3)}
+.dc-concept-reveal{padding:3px 9px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:11.5px;font-family:inherit;font-weight:600}
+.dc-concept-reveal:hover{background:var(--accent);color:#fff}
+.dc-concept-a{font-size:13px;color:var(--text-2);background:var(--surface-2);padding:4px 8px;border-radius:6px;flex:1 1 100%;margin:4px 0 0 26px}
+.dc-concept-hint{font-size:11px;color:var(--text-3);font-style:italic;flex:0 0 auto}
+.dc-done-tag{font-size:12px;color:var(--green);font-weight:700}
 .progress{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:6px 0 14px}
 .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width .3s}
 .progress-label{font-size:12px;color:var(--text-3)}
@@ -5461,6 +5495,48 @@ const WEEK_META = {
 };
 function escH(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function fmtDur(sec){ if(sec==null) return ''; const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; if(h>0) return h+'h'+String(m).padStart(2,'0')+'m'; if(m>0) return m+'min'+(s?' '+s+'s':''); return s+'s'; }
+// 概念数据模型:把清单里"题面(答案)"混合字符串解析成独立的 {q, a, hasAnswer} 三字段 (2026-08-26)
+// 设计动机:原 conceptText() 把括号里外合并返回,用户在复习卡看到「数据治理框架的组成要素(战略/组织/...)」
+//   只要瞥几个字眼就敢点"掌握",盲测完全失效. 拆开后题面默认展示、答案需主动展开,挡住"看关键词就过关".
+//   兼容嵌套括号(取最外层)、无括号回退完整文本.
+const _conceptCache={};  // idx -> {q, a, hasAnswer}
+function _conceptRaw(i){
+  const cb = document.querySelectorAll('#cdga-check .chk')[i];
+  if(!cb) return '';
+  const span = cb.closest('.chk-row')&&cb.closest('.chk-row').querySelector('span');
+  if(span) return span.textContent.trim();
+  return '';
+}
+function conceptPair(i){
+  if(_conceptCache[i] !== undefined) return _conceptCache[i];
+  const full = _conceptRaw(i);
+  if(!full){ _conceptCache[i]={q:'概念 '+(i+1),a:'',hasAnswer:false}; return _conceptCache[i]; }
+  // 找首个中文左括号 (允许全角「(」与半角'(')
+  const openMatch = full.match(/[(（]/);
+  if(!openMatch){
+    _conceptCache[i] = {q:full, a:'', hasAnswer:false};
+    return _conceptCache[i];
+  }
+  const qEnd = openMatch.index;
+  const aStart = qEnd + 1;
+  // 找首个对应右括号
+  let closeIdx = -1;
+  for(let p=aStart;p<full.length;p++){
+    const c = full[p];
+    if(c===')'||c==='）'){ closeIdx = p; break; }
+  }
+  if(closeIdx < 0){
+    _conceptCache[i] = {q:full, a:'', hasAnswer:false};
+    return _conceptCache[i];
+  }
+  const q = full.slice(0, qEnd).trim() || ('概念 '+(i+1));
+  const a = full.slice(aStart, closeIdx).trim();
+  _conceptCache[i] = {q, a, hasAnswer: a.length>0};
+  return _conceptCache[i];
+}
+function conceptQ(i){ return conceptPair(i).q; }
+function conceptA(i){ return conceptPair(i).a; }
+// 保留旧 conceptText 向后兼容(错题/其他可能还在用)
 function conceptText(i){
   const cb = document.querySelectorAll('#cdga-check .chk')[i];
   if(cb){
@@ -5747,26 +5823,54 @@ function renderDay(iso){
     return `<span class="dc-daychip ${a} ${c}" data-iso="${x.iso}">${x.wd.slice(1)}</span>`;
   }).join('');
   // —— 主动投递:复习提醒 + 本周主题/关键概念 ——
+  // 复习卡走「盲测」模式:默认只显题面,点「先自己想」才展开答案+三档评分. 2026-08-26 立 —
   const checks=loadChecks();
   const dates=loadDates();
   const due=dueReviewItems(dates, checks).slice(0,6);
   const reviewHTML = due.length ? `
     <div class="dc-review">
-      <h4>🔁 复习提醒 (${due.length} 条) — 学过的东西,按 3/7/14/30 天循环考你</h4>
-      <div class="dc-review-list">${due.map(({i,days,cycle})=>`
-        <div class="dc-review-item">
+      <h4>🔁 复习提醒 (${due.length} 条) — 答案默认折叠，先回忆再展开</h4>
+      <div class="dc-review-list">${due.map(({i,days,cycle})=>{
+        const p = conceptPair(i);
+        const noAns = !p.hasAnswer;
+        return `
+        <div class="dc-review-item ${noAns?'no-a':''}" data-ridx2="${i}">
           <span class="dc-cycle-tag c${cycle<=30?cycle:30}">+${cycle}d</span>
-          <span class="dc-review-text">${escH(conceptText(i))}</span>
-          <div class="dc-review-btns">
-            <button class="ok"  data-ridx="${i}" data-act="ok">✓ 仍掌握</button>
-            <button class="bad" data-ridx="${i}" data-act="bad">× 忘了</button>
+          <div class="dc-review-q">
+            <span class="q-text">${escH(p.q)}</span>
+            ${noAns
+              ? '<span class="dc-no-answer-tag">⚠ 清单里此条无括号答案，请到「✅ 知识点清单」补全</span>'
+              : '<button class="dc-review-reveal" data-idx="'+i+'" data-act="reveal">🤔 先自己想 · 展开答案</button>'}
           </div>
-        </div>`).join('')}
+          ${noAns ? '' : `<div class="dc-review-a" data-for="${i}" hidden>
+            <span class="a-label">答案：</span><span class="a-text">${escH(p.a)}</span>
+            <div class="dc-review-btns-3">
+              <button class="ok3" data-ridx="${i}" data-act="ok">✓ 全记住</button>
+              <button class="part" data-ridx="${i}" data-act="part">⚠ 一部分</button>
+              <button class="bad" data-ridx="${i}" data-act="bad">× 忘了</button>
+            </div>
+          </div>`}
+        </div>`;
+      }).join('')}
       </div>
+      <div class="dc-review-hint">💡 复习三档：全记住 → 进入下一周期；一部分 → 退回短周期再练；忘了 → 本周主题重学</div>
     </div>` : '';
   const concepts=weekKeyConcepts(d.w, checks, 3);
   const conceptsHTML = concepts.length
-    ? concepts.map(idx=>`<label class="dc-concept ${checks[idx]?'done':''}"><input type="checkbox" data-cidx="${idx}" ${checks[idx]?'checked':''}><span>${escH(conceptText(idx))}</span></label>`).join('')
+    ? concepts.map(idx=>{
+        const p = conceptPair(idx);
+        const noAns = !p.hasAnswer;
+        const already = !!checks[idx];
+        return `<div class="dc-concept-row ${noAns?'no-a':''} ${already?'done':''}" data-cidx2="${idx}">
+          <label class="dc-concept">
+            <input type="checkbox" data-cidx="${idx}" ${already?'checked':''} ${(noAns||already)?'':'disabled'}>
+            <span class="dc-concept-q">${escH(p.q)}</span>
+          </label>
+          ${already ? '<span class="dc-done-tag">✅ 已掌握</span>' : (noAns
+            ? '<span class="dc-no-answer-tag">⚠ 此条清单无括号答案</span>'
+            : '<button class="dc-concept-reveal" data-idx="'+idx+'" data-act="reveal-c">📖 先想 · 展开答案</button><span class="dc-concept-a" data-for="c-'+idx+'" hidden><b>答案：</b>'+escH(p.a)+'</span><span class="dc-concept-hint">（展开后才能勾已掌握）</span>')}
+        </div>`;
+      }).join('')
     : (WEEK_DOMAINS[d.w]&&WEEK_DOMAINS[d.w].length ? '<div class="dc-empty">本周这些域都已勾完,可去「✅ 知识点清单」手动复习其他概念</div>' : '<div class="dc-empty">本周以刷题/模拟为主,无新概念</div>');
   const weekHTML = `
     <div class="dc-week">
@@ -5898,26 +6002,88 @@ function renderDay(iso){
     if(!b.dataset.origLabel) b.dataset.origLabel=b.textContent.replace(/^🔽\s*/, '');
   });
   // 主动投递:关键概念勾选 → 同步到清单(并记 mastered_at)
+  // 新版:未展开答案时 checkbox 强制 disabled,无法误勾 (2026-08-26)
   dayCard.querySelectorAll('[data-cidx]').forEach(cb=>{
     cb.onchange=e=>{
       const idx=Number(cb.dataset.cidx);
+      // 防御:即使 JS 渲染残留了 disabled,用户强行勾也要拦截
+      const row = cb.closest('.dc-concept-row');
+      if(row && row.querySelector('.dc-concept-a') && row.querySelector('.dc-concept-a').hidden && !cb.dataset.forceOk){
+        cb.checked = !cb.checked;
+        flashRow(row, '请先展开答案回忆，再勾已掌握');
+        return;
+      }
       setCheckState(idx, cb.checked);
       cb.closest('.dc-concept').classList.toggle('done', cb.checked);
     };
   });
-  // 复习提醒按钮: ✓ 仍掌握 → 重置 mastered_at 为今天(进入下一周期); × 忘了 → 取消勾选(进入本周主题再学)
-  dayCard.querySelectorAll('[data-ridx]').forEach(btn=>{
+  // 关键概念「先想·展开答案」按钮
+  dayCard.querySelectorAll('[data-act="reveal-c"]').forEach(btn=>{
+    btn.onclick=()=>{
+      const idx = btn.dataset.idx;
+      const a = dayCard.querySelector('.dc-concept-a[data-for="c-'+idx+'"]');
+      const cb = dayCard.querySelector('input[data-cidx="'+idx+'"]');
+      if(a) a.hidden = false;
+      if(cb) cb.disabled = false;   // 展开后才能勾
+      btn.remove();
+    };
+  });
+  // 复习卡「展开答案」按钮
+  dayCard.querySelectorAll('[data-act="reveal"]').forEach(btn=>{
+    btn.onclick=()=>{
+      const idx = btn.dataset.idx;
+      const a = dayCard.querySelector('.dc-review-a[data-for="'+idx+'"]');
+      if(a){ a.hidden = false; }
+      btn.remove();
+      const item = btn.closest('.dc-review-item');
+      if(item) item.classList.add('revealed');
+    };
+  });
+  // 复习卡三档评分:✓全记住 / ⚠一部分 / ×忘了 — 2026-08-26 立
+  // 约束:✓ / ⚠ 必须先展开答案才能点(挡住「看几个关键词就过关」的盲测失效);
+  //      × 忘了可以直点(都已忘了,展开也无新东西)
+  dayCard.querySelectorAll('.dc-review-btns-3 [data-ridx]').forEach(btn=>{
     btn.onclick=()=>{
       const idx=Number(btn.dataset.ridx);
       const act=btn.dataset.act;
+      const itemEl=btn.closest('.dc-review-item');
+      const revealed=itemEl && itemEl.classList.contains('revealed');
+      if(act!=='bad' && !revealed){
+        // 视觉闪烁:提示先展开答案
+        const area = btn.closest('.dc-review-a');
+        if(area){
+          area.style.transition='box-shadow .4s ease';
+          area.style.boxShadow='0 0 0 4px rgba(255,193,7,.5)';
+          showToast('🤔 请先点「展开答案」回忆一下，再评掌握度');
+          setTimeout(()=>{ area.style.boxShadow=''; }, 900);
+        }
+        return;
+      }
       if(act==='ok'){
+        // 全记住 → 进入下一周期 (cycles 数组里的下一个更大周期)
         const d=loadDates(); d[idx]=todayISO(); saveDates(d);
-      } else {
+        const c=loadChecks(); c[idx]=true; saveChecks(c);
+        showToast('✅ 进入下一周期复习');
+      } else if(act==='part'){
+        // 一部分 → 未掌握 + 立即重置 mastered_at 进入短周期复习
         setCheckState(idx, false);
+        const d=loadDates(); d[idx]=todayISO(); saveDates(d);
+        showToast('⚠ 已加入短周期复习（按 3d 循环）');
+      } else {
+        // 忘了 → 取消勾选,加入本周主题概念重学
+        setCheckState(idx, false);
+        showToast('🔁 已加入本周主题，下一轮复习见');
       }
       renderDay(iso);
     };
   });
+  // 防御函数:行级闪烁提示
+  function flashRow(row, msg){
+    row.style.transition='box-shadow .4s ease';
+    row.style.boxShadow='0 0 0 4px rgba(255,193,7,.5)';
+    showToast(msg);
+    setTimeout(()=>{ row.style.boxShadow=''; }, 900);
+  }
   document.getElementById('dcPrev').onclick=()=>gotoDay(d.day-1);
   document.getElementById('dcNext').onclick=()=>gotoDay(d.day+1);
   dayCard.querySelectorAll('[data-iso]').forEach(c=>c.onclick=()=>{dayDate.value=c.dataset.iso;renderDay(c.dataset.iso);});
