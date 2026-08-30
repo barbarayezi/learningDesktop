@@ -540,11 +540,17 @@ pre code{background:none;padding:0}
 .wb-sec-h{font-size:14px;font-weight:700;margin:0 0 12px;color:var(--text);display:flex;justify-content:space-between;align-items:center}
 .wb-sec-h .num{font-size:12px;color:var(--text-3);font-weight:500}
 
-.wb-next-table{width:100%;border-collapse:collapse;font-size:13px}
-.wb-next-table th{font-size:11.5px;color:var(--text-3);font-weight:700;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em}
-.wb-next-table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+.wb-next-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.wb-next-table th{font-size:11.5px;color:var(--text-3);font-weight:700;text-align:left;padding:6px 10px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.05em;vertical-align:middle}
+.wb-next-table td{padding:10px;border-bottom:1px solid var(--border);border-left:1px solid var(--border);vertical-align:middle}
+.wb-next-table th:first-child,.wb-next-table td:first-child{border-left:none}
 .wb-next-table tr:last-child td{border-bottom:none}
-.wb-next-table .qi{color:var(--text-2);font-size:13px;line-height:1.4;max-width:520px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wb-next-table th:nth-child(1),.wb-next-table td:nth-child(1){width:46px;text-align:center}
+.wb-next-table th:nth-child(2),.wb-next-table td:nth-child(2){width:auto}
+.wb-next-table th:nth-child(3),.wb-next-table td:nth-child(3){width:58px;text-align:center}
+.wb-next-table th:nth-child(4),.wb-next-table td:nth-child(4){width:108px;text-align:center}
+.wb-next-table th:nth-child(5),.wb-next-table td:nth-child(5){width:96px;text-align:center}
+.wb-next-table .qi{color:var(--text-2);font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}
 .wb-next-table .qi b{color:var(--text)}
 .wb-next-table .box-before{color:var(--text-3);font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}
 .wb-next-table .box-after{color:var(--text);font-weight:700;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
@@ -4177,9 +4183,94 @@ function bindPracticeEvents(){
       if(isReview) markWrongReview(item.i, picked===item.q.a);
       // 普通刷题答错：自动收录进错题本
       else if(picked!==item.q.a) addWrong(item.i);
-      savePractice(); renderPractice();
+      savePractice();
+      // 🌟 修复：选项点击后停留在原题并显示反馈（不前进）
+      //   practiceList() 在 antiRepeat 下会把"刚答完的题"踢出 list，
+      //   并把另一道未答过的新题挪到 list[0]，于是 currentIdx=0 渲染出来
+      //   的就是新题，看起来"跳到下一题"。这里不调 renderPractice()，
+      //   而是直接在当前 DOM 上追加反馈 + 切换底部按钮，让用户先看反馈
+      //   再点「下一题 →」按钮主动进下一题，确保一轮就是 5 道题不缩水。
+      revealAnswerFeedback(item, picked, list);
     });
   });
+
+  // 在当前题目卡片上「原地」展示答题反馈（不动 list、不前进 currentIdx）
+  function revealAnswerFeedback(item, picked, list){
+    const card=document.getElementById('pcard'); if(!card) return;
+    const correct=picked===item.q.a;
+    // 1. 选项按钮置为 locked + correct/wrong
+    card.querySelectorAll('.pc-opt').forEach(b=>{
+      b.disabled=true;
+      b.classList.add('locked');
+      b.classList.remove('selected');
+      const L=b.dataset.pick;
+      if(L===item.q.a) b.classList.add('correct');
+      else if(L===picked){ b.classList.add('wrong'); b.classList.add('selected'); }
+    });
+    // 2. 插入/替换 feedback 块
+    const oldFb=card.querySelector('.pc-feedback');
+    if(oldFb) oldFb.remove();
+    const fbHtml=`<div class="pc-feedback ${correct?'correct':'wrong'}">
+      <div class="label">${correct?'✅ 回答正确':'❌ 回答错误，正确答案是 '+item.q.a}</div>
+      <div class="expl"><b>解析：</b>${item.q.e}</div>
+    </div>`;
+    card.querySelector('.pc-options').insertAdjacentHTML('afterend', fbHtml);
+    // 3. 替换底部按钮为「下一题」/「查看成绩」
+    const navRight=card.querySelector('.pc-nav .right');
+    if(navRight){
+      const isLast=practice.currentIdx===list.length-1;
+      navRight.innerHTML=isLast
+        ? `<button class="pc-btn primary" id="btn-finish">查看成绩 →</button>`
+        : `<button class="pc-btn primary" id="btn-next">下一题 →</button>`;
+      if(isLast){
+        navRight.querySelector('#btn-finish').addEventListener('click',()=>{
+          practice.finished=true;
+          const df=practice.domainFilter;
+          if(df && df!=='wrong' && df!=='__wrong_today__'){
+            if(df==='all'){
+              QUIZ.map(q=>q.d).filter((v,i,a)=>a.indexOf(v)===i).forEach(dk=>{
+                if(dk!=='wrong' && dk!=='__wrong_today__') saveQuizDailyDone(dk);
+              });
+              saveQuizDailyDone('__all__');
+            } else {
+              saveQuizDailyDone(df);
+            }
+          }
+          savePractice(); renderPractice();
+        });
+      } else {
+        navRight.querySelector('#btn-next').addEventListener('click',()=>{
+          if(practice.currentIdx<list.length-1){
+            practice.currentIdx++; savePractice(); renderPractice();
+          }
+        });
+      }
+    }
+    // 4. 更新 HUD 头部统计 ✅对/❌错 + 进度条
+    const hud=document.querySelector('.practice-hud');
+    if(hud){
+      const totalDone=Object.keys(practice.answers).filter(k=>practice.answers[k]).length;
+      const totalRight=Object.keys(practice.answers).filter(k=>{
+        const it=QUIZ[k]; return it && practice.answers[k]===it.a;
+      }).length;
+      const answeredHere=list.filter(x=>practice.answers[x.i]).length;
+      const progressPct=list.length?Math.round(answeredHere/list.length*100):0;
+      const pb=hud.querySelector('.progress span'); if(pb) pb.style.width=progressPct+'%';
+      const stats=hud.querySelectorAll('.stat');
+      if(stats.length>=4){
+        stats[2].innerHTML=`✅ 对 <b>${totalRight}</b>`;
+        stats[3].innerHTML=`❌ 错 <b>${totalDone-totalRight}</b>`;
+      }
+    }
+    // 5. 更新跳题小圆点的样式（标为 right/wrong）
+    card.querySelectorAll('.pc-jump-dot').forEach(d=>{
+      const idx=parseInt(d.dataset.goto);
+      const a=practice.answers[idx];
+      d.classList.remove('right','wrong');
+      if(a===QUIZ[idx].a) d.classList.add('right');
+      else if(a) d.classList.add('wrong');
+    });
+  }
 
   // 上下题
   root.querySelector('#btn-prev')?.addEventListener('click',()=>{
