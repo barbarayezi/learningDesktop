@@ -443,10 +443,15 @@ pre code{background:none;padding:0}
 
 /* ---------- WrongBook 按盒查看 ---------- */
 .wb-boxes-summary{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
-.wb-boxes-pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--text-2)}
+.wb-boxes-pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--text-2);cursor:pointer;user-select:none;transition:.15s}
+.wb-boxes-pill:hover{border-color:var(--accent);background:var(--accent-soft)}
 .wb-boxes-pill b{font-weight:700;color:var(--text)}
 .wb-boxes-pill span{font-size:12px;font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:1px 8px}
 .wb-boxes-pill.grad span{background:var(--green-soft);color:var(--green)}
+.wb-boxes-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wb-boxes-pill.active b{color:#fff}
+.wb-boxes-pill.active span{background:rgba(255,255,255,.25);color:#fff}
+.wb-boxes-pill.grad.active{background:var(--green);border-color:var(--green)}
 .wb-boxes-grid{display:flex;flex-direction:column;gap:14px}
 .wb-box-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
 .wb-box-card.b1{border-left:4px solid var(--red)}
@@ -4607,6 +4612,7 @@ const WB_SUBMODE_KEY='cdga-wb-submode-v1';
 function loadWbSubMode(){ try{ const v=localStorage.getItem(WB_SUBMODE_KEY); return (v==='browse'||v==='practice'||v==='boxes')?v:'browse'; }catch(e){ return 'browse'; } }
 function saveWbSubMode(m){ try{ localStorage.setItem(WB_SUBMODE_KEY, m); }catch(e){} }
 let wbSubMode=loadWbSubMode();
+let wbBoxFilter='all'; // 'all' | '1'..'5' | 'graduated'
 let wbSession=null;
 function _addDays(iso,n){ const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function _fmtDur(ms){ const s=Math.max(0,Math.round(ms/1000)); const m=Math.floor(s/60); return m+':'+String(s%60).padStart(2,'0'); }
@@ -4725,6 +4731,8 @@ function renderWrongbookBoxes(){
     boxes.push({box:b, interval:LEITNER[b-1], items, nextReview, dueToday});
   }
   const totalActive=boxes.reduce((s,b)=>s+b.items.length,0);
+  const total=totalActive+graduated.length;
+  const isActive=(boxNum)=> wbBoxFilter===String(boxNum);
   function renderItem(t, isGraduated){
     const e=t.e, q=t.q;
     return `<div class="wb-item" data-i="${t.i}">
@@ -4750,13 +4758,14 @@ function renderWrongbookBoxes(){
     </div>`;
   }
   view.innerHTML=`
-    <div class="callout tip">📦 按 <b>Leitner 五盒</b>查看错题。每道题根据当前盒级决定复习间隔，盒1每天、盒5每 16 天。当天到期的题会在卡片右上角标红。</div>
+    <div class="callout tip">📦 按 <b>Leitner 五盒</b>查看错题。每道题根据当前盒级决定复习间隔，盒1每天、盒5每 16 天。当天到期的题会在卡片右上角标红。点击上方按钮可筛选只看某一盒。</div>
     <div class="wb-boxes-summary">
-      ${boxes.map(b=>`<div class="wb-boxes-pill b${b.box}"><b>盒${b.box}</b><span>${b.items.length}</span></div>`).join('')}
-      <div class="wb-boxes-pill grad"><b>已毕业</b><span>${graduated.length}</span></div>
+      <div class="wb-boxes-pill all ${wbBoxFilter==='all'?'active':''}" data-filter="all"><b>全部</b><span>${total}</span></div>
+      ${boxes.map(b=>`<div class="wb-boxes-pill b${b.box} ${isActive(b.box)?'active':''}" data-filter="${b.box}"><b>盒${b.box}</b><span>${b.items.length}</span></div>`).join('')}
+      <div class="wb-boxes-pill grad ${wbBoxFilter==='graduated'?'active':''}" data-filter="graduated"><b>已毕业</b><span>${graduated.length}</span></div>
     </div>
     <div class="wb-boxes-grid">
-      ${boxes.map(b=>`
+      ${wbBoxFilter!=='graduated' ? boxes.filter(b=> wbBoxFilter==='all' || isActive(b.box)).map(b=>`
         <div class="wb-box-card b${b.box}">
           <div class="wb-box-head">
             <div class="wb-box-title">
@@ -4772,8 +4781,8 @@ function renderWrongbookBoxes(){
             ${b.items.length? b.items.map(t=>renderItem(t,false)).join('') : '<div class="wb-muted" style="padding:14px">该盒暂无题目</div>'}
           </div>
         </div>
-      `).join('')}
-      ${graduated.length?`
+      `).join('') : ''}
+      ${(wbBoxFilter==='all' || wbBoxFilter==='graduated') && graduated.length?`
         <div class="wb-box-card grad">
           <div class="wb-box-head">
             <div class="wb-box-title">
@@ -4787,6 +4796,13 @@ function renderWrongbookBoxes(){
         </div>
       `:''}
     </div>`;
+  view.querySelectorAll('.wb-boxes-pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      const f=p.dataset.filter;
+      wbBoxFilter = (wbBoxFilter===f)?'all':f;
+      renderWrongbookBoxes();
+    });
+  });
   view.querySelectorAll('.wb-reason').forEach(sel=>{ sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongbookBoxes(); }); });
   view.querySelectorAll('.wb-redo').forEach(b=>{ b.addEventListener('click',()=>startWrongbookSession([{q:QUIZ[+b.dataset.i], i:+b.dataset.i}], '单题重做')); });
   view.querySelectorAll('.wb-grad').forEach(b=>{ b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？')){ markGraduate(+b.dataset.i,true); renderWrongbookBoxes(); } }); });
