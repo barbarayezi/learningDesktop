@@ -915,6 +915,14 @@ pre code{background:none;padding:0}
 .dc-cheat-wrap{margin:12px 0 2px}
 .dc-cheat-toggle{width:100%;justify-content:flex-start;font-size:13px;color:var(--accent)}
 .dc-cheat{display:grid;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+/* 折叠失效修复（2026-08-26）：
+   .dc-cheat 是单 class，.dc-fold-block 也是单 class，同优先级；.dc-cheat 写在
+   后面导致其 display:grid 永远覆盖 .dc-fold-block{display:none}，折叠块永不隐藏。
+   用 2 类选 接管 base 与 open 两种状态：
+     · 默认       → display:none  真正隐藏
+     · .open       → display:grid 还原原 grid + 边框/圆角/背景（等同 .dc-cheat 自身样式）*/
+.dc-fold-block.dc-cheat{display:none}
+.dc-fold-block.dc-cheat.open{display:grid;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
 .dc-cheat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
 .dc-cheat-item{display:flex;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12.5px}
 .dc-cheat-num{flex:0 0 20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
@@ -3917,17 +3925,40 @@ function resetPractice(){
   practice.finished=false;
   // ✨ 加种子版本号 → 下次 practiceList() 用新种子重新洗牌，相当于"换一组题"
   practice.todaySeed=(practice.todaySeed||0)+1;
+  _invalidateListCache();
   savePractice(); renderPractice();
 }
 
+// ✨ 2026-08-28 fix：list 缓存（仅在「外部状态」变化时重算）
+// 之前 practiceList() 每次调用都重算 unans/done 划分 + 洗牌 + 抽前 N。
+// 用户答一题后 answers 多了 1 条 → unans 池缩短 → 洗牌结果与上次不同
+// → currentIdx 对应的题号在新 list 里变成另一道题 → 用户感觉「点选直接跳题、答案没显示」。
+// 现在：list 按「日期+域+来源+seed+pickSize+shuffle+antiRepeat」缓存，
+// 答一题不重算（同一天同状态下 list 稳定），curIdx 锁定的题始终在原位。
+// 切域/切来源/切 shuffle/切 antiRepeat/重置 → 清缓存。
+let _listCache = null;
+let _listCacheKey = '';
+function _listKey(){
+  return [
+    _todayISO(),
+    practice.domainFilter||'all',
+    practice.sourceFilter||'all',
+    practice.todaySeed||0,
+    practice.pickSize||5,
+    practice.shuffle?'1':'0',
+    practice.antiRepeat?'1':'0'
+  ].join('|');
+}
+function _invalidateListCache(){ _listCache=null; _listCacheKey=''; }
+
 // 当前筛选下的题目列表（带每日抽题 + 打乱）
 function practiceList(){
-  // 错题模式：直接列出所有做错的题（不抽、不打乱）
+  // 错题模式：直接列出所有做错的题（不抽、不打乱）—— 跟随 answers 实时变化，不缓存
   if(practice.domainFilter==='wrong'){
     return QUIZ.map((q,i)=>({q,i}))
       .filter(({q,i})=>practice.answers[i] && practice.answers[i]!==q.a);
   }
-  // 错题复习 session：用进入时固定的快照（避免答题升级盒级后列表动态缩短）
+  // 错题复习 session：用进入时固定的快照（避免答题升级盒级后列表动态缩短）—— 也不缓存
   if(practice.domainFilter==='__wrong_today__'){
     const snap=practice.reviewSnapshot||[];
     return snap.map(i=>({q:QUIZ[i], i})).filter(x=>x.q);
@@ -3940,9 +3971,13 @@ function practiceList(){
     pool = pool.filter(x=>qSource(x.q)===practice.sourceFilter);
   }
   if(pool.length===0) return [];
+  // ✨ list 缓存命中：仅在「外部状态」变化时重算；答一题不复算 → curIdx 稳定
+  const key=_listKey();
+  if(_listCache && _listCacheKey===key) return _listCache;
   // ✨ 用今天日期 + 域名 + 来源 + 种子版本号 当种子 → 同一天稳定，跨日自然换
   const seed = _dateSeed(_todayISO()+':'+practice.domainFilter+':'+(practice.sourceFilter||'all')+':'+(practice.todaySeed||0));
   const rng = _rngFrom(seed);
+  let out=[];
   // ✨ 2026-08-26 防重复：把池子拆成「未答」+「已答」，优先抽未答的，全答过再回退到已答
   //    仅在「普通域刷题」下生效（wrong / __wrong_today__ 走自己专属路径，不参与）
   if(practice.antiRepeat){
@@ -3957,7 +3992,7 @@ function practiceList(){
         }
       }
       const n = practice.pickSize||unans.length;
-      const out = unans.slice(0, n);
+      out = unans.slice(0, n);
       // 未答不够 N 道 → 从已答池里补足（也洗牌）
       if(out.length<n && done.length>0){
         if(practice.shuffle){
@@ -3968,20 +4003,32 @@ function practiceList(){
         }
         out.push(...done.slice(0, n-out.length));
       }
-      return out;
+    } else {
+      // unans=0 → 整域都已答过：回退到原始行为（已答池里抽 N 道）
+      out = pool.slice();
+      if(practice.shuffle){
+        for(let i=out.length-1;i>0;i--){
+          const j=Math.floor(rng()*(i+1));
+          [out[i],out[j]]=[out[j],out[i]];
+        }
+      }
+      const n = practice.pickSize||out.length;
+      out = out.length>n ? out.slice(0,n) : out;
     }
-    // unans=0 → 整域都已答过：回退到原始行为（已答池里抽 N 道）
-  }
-  const arr = pool.slice();
-  if(practice.shuffle){
-    for(let i=arr.length-1;i>0;i--){
-      const j=Math.floor(rng()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
+  } else {
+    const arr = pool.slice();
+    if(practice.shuffle){
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(rng()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
     }
+    // 每日抽 N 道（池子够才抽，否则全展示）
+    const n = practice.pickSize||arr.length;
+    out = arr.length>n ? arr.slice(0,n) : arr;
   }
-  // 每日抽 N 道（池子够才抽，否则全展示）
-  const n = practice.pickSize||arr.length;
-  return arr.length>n ? arr.slice(0,n) : arr;
+  _listCache=out; _listCacheKey=key;
+  return out;
 }
 
 // 渲染：HUD + 题目卡片（或结果）
@@ -4309,11 +4356,13 @@ function bindPracticeEvents(){
   root.querySelector('#btn-shuffle')?.addEventListener('click',()=>{
     practice.shuffle=!practice.shuffle;
     practice.todaySeed=(practice.todaySeed||0)+1;   // 强制换一组种子
+    _invalidateListCache();
     savePractice(); renderPractice();
   });
   // ✨ 2026-08-26 防重复开关：开→每日从「未答过的题」里抽；关→原始行为
   root.querySelector('#btn-anti')?.addEventListener('click',()=>{
     practice.antiRepeat=!practice.antiRepeat;
+    _invalidateListCache();
     savePractice(); renderPractice();
   });
   root.querySelector('#btn-wrong')?.addEventListener('click',()=>{
@@ -4322,11 +4371,13 @@ function bindPracticeEvents(){
     })){ alert('暂无错题可刷——先把题做完吧～'); return; }
     practice.domainFilter='wrong';
     practice.currentIdx=0; practice.finished=false;
+    _invalidateListCache();
     savePractice(); renderPractice();
   });
   root.querySelector('#btn-back-all')?.addEventListener('click',()=>{
     practice.domainFilter='all';
     practice.currentIdx=0; practice.finished=false;
+    _invalidateListCache();
     savePractice(); renderPractice();
   });
 
@@ -4346,6 +4397,7 @@ function bindPracticeEvents(){
     c.addEventListener('click',()=>{
       practice.sourceFilter=c.dataset.s;
       practice.currentIdx=0; practice.finished=false;
+      _invalidateListCache();
       savePractice(); renderPractice();
     });
   });
@@ -4356,6 +4408,7 @@ function bindPracticeEvents(){
       practice.domainFilter=c.dataset.d;
       practice.currentIdx=0; // 切域后回到第一题
       practice.finished=false;
+      _invalidateListCache();
       savePractice(); renderPractice();
     });
   });
@@ -4386,6 +4439,7 @@ function startBankPractice(sourceKey){
   practice.currentIdx=0; practice.finished=false;
   practice.answers={}; // 从题库汇总卡进入也清空旧作答，确保每轮可重新做
   practice.todaySeed=(practice.todaySeed||0)+1; // 换组种子，避免沿用旧顺序
+  _invalidateListCache();
   savePractice();
   quizMode='practice';
   localStorage.setItem('cdga-quiz-mode','practice');
