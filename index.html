@@ -441,6 +441,33 @@ pre code{background:none;padding:0}
 .wb-subtab.active .ct{background:var(--accent);color:#fff}
 .wb-view[hidden]{display:none}
 
+/* ---------- WrongBook 按盒查看 ---------- */
+.wb-boxes-summary{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+.wb-boxes-pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--text-2)}
+.wb-boxes-pill b{font-weight:700;color:var(--text)}
+.wb-boxes-pill span{font-size:12px;font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:1px 8px}
+.wb-boxes-pill.grad span{background:var(--green-soft);color:var(--green)}
+.wb-boxes-grid{display:flex;flex-direction:column;gap:14px}
+.wb-box-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.wb-box-card.b1{border-left:4px solid var(--red)}
+.wb-box-card.b2{border-left:4px solid var(--yellow)}
+.wb-box-card.b3{border-left:4px solid var(--accent)}
+.wb-box-card.b4{border-left:4px solid #8b5cf6}
+.wb-box-card.b5{border-left:4px solid var(--green)}
+.wb-box-card.grad{border-left:4px solid var(--green)}
+.wb-box-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.wb-box-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wb-box-badge{display:inline-block;font-size:13px;font-weight:700;background:var(--text);color:#fff;border-radius:8px;padding:3px 10px}
+.wb-box-card.grad .wb-box-badge{background:var(--green)}
+.wb-box-sub{font-size:12.5px;color:var(--text-3)}
+.wb-box-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wb-box-due{font-size:11.5px;font-weight:700;background:var(--red-soft);color:var(--red);border-radius:99px;padding:2px 9px}
+.wb-box-next{font-size:11.5px;color:var(--text-3);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:2px 9px}
+.wb-box-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.wb-box-body .wb-item{background:var(--bg);border-radius:10px}
+.wb-box-body .wb-item.graduated{background:var(--green-soft)}
+.wb-reason-tag{font-size:11.5px;background:var(--yellow-soft);color:var(--yellow);border-radius:6px;padding:1px 8px}
+
 /* ---------- WrongBook 刷题模式：选题页 ---------- */
 .wb-sel-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:16px}
 .wb-sel-h{font-size:15px;font-weight:700;margin:0 0 12px;color:var(--text)}
@@ -4577,7 +4604,7 @@ function startWrongReview(onlyIdx){
 }
 // ===== 错题本：浏览模式 + 刷题模式（Leitner 五盒 + 艾宾浩斯间隔） =====
 const WB_SUBMODE_KEY='cdga-wb-submode-v1';
-function loadWbSubMode(){ try{ const v=localStorage.getItem(WB_SUBMODE_KEY); return (v==='browse'||v==='practice')?v:'browse'; }catch(e){ return 'browse'; } }
+function loadWbSubMode(){ try{ const v=localStorage.getItem(WB_SUBMODE_KEY); return (v==='browse'||v==='practice'||v==='boxes')?v:'browse'; }catch(e){ return 'browse'; } }
 function saveWbSubMode(m){ try{ localStorage.setItem(WB_SUBMODE_KEY, m); }catch(e){} }
 let wbSubMode=loadWbSubMode();
 let wbSession=null;
@@ -4596,6 +4623,7 @@ function renderWrongBook(){
     root.innerHTML=`
       <div class="wb-subtabs">
         <button class="wb-subtab ${wbSubMode==='browse'?'active':''}" data-wb="browse">📖 浏览模式</button>
+        <button class="wb-subtab ${wbSubMode==='boxes'?'active':''}" data-wb="boxes">📦 按盒查看</button>
         <button class="wb-subtab ${wbSubMode==='practice'?'active':''}" data-wb="practice">🎯 刷题模式</button>
       </div>
       <div class="wb-view" id="wb-view"></div>`;
@@ -4603,6 +4631,7 @@ function renderWrongBook(){
       b.addEventListener('click',()=>{ wbSubMode=b.dataset.wb; saveWbSubMode(wbSubMode); renderWrongBook(); });
     });
     if(wbSubMode==='browse') renderWrongbookBrowse();
+    else if(wbSubMode==='boxes') renderWrongbookBoxes();
     else renderWrongbookPracticeLanding();
   }catch(err){
     root.innerHTML='<div class="callout">错题本加载出错：'+escH(String(err))+'</div>';
@@ -4679,6 +4708,89 @@ function renderWrongbookBrowse(){
   view.querySelectorAll('.wb-redo').forEach(b=>{ b.addEventListener('click',()=>startWrongbookSession([{q:QUIZ[+b.dataset.i], i:+b.dataset.i}], '单题重做')); });
   view.querySelectorAll('.wb-grad').forEach(b=>{ b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？毕业后将移出错题本。')){ markGraduate(+b.dataset.i,true); renderWrongbookBrowse(); } }); });
   view.querySelectorAll('.wb-ungrad').forEach(b=>{ b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongbookBrowse(); }); });
+}
+
+// —— 按盒查看：把错题按 Leitner 盒 1-5 + 已毕业 分组展示 ——
+function renderWrongbookBoxes(){
+  const view=document.getElementById('wb-view'); if(!view) return;
+  const wb=loadWrongBook();
+  const today=_todayISO();
+  const graduated=Object.keys(wb).filter(k=>wb[k].graduated).map(k=>({i:+k, e:wb[k], q:QUIZ[+k]})).filter(t=>t.q);
+  const boxes=[];
+  for(let b=1;b<=5;b++){
+    const items=Object.keys(wb).filter(k=>!wb[k].graduated && (wb[k].box||1)===b).map(k=>({i:+k, e:wb[k], q:QUIZ[+k]})).filter(t=>t.q);
+    const nextReviews=items.map(t=>_addDays(t.e.lastReview||today, LEITNER[b-1]));
+    const nextReview=nextReviews.length? nextReviews.reduce((a,c)=>a<c?a:c) : null;
+    const dueToday=items.filter(t=>_daysBetween(t.e.lastReview||today, today)>=LEITNER[b-1]).length;
+    boxes.push({box:b, interval:LEITNER[b-1], items, nextReview, dueToday});
+  }
+  const totalActive=boxes.reduce((s,b)=>s+b.items.length,0);
+  function renderItem(t, isGraduated){
+    const e=t.e, q=t.q;
+    return `<div class="wb-item" data-i="${t.i}">
+      <div class="wb-item-main">
+        <div class="wb-q">#${t.i+1} ${escH(q.q)}</div>
+        <div class="wb-meta">
+          <span class="wb-domain">${escH(q.d)}</span>
+          <span class="wb-review">复习 ${e.reviewCount||0} 次 · 连对 ${e.streakCorrect||0}</span>
+          <span class="wb-date">末次 ${e.lastReview||'-'}</span>
+          ${e.reason?`<span class="wb-reason-tag">${escH((WRONG_REASONS.find(r=>r.k===e.reason)||{}).label||e.reason)}</span>`:''}
+        </div>
+      </div>
+      <div class="wb-item-side">
+        ${!isGraduated?`<select class="wb-reason" data-i="${t.i}">
+          <option value="">错因未标</option>
+          ${WRONG_REASONS.map(r=>`<option value="${r.k}" ${e.reason===r.k?'selected':''}>${r.icon} ${r.label}</option>`).join('')}
+        </select>`:''}
+        <div class="wb-btns">
+          <button class="wb-redo" data-i="${t.i}">重做</button>
+          ${isGraduated?`<button class="wb-ungrad" data-i="${t.i}">恢复</button>`:`<button class="wb-grad" data-i="${t.i}">毕业</button>`}
+        </div>
+      </div>
+    </div>`;
+  }
+  view.innerHTML=`
+    <div class="callout tip">📦 按 <b>Leitner 五盒</b>查看错题。每道题根据当前盒级决定复习间隔，盒1每天、盒5每 16 天。当天到期的题会在卡片右上角标红。</div>
+    <div class="wb-boxes-summary">
+      ${boxes.map(b=>`<div class="wb-boxes-pill b${b.box}"><b>盒${b.box}</b><span>${b.items.length}</span></div>`).join('')}
+      <div class="wb-boxes-pill grad"><b>已毕业</b><span>${graduated.length}</span></div>
+    </div>
+    <div class="wb-boxes-grid">
+      ${boxes.map(b=>`
+        <div class="wb-box-card b${b.box}">
+          <div class="wb-box-head">
+            <div class="wb-box-title">
+              <span class="wb-box-badge">盒${b.box}</span>
+              <span class="wb-box-sub">每 ${b.interval} 天复习 · ${b.items.length} 题</span>
+            </div>
+            <div class="wb-box-meta">
+              ${b.dueToday?`<span class="wb-box-due">今日到期 ${b.dueToday}</span>`:''}
+              ${b.nextReview?`<span class="wb-box-next">下次 ${b.nextReview}</span>`:''}
+            </div>
+          </div>
+          <div class="wb-box-body">
+            ${b.items.length? b.items.map(t=>renderItem(t,false)).join('') : '<div class="wb-muted" style="padding:14px">该盒暂无题目</div>'}
+          </div>
+        </div>
+      `).join('')}
+      ${graduated.length?`
+        <div class="wb-box-card grad">
+          <div class="wb-box-head">
+            <div class="wb-box-title">
+              <span class="wb-box-badge">🎓 已毕业</span>
+              <span class="wb-box-sub">已掌握 · ${graduated.length} 题</span>
+            </div>
+          </div>
+          <div class="wb-box-body">
+            ${graduated.map(t=>renderItem(t,true)).join('')}
+          </div>
+        </div>
+      `:''}
+    </div>`;
+  view.querySelectorAll('.wb-reason').forEach(sel=>{ sel.addEventListener('change',()=>{ setWrongReason(+sel.dataset.i, sel.value); renderWrongbookBoxes(); }); });
+  view.querySelectorAll('.wb-redo').forEach(b=>{ b.addEventListener('click',()=>startWrongbookSession([{q:QUIZ[+b.dataset.i], i:+b.dataset.i}], '单题重做')); });
+  view.querySelectorAll('.wb-grad').forEach(b=>{ b.addEventListener('click',()=>{ if(confirm('确认把这道标记为「已掌握/毕业」？')){ markGraduate(+b.dataset.i,true); renderWrongbookBoxes(); } }); });
+  view.querySelectorAll('.wb-ungrad').forEach(b=>{ b.addEventListener('click',()=>{ markGraduate(+b.dataset.i,false); renderWrongbookBoxes(); }); });
 }
 
 // —— 刷题模式 landing：选本轮范围 ——
