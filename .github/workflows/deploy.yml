@@ -32,7 +32,7 @@ jobs:
       # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
       - name: Remove non-site files before upload
         run: |
-          rm -rf .git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json 2>/dev/null || true
+          rm -rf .git .github .workbuddy .tmp proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json _check.js _heat_test.html bypass-open.html idx.html 2>/dev/null || true
           echo "Remaining files to deploy:"
           ls -la
 
