@@ -1,0 +1,10 @@
+# Cloudflare Worker 部署配置
+# 用法：cd cloudflare-sync-proxy && wrangler login && wrangler deploy
+# 部署后必须设置密钥（二选一）：
+#   wrangler secret put CLOUDBASE_SERVICE_KEY
+#   或 Dashboard → Worker → Settings → Variables → 添加 Secret: CLOUDBASE_SERVICE_KEY
+# 密钥值 = CloudBase 控制台生成的 service_role 密钥（永不过期）。严禁写入本文件/任何提交文件。
+name = "learningdesktop-sync-proxy"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+workers_dev = true
