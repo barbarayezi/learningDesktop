@@ -1,25 +1,31 @@
 /**
- * Cloudflare Worker 版同步代理（免费替代 CloudBase 云函数）
+ * Cloudflare Worker 版云同步存储（终极方案）
  *
- * 作用：浏览器 → https://<worker>.workers.dev/* → 本 Worker → CloudBase PostgreSQL (PostgREST) 网关
- *       在服务端统一注入 service_role 密钥，解决浏览器跨域与「密钥不能进前端」的问题。
+ * 背景：CloudBase（腾讯云）账户欠费导致 PostgreSQL 数据库实例冻结（实测
+ * `create pg connection ... failed to connect to postgres`），旧「转发到
+ * CloudBase 网关」方案不可行。本 Worker 改为**直接把数据存在 Cloudflare KV**，
+ * 免费额度（每天 10 万读 / 1000 写）对个人打卡数据绰绰有余，永不欠费、永不过期。
+ *
+ * 数据模型（与旧 CloudBase user_data 表语义兼容）：
+ *   - KV key  = "user_data:" + localStorage key
+ *   - KV value = JSON.stringify({ key, value, updated_at })
+ *   - select 返回数组 [{ key, value, updated_at }, ...]（value 为任意 JSON）
+ *
+ * 路径映射（前端 index.html 的 cloud 对象原样可用，只改 SYNC_PROXY_URL）：
+ *   - GET    /v1/rdb/rest/user_data?select=key,value   → 列出全部
+ *   - POST   /v1/rdb/rest/user_data                     → upsert（body: [rows]）
+ *   - DELETE /v1/rdb/rest/user_data?key=eq.<key>        → 删除单条
+ *   - POST   /auth/v1/signin/anonymously                → 返回假 token（兼容旧登录调用）
+ *   - OPTIONS → CORS 预检
  *
  * 部署：
- *   1) 把本文件与 wrangler.toml 放到任意目录，cd 进去
- *   2) wrangler login && wrangler deploy
- *   3) 设置密钥（二选一）：
- *        - wrangler secret put CLOUDBASE_SERVICE_KEY
- *        - 或 Dashboard → 你的 Worker → Settings → Variables → 添加(Secret) CLOUDBASE_SERVICE_KEY
- *      密钥值：CloudBase 控制台「数据管理 → 鉴权设置/API Keys」重新生成的 service_role 密钥
- *   4) 部署后把 index.html 里 SYNC_PROXY_URL 改成 https://<worker名>.<你的子域>.workers.dev
- *
- * 兼容路径：/syncProxy/api/...、/api/...、/v1/rdb/rest/...、/auth/v1/... 均可（自动剥离可选前缀）。
+ *   cd cloudflare-sync-proxy
+ *   wrangler deploy                       # 需先 wrangler login
+ *   （KV namespace 已建：learningdesktop-sync）
+ *   然后把 index.html 的 SYNC_PROXY_URL 改为 https://learningdesktop-sync-proxy.354341337.workers.dev
  */
 
-const CLOUDBASE_URL = "https://test-d5gf0o9ky7d34beaf.api.tcloudbasegateway.com";
-
-// 可选的触发前缀（兼容旧云函数路径），如无前缀则原样转发
-const STRIP_PREFIXES = ["/syncProxy", "/api"];
+const KV_PREFIX = "user_data:";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -30,66 +36,87 @@ const CORS_HEADERS = {
 
 export default {
   async fetch(request, env) {
-    const serviceKey = env.CLOUDBASE_SERVICE_KEY;
-    if (!serviceKey) {
-      return json(500, { error: "CLOUDBASE_SERVICE_KEY 未配置，请在 Cloudflare Worker 环境变量(Secret)中设置" });
-    }
-
     const url = new URL(request.url);
+    const path = url.pathname;
 
     // CORS 预检
     if (request.method === "OPTIONS") {
       return new Response("", { status: 204, headers: CORS_HEADERS });
     }
 
-    // 循环剥掉可选前缀（/syncProxy、/api），直到无可剥，拼回 query string。
-    // 兼容三种调用形态：https://worker/v1/rdb/rest/...（无前缀）、
-    // https://worker/syncProxy/v1/rdb/rest/...（旧云函数单前缀）、
-    // https://worker/syncProxy/api/v1/rdb/rest/...（双前缀残留，防御性）。
-    let targetPath = url.pathname;
-    let stripped = true;
-    while (stripped) {
-      stripped = false;
-      for (const prefix of STRIP_PREFIXES) {
-        if (targetPath === prefix || targetPath.startsWith(prefix + "/")) {
-          targetPath = targetPath.slice(prefix.length);
-          stripped = true;
-          break;
-        }
-      }
+    // 兼容旧登录调用：返回一个假 token（KV 模式无需真实鉴权）
+    if (path.includes("/auth/v1/signin/anonymously")) {
+      return json(200, { access_token: "kv-mode-anon", token_type: "bearer", expires_in: 3600 });
     }
-    if (!targetPath.startsWith("/")) targetPath = "/" + targetPath;
-    targetPath += url.search;
 
-    // 透传请求头，但剔除会被网关拒绝/冲突的头，并注入 service_role 密钥
-    const headers = new Headers(request.headers);
-    for (const h of ["host", "origin", "referer", "connection", "accept-encoding", "authorization", "apikey"]) {
-      headers.delete(h);
+    // 兼容可选前缀：/syncProxy、/api（防御性剥离）
+    let p = path;
+    for (const prefix of ["/syncProxy", "/api"]) {
+      if (p === prefix || p.startsWith(prefix + "/")) { p = p.slice(prefix.length); break; }
     }
-    headers.set("apikey", serviceKey);
-    headers.set("Authorization", "Bearer " + serviceKey);
+    if (!p.startsWith("/")) p = "/" + p;
 
-    let resp;
+    // 仅处理 user_data 表，其余返回 404
+    const m = p.match(/^\/v1\/rdb\/rest\/user_data$/);
+    if (!m) {
+      return json(404, { error: "not found", path: p });
+    }
+
+    const kv = env.SYNC_KV;
+    if (!kv) {
+      return json(500, { error: "SYNC_KV binding 未配置（wrangler.toml 缺 kv_namespaces）" });
+    }
+
     try {
-      resp = await fetch(CLOUDBASE_URL + targetPath, {
-        method: request.method,
-        headers,
-        body: ["GET", "HEAD"].includes(request.method) ? undefined : request.body,
-        redirect: "manual",
-      });
-    } catch (err) {
-      return json(502, { error: String(err && err.message || err), proxy: "cloudflare-worker" });
-    }
+      if (request.method === "GET") {
+        // 列出全部
+        const rows = [];
+        const listed = await kv.list({ prefix: KV_PREFIX });
+        for (const item of listed.keys) {
+          const raw = await kv.get(item.name);
+          if (!raw) continue;
+          try {
+            rows.push(JSON.parse(raw));
+          } catch (e) {
+            rows.push({ key: item.name.slice(KV_PREFIX.length), value: raw, updated_at: null });
+          }
+        }
+        // 按 updated_at 排序（稳定输出）
+        rows.sort((a, b) => String(a.updated_at || "").localeCompare(String(b.updated_at || "")));
+        return json(200, rows);
+      }
 
-    // 组装响应：透传业务头 + 强制 CORS；fetch 在 Worker 内已自动解压 gzip，需去掉 content-encoding 防浏览器二次解压
-    const outHeaders = new Headers(resp.headers);
-    for (const h of ["content-encoding", "transfer-encoding", "connection"]) {
-      outHeaders.delete(h);
+      if (request.method === "POST") {
+        // upsert：body = [ {key, value, updated_at}, ... ]
+        const bodyText = await request.text();
+        let rows;
+        try { rows = JSON.parse(bodyText || "[]"); } catch (e) { return json(400, { error: "invalid JSON body" }); }
+        if (!Array.isArray(rows)) rows = [rows];
+        for (const row of rows) {
+          if (!row || typeof row.key !== "string") continue;
+          const rec = {
+            key: row.key,
+            value: row.value ?? null,
+            updated_at: row.updated_at || new Date().toISOString(),
+          };
+          await kv.put(KV_PREFIX + row.key, JSON.stringify(rec));
+        }
+        return json(201, { success: true, count: rows.filter(r => r && typeof r.key === "string").length });
+      }
+
+      if (request.method === "DELETE") {
+        // key=eq.<key>
+        const keyParam = url.searchParams.get("key");
+        if (!keyParam) return json(400, { error: "missing ?key=eq.<key>" });
+        const k = keyParam.startsWith("eq.") ? keyParam.slice(3) : keyParam;
+        await kv.delete(KV_PREFIX + k);
+        return new Response(null, { status: 204, headers: CORS_HEADERS });
+      }
+
+      return json(405, { error: "method not allowed" });
+    } catch (err) {
+      return json(500, { error: String(err && err.message || err), proxy: "cloudflare-worker-kv" });
     }
-    for (const [k, v] of Object.entries(CORS_HEADERS)) {
-      outHeaders.set(k, v);
-    }
-    return new Response(resp.body, { status: resp.status, headers: outHeaders });
   },
 };
 

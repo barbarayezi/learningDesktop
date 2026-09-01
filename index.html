@@ -2988,11 +2988,11 @@ window.addEventListener('unhandledrejection', function(ev){ reportErr('Promise',
 
 /* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
 var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
-// 云同步代理（Cloudflare Worker 版，替代已欠费停摆的 CloudBase 云函数）：
-// 部署 cloudflare-sync-proxy/worker.js 后，把这里改成
-//   "https://<你的worker名>.<你的子域>.workers.dev"   （不带 /syncProxy /api 前缀，worker 自动剥离）
-// 留空 = 走同源 /api（家里 Mac proxy_server.py 局域网模式，仅本地 8080 可用）。
-var SYNC_PROXY_URL = "";
+// 云同步代理（Cloudflare Worker + KV，终极方案）：
+// CloudBase 欠费导致 PostgreSQL 数据库冻结（实测 create pg connection failed），
+// 数据已迁到 Cloudflare KV 免费存储（learningdesktop-sync-proxy.354341337.workers.dev），
+// 永不欠费、永不过期。worker 直读 KV，不再转发 CloudBase。
+var SYNC_PROXY_URL = "https://learningdesktop-sync-proxy.354341337.workers.dev";
 var API_PROXY = SYNC_PROXY_URL || (window.location.origin + "/api");
 var REST_URL = API_PROXY + "/v1/rdb/rest";
 
@@ -3149,6 +3149,14 @@ localStorage.removeItem = function(key) {
         _origSetItem(row.key, JSON.stringify(merged));
       });
     }
+    // 本地全量上云（新设备/新存储首次打开时，确保本机 localStorage 的数据推上去）。
+    // 走 syncKeyToCloud：先拉云端→深合并→upsert，不会覆盖云端已有更新。
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k !== '__ld_test__') syncKeyToCloud(k);
+      }
+    } catch (se) { console.warn('⚠️ 本地全量上云部分失败:', se.message); }
     cloudReady = true;
     console.log('✅ 云端已连接，同步了 ' + (result.data ? result.data.length : 0) + ' 条数据');
   } catch (e) {
