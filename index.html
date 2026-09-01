@@ -5721,13 +5721,13 @@ function gotoDay(n){
 
 /* ---------- 主动投递:本周主题 + spaced repetition 复习提醒 ---------- */
 /* ---------- 文章外链降级（修 file:// clipboard 失败）：3 按钮 · 微信内搜 + 百度搜 + 复制标题 ---------- */
-function showToast(msg){
+function showToast(msg, ms){
   let el=document.getElementById('toast');
   if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); }
   el.textContent=msg;
   el.classList.add('show');
   clearTimeout(showToast._t);
-  showToast._t=setTimeout(()=>el.classList.remove('show'), 2200);
+  showToast._t=setTimeout(()=>el.classList.remove('show'), ms||2200);
 }
 // file:// 下 navigator.clipboard 多半 silently 失败：直接走 execCommand
 function copyText(text, successMsg){
@@ -6413,6 +6413,30 @@ function renderDay(iso){
   // 复习卡三档评分:✓全记住 / ⚠一部分 / ×忘了 — 2026-08-26 立
   // 约束:✓ / ⚠ 必须先展开答案才能点(挡住「看几个关键词就过关」的盲测失效);
   //      × 忘了可以直点(都已忘了,展开也无新东西)
+  // 即时视觉反馈 2026-09-01:不等 renderDay,锁定按钮+行变彩底+插「已记 · +Nd」标签,
+  //                          避免「点了按钮看不到任何反应」(即使用户浏览器有缓存也能感知)
+  function markRated(itemEl, act){
+    if(!itemEl) return;
+    itemEl.querySelectorAll('.dc-review-btns-3 button').forEach(b=>{ b.disabled=true; });
+    const bg = act==='ok' ? '#e8f5e9' : act==='part' ? '#fff8e1' : '#ffebee';
+    itemEl.style.transition='background .3s ease';
+    itemEl.style.background=bg;
+    itemEl.style.borderRadius='8px';
+    itemEl.style.padding='4px 8px';
+    const btns3=itemEl.querySelector('.dc-review-btns-3');
+    if(btns3){
+      let tag=btns3.querySelector('.dc-rated-tag');
+      if(!tag){
+        tag=document.createElement('div');
+        tag.className='dc-rated-tag';
+        tag.style.cssText='margin:6px 0 4px;font-size:13px;color:#444;font-weight:600;';
+        btns3.parentNode.insertBefore(tag, btns3);
+      }
+      tag.textContent = act==='ok' ? '✅ 已记 · +7d 后再考'
+                      : act==='part' ? '⚠ 已记 · +3d 后再练'
+                      : '🔁 已记 · 本周主题见';
+    }
+  }
   dayCard.querySelectorAll('.dc-review-btns-3 [data-ridx]').forEach(btn=>{
     btn.onclick=()=>{
       const idx=Number(btn.dataset.ridx);
@@ -6434,18 +6458,21 @@ function renderDay(iso){
         // 全记住 → 进入下一周期 (cycles 数组里的下一个更大周期)
         const d=loadDates(); d[idx]=todayISO(); saveDates(d);
         const c=loadChecks(); c[idx]=true; saveChecks(c);
-        showToast('✅ 进入下一周期复习');
+        showToast('✅ 进入下一周期复习 (+7d 后再考)', 3500);
+        markRated(itemEl, 'ok');
       } else if(act==='part'){
         // 一部分 → 保留「已掌握」(确实记住了一部分),但把 mastered_at 重置为今天
         //          → 强制走 3d 短周期再练。修复 2026-09-01:原实现 setCheckState(false)
         //            会把 checks 置 false,被 dueReviewItems 的 checks[k]!==true 过滤,
         //            导致该条永久退出复习池(「一部分」形同「忘了」且无重学入口)。
         setCheckState(idx, true);
-        showToast('⚠ 已加入短周期复习（按 3d 循环）');
+        showToast('⚠ 已加入短周期复习（按 3d 循环）', 3500);
+        markRated(itemEl, 'part');
       } else {
         // 忘了 → 取消勾选,加入本周主题概念重学
         setCheckState(idx, false);
-        showToast('🔁 已加入本周主题，下一轮复习见');
+        showToast('🔁 已加入本周主题，下一轮复习见', 3500);
+        markRated(itemEl, 'bad');
       }
       renderDay(iso);
     };
