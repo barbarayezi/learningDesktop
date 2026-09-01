@@ -6415,6 +6415,8 @@ function renderDay(iso){
   //      × 忘了可以直点(都已忘了,展开也无新东西)
   // 即时视觉反馈 2026-09-01:不等 renderDay,锁定按钮+行变彩底+插「已记 · +Nd」标签,
   //                          避免「点了按钮看不到任何反应」(即使用户浏览器有缓存也能感知)
+  // gate 判定 2026-09-01 改:不再依赖 itemEl 的 '.revealed' class(老版本可能漏 add),
+  //                          改看 <div class="dc-review-a" hidden> 的 DOM 状态——更稳健
   function markRated(itemEl, act){
     if(!itemEl) return;
     itemEl.querySelectorAll('.dc-review-btns-3 button').forEach(b=>{ b.disabled=true; });
@@ -6442,7 +6444,9 @@ function renderDay(iso){
       const idx=Number(btn.dataset.ridx);
       const act=btn.dataset.act;
       const itemEl=btn.closest('.dc-review-item');
-      const revealed=itemEl && itemEl.classList.contains('revealed');
+      // 答案区 DOM 状态最可靠;不再依赖 .revealed class(用户截图反馈老版本漏 add class 仍被拦)
+      const ansDiv=itemEl && itemEl.querySelector('.dc-review-a');
+      const revealed=!!(ansDiv && !ansDiv.hidden);
       if(act!=='bad' && !revealed){
         // 视觉闪烁:提示先展开答案
         const area = btn.closest('.dc-review-a');
