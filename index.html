@@ -3149,6 +3149,7 @@ localStorage.removeItem = function(key) {
         _origSetItem(row.key, JSON.stringify(merged));
       });
     }
+    var hadCloud = result.data && result.data.length > 0;
     // 本地全量上云（新设备/新存储首次打开时，确保本机 localStorage 的数据推上去）。
     // 走 syncKeyToCloud：先拉云端→深合并→upsert，不会覆盖云端已有更新。
     try {
@@ -3159,6 +3160,12 @@ localStorage.removeItem = function(key) {
     } catch (se) { console.warn('⚠️ 本地全量上云部分失败:', se.message); }
     cloudReady = true;
     console.log('✅ 云端已连接，同步了 ' + (result.data ? result.data.length : 0) + ' 条数据');
+    // 关键：云端有数据被合并写回本地后，强制刷新一次页面，
+    // 否则页面 UI 仍渲染 initCloud 启动瞬间读到的 localStorage 旧快照。
+    // 第二次启动时云端和本地已一致，云端拉到的 merge 与本地相同，不会再触发刷新。
+    if (hadCloud) {
+      setTimeout(function(){ try { location.reload(); } catch(e){} }, 1200);
+    }
   } catch (e) {
     console.warn('⚠️ 云端连接失败，使用本地缓存:', e.message);
   }
