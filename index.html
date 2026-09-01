@@ -6435,9 +6435,11 @@ function renderDay(iso){
         const c=loadChecks(); c[idx]=true; saveChecks(c);
         showToast('✅ 进入下一周期复习');
       } else if(act==='part'){
-        // 一部分 → 未掌握 + 立即重置 mastered_at 进入短周期复习
-        setCheckState(idx, false);
-        const d=loadDates(); d[idx]=todayISO(); saveDates(d);
+        // 一部分 → 保留「已掌握」(确实记住了一部分),但把 mastered_at 重置为今天
+        //          → 强制走 3d 短周期再练。修复 2026-09-01:原实现 setCheckState(false)
+        //            会把 checks 置 false,被 dueReviewItems 的 checks[k]!==true 过滤,
+        //            导致该条永久退出复习池(「一部分」形同「忘了」且无重学入口)。
+        setCheckState(idx, true);
         showToast('⚠ 已加入短周期复习（按 3d 循环）');
       } else {
         // 忘了 → 取消勾选,加入本周主题概念重学
