@@ -36,6 +36,13 @@
 - **生效前提（关键）**：运行中的服务器(`192.168.103.37:8080`)仍跑旧代码，**必须在该机 `git pull` 并重启 `proxy_server.py`** 修复才生效；重启后 `cloudReady` 变 true，云端已有数据会合并回本地、后续写入会上云。
 - **安全提醒**：service_role 是项目全权限密钥，现硬编码在 git 跟踪的 `proxy_server.py` 中；若仓库为 public，应改为环境变量/`config.json`(gitignore) 或轮换密钥。
 
+## 云同步架构（2026-09-01 起：Cloudflare Worker 取代 CloudBase 云函数）
+- **🔴 2026-09-01 根因定案**：8/25 部署的 CloudBase 云函数 `syncProxy`（`cloudbase-sync-proxy/`，地址 `...ap-shanghai.app.tcloudbase.com/syncProxy`）实测返回 `FUNCTIONS_INVOCATION_FAILED / AvailableStatus = InsufficientBalance`——**CloudBase 账户余额耗尽，云函数被冻结**（静态托管不受影响仍 200）。用户换电脑看不到打卡 = 云函数挂了 → `cloudReady=false` → localStorage 拦截器 `if(!cloudReady) return` 只写本地不上云。
+- **✅ 新方案（commit `1643ca3`）**：新增 `cloudflare-sync-proxy/worker.js` + `wrangler.toml`（worker 名 `learningdesktop-sync-proxy`），转发到 `https://test-d5gf0o9ky7d34beaf.api.tcloudbasegateway.com`，服务端注入 `apikey`+`Authorization: Bearer`（密钥走 `wrangler secret put CLOUDBASE_SERVICE_KEY`，**严禁写入仓库**）；循环剥离 `/syncProxy`、`/api` 可选前缀；CORS 全放行。worker 逻辑已本地单测 5 用例全过。
+- **`index.html` 的 `SYNC_PROXY_URL` 当前置空 `""`**（回退同源 /api 局域网模式）。**部署 worker 后填入 `https://learningdesktop-sync-proxy.<子域>.workers.dev`（不带前缀）** → commit+push → 任意电脑/手机直连 worker 云同步，彻底不依赖家里 Mac、也绕开 CloudBase 欠费。
+- 部署步骤：`cd cloudflare-sync-proxy && npx wrangler login && npx wrangler deploy && npx wrangler secret put CLOUDBASE_SERVICE_KEY`；或 Cloudflare Dashboard 网页粘贴 worker.js + Variables 加 Secret。
+- 公网页面验证已上线（`grep 'var SYNC_PROXY_URL'` 显示 `""`，注释含 `cloudflare-sync-proxy`）。
+
 ## 前端渲染铁律 —— 不再让单点错误整页空白（2026-08-17 立）
 - 本项目 `index.html` 是单一超大 `<script>` 文件。任何顶层未捕获异常都会在该点中断脚本，导致**热力图、每日学习卡、B站视频表等全部空白**。
 - 血的教训（2026-08-17 晚两次白屏）：① 把 `_origSetItem` 拦截器定义放到 `initCloud` 之后；② 在 `const WEEKS` 定义之前立即执行访问 `WEEKS` 的 IIFE。
