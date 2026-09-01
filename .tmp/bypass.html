@@ -1,0 +1,8 @@
+<!doctype html><html><head><meta charset="utf-8"><title>bypass</title>
+<script>
+localStorage.setItem('_cdga_login', JSON.stringify({ts: Date.now()}));
+// also preset daily checkboxes so renderDay shows non-empty data
+localStorage.setItem('cdga-daily-checks', JSON.stringify({}));
+location.replace('index.html?skipGate=1');
+</script>
+</head><body></body></html>

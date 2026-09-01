@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body>
+<script>
+localStorage.setItem('_cdga_login', JSON.stringify({ts: Date.now()}));
+// Pre-open cheat so we screenshot the open state
+// But we can't inject into index.html before its data-fold binding runs.
+// Easier:  navigate then sleep with virtual time? headless --virtual-time-budget
+// doesn't help once the page is loaded for click.
+// Use a wrapper that opens window to index.html then postMessage clicking
+// Simplest fallback:  set a marker to auto-open the cheat fold after init
+location.replace('index.html');
+</script>
+</body></html>
