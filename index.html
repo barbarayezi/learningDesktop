@@ -1585,7 +1585,7 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <label class="chk-row"><input type="checkbox" class="chk"><span>元数据驱动的数据治理实践（用血缘支撑影响分析与责权归属，如 EPK→ODS→DWS）</span></label>
 
         <div class="chk-head"><h3>4. 数据仓库与商务智能（10 分）</h3></div>
-        <label class="chk-row"><input type="checkbox" class="chk"><span>数据仓库架构（Inmon/Kimball 范式 vs 维度）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>数据仓库架构（Inmon=自上而下 CIF 企业信息工厂，先 3NF 范式化 EDW 再按主题拆 DM，重跨域一致/合规/审计；Kimball=自下而上 维度建模，事实表+维度表+星型/雪花 schema，用「一致维度+总线架构」拼出企业视图，重查询性能/自助 BI；适用：Inmon 用于跨域治理+监管报表，Kimball 用于 BI/自助分析；ODS/DWS/DWT/ADS 分层即 Kimball 思路的中国化落地；Inmon 四特征：面向主题、集成、相对稳定、反映历史变化）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>ETL 与 ELT 的区别（ETL=先转换后加载，适合传统数仓；ELT=先加载后转换，适合云数仓/大数据）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数仓分层 ODS/DWS/ADS（ODS=贴源层、DWS=汇总层、ADS=应用层，对应 Doris 分层实践）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数据集市与商务智能（数据集市=面向主题的局部数仓；BI=报表/OLAP/可视化消费数据）</span></label>
