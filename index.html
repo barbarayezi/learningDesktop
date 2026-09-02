@@ -3993,6 +3993,15 @@ function resetPractice(){
 let _listCache = null;
 let _listCacheKey = '';
 function _listKey(){
+  // 防重复模式下，已答集合变化必须使缓存失效，否则已答题会混入未答列表
+  let answeredCount=0;
+  if(practice.antiRepeat){
+    if(practice.domainFilter==='all'){
+      answeredCount=Object.keys(practice.answers||{}).length;
+    } else {
+      answeredCount=QUIZ.filter((q,i)=>q.d===practice.domainFilter && practice.answers[i]).length;
+    }
+  }
   return [
     _todayISO(),
     practice.domainFilter||'all',
@@ -4000,7 +4009,8 @@ function _listKey(){
     practice.todaySeed||0,
     practice.pickSize||5,
     practice.shuffle?'1':'0',
-    practice.antiRepeat?'1':'0'
+    practice.antiRepeat?'1':'0',
+    answeredCount
   ].join('|');
 }
 function _invalidateListCache(){ _listCache=null; _listCacheKey=''; }
@@ -6676,6 +6686,8 @@ function openQuiz(domain,mode){
     practice.answers={};
     practice.todaySeed=(practice.todaySeed||0)+1;
   }
+  // 每次从入口重新进入，清空 list 缓存，避免命中旧域/旧答案的旧 list
+  _invalidateListCache();
   quizMode=mode||'practice'; localStorage.setItem('cdga-quiz-mode',quizMode);
   savePractice(); showPage('cdga-quiz'); applyQuizMode();
   if(mode==='study' && domain && domain!=='all'){
