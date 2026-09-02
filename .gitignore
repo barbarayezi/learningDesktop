@@ -22,6 +22,9 @@ cloudbase-sync-proxy/node_modules/
 
 # Chrome headless 测试残留
 .tmp/
+.tmp-headless/
+.tmp-headless.png
 
 # wrangler 部署缓存
 cloudflare-sync-proxy/.wrangler/
+landing-page/.wrangler/
