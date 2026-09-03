@@ -224,7 +224,9 @@ pre code{background:none;padding:0}
 .dc-concept-row.done .dc-concept-q{text-decoration:line-through;color:var(--text-3)}
 .dc-concept-reveal{padding:3px 9px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:11.5px;font-family:inherit;font-weight:600}
 .dc-concept-reveal:hover{background:var(--accent);color:#fff}
-.dc-concept-a{font-size:13px;color:var(--text-2);background:var(--surface-2);padding:4px 8px;border-radius:6px;flex:1 1 100%;margin:4px 0 0 26px}
+.dc-concept-a{font-size:13px;color:var(--text);background:var(--surface-2);border-left:3px solid var(--accent);padding:6px 10px;border-radius:0 6px 6px 0;flex:1 1 100%;margin:4px 0 0 26px;line-height:1.5}
+.dc-concept-hide{padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer;font-size:11.5px;font-family:inherit;font-weight:600}
+.dc-concept-hide:hover{background:var(--surface-2)}
 .dc-concept-hint{font-size:11px;color:var(--text-3);font-style:italic;flex:0 0 auto}
 .dc-done-tag{font-size:12px;color:var(--green);font-weight:700}
 .progress{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:6px 0 14px}
@@ -1595,11 +1597,11 @@ setTimeout(function(){ var sp = document.getElementById('bootSplash'); if (sp) s
         <label class="chk-row"><input type="checkbox" class="chk"><span>元数据驱动的数据治理实践（用血缘支撑影响分析与责权归属，如 EPK→ODS→DWS）</span></label>
 
         <div class="chk-head"><h3>4. 数据仓库与商务智能（10 分）</h3></div>
-        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon｜自上而下 = 先整体后拆件（CIF 企业信息工厂：先 3NF 建企业 EDW，再按主题拆 DM；重跨域一致/合规/审计）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon｜自上而下 的核心思想是什么（先整体后拆件：CIF 企业信息工厂先 3NF 建企业 EDW，再按主题拆 DM；重跨域一致、合规、审计）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>Kimball｜自下而上 = 先零件后组装（维度建模：事实表+维度表+星型/雪花 schema，用「一致维度+总线架构」拼出企业视图；重查询性能/自助 BI）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>适用｜谁管治理谁管分析（Inmon 用于跨域治理+监管报表；Kimball 用于 BI+自助分析）</span></label>
-        <label class="chk-row"><input type="checkbox" class="chk"><span>⚠ 分层其实是 Kimball 的（中国 ODS/DWS/DWT/ADS 分层 = Kimball 总线架构的中国化落地，不是 Inmon，对应 DAMA 11 章）</span></label>
-        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon 四特征（面向主题、集成、相对稳定、反映历史变化）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>分层架构其实是哪家的（Kimball 的：中国 ODS/DWS/DWT/ADS 分层 = Kimball 总线架构的中国化落地，不是 Inmon，对应 DAMA 11 章）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon 数仓四特征是什么（面向主题、集成、相对稳定、反映历史变化）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>ETL 与 ELT 的区别（ETL=先转换后加载，适合传统数仓；ELT=先加载后转换，适合云数仓/大数据）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数仓分层 ODS/DWS/ADS（ODS=贴源层、DWS=汇总层、ADS=应用层，对应 Doris 分层实践）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数据集市与商务智能（数据集市=面向主题的局部数仓；BI=报表/OLAP/可视化消费数据）</span></label>
@@ -6324,7 +6326,7 @@ function renderDay(iso){
           </label>
           ${already ? '<span class="dc-done-tag">✅ 已掌握</span>' : (noAns
             ? '<span class="dc-no-answer-tag">⚠ 此条清单无括号答案</span>'
-            : '<button class="dc-concept-reveal" data-idx="'+idx+'" data-act="reveal-c">📖 先想 · 展开答案</button><span class="dc-concept-a" data-for="c-'+idx+'" hidden><b>答案：</b>'+escH(p.a)+'</span><span class="dc-concept-hint">（展开后才能勾已掌握）</span>')}
+            : '<button class="dc-concept-reveal" data-idx="'+idx+'" data-act="reveal-c">📖 先想 · 展开答案</button><span class="dc-concept-a" data-for="c-'+idx+'" hidden>'+escH(p.a)+'</span><button class="dc-concept-hide" data-idx="'+idx+'" data-act="hide-c" hidden>📕 收起答案</button><span class="dc-concept-hint">（展开后才能勾已掌握）</span>')}
         </div>`;
       }).join('')
     : (WEEK_DOMAINS[d.w]&&WEEK_DOMAINS[d.w].length ? '<div class="dc-empty">本周这些域都已勾完,可去「✅ 知识点清单」手动复习其他概念</div>' : '<div class="dc-empty">本周以刷题/模拟为主,无新概念</div>');
@@ -6480,9 +6482,23 @@ function renderDay(iso){
       const idx = btn.dataset.idx;
       const a = dayCard.querySelector('.dc-concept-a[data-for="c-'+idx+'"]');
       const cb = dayCard.querySelector('input[data-cidx="'+idx+'"]');
+      const hide = dayCard.querySelector('.dc-concept-hide[data-idx="'+idx+'"]');
       if(a) a.hidden = false;
       if(cb) cb.disabled = false;   // 展开后才能勾
-      btn.remove();
+      btn.hidden = true;            // 展开后隐藏「展开」按钮
+      if(hide) hide.hidden = false; // 显示「收起」按钮
+    };
+  });
+  dayCard.querySelectorAll('[data-act="hide-c"]').forEach(btn=>{
+    btn.onclick=()=>{
+      const idx = btn.dataset.idx;
+      const a = dayCard.querySelector('.dc-concept-a[data-for="c-'+idx+'"]');
+      const cb = dayCard.querySelector('input[data-cidx="'+idx+'"]');
+      const reveal = dayCard.querySelector('.dc-concept-reveal[data-idx="'+idx+'"]');
+      if(a) a.hidden = true;
+      if(cb) cb.disabled = true;    // 收起后恢复「须先展开才能勾」
+      btn.hidden = true;
+      if(reveal) reveal.hidden = false;
     };
   });
   // 复习卡「展开答案」按钮
