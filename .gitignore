@@ -32,6 +32,9 @@ landing-page/.wrangler/
 # git 仓库恢复备份（含损坏 .git，体积大，不入库）
 .workbuddy/backup/
 
+# 本地自动化任务配置（机器相关，不入库）
+.workbuddy/automations/
+
 # 根目录截图 / 测试碎片（本地产物，不入库）
 _shot_final.png
 _check.js
