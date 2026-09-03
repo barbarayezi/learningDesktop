@@ -60,6 +60,26 @@ grep 只能证明"某字符串存在于公网"，无法证明整份文件是新�
 **受控崩溃测试**：新增断言后要验证它真能变红（例如临时注释 `bootAll();`
 跑一遍应报错），否则测试可能是永远绿的假警报。
 
+**🆕 boot 队列「存储快照重载」必须含 `loadPractice()`（2026-09-03 立）**：
+- 任何「内存与 disk 同步」类的操作（loadPractice / loadChecks / loadDates 等）
+  必须显式列在 boot 任务里，不能依赖其他模块顺带触发
+- 5288 行原 `applyQuizMode()` 在脚本顶层立即执行 → 早于 `bootAll()` 内的
+  `initCloud` → 灌进内存的 `practice.answers` 是 localStorage 旧值
+- 不 reload `practice` → daily card 的 done 算的是 stale 值 → 用户点 daily card
+  → openQuiz → savePractice 把 stale 写回 disk **覆盖 initCloud merge 结果**
+  → loadPractice 重读 → list 把云端已答当「未答」抽进 unans 池
+  → 渲染「做过的样子」（**`#167 QUIZ[166] 维度建模中的"事实表"存储？`）
+- 修复 = boot 任务「存储快照重载」加 `try{ loadPractice(); }catch(e){}`；
+  脚本顶层 `applyQuizMode()` 移到 boot 队列「刷题模式初始化」
+- regression.js 4e 组 8 项断言覆盖（受控崩溃已验证真能变红）
+
+**静态断言"boot 任务含 X 调用"必须排除注释伪命中（2026-09-03）**：
+- 用 `lastIndexOf` 找最后一次出现（不是 `indexOf`，因为注释里可能含
+  `boot('X', function(){ Y() })` 字面量）
+- 逐行去掉 `// ...` 注释后再扫
+- 函数体结束识别要支持两种：`\n});` 多行 / `});` 单行
+  （单行 boot 任务如 `function(){ applyQuizMode(); }` 没有 `\n` 在 `});` 前）
+
 ## 单一来源：学习计划只维护 `index.html`
 - 所有计划改动落到网站，**不再新建/更新 `01_考证/*.md`、`02_读博/*.md`**
   （8-16 已删除全部 11 份计划 md，内容已镜像进网站页面）。
