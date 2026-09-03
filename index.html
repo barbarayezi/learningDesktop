@@ -1585,7 +1585,11 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
         <label class="chk-row"><input type="checkbox" class="chk"><span>元数据驱动的数据治理实践（用血缘支撑影响分析与责权归属，如 EPK→ODS→DWS）</span></label>
 
         <div class="chk-head"><h3>4. 数据仓库与商务智能（10 分）</h3></div>
-        <label class="chk-row"><input type="checkbox" class="chk"><span>数据仓库架构（Inmon=自上而下 CIF 企业信息工厂，先 3NF 范式化 EDW 再按主题拆 DM，重跨域一致/合规/审计；Kimball=自下而上 维度建模，事实表+维度表+星型/雪花 schema，用「一致维度+总线架构」拼出企业视图，重查询性能/自助 BI；适用：Inmon 用于跨域治理+监管报表，Kimball 用于 BI/自助分析；ODS/DWS/DWT/ADS 分层即 Kimball 思路的中国化落地；Inmon 四特征：面向主题、集成、相对稳定、反映历史变化）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon｜自上而下 = 先整体后拆件（CIF 企业信息工厂：先 3NF 建企业 EDW，再按主题拆 DM；重跨域一致/合规/审计）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>Kimball｜自下而上 = 先零件后组装（维度建模：事实表+维度表+星型/雪花 schema，用「一致维度+总线架构」拼出企业视图；重查询性能/自助 BI）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>适用｜谁管治理谁管分析（Inmon 用于跨域治理+监管报表；Kimball 用于 BI+自助分析）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>⚠ 分层其实是 Kimball 的（中国 ODS/DWS/DWT/ADS 分层 = Kimball 总线架构的中国化落地，不是 Inmon，对应 DAMA 11 章）</span></label>
+        <label class="chk-row"><input type="checkbox" class="chk"><span>Inmon 四特征（面向主题、集成、相对稳定、反映历史变化）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>ETL 与 ELT 的区别（ETL=先转换后加载，适合传统数仓；ELT=先加载后转换，适合云数仓/大数据）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数仓分层 ODS/DWS/ADS（ODS=贴源层、DWS=汇总层、ADS=应用层，对应 Doris 分层实践）</span></label>
         <label class="chk-row"><input type="checkbox" class="chk"><span>数据集市与商务智能（数据集市=面向主题的局部数仓；BI=报表/OLAP/可视化消费数据）</span></label>
@@ -3323,9 +3327,41 @@ if(_searchEl)_searchEl.addEventListener('input',function(){
 /* ---------- Checklist persistence (with mastered_at for spaced repetition) ---------- */
 const KEY='bb-cdga-check';
 const DKEY='bb-cdga-check-dates';   // {i: ISO-date} 记录每个概念"已掌握"的时间
-function loadChecks(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}}
+function loadChecks(){
+  try{
+    const raw = JSON.parse(localStorage.getItem(KEY)) || {};
+    // schema v2：W3「数据仓库架构」从 1 条 200 字长串拆为 5 条（Inmon/Kimball/适用/⚠分层/Inmon 四特征），
+    // 老 ETL/ELT/分层/集市/项目实例 4 条顺移到 19-22，后续域整体 +4。幂等迁移。
+    if(raw && raw.__v === 2) return raw;
+    const next = {__v: 2};
+    for(let i=0;i<=13;i++) if(raw[i]) next[i]=true;            // 0-13 不变
+    if(raw[14]) next[14]=true;                                  // 老 200 字长串 → 新 Inmon 路线
+    if(raw[15]) next[19]=true;                                  // 老 ETL/ELT → 新 19
+    if(raw[16]) next[20]=true;                                  // 老 分层 → 新 20
+    if(raw[17]) next[21]=true;                                  // 老 集市+BI → 新 21
+    if(raw[18]) next[22]=true;                                  // 老 项目实例 → 新 22
+    for(let i=19;i<=49;i++) if(raw[i]) next[i+4]=true;          // 19-49 → 23-53
+    saveChecks(next);
+    return next;
+  }catch(e){return {}}
+}
 function saveChecks(o){localStorage.setItem(KEY,JSON.stringify(o))}
-function loadDates(){try{return JSON.parse(localStorage.getItem(DKEY))||{}}catch(e){return{}}}
+function loadDates(){
+  try{
+    const raw = JSON.parse(localStorage.getItem(DKEY)) || {};
+    if(raw && raw.__v === 2) return raw;
+    const next = {__v: 2};
+    for(let i=0;i<=13;i++) if(raw[i]) next[i]=raw[i];
+    if(raw[14]) next[14]=raw[14];
+    if(raw[15]) next[19]=raw[15];
+    if(raw[16]) next[20]=raw[16];
+    if(raw[17]) next[21]=raw[17];
+    if(raw[18]) next[22]=raw[18];
+    for(let i=19;i<=49;i++) if(raw[i]) next[i+4]=raw[i];
+    saveDates(next);
+    return next;
+  }catch(e){return {}}
+}
 function saveDates(o){localStorage.setItem(DKEY,JSON.stringify(o))}
 function todayISO(){return new Date().toISOString().slice(0,10)}
 function updateProgress(){
@@ -5832,11 +5868,14 @@ const WEEK_DOMAINS = {
   25:[], 26:[]
 };
 // 知识域 ID → 知识点清单 checkbox 索引范围（与 cdga-check 页 checkbox 顺序对应）
+// 注：W3 数仓架构那条 2026-09-03 拆为 5 条（Inmon/Kimball/适用/⚠分层/Inmon 四特征），
+// 故域 4 扩为 9 条 [14-22]（拆出 5 条 + 原 ETL/ELT/分层/集市/项目实例 4 条顺移），
+// 后续域整体 +4；总条数 50 → 54。
 const DOMAIN_IDX = {
-  1:[0,1,2,3,4], 2:[5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16,17,18],
-  5:[19,20,21,22,23], 6:[24,25,26,27], 7:[28,29,30], 8:[31,32,33],
-  9:[34,35], 10:[36,37], 11:[38], 12:[39], 13:[40], 14:[41],
-  15:[42], 16:[43], 17:[44]
+  1:[0,1,2,3,4], 2:[5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16,17,18,19,20,21,22],
+  5:[23,24,25,26,27], 6:[28,29,30,31], 7:[32,33,34], 8:[35,36,37],
+  9:[38,39], 10:[40,41], 11:[42], 12:[43], 13:[44], 14:[45],
+  15:[46], 16:[47], 17:[48]
 };
 const WEEK_META = {
   1:'W1 · 数据治理', 2:'W2 · 数据质量+元数据', 3:'W3 · 数仓BI+主数据', 4:'W4 · 建模+架构',
