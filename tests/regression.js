@@ -236,6 +236,52 @@ const listAll = X.practiceList();
 ok('all 域同样优先未答', listAll.filter((t) => practice.answers[t.i] != null).length === 0,
   '已答 ' + listAll.filter((t) => practice.answers[t.i] != null).length + '/' + listAll.length);
 
+// ─────────────────── 4b. daily 卡片文案跟随 antiRepeat（2026-09-03） ───────────────────
+// 现场：daily 卡片永远写死「优先未答」，但用户在刷题页右上角关掉「防重复」后，
+// 实际是从「全部题」随机抽 → 首题可能命中已做题（#167），文案与行为脱钩误导人。
+group('4b. daily 卡片文案不写死「优先未答」，跟随 antiRepeat 真实状态');
+ok('按钮文案按 antiRepeat 动态生成（hint 三元）',
+  /const hint = practice\.antiRepeat \? '优先未答' : '随机抽取'/.test(html));
+const staleStatic = (html.match(/题 · 优先未答 · 每日抽/g) || []);
+ok('daily 按钮不再残留写死的「题 · 优先未答 · 每日抽」', staleStatic.length === 0,
+  '残留 ' + staleStatic.length + ' 处（若 >0 说明又写死了）');
+ok('防重复说明提示已双向化（开/关各一条文案）',
+  /防重复模式开启：每天优先刷/.test(html) && /防重复模式已关闭：从全部题里随机抽/.test(html));
+
+// ─────────────────── 4c. 防重复关 = 允许抽到已做题（行为定义，防误改） ───────────────────
+// 复现用户现场：先在防重复开时答满该域前 N-2 题，再在刷题页里点「🆕 防重复」关掉
+// （answers 保留，仅切换开关），随后切域 chip / 回到该域 → list 从「全部题」抽 5，
+// 首题可能命中已做题。注意：不能用 openQuiz 模拟——它在 antiRepeat=关 时会清空 answers，
+// 而真实用户路径（域 chip / mode-toggle / 防重复开关）都不清 answers。
+group('4c. 防重复关闭 = 从全部题抽（可能命中已做）');
+practice.answers = {};
+const idxDomAll = QUIZ.map((q, i) => ({ q, i })).filter((t) => t.q.d === dom).map((t) => t.i);
+idxDomAll.slice(0, idxDomAll.length - 2).forEach((i) => { practice.answers[i] = QUIZ[i].a; });
+practice.antiRepeat = true;
+practice.shuffle = false;
+practice.pickSize = 5;
+practice.finished = false;
+practice.reviewSnapshot = null;
+// 先在防重复开时进一次（openQuiz 不清 answers），再模拟页内关掉防重复（btn-anti 行为）
+X.openQuiz(dom, 'practice');
+practice.antiRepeat = false;
+X._invalidateListCache();   // 等效 btn-anti 点击：翻转 + 清缓存（不清 answers）
+const listOff = X.practiceList();
+ok('防重复关：列表长度 = pickSize(5)', listOff.length === 5, 'len=' + listOff.length);
+const listOff0 = !!practice.answers[listOff[0].i];
+ok('防重复关：首题可命中已答题（本构造确定性命中）', listOff0,
+  'list[0]=#' + (listOff[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listOff[0].i]));
+ok('防重复关：answers 未被清空（页内切开关不清记录）',
+  Object.keys(practice.answers).filter((k) => practice.answers[k]).length === idxDomAll.length - 2,
+  'truthy=' + Object.keys(practice.answers).filter((k) => practice.answers[k]).length);
+// 对照：同数据开防重复 → 首题必须是未答
+practice.antiRepeat = true;
+X._invalidateListCache();
+const listOn = X.practiceList();
+const listOn0 = !!practice.answers[listOn[0].i];
+ok('对照：防重复开 + 同数据 → 首题是未答题', !listOn0,
+  'list[0]=#' + (listOn[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listOn[0].i]));
+
 // ─────────────────── 5. 错题本 Leitner 行为断言 ───────────────────
 group('5. 错题本：收纳 / 升盒降盒 / 毕业');
 

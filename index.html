@@ -6248,14 +6248,18 @@ function renderDay(iso){
         } else if(allCovered){
           out.push(`<button class="dc-btn success" data-quiz="${k}" data-mode="practice">🏆 复习 ${name} <span class="dc-prog">${done}/${cnt} · 已全刷一遍</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
         } else {
-          out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🆕 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · 优先未答 · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
+          // ✨ 2026-09-03 fix：按钮文案跟随 antiRepeat 真实状态，避免「关防重复还写优先未答」误导
+          const hint = practice.antiRepeat ? '优先未答' : '随机抽取';
+          out.push(`<button class="dc-btn" data-quiz="${k}" data-mode="practice">🆕 刷题 ${name} <span class="dc-prog">${done} / ${cnt} 题 · ${hint} · 每日抽 ${pickCnt}</span></button><button class="dc-btn ghost" data-quiz="${k}" data-mode="study">📖 看题</button>`);
         }
       }
     });
-    // ✨ 2026-08-26 防重复说明：仅在「未全答完」时显示一次
+    // ✨ 2026-08-26 防重复说明：双向提示（开/关各自说明），仅在「未全答完」时显示一次
     const anyUncovered = dom.some(k=>k!=='all' && answered(k) < QUIZ.filter(q=>q.d===k).length);
-    if(anyUncovered && practice.antiRepeat){
-      out.push(`<div class="dc-prog" style="margin-top:6px;font-size:11.5px;color:var(--text-3)">🆕 防重复模式开启：每天优先刷「未答过的题」，全答完一遍再回退。刷题页可一键关闭。</div>`);
+    if(anyUncovered){
+      out.push(practice.antiRepeat
+        ? `<div class="dc-prog" style="margin-top:6px;font-size:11.5px;color:var(--text-3)">🆕 防重复模式开启：每天优先刷「未答过的题」，全答完一遍再回退。刷题页可一键关闭。</div>`
+        : `<div class="dc-prog" style="margin-top:6px;font-size:11.5px;color:var(--yellow)">⚠️ 防重复模式已关闭：从全部题里随机抽 5 道，可能抽到已做过的题。想优先刷未答题？进刷题页点右上角「🆕 防重复」一键开启。</div>`);
     }
     return out.join('');
   })();
