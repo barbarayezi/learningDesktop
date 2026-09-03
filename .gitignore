@@ -28,3 +28,13 @@ cloudbase-sync-proxy/node_modules/
 # wrangler 部署缓存
 cloudflare-sync-proxy/.wrangler/
 landing-page/.wrangler/
+
+# git 仓库恢复备份（含损坏 .git，体积大，不入库）
+.workbuddy/backup/
+
+# 根目录截图 / 测试碎片（本地产物，不入库）
+_shot_final.png
+_check.js
+_heat_test.html
+bypass-open.html
+idx.html
