@@ -10,6 +10,7 @@ on:
       - 'index.html'
       - '资料/**'
       - 'articles.js'
+      - 'tests/**'
       - '.github/workflows/**'
 
 jobs:
@@ -18,6 +19,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ⛔ 质量闸门：回归测试不过 → 直接中止，公网永远拿不到坏代码。
+      # 覆盖：内联脚本语法、启动骨架完整性（boot 队列必须被 bootAll 消费）、
+      #      刷题列表「优先未答 + 一轮内不重排」、错题本 Leitner 升降盒与毕业。
+      # 历史教训：只靠 grep 特征串验证"部署成功"，证明不了行为正确
+      #          （2026-09-03 就因此把带 bug 的 _listKey 放上了公网）。
+      - name: Regression tests (quality gate)
+        run: |
+          node tests/regression.js
+          echo "✅ 回归测试通过，允许继续部署"
 
       # index.html 引用的是根目录 articles.js，但仓库里它在 资料/ 下；
       # 复制到根目录，保证公网「资讯」tab 不会 404（也避免覆盖掉手动上传的版本）。
@@ -32,14 +48,9 @@ jobs:
       # 属于后端或私有内容（其中含 CloudBase service_role 密钥），绝不上传公网托管。
       - name: Remove non-site files before upload
         run: |
-          rm -rf .git .github .workbuddy .tmp proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json _check.js _heat_test.html bypass-open.html idx.html 2>/dev/null || true
+          rm -rf .git .github .workbuddy .tmp tests proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json _check.js _heat_test.html bypass-open.html idx.html 2>/dev/null || true
           echo "Remaining files to deploy:"
           ls -la
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
 
       - name: Install CloudBase CLI
         run: npm install -g @cloudbase/cli

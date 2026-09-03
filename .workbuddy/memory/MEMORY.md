@@ -1,59 +1,123 @@
 # 学习桌面项目 · 长期约定
 
-## 学习计划单一来源（2026-08-16 起）
-- **学习计划只维护网站 `index.html`**（由 `proxy_server.py` 静态托管，本机访问 `http://localhost:8080/` 或局域网 `http://192.168.71.53:8080/`——**IP 随 WiFi/DHCP 变化，以 `ifconfig` 实际为准**），今后不再新建或更新 `01_考证/*.md`、`02_读博/*.md` 等 markdown 计划文件。
-- 用户明确要求：今后所有计划改动都落到网站上，统一到单一来源。
-- 2026-08-16 已执行「彻底单一来源」：删除 `01_考证/` 与 `02_读博/` 下全部 11 份计划 md（CDGA 复习/26周/每周材料/自测/自查/资料清单、DAMA 三级规划、数据开发排期；博士申请计划/推荐信/网址汇总），内容均已镜像在网站对应页面。
-- 网站页面清单（2026-08-16 最终版）：cdga-daily（每日学习中心·单一自动路由入口，含 W1–W26 182 天打卡，按日期自动落 CDGA→软考→数据开发→CDGP 阶段；**顶部新增可折叠「CDGA 半年复习路线图」（26周逐周明细），原 cdga-plan 的"阶段路线图+逐周明细"已合并到此**）、cdga-check（自查清单）、cdga-quiz（自测题）、cdga-res（**资料与资讯中心**，tab 切换：📥 资料获取清单 / 📰 公众号推文精选 / 📡 关注源，原 cdga-news、cdga-sources 已并入）、advanced-plan（三级进阶总规划 + 数据开发证书，tab 切换）、advanced-check（软考/数据开发/CDGP 自查清单，tab 切换）、phd（博士申请：计划/推荐信/网址，tab 切换）。**cdga-plan 已不再是侧边栏独立入口**：完整备考百科内容（考试全貌/17知识域权重/拿分基本盘/项目经验映射/避坑失分点/里程碑自检）仍保留在 section#cdga-plan，由每日中心折叠区「📖 看完整备考百科 →」按钮跳转可达。
-- **保留未删**：`资料/` 下的参考 md（备考笔记、免费备考路径、B站日程等）仍作站内资料阅读器源，不在"计划"范畴，保持不变。
-- **Git 仓库结构（2026-08-16 变更）**：`learningDesktop` 现在是**独立 git 仓库**，自带 `.git`，`origin = git@github.com:barbarayezi/learningDesktop.git`（SSH）。注意：今天早些时候曾误把 learningDesktop/index.html 提交到上层 `01_Projects` 仓库（commit 5bb3eb0、313d3a8），后已把 learningDesktop 独立化为仓库并推送 `3925820` 到 GitHub main（删除 11 份 md 的单一来源收尾也一并上线）。上层 `01_Projects` 仓库仍把这些文件当它的跟踪对象，存在嵌套仓库冲突——建议后续在 `01_Projects` 用 `git rm --cached -r learningDesktop`（或加 .gitignore）解除跟踪，避免 git 把 learningDesktop 当 gitlink 报错。
-- **提交方式**：在 learningDesktop 内直接 `git add -A && git commit && git push`（已配 tracking origin/main）。日常改 index.html 后直接 commit+push，无需再走 01_Projects。
-- 提交历史：2026-08-16 将学习桌面独立化为 git 仓库并推送 GitHub（main = 3925820）。
+## 🔴 改动交付铁律（2026-09-03 立，最高优先级）
+起因：9-03 发现「已修复并推送」的刷题 bug 其实没上线——git 仓库损坏后我用
+`git reset --mixed FETCH_HEAD` 恢复，把工作区 index.html 回退到旧版本，
+而"去掉 `_listKey` 里 answeredCount"的关键编辑就此丢失。只靠 `curl | grep 特征串`
+验证部署，只能证明"某字符串在公网上"，证明不了"行为正确"。
 
-## 公网部署（CloudBase 静态网站托管，2026-08-25 厘清并修通）
-- 公网地址 `https://test-d5gf0o9ky7d34beaf-1469471831.tcloudbaseapp.com/`，即 CloudBase 静态网站托管，serve 的就是仓库里的 `index.html`（与本地/proxy 同源同文件）。
-  - **⚠️ envId 真实值 = `test-d5gf0o9ky7d34beaf`（无后缀）**。公网默认域名里的 `-1469471831` 是 CloudBase 默认域名后缀（来自 appId/uin），**不属于 envId**。过去多次把域名后缀当 envId 传入，导致 `DescribeStaticStore` 报 `InvalidParameter`。**权威 envId 以 `tcb env list` 实测为准**（该密钥可见环境即 `test-d5gf0o9ky7d34beaf`，状态 Normal，region ap-shanghai）。
-- **GitHub Actions 自动部署**：`.github/workflows/deploy.yml` 在 `push` 到 `main` 且改动命中 `index.html` / `资料/**` / `articles.js` / 工作流本身时自动部署。
-  - **🔴 历史坑（2026-08-21→08-25）**：最初用 `TencentCloudBase/cloudbase-action@v1`（node12），在 GitHub node24 runner 上登录失败「无有效身份信息」；中间一度误把域名后缀塞进 envId 又引出 `DescribeStaticStore: InvalidParameter`；并曾误以为 Secrets 没配。
-  - **✅ 2026-08-25 修好并首次 success（run 29, commit `01dc60b`）**：部署步骤改为**腾讯云官方 CLI**——`npm i -g @cloudbase/cli` → `tcb login --apiKeyId $TCB_SECRET_ID --apiKey $TCB_SECRET_KEY` → `tcb env use $TCB_ENV_ID` → `tcb hosting deploy . --env-id $TCB_ENV_ID --yes`。环境参数必须用 `--env-id`（tcb V3 全局选项），`-e` 不被 hosting 子命令识别。
-  - **Secrets 名（一字不差）**：`TCB_SECRET_ID`、`TCB_SECRET_KEY`（用户已在仓库 Settings → Secrets → Actions 配好，2026-08-25 验证 Pre-check 通过）。密钥为子账号 CAM 密钥，对该 envId 有 CloudBase 权限（env list/use/hosting 均通）。
-  - 工作流部署前 `rm -rf`：`.git .github .workbuddy proxy_server.py cloudbase-sync-proxy landing-page Find overview.md node_modules 资料/harvest_articles.py cloudbaserc.json`，确保含 service_role 密钥的后端文件**绝不上公网**（cloudbaserc.json 含错误短版 envId，一并删掉、改用 --env-id 显式指定）。
-  - 工作流会把 `资料/articles.js` 复制到根目录 `articles.js`（因 `index.html` 引用根目录 articles.js，但仓库里它在 `资料/` 下），保证公网「资讯」tab 不 404。
-  - 手动部署兜底（需本机 `tcb login` 已登录）：`tcb hosting deploy . -e test-d5gf0o9ky7d34beaf --yes`。
-- **安全提醒**：CAM 的 `TCB_SECRET_KEY` 是账号级密钥，仓库为 public，切勿明文提交；建议子账号最小权限。proxy_server.py / cloudbase-sync-proxy 仍属后端，工作流已排除。
-- **当前工作机（Windows）tcb 未登录**：沙箱无法完成 `tcb login` 浏览器交互，本机不能直接 deploy；公网部署走 GitHub Actions 即可（2026-08-25 实测 `tcb env list` 通过 CI 正常返回，确认密钥有效）。
-- 是否生效的验证：`curl -s 公网URL | grep 特征串`；Ch12 链接修复后公网应出现 `BV14t4y1Z7Hg`、消失 `BV1p5mEBkESv`；更严：确认公网上存在 `资料/03_机构免费资料/*.pdf` 等 ≥5 个子目录文件，仅 index.html 200 不能算通。
-- **「Actions 已配」验收铁律**：任何改动 deploy.yml / 加 secrets / 改 push 路径后，必须在同回合**轮询 GitHub Actions API**（GET `/actions/runs?per_page=1`）确认 `conclusion=success`，再写「已配好」。记忆陷阱：把「我以为配了」写成「已配好」是 8-21 翻车主因。
+**四道防线，缺一不可：**
+1. **回归测试是唯一验收标准**：改完 index.html 必须跑
+   `node tests/regression.js`（零依赖，34+ 断言）。绿灯才允许 commit。
+   覆盖：内联脚本语法 / 启动骨架完整性 / 刷题列表优先未答且一轮内不重排 /
+   错题本 Leitner 升降盒与毕业。**不要再写用完就删的临时测试脚本**，
+   要加断言就加进 `tests/regression.js`。
+2. **CI 质量闸门**：`deploy.yml` 在部署前跑同一份测试，失败即 `exit 1` 中止，
+   公网永远拿不到坏代码。（`tests/` 已加入部署前 `rm -rf` 清单，不上公网。）
+3. **git 危险操作后必须复核改动是否还在**：凡执行
+   `reset` / `checkout --` / `stash pop` / 仓库重建 / `pull --rebase` 后，
+   立刻 `git diff HEAD -- index.html` + grep 关键特征，确认自己的编辑没被回退，
+   再继续。**这条是 9-03 翻车的直接原因。**
+4. **"已修复"的措辞门槛**：只有在「测试绿灯 + Actions `conclusion=success` +
+   公网双向断言（新特征在 / 旧特征消失）」三者齐备后，才能对用户说已修复。
+   把"我以为改好了"说成"已修复"是 8-21、9-03 两次翻车的共同主因。
 
-## 本地服务托管（proxy_server.py）· 环境坑（2026-08-17 补）
-- `proxy_server.py` 是 CDGA 学习桌面的本地静态服务器 + CloudBase API 代理，绑定 `0.0.0.0:8080`（监听所有网卡）。
-- **CodeBuddy 的 Bash 环境无法持久化后台服务**：`nohup` / `setsid` / `run_in_background` 起的进程会在用户下一轮提问时被回收；`launchctl load` / `launchctl bootstrap gui/501` 因当前命令没有 GUI 登录会话权限报 `Input/output error`。
-- **正确常驻方式**：在 Mac Mini 自带「终端」App 里执行 `launchctl load ~/Library/LaunchAgents/com.barbara.learningdesktop.proxy.plist`（该 plist 已建好，含 `KeepAlive`：崩溃自动重启 + 登录自启）。CodeBuddy 这边只能"本轮内"临时拉起服务。
-- 排查"打不开"的顺序：① 服务是否在跑（`lsof -nP -iTCP:8080 -sTCP:LISTEN`）；② 访问 IP 是否等于本机当前 `ifconfig` 的 IP（DHCP 会变，旧 `192.168.103.37` 已失效，当前 `192.168.71.53`）；③ 浏览器是否装代理插件把该 IP 拐走（需设直连/bypass，系统级代理已确认 Disabled）；④ macOS 防火墙是否弹窗需允许 python 入站。
-- **跨设备云同步根因与修复（2026-08-18 定案）**：旧 `CLOUDBASE_KEY` 是一把 API-key JWT，有效期仅 1 小时且 `exp=2025-08-16 01:00Z`（已过期一年）；更致命的是 `proxy_request` **从没把密钥注入**转发请求 → 网关收不到凭证 → 匿名登录失败 → `cloudReady=false` → `localStorage.setItem` 拦截器 `if(!cloudReady) return` 导致数据**从不上报云端**，所以各设备各存各的 localStorage、互不连通。
-- **修复（commit `65e7d40`）**：① 换成用户从 CloudBase 控制台新生成的 **service_role 密钥**（`role=service_role`、永不过期 `exp=9999`、绕过 RLS）；② `proxy_request` 现在对**每次 `/api/*` 请求强制注入** `apikey: <KEY>` 与 `Authorization: Bearer <KEY>`（浏览器不持有密钥，服务端统一鉴权）；③ `index.html` 的 `initCloud` 改为「匿名登录失败不阻断，只要云端 select 通就 `cloudReady=true`」。
-- **已验证**：本地起测试代理(127.0.0.1:8099)对真实 CloudBase 网关跑通 GET 200（云端 `user_data` 表里**已有用户真实数据**：`cdga-daily-checks` 含 `2026-08-15/16/17` 打卡，说明历史进度没丢）/ upsert 201 / select 200 / delete 204。
-- **生效前提（关键）**：运行中的服务器(`192.168.103.37:8080`)仍跑旧代码，**必须在该机 `git pull` 并重启 `proxy_server.py`** 修复才生效；重启后 `cloudReady` 变 true，云端已有数据会合并回本地、后续写入会上云。
-- **安全提醒**：service_role 是项目全权限密钥，现硬编码在 git 跟踪的 `proxy_server.py` 中；若仓库为 public，应改为环境变量/`config.json`(gitignore) 或轮换密钥。
+**受控崩溃测试**：新增断言后要验证它真能变红（例如临时注释 `bootAll();`
+跑一遍应报错），否则测试可能是永远绿的假警报。
 
-## 云同步架构（2026-09-01 起：Cloudflare Worker 取代 CloudBase 云函数）
-- **🔴 2026-09-01 根因定案**：8/25 部署的 CloudBase 云函数 `syncProxy`（`cloudbase-sync-proxy/`，地址 `...ap-shanghai.app.tcloudbase.com/syncProxy`）实测返回 `FUNCTIONS_INVOCATION_FAILED / AvailableStatus = InsufficientBalance`——**CloudBase 账户余额耗尽，云函数被冻结**（静态托管不受影响仍 200）。用户换电脑看不到打卡 = 云函数挂了 → `cloudReady=false` → localStorage 拦截器 `if(!cloudReady) return` 只写本地不上云。
-- **✅ 新方案（commit `1643ca3`）**：新增 `cloudflare-sync-proxy/worker.js` + `wrangler.toml`（worker 名 `learningdesktop-sync-proxy`），转发到 `https://test-d5gf0o9ky7d34beaf.api.tcloudbasegateway.com`，服务端注入 `apikey`+`Authorization: Bearer`（密钥走 `wrangler secret put CLOUDBASE_SERVICE_KEY`，**严禁写入仓库**）；循环剥离 `/syncProxy`、`/api` 可选前缀；CORS 全放行。worker 逻辑已本地单测 5 用例全过。
-- **`index.html` 的 `SYNC_PROXY_URL` 当前置空 `""`**（回退同源 /api 局域网模式）。**部署 worker 后填入 `https://learningdesktop-sync-proxy.<子域>.workers.dev`（不带前缀）** → commit+push → 任意电脑/手机直连 worker 云同步，彻底不依赖家里 Mac、也绕开 CloudBase 欠费。
-- 部署步骤：`cd cloudflare-sync-proxy && npx wrangler login && npx wrangler deploy && npx wrangler secret put CLOUDBASE_SERVICE_KEY`；或 Cloudflare Dashboard 网页粘贴 worker.js + Variables 加 Secret。
-- 公网页面验证已上线（`grep 'var SYNC_PROXY_URL'` 显示 `""`，注释含 `cloudflare-sync-proxy`）。
+## 单一来源：学习计划只维护 `index.html`
+- 所有计划改动落到网站，**不再新建/更新 `01_考证/*.md`、`02_读博/*.md`**
+  （8-16 已删除全部 11 份计划 md，内容已镜像进网站页面）。
+- 保留 `资料/` 下参考 md（备考笔记、免费备考路径、B站日程等），作站内资料阅读器源。
+- 页面清单：`cdga-daily`（每日学习中心·唯一自动路由入口，W1–W26 共 182 天打卡，
+  按日期自动落 CDGA→软考→数据开发→CDGP 阶段；顶部含可折叠「26周复习路线图」）、
+  `cdga-check`（自查清单）、`cdga-quiz`（自测/刷题/错题本/外部题库 四模式）、
+  `cdga-res`（资料与资讯中心，tab：资料清单/推文精选/关注源）、
+  `advanced-plan`、`advanced-check`、`phd`。
+  `cdga-plan`（完整备考百科）不在侧边栏，由每日中心折叠区按钮跳转可达。
 
-## 前端渲染铁律 —— 不再让单点错误整页空白（2026-08-17 立）
-- 本项目 `index.html` 是单一超大 `<script>` 文件。任何顶层未捕获异常都会在该点中断脚本，导致**热力图、每日学习卡、B站视频表等全部空白**。
-- 血的教训（2026-08-17 晚两次白屏）：① 把 `_origSetItem` 拦截器定义放到 `initCloud` 之后；② 在 `const WEEKS` 定义之前立即执行访问 `WEEKS` 的 IIFE。
-- **从今以后的原则**：所有「启动期」调用/事件绑定/DOM 初始化必须走 `safe(label, fn)`；新增任何 boot 点时，先问自己「如果这段抛错，会不会中断后面整个脚本」。
-- 当前已加固的入口（2026-08-17 最终）：`initCloud` 自含 try/catch；主题切换、阶段导航条、侧边栏、搜索、日期/周切换、热力图、今日学习卡、B站视频表、资讯、关注源、`initChecks`/`initLadder`/`initPhdPath`/`initDataDev` 均已 `safe()` 隔离。
-- 错误展示：`reportErr()` 会在页面底部生成固定红色横幅，列出出错的子模块及调用栈，其它模块继续正常渲染。
-- 验证方法：每次改动后用 Chrome headless 截图（`--window-size=1280,2600`）确认 ① 无底部红条；② 热力图、今日学习卡、B站视频表、侧边栏均可见。必要时做受控崩溃测试（临时在某函数首行 `throw`）。
+## Git 仓库
+- `learningDesktop` 是**独立 git 仓库**，`origin = git@github.com:barbarayezi/learningDesktop.git`（SSH）。
+- 日常：仓库内直接 `git add -A && git commit && git push`（已配 tracking origin/main）。
+- ⚠️ 上层 `01_Projects` 仓库仍跟踪着这些文件，存在嵌套仓库冲突。
+  建议在 `01_Projects` 执行 `git rm --cached -r learningDesktop` 或加 .gitignore 解除跟踪。
+- ⚠️ **本机 git 环境不稳定**：曾出现 `.git/refs` 与 pack 数据文件丢失导致
+  「不是仓库」。恢复路径：`git init -b main` → `git remote add origin` →
+  `git fetch origin main` → `git reset --mixed FETCH_HEAD`（**注意 `--soft` 不动索引，
+  会把全部文件误判为删除，必须用 `--mixed`**）→ 然后立刻执行上面铁律第 3 条复核。
 
-## CDGA 清单「题面/答案」盲测数据模型约定（2026-08-26 立）
-- `#cdga-check .chk-row span` 文本统一规范化为 **一条一括号**：括号前=题面，括号内=答案本体（一条最多一组半角/全角括号，答案文本里禁止再出现括号字符）。
-- **标签（必考/重点/高频/每年必考 等）禁止进括号**，放题面前用 `必考点｜` `重点｜` 前缀，或直接删除（标签信息由「错题回放」「速查表」展示更合适）。
-- **不增删 `.chk-row`、保持索引 0-49 顺序**，用户的勾选状态按索引存 localStorage 才不会错位；新增概念也只能插在索引尾部扩展。
-- `conceptPair()` 解析器兜底：纯标签括号 / 纯数字区间视为无答案(`hasAnswer=false`)、题面用全文；多括号条目剩余部分拼回题面防丢字。详见当日 memory。
-- **写入清单前先想「这条怎么盲测？答案是什么」**，避免「答案：必考」「答案：PIA」这类工具把标签/缩写当答案的 bug 复发。
+## 公网部署（CloudBase 静态托管 + GitHub Actions）
+- 公网地址 `https://test-d5gf0o9ky7d34beaf-1469471831.tcloudbaseapp.com/`，
+  serve 的就是仓库里的 `index.html`。
+- **⚠️ envId 真实值 = `test-d5gf0o9ky7d34beaf`（无后缀）**。域名里的 `-1469471831`
+  是默认域名后缀，**不属于 envId**；误传会让 `DescribeStaticStore` 报 `InvalidParameter`。
+- `.github/workflows/deploy.yml` 在 push 到 main 且命中
+  `index.html` / `资料/**` / `articles.js` / `tests/**` / 工作流本身时触发。
+  步骤：checkout → setup-node → **回归测试闸门** → 补根目录 articles.js →
+  删除非站点文件 → 装 `@cloudbase/cli` → 校验 Secrets → `tcb login` → `tcb hosting deploy`。
+- 关键命令：`tcb login --apiKeyId $TCB_SECRET_ID --apiKey $TCB_SECRET_KEY` →
+  `tcb hosting deploy . --env-id $TCB_ENV_ID --yes`。
+  **环境参数必须用 `--env-id`**（`-e` 不被 hosting 子命令识别）。
+- Secrets 名（一字不差）：`TCB_SECRET_ID`、`TCB_SECRET_KEY`（已配好并验证）。
+- 部署前 `rm -rf` 清单含 `.git .github .workbuddy tests proxy_server.py`
+  `cloudbase-sync-proxy landing-page cloudbaserc.json` 等——含密钥的后端文件绝不上公网。
+- 工作流会把 `资料/articles.js` 复制到根目录（index.html 引用根目录版本），防「资讯」tab 404。
+- **本机 Windows 未 `tcb login`**（沙箱无法完成浏览器交互），公网部署一律走 Actions。
+- 验收：轮询 `GET /repos/barbarayezi/learningDesktop/actions/runs?per_page=1`
+  确认 `conclusion=success`，再 curl 公网做**双向断言**。
+  ⚠️ 轮询别写长 for 循环（会触发沙箱资源限制），单次查询即可。
+
+## 云同步架构（2026-09-01 起：Cloudflare Worker）
+- **背景**：CloudBase 账户欠费 → 云函数 `syncProxy` 被冻结
+  （`InsufficientBalance`），静态托管不受影响。云函数挂 → `cloudReady=false`
+  → localStorage 拦截器 `if(!cloudReady) return` 只写本地不上云 → 换设备看不到打卡。
+- **现方案**：`cloudflare-sync-proxy/worker.js`（worker 名 `learningdesktop-sync-proxy`）
+  转发到 `https://test-d5gf0o9ky7d34beaf.api.tcloudbasegateway.com`，
+  服务端注入 `apikey` + `Authorization: Bearer`，密钥走
+  `wrangler secret put CLOUDBASE_SERVICE_KEY`（**严禁写入仓库**）。
+- 部署：`cd cloudflare-sync-proxy && npx wrangler login && npx wrangler deploy`，
+  或 Dashboard 粘贴 worker.js + 加 Secret。
+- `index.html` 的 `SYNC_PROXY_URL` 填入 worker 地址后，任意设备直连同步，
+  不依赖家里 Mac、也绕开 CloudBase 欠费；置空 `""` 则回退同源 `/api` 局域网模式。
+- **安全**：service_role 是项目全权限密钥，仓库为 public，绝不能明文提交。
+
+## 本地服务（proxy_server.py）
+- 本地静态服务器 + CloudBase API 代理，绑定 `0.0.0.0:8080`。
+- **CodeBuddy Bash 环境无法持久化后台服务**（nohup/setsid/run_in_background 起的进程
+  下一轮会被回收；launchctl 无 GUI 会话权限）。常驻需在 Mac 自带终端执行
+  `launchctl load ~/Library/LaunchAgents/com.barbara.learningdesktop.proxy.plist`。
+- 打不开的排查顺序：① 服务在跑吗（`lsof -nP -iTCP:8080 -sTCP:LISTEN`）；
+  ② 访问 IP 是否等于当前 `ifconfig` 的 IP（**DHCP 会变**，别用记忆里的旧 IP）；
+  ③ 浏览器代理插件是否劫持；④ macOS 防火墙是否需允许 python 入站。
+
+## 前端渲染铁律 —— 不让单点错误整页空白
+- `index.html` 是单一超大内联 `<script>`，**任何顶层未捕获异常都会在该点中断脚本**，
+  导致热力图、每日学习卡、B站视频表等全部空白。
+- 历史白屏教训：① 拦截器定义放到了使用点之后；② 在 `const WEEKS` 定义前
+  执行了访问 `WEEKS` 的 IIFE。
+- **当前机制（已从 `safe()` 演进为 `boot()` 队列）**：
+  `boot(label, fn)` 把启动任务 push 进 `_bootTasks`，文件末尾 `bootAll()`
+  在 `bootSplash` 遮罩下逐个执行并单独 try/catch；`safe(label, fn)` 仍保留作即时包裹。
+  **⚠️ `boot()` 只入队，必须有 `bootAll()` 消费——漏调则所有初始化静默不执行、整页空白。
+  这条已写成 `tests/regression.js` 的断言。**
+- 首屏遮罩有 15s 超时兜底：主脚本崩了也会放行，不会永久卡在 loading。
+- `reportErr()` 在页面底部生成红色横幅列出出错模块，其它模块继续渲染。
+- 新增 boot 点时先自问：「这段抛错会不会中断后面整个脚本」。
+
+## 刷题 / 错题本 数据模型
+- 刷题列表缓存：`_listKey` 由「日期+域+来源+seed+pickSize+shuffle+antiRepeat」组成，
+  **刻意不含"已答集合"**——一轮内列表固定，答一题不重排，避免"答完就跳下一道、
+  看不到本题反馈"。只在 `openQuiz` 进入、切模式、重置时 `_invalidateListCache()`。
+- 错题本 `cdga-wrong-book-v1`：每题存
+  `wrongAt/wrongCount/box/lastReview/reviewCount/streakCorrect/reason/graduated`。
+  Leitner 五盒间隔 `[1,2,4,8,16]` 天；答对升盒、答错回盒 1、**连续做对 3 次毕业**移出。
+  错因 4 类：概念不清 / 粗心跳步 / 审题失误 / 时间不足。
+- 复习 session 用 `practice.reviewSnapshot` 固定题目集，避免复习中升盒导致列表缩短错位。
+
+## CDGA 清单「题面/答案」盲测数据模型
+- `#cdga-check .chk-row span` 统一 **一条一括号**：括号前=题面，括号内=答案本体
+  （一条最多一组括号，答案文本内禁止再出现括号字符）。
+- **标签（必考/重点/高频）禁止进括号**，改用 `必考点｜` 前缀或直接删除。
+- **不增删 `.chk-row`、保持索引顺序**（勾选状态按索引存 localStorage，会错位）；
+  新增概念只能插在索引尾部。清单结构变更需配 schema 版本号做幂等迁移（见 `loadChecks` v2）。
+- 写入清单前先自问「这条怎么盲测？答案是什么」，避免「答案：必考」这类把标签当答案的 bug。
