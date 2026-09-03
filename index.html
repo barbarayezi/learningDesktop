@@ -6448,7 +6448,15 @@ function renderDay(iso){
   document.getElementById('dayCheck').onchange=e=>{dailyChecks[iso]=e.target.checked;saveDailyChecks(dailyChecks);renderDay(iso);};
   document.getElementById('openReader').onclick=()=>openReader('sohu');
   dayCard.querySelectorAll('[data-res]').forEach(el=>el.onclick=()=>openReader(el.dataset.res));
-  dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>openQuiz(b.dataset.quiz,b.dataset.mode));
+  dayCard.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>{
+    // 2026-09-03 fix：daily card 入口承诺「优先未答」→ 必须强制开启防重复
+    // （用户可能在刷题页里手动关了 → 这里重新开启保证兑现承诺；用户仍可在刷题页关回去）
+    if(b.dataset.mode==='practice' && !practice.antiRepeat){
+      practice.antiRepeat=true;
+      savePractice();
+    }
+    openQuiz(b.dataset.quiz,b.dataset.mode);
+  });
   dayCard.querySelector('#dcWrongBook')?.addEventListener('click',()=>{ quizMode='wrongbook'; localStorage.setItem('cdga-quiz-mode','wrongbook'); showPage('cdga-quiz'); applyQuizMode(); });
   // 折叠：P2/P3 组
   dayCard.querySelectorAll('[data-fold]').forEach(btn=>{

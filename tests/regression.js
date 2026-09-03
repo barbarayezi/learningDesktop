@@ -282,6 +282,33 @@ const listOn0 = !!practice.answers[listOn[0].i];
 ok('对照：防重复开 + 同数据 → 首题是未答题', !listOn0,
   'list[0]=#' + (listOn[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listOn[0].i]));
 
+// ─────────────────── 4d. daily 入口 click handler 强制开 antiRepeat（2026-09-03） ───────────────────
+// 用户真实痛点：daily card 文案动态化只是「不再误导」，但**刷题页首题仍是已做的题**。
+// 根因 = 用户在刷题页里关了 antiRepeat → list 从全部题抽 → 命中已做题。
+// 修复 = daily card 按钮 click handler 强制 antiRepeat=true（兑现承诺，可手动关回去）。
+group('4d. daily 入口强制开启 antiRepeat（兑现「优先未答」承诺）');
+ok('daily 入口 click handler 含「practice.antiRepeat=true」强制开启',
+  /dataset\.mode==='practice' && !practice\.antiRepeat/.test(html) &&
+  /practice\.antiRepeat=true/.test(html));
+// 行为验证：模拟「用户刷题页里关了 → 再点 daily card」
+practice.answers = {};
+idxDomAll.slice(0, idxDomAll.length - 2).forEach((i) => { practice.answers[i] = QUIZ[i].a; });
+practice.antiRepeat = false;   // 模拟刷题页里关了
+practice.shuffle = false;
+practice.pickSize = 5;
+practice.finished = false;
+practice.reviewSnapshot = null;
+practice.domainFilter = dom;
+practice.currentIdx = 0;
+// 等效 click handler 行为：强制开 + savePractice + openQuiz
+practice.antiRepeat = true;
+X.savePractice();
+X.openQuiz(dom, 'practice');
+const listAfter = X.practiceList();
+ok('daily 入口后 antiRepeat=true（兑现承诺）', practice.antiRepeat === true);
+ok('daily 入口后首题是未答题（不命中已做）', !practice.answers[listAfter[0].i],
+  'list[0]=#' + (listAfter[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listAfter[0].i]));
+
 // ─────────────────── 5. 错题本 Leitner 行为断言 ───────────────────
 group('5. 错题本：收纳 / 升盒降盒 / 毕业');
 
