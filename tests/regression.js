@@ -166,7 +166,7 @@ const EXPORT_NAMES = [
   'loadPractice', 'savePractice', 'LEITNER', 'WRONG_STORE', 'WRONG_REASONS',
   'addWrong', 'markWrongReview', 'markGraduate', 'setWrongReason',
   'wrongTodayList', 'loadWrongBook', 'saveWrongBook', '_todayISO', '_daysBetween',
-  'RK_QUIZ', 'QUIZ_DOMAINS', 'renderPractice', 'resetPractice',
+  'RK_QUIZ', 'QUIZ_DOMAINS', 'QUIZ_STORE', 'renderPractice', 'resetPractice',
 ];
 const exportTail = '\n;globalThis.__X__ = {' +
   EXPORT_NAMES.map((n) => `get ${n}(){ try{ return ${n}; }catch(e){ return undefined; } }`).join(',') +
@@ -308,6 +308,84 @@ const listAfter = X.practiceList();
 ok('daily 入口后 antiRepeat=true（兑现承诺）', practice.antiRepeat === true);
 ok('daily 入口后首题是未答题（不命中已做）', !practice.answers[listAfter[0].i],
   'list[0]=#' + (listAfter[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listAfter[0].i]));
+
+// ─────────────────── 4e. 云端 merge 后内存 practice 必须重载（2026-09-03）───────────────────
+// 真实事故：用户 device A 答过 QUIZ[166]，上传云端；device B 打开 → initCloud 把 166
+// 灌进 localStorage → 但「存储快照重载」boot 任务**漏了 loadPractice()** → 内存里
+// practice.answers 仍是 stale（含 4 题、不含 166） → daily card 的 done=4 显示正常
+// → 用户点 daily card → openQuiz 触发 savePractice 把内存 stale 写回 localStorage，
+// 覆盖 initCloud merge 结果 → 再 loadPractice 重新读 → list 把 166 当成「未答」
+// 抽进 unans 池 → 进入页看到「做过的样子」(QUIZ[166].a='B' 与 stale 内存不冲突)。
+// 修复 = '存储快照重载' boot 任务里加 loadPractice()；并把脚本顶层 applyQuizMode()
+//         移到 boot 队列，等 initCloud 完成后再跑。
+group('4e. 云端 merge 后内存 practice 必须重载（daily card 与刷题页一致）');
+// 「boot 任务含某调用」的检测要排除注释伪命中——逐行去掉 // 注释再查
+// 用 lastIndexOf 找「最后一次」出现，因为注释里也可能误打 boot(...) 字面量
+function bootCallbackCallsReal(label, fnName) {
+  const needle = "boot('" + label + "'";
+  const idx = html.lastIndexOf(needle);
+  if (idx < 0) return false;
+  // 切到下一个 boot( 或第一个 );\n 或 2000 字符内
+  const tail = html.slice(idx, idx + 2000);
+  const fnStart = tail.indexOf('function');
+  if (fnStart < 0) return false;
+  // 找函数体结束：连续 }) 行；优先找空行后的 });，其次找 }) 立即分号
+  let fnEnd = tail.indexOf('\n});', fnStart);
+  if (fnEnd < 0) fnEnd = tail.indexOf('});', fnStart);
+  if (fnEnd < 0) fnEnd = tail.length;
+  const cb = tail.slice(fnStart, fnEnd);
+  for (const line of cb.split('\n')) {
+    const code = line.replace(/\/\*.*?\*\//g, '').replace(/\/\/.*$/, '');
+    if (new RegExp('\\b' + fnName + '\\s*\\(').test(code)) return true;
+  }
+  return false;
+}
+ok('boot 任务「存储快照重载」回调内有 loadPractice() 实际调用（排除注释）',
+  bootCallbackCallsReal('存储快照重载', 'loadPractice'));
+ok('原 5288 那段（页面首次加载+applyQuizMode 顶层调用）已被删除',
+  !/\/\/ 页面首次加载：按持久化的模式渲染[\s\S]{0,80}applyQuizMode\(\);/.test(html));
+ok('boot 队列里包含「刷题模式初始化」回调内有 applyQuizMode() 实际调用（排除注释）',
+  bootCallbackCallsReal('刷题模式初始化', 'applyQuizMode'));
+
+// 行为验证：构造 stale 内存 → localStorage 含 166 → loadPractice → 内存同步 →
+// daily card 的 done 计数与 list 行为不再脱钩
+localStorage.removeItem(X.QUIZ_STORE);
+// 模拟 initCloud merge 写回 localStorage 的「最新」值（云端 + 本地合并结果）
+// 用 12 在三、元数据管理域作干扰项，验证 stale 内存里少 166（云端独有）会被找回
+localStorage.setItem(X.QUIZ_STORE, JSON.stringify({
+  answers: { 12: 'A', 17: 'B', 116: 'D', 165: 'B', 166: 'B' },
+  currentIdx: 0, domainFilter: '四、数据仓库与BI', finished: false,
+  pickSize: 5, shuffle: true, todaySeed: 0, sourceFilter: 'all', antiRepeat: true
+}));
+// 模拟 device B 「脏内存」：openQuiz 5288 那次用 stale localStorage 加载的 practice.answers
+// 不含 166（云端独有），UI 显示 done=4 但内容里少了 166
+practice.answers = { 12: 'A', 17: 'B', 116: 'D', 165: 'B' };
+// 跑 boot 任务里的 loadPractice 重载
+X.loadPractice();
+ok('loadPractice 把 initCloud merge 的 166 灌进内存',
+  practice.answers[166] === 'B', 'memory=' + JSON.stringify(practice.answers));
+const dom166Idx = QUIZ.map((q,i)=>({q,i})).filter(x=>x.q.d==='四、数据仓库与BI').map(x=>x.i);
+const doneInDom166 = dom166Idx.filter(i => practice.answers[i]).length;
+// 17、116、165、166 都在「四、数据仓库与BI」域 → 已答 4 题（包含 166）
+ok('daily card 的 done 计数 = 4（含云端 166，不含 12）', doneInDom166 === 4,
+  'done=' + doneInDom166 + '（应为 4：17/116/165/166）');
+ok('done 集合内确实含 166（云端独有答案不被丢）',
+  dom166Idx.filter(i => practice.answers[i]).indexOf(166) >= 0,
+  'done 集合=' + dom166Idx.filter(i => practice.answers[i]).join(','));
+
+// 配套：内存修复后走一遍 daily card 入口（openQuiz+practiceList）→ list 不会把 166 抽进 unans
+practice.shuffle = false;
+practice.pickSize = 5;
+practice.finished = false;
+practice.reviewSnapshot = null;
+X.openQuiz('四、数据仓库与BI', 'practice');
+const listSync = X.practiceList();
+ok('云端 merge 后 daily card 入口：list[0] 不命中已答对题',
+  practice.answers[listSync[0].i] == null,
+  'list[0]=#' + (listSync[0].i + 1) + ' answered=' + JSON.stringify(practice.answers[listSync[0].i]));
+ok('云端 merge 后 daily card 入口：list 全程不含 166',
+  !listSync.some(x => x.i === 166),
+  'list=' + listSync.map(x=>x.i+1).join(','));
 
 // ─────────────────── 5. 错题本 Leitner 行为断言 ───────────────────
 group('5. 错题本：收纳 / 升盒降盒 / 毕业');

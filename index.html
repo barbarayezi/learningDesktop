@@ -3204,6 +3204,11 @@ boot('存储快照重载', function(){
   try{ daynotes=loadDayNotes(); }catch(e){}
   try{ videoWatched=loadVideoWatched(); }catch(e){}
   try{ wbSubMode=loadWbSubMode(); }catch(e){}
+  // ✨ 2026-09-03 fix：必须含 loadPractice() —— 否则内存里 practice.answers 停留
+  //     在脚本顶层 applyQuizMode() 的「旧值」，daily card 的 done 计数算错；
+  //     用户点 daily card → openQuiz → savePractice 还会把旧值写回 localStorage
+  //     覆盖 initCloud merge 过的结果，导致「跳到做过的题」复活。
+  try{ loadPractice(); }catch(e){}
 });
 boot('主题切换绑定', function(){
   document.getElementById('themeBtn').onclick=()=>{
@@ -5284,8 +5289,8 @@ document.querySelectorAll('.mode-toggle button').forEach(b=>{
   });
 });
 
-// 页面首次加载：按持久化的模式渲染
-applyQuizMode();
+// 页面首次加载的刷题模式初始化已搬到 boot 队列末尾（避免在 initCloud 完成前用 stale
+// localStorage 初始化内存里的 practice.answers → 导致 daily card 与刷题页数据脱钩）
 // 拦截原 showPage 函数以支持模式切换后重渲染
 const _origShowPage=window.showPage;
 window.showPage=function(id){
@@ -6892,6 +6897,10 @@ boot('热力图', buildHeat);
 boot('今日学习卡', function(){ renderDay(TODAY_ISO); });
 boot('热力图刷新', refreshHeat);
 boot('品牌导航绑定', function(){ document.querySelector('.brand').onclick=()=>showPage('home'); });
+// ✨ 2026-09-03 fix：脚本顶层 applyQuizMode() 移到 boot 队列，等 initCloud merge 完成 +
+//     '存储快照重载' 把 practice.answers 灌回内存之后再渲染，避免 daily card 的 done
+//     计数与刷题页的 list 出现「内存脏值」不一致导致「跳到做过的题」。
+boot('刷题模式初始化', function(){ applyQuizMode(); });
 boot('打开默认页', function(){ showPage('daily'); });
 
 const NEWS_SEEN_KEY='cdga-news-seen';
