@@ -47,6 +47,11 @@ function ok(name, cond, detail) {
 function group(title) {
   console.log('\n【' + title + '】');
 }
+// 已知欠债：不阻断部署，但会打印出来，避免"看不见就等于不存在"
+function warn(name, cond, detail) {
+  if (cond) { passed++; console.log('  ✅ ' + name); }
+  else { console.log('  ⚠️  ' + name + (detail ? ' — ' + detail : '') + '  （已知欠债，不阻断）'); }
+}
 
 // ───────────────────────── 1. 提取内联脚本 ─────────────────────────
 group('1. 内联脚本提取与语法');
@@ -161,6 +166,7 @@ const EXPORT_NAMES = [
   'loadPractice', 'savePractice', 'LEITNER', 'WRONG_STORE', 'WRONG_REASONS',
   'addWrong', 'markWrongReview', 'markGraduate', 'setWrongReason',
   'wrongTodayList', 'loadWrongBook', 'saveWrongBook', '_todayISO', '_daysBetween',
+  'RK_QUIZ', 'QUIZ_DOMAINS', 'renderPractice', 'resetPractice',
 ];
 const exportTail = '\n;globalThis.__X__ = {' +
   EXPORT_NAMES.map((n) => `get ${n}(){ try{ return ${n}; }catch(e){ return undefined; } }`).join(',') +
@@ -267,6 +273,170 @@ ok('毕业题不再进入今日待复习', !todayIds.includes(t), 'today=' + JSO
 X.setWrongReason(t, 'concept');
 wb = X.loadWrongBook();
 ok('错因可标注', wb[t].reason === 'concept', 'reason=' + wb[t].reason);
+
+// ─────────────────── 6. 题库数据质量 ───────────────────
+// 「题目本身的 bug」（答案字母越界、选项重复、题干重复、缺解析）不会让页面报错，
+// 只会让人做题时看到错的东西 —— 逻辑测试抓不到，必须逐题体检。
+group('6. 题库数据质量（逐题体检）');
+
+const LETTERS = 'ABCDEFGH';
+
+function auditBank(bankName, bank, keyField) {
+  if (!Array.isArray(bank) || bank.length === 0) {
+    ok(bankName + ' 题库存在且非空', false, 'got ' + typeof bank);
+    return;
+  }
+  ok(bankName + ' 题库存在且非空', true, bank.length + ' 题');
+
+  const badField = [];
+  const badOpts = [];
+  const badAnswer = [];
+  const dupOpts = [];
+  const noExplain = [];
+  const dupStem = [];
+  const seenStem = new Map();
+
+  bank.forEach((q, i) => {
+    const tag = '#' + i + ' ' + String(q && q.q || '').slice(0, 18);
+
+    // 字段完整性
+    if (!q || typeof q.q !== 'string' || !q.q.trim() || !q[keyField]) badField.push(tag);
+
+    // 选项：数组 / 至少 2 项 / 无空串
+    if (!Array.isArray(q.o) || q.o.length < 2 ||
+        q.o.some((o) => typeof o !== 'string' || !o.trim())) {
+      badOpts.push(tag);
+    } else {
+      // 同题内选项不得重复（重复选项会出现两个"正确答案"）
+      const norm = q.o.map((o) => o.trim());
+      if (new Set(norm).size !== norm.length) dupOpts.push(tag);
+    }
+
+    // 答案字母必须落在选项范围内：'B' 且只有 2 个选项 → 越界
+    const pos = typeof q.a === 'string' ? LETTERS.indexOf(q.a.trim()) : -1;
+    if (pos < 0 || !Array.isArray(q.o) || pos >= q.o.length) {
+      badAnswer.push(tag + ' a=' + JSON.stringify(q.a) + ' o.len=' + (q.o ? q.o.length : 'n/a'));
+    }
+
+    // 解析不能为空（错题本复盘全靠它）
+    if (typeof q.e !== 'string' || !q.e.trim()) noExplain.push(tag);
+
+    // 题干去重
+    const stem = String(q.q || '').replace(/\s+/g, '');
+    if (seenStem.has(stem)) dupStem.push(tag + ' ↔ #' + seenStem.get(stem));
+    else seenStem.set(stem, i);
+  });
+
+  ok(bankName + ' 每题字段完整(q/' + keyField + ')', badField.length === 0,
+    badField.slice(0, 3).join(' | '));
+  ok(bankName + ' 选项合法(数组/≥2项/无空串)', badOpts.length === 0, badOpts.slice(0, 3).join(' | '));
+  ok(bankName + ' 同题内无重复选项', dupOpts.length === 0, dupOpts.slice(0, 3).join(' | '));
+  ok(bankName + ' 答案字母落在选项范围内', badAnswer.length === 0, badAnswer.slice(0, 3).join(' | '));
+  ok(bankName + ' 每题都有解析', noExplain.length === 0,
+    noExplain.length + ' 题缺解析: ' + noExplain.slice(0, 3).join(' | '));
+  ok(bankName + ' 无重复题干', dupStem.length === 0,
+    dupStem.length + ' 组重复: ' + dupStem.slice(0, 3).join(' | '));
+}
+
+auditBank('CDGA', QUIZ, 'd');
+auditBank('软考', X.RK_QUIZ, 't');
+
+// 解析质量棘轮：e 只有出处署名、没有任何讲解的题，允许存量、禁止新增。
+// 这类题不会报错，但答错后错题本复盘时看不到"为什么错" → 学习闭环断掉。
+const NO_EXPLAIN_BASELINE = 91;   // 2026-09-03 实测存量；只允许降、不允许升
+// 精确判定：按 · ｜ | 切段，丢掉纯署名段，若一段不剩 → 只有出处、没有讲解。
+// 不用长度阈值 —— 「全生命周期管理。」这类短解析是真解析，不能误判为欠债。
+const ATTR_SEG = /^(网友回忆版|CC BY-SA\s*4\.0.*|weixin_\d+|csdn[-\w]*|答案推断[:：]?)$/i;
+function isBareAttribution(e) {
+  const segs = String(e || '')
+    .split(/[·｜|]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && !ATTR_SEG.test(s));
+  return segs.length === 0;
+}
+const bare = QUIZ.map((q, i) => ({ q, i })).filter((x) => isBareAttribution(x.q.e));
+ok('无讲解题数未新增（棘轮，只许降不许升）', bare.length <= NO_EXPLAIN_BASELINE,
+  '当前 ' + bare.length + ' 题 > 基线 ' + NO_EXPLAIN_BASELINE + '，说明新加的题没写解析');
+warn('全部题目都有真正的讲解（非仅出处署名）', bare.length === 0,
+  bare.length + '/' + QUIZ.length + ' 题只有出处署名');
+if (bare.length < NO_EXPLAIN_BASELINE) {
+  console.log('     ↑ 基线可下调至 ' + bare.length + '（请同步改 NO_EXPLAIN_BASELINE）');
+}
+
+// 域清单必须由题库真实推导，且每域题目数够抽一轮
+ok('域清单非空且来自题库', Array.isArray(X.QUIZ_DOMAINS) && X.QUIZ_DOMAINS.length > 0,
+  'domains=' + (X.QUIZ_DOMAINS || []).length);
+const thinDomains = (X.QUIZ_DOMAINS || []).filter((d) => domCount[d] < 5);
+ok('每个域题目数 ≥ 5（够抽一轮 pickSize=5）', thinDomains.length === 0,
+  thinDomains.map((d) => d + '=' + domCount[d]).join(', '));
+
+// ─────────────────── 7. 答题推进与边界 ───────────────────
+// 列表对了但渲染越界照样白屏/错位，这一组盯的是"用户实际点下去"的路径。
+group('7. 答题推进与边界（渲染不崩 / 数量不缩水 / 重置生效）');
+
+practice.answers = {};
+practice.antiRepeat = true;
+practice.pickSize = 5;
+practice.shuffle = true;
+practice.finished = false;
+practice.reviewSnapshot = null;
+X.openQuiz(dom, 'practice');
+const rl = X.practiceList();
+ok('一轮题量 = pickSize（不缩水）', rl.length === practice.pickSize,
+  'len=' + rl.length + ' pickSize=' + practice.pickSize);
+
+// 逐题答完，每步都渲染一次，任何一步抛错都算回归
+let renderErr = null;
+try {
+  for (let i = 0; i < rl.length; i++) {
+    practice.currentIdx = i;
+    X.renderPractice();
+    practice.answers[rl[i].i] = QUIZ[rl[i].i].a;
+  }
+} catch (e) { renderErr = e; }
+ok('逐题作答+渲染全程不抛错', renderErr === null, renderErr ? renderErr.message : '');
+
+// 全答完后列表不得塌缩（否则"答到第5题时列表只剩1条"→ 索引错位）
+const rlAfter = X.practiceList();
+ok('全部答完后列表长度不变', rlAfter.length === rl.length,
+  rl.length + ' → ' + rlAfter.length);
+
+// currentIdx 越界必须被修正，而不是渲染出 undefined 题目
+let boundErr = null;
+practice.currentIdx = 999;
+try { X.renderPractice(); } catch (e) { boundErr = e; }
+ok('currentIdx 越界时渲染不崩', boundErr === null, boundErr ? boundErr.message : '');
+ok('currentIdx 越界被修正回合法范围', practice.currentIdx < rlAfter.length && practice.currentIdx >= 0,
+  'currentIdx=' + practice.currentIdx);
+
+// 负索引同样兜住
+practice.currentIdx = -5;
+let negErr = null;
+try { X.renderPractice(); } catch (e) { negErr = e; }
+ok('currentIdx 负值时渲染不崩且被修正', negErr === null && practice.currentIdx >= 0,
+  'currentIdx=' + practice.currentIdx);
+
+// 重置：清空作答并重新出题
+if (typeof X.resetPractice === 'function') {
+  X.resetPractice();
+  const rlReset = X.practiceList();
+  ok('重置后作答清空', Object.keys(practice.answers || {}).length === 0,
+    '剩余 ' + Object.keys(practice.answers || {}).length + ' 条作答');
+  ok('重置后仍能出题', rlReset.length > 0, 'len=' + rlReset.length);
+} else {
+  ok('resetPractice 已导出', false, '未取到该函数');
+}
+
+// 换域必须换题：切到另一个域后列表里不应残留原域题目
+const otherDom = Object.keys(domCount).filter((d) => d !== dom && domCount[d] >= 5)[0];
+if (otherDom) {
+  X.openQuiz(otherDom, 'practice');
+  const rlOther = X.practiceList();
+  const leaked = rlOther.filter((x) => QUIZ[x.i].d !== otherDom).length;
+  ok('切换域后列表只含该域题目', leaked === 0, '混入 ' + leaked + ' 题 (dom=' + otherDom + ')');
+} else {
+  ok('存在第二个可测域', false, '题库域不足，无法测切换');
+}
 
 // ─────────────────── 收尾 ───────────────────
 summary();
