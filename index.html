@@ -1238,6 +1238,12 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
 </style>
 </head>
 <body>
+<!-- 启动同步遮罩：initCloud 完成前盖住首屏，避免「先渲染本地空数据再 reload」的闪烁 -->
+<div id="bootSplash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;z-index:99998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:opacity .3s">
+  <div style="font-size:2.4rem;line-height:1">☁️</div>
+  <div style="color:#b9b9d8;font-size:.95rem;letter-spacing:.05em">正在同步学习记录…</div>
+  <div style="color:#666;font-size:.75rem">首次打开或换设备会自动拉取云端进度</div>
+</div>
 <!-- 密码门 -->
 <div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
   <div style="text-align:center;color:#eee;max-width:360px;padding:2rem">
@@ -2990,6 +2996,13 @@ function safe(label, fn){ try { return fn(); } catch(e){ console.error('['+label
 window.addEventListener('error', function(ev){ reportErr('全局', ev.error||ev.message); });
 window.addEventListener('unhandledrejection', function(ev){ reportErr('Promise', (ev.reason&&(ev.reason.stack||ev.reason.message))||ev.reason); });
 
+/* ===== 启动队列：先 initCloud 拉云端合并写回 localStorage，再统一渲染 UI =====
+ * 目标：任何设备打开页面 → 遮罩期间完成云端拉取+深合并 → 一次性渲染最终数据，
+ * 不再需要 initCloud 后 location.reload()（避免「闪一下」和手动强刷）。
+ */
+var _bootTasks = [];
+function boot(label, fn){ _bootTasks.push([label, fn]); }
+
 /* ---------- 云端数据库 (CloudBase PostgreSQL via PostgREST) ---------- */
 var CLOUDBASE_ENV = "test-d5gf0o9ky7d34beaf";
 // 云同步代理（Cloudflare Worker + KV，终极方案）：
@@ -3130,7 +3143,9 @@ localStorage.removeItem = function(key) {
 
 // 初始化：尝试匿名登录（可选，失败不影响）→ 用代理注入的 service_role key 拉云端数据，
 // 与本地「深合并」后写回（不再整块覆盖）。只要云端连通即视为就绪。
-(async function initCloud() {
+// 说明：本函数不再自执行、不再 reload——由文件末尾 bootAll() 在 bootSplash 遮罩下
+// await 本函数完成（含 7s 超时兜底）后才统一渲染 UI，保证任何设备打开即见云端同步结果。
+async function initCloud() {
   try {
     // 匿名登录仅为兼容旧逻辑；真正鉴权由服务端代理注入 service_role key 完成
     try {
@@ -3145,17 +3160,12 @@ localStorage.removeItem = function(key) {
 
     var result = await cloud.from('user_data').select('key,value');
     if (result.error) throw result.error;
-    var didChange = false;
     if (result.data) {
       result.data.forEach(function(row) {
         var cv = parseVal(row.value);
         var lv = parseVal(localStorage.getItem(row.key));
         var merged = lv ? deepMerge(cv, lv) : cv;
         var mergedStr = JSON.stringify(merged);
-        // 仅当合并结果与本地原值不同时才算「变化」，避免重复 reload 循环
-        if (localStorage.getItem(row.key) !== mergedStr) {
-          didChange = true;
-        }
         _origSetItem(row.key, mergedStr);
       });
     }
@@ -3169,17 +3179,12 @@ localStorage.removeItem = function(key) {
     } catch (se) { console.warn('⚠️ 本地全量上云部分失败:', se.message); }
     cloudReady = true;
     console.log('✅ 云端已连接，同步了 ' + (result.data ? result.data.length : 0) + ' 条数据');
-    // 关键：云端数据被合并写回本地且**真的变化了**才强制刷新页面，
-    // 否则页面 UI 仍渲染 initCloud 启动瞬间读到的 localStorage 旧快照。
-    // sessionStorage 标记兜底，避免异常情况下无限 reload。
-    if (didChange && !sessionStorage.getItem('__ld_reloaded')) {
-      sessionStorage.setItem('__ld_reloaded', '1');
-      setTimeout(function(){ try { location.reload(); } catch(e){} }, 1200);
-    }
+    return true;
   } catch (e) {
     console.warn('⚠️ 云端连接失败，使用本地缓存:', e.message);
+    return false;
   }
-})();
+}
 
 /* ---------- Theme ---------- */
 const html=document.documentElement;
@@ -4029,15 +4034,9 @@ function resetPractice(){
 let _listCache = null;
 let _listCacheKey = '';
 function _listKey(){
-  // 防重复模式下，已答集合变化必须使缓存失效，否则已答题会混入未答列表
-  let answeredCount=0;
-  if(practice.antiRepeat){
-    if(practice.domainFilter==='all'){
-      answeredCount=Object.keys(practice.answers||{}).length;
-    } else {
-      answeredCount=QUIZ.filter((q,i)=>q.d===practice.domainFilter && practice.answers[i]).length;
-    }
-  }
+  // ⚠️ 刻意不含「已答集合」：一轮刷题期间 list 固定，答一题不重排，
+  // 避免「点下一题跳过一道 / 答完本题看不到答案」。
+  // 已答状态只在「进入刷题」时通过 _invalidateListCache() 生效一次（见 openQuiz）。
   return [
     _todayISO(),
     practice.domainFilter||'all',
@@ -4045,8 +4044,7 @@ function _listKey(){
     practice.todaySeed||0,
     practice.pickSize||5,
     practice.shuffle?'1':'0',
-    practice.antiRepeat?'1':'0',
-    answeredCount
+    practice.antiRepeat?'1':'0'
   ].join('|');
 }
 function _invalidateListCache(){ _listCache=null; _listCacheKey=''; }
@@ -5260,6 +5258,11 @@ document.querySelectorAll('.mode-toggle button').forEach(b=>{
       practice.domainFilter='all';
       practice.reviewSnapshot=null;
       savePractice();
+    }
+    // 切回刷题模式：清缓存并按当前已答状态重排，currentIdx 归零避免命中旧 list
+    if(quizMode==='practice'){
+      practice.currentIdx=0; practice.finished=false;
+      _invalidateListCache();
     }
     applyQuizMode();
     window.scrollTo({top:document.getElementById('cdga-quiz').offsetTop-20,behavior:'smooth'});
