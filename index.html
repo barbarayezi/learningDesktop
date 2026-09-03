@@ -1294,6 +1294,10 @@ html[data-theme="dark"] .md-host code{color:#f78da7;border-color:var(--border)}
   inp.onkeydown = function(e) { if (e.key === 'Enter') btn.click(); };
 })();
 </script>
+<!-- 启动兜底：若主脚本异常导致 bootAll 未执行，15s 后无论如何释放首屏遮罩 -->
+<script>
+setTimeout(function(){ var sp = document.getElementById('bootSplash'); if (sp) sp.style.display = 'none'; }, 15000);
+</script>
 <div class="app">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
@@ -3190,7 +3194,16 @@ async function initCloud() {
 const html=document.documentElement;
 const saved=localStorage.getItem('bb-theme');
 if(saved)html.setAttribute('data-theme',saved);
-safe('主题切换绑定', function(){
+// boot 队列第一项：initCloud merge 完成后重载全部「顶层 localStorage 快照」，
+// 使后续各 boot 模块（热力图/视频/资讯/每日卡/刷题模式）读到云端合并后的最新值。
+boot('存储快照重载', function(){
+  try{ dailyChecks=loadDailyChecks(); }catch(e){}
+  try{ notes=loadNotes(); }catch(e){}
+  try{ daynotes=loadDayNotes(); }catch(e){}
+  try{ videoWatched=loadVideoWatched(); }catch(e){}
+  try{ wbSubMode=loadWbSubMode(); }catch(e){}
+});
+boot('主题切换绑定', function(){
   document.getElementById('themeBtn').onclick=()=>{
     const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
     html.setAttribute('data-theme',next);localStorage.setItem('bb-theme',next);
@@ -3273,7 +3286,7 @@ function maybeSwitchStageByDate(iso){
 }
 
 /* 初始化阶段导航条 */
-safe('阶段导航条', function(){ renderStageBars('cdga-daily'); });
+boot('阶段导航条', function(){ renderStageBars('cdga-daily'); });
 
 /* tab 切换通用函数 */
 function initTabs(wrapId){
@@ -3314,7 +3327,7 @@ document.querySelectorAll('[data-goto]').forEach(c=>c.onclick=()=>showPage(c.dat
 const sidebar=document.getElementById('sidebar'),scrim=document.getElementById('scrim');
 function openSidebar(){sidebar.classList.add('open');scrim.classList.add('show');}
 function closeSidebar(){sidebar.classList.remove('open');scrim.classList.remove('show');}
-safe('侧边栏绑定', function(){
+boot('侧边栏绑定', function(){
   document.getElementById('menuBtn').onclick=openSidebar;
   scrim.onclick=closeSidebar;
 });
@@ -3395,7 +3408,7 @@ function initChecks(){
   });
   updateProgress();
 }
-safe('知识点清单初始化', initChecks);
+boot('知识点清单初始化', initChecks);
 
 /* ---------- Video schedule check-in (CDGA daily center) ---------- */
 const VKEY='bb-video-checks';
@@ -3480,7 +3493,7 @@ function renderVideoToday(){
     <div class="vcard-sub">本周目标：工作日晚上 — ${vlink(x[3], wk.vWorkVideos)} ｜ 周末 — ${vlink(x[4], wk.vWeekendVideos)}</div>
   </div>`;
 }
-(function(){
+boot('B站视频模块', function(){
   // renderVideoRows/renderVideoWeek 现在依赖 WEEKS[i] 取视频链接；WEEKS 在更后面定义，延迟到当前脚本执行完再初始化
   setTimeout(function(){
     safe('B站视频打卡行', renderVideoRows);
@@ -3504,7 +3517,7 @@ function renderVideoToday(){
     }));
     if(typeof updateProgress==='function')updateProgress();
   }, 0);
-})();
+});
 const LADDER_KEY='bb-ladder-checks';
 function loadLadder(){try{return JSON.parse(localStorage.getItem(LADDER_KEY))||{}}catch(e){return{}}}
 function saveLadder(o){localStorage.setItem(LADDER_KEY,JSON.stringify(o))}
@@ -3522,7 +3535,7 @@ function initLadder(){
   });
   updateLadderProgress();
 }
-safe('进阶阶梯初始化', initLadder);
+boot('进阶阶梯初始化', initLadder);
 function updateLadderProgress(){
   const all=document.querySelectorAll('#ladder-checks input[type=checkbox]');
   if(!all.length)return;
@@ -3566,7 +3579,7 @@ function initPhdPath(){
   });
   updatePhdProgress();
 }
-safe('博士路径初始化', initPhdPath);
+boot('博士路径初始化', initPhdPath);
 
 /* ---------- Data-Dev checklist ---------- */
 const DATADEV_KEY='bb-datadev-checks';
@@ -3586,7 +3599,7 @@ function initDataDev(){
   });
   updateDataDevProgress();
 }
-safe('数据开发清单初始化', initDataDev);
+boot('数据开发清单初始化', initDataDev);
 function updateDataDevProgress(){
   const all=document.querySelectorAll('#datadev-checks input[type=checkbox]');
   if(!all.length)return;
@@ -6736,7 +6749,7 @@ function openQuiz(domain,mode){
     setTimeout(()=>{const els=[].slice.call(document.querySelectorAll('#quiz-list .quiz-domain'));const t=els.find(e=>e.textContent===domain);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},60);
   } else { window.scrollTo({top:0}); }
 }
-safe('日期/周切换绑定', function(){
+boot('日期/周切换绑定', function(){
   dayDate.onchange=()=>{ renderDay(dayDate.value); maybeSwitchStageByDate(dayDate.value); };
   document.getElementById('dayPrev').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)-1);
   document.getElementById('dayNext').onclick=()=>gotoDay((DAILY_BY_ISO[dayDate.value]?DAILY_BY_ISO[dayDate.value].day:1)+1);
@@ -6847,11 +6860,11 @@ function buildDailyArticles(){
   return pool;
 }
 const DAILY_ARTICLES=buildDailyArticles();
-safe('热力图', buildHeat);
-safe('今日学习卡', function(){ renderDay(TODAY_ISO); });
-safe('热力图刷新', refreshHeat);
-safe('品牌导航绑定', function(){ document.querySelector('.brand').onclick=()=>showPage('home'); });
-safe('打开默认页', function(){ showPage('daily'); });
+boot('热力图', buildHeat);
+boot('今日学习卡', function(){ renderDay(TODAY_ISO); });
+boot('热力图刷新', refreshHeat);
+boot('品牌导航绑定', function(){ document.querySelector('.brand').onclick=()=>showPage('home'); });
+boot('打开默认页', function(){ showPage('daily'); });
 
 const NEWS_SEEN_KEY='cdga-news-seen';
 function newsGetSeen(){ try{ return new Set(JSON.parse(localStorage.getItem(NEWS_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
@@ -6923,7 +6936,7 @@ function renderNews(){
     if(mk){ const id=mk.dataset.id; const seen=newsGetSeen(); if(seen.has(id)) seen.delete(id); else seen.add(id); localStorage.setItem(NEWS_SEEN_KEY, JSON.stringify([...seen])); renderNews(); }
   }); }
   if(list){ list.addEventListener('input',e=>{ const ta=e.target.closest('.js-note'); if(ta){ notes[ta.dataset.id]=ta.value; saveNotes(); } }); }
-  safe('资讯列表', renderNews);
+  boot('资讯列表', renderNews);
 })();
 /* ---------- 关注源 ---------- */
 let srcCat='all';
@@ -6961,7 +6974,7 @@ function focusNewsFeed(){ const b=document.getElementById('newsBlock'); if(b) b.
     const card=e.target.closest('.src-card');
     if(card){ const nm=card.dataset.name; const s=(window.SOURCES||[]).find(x=>x.name===nm); const acc=s?(s.accounts||[]):[]; if(newsAccounts && newsAccounts.join()===acc.join()){ newsAccounts=null; } else { newsAccounts=acc.length?acc:null; } renderSources(); renderNews(); focusNewsFeed(); return; }
   });
-  safe('关注源', renderSources);
+  boot('关注源', renderSources);
 })();
 
 /* ===================== 通用每日中心（软考/数据开发证/CDGP 共用，独立于 CDGA） ===================== */
@@ -7067,7 +7080,7 @@ const RUANKAO_CFG={
     {w:10,meta:'真题套卷+模拟+查漏',watch:'近 5 年上下午全套卷 ×2 轮；限时模拟',read:'错题本复盘；薄弱模块回教程',self:'套卷 ≥75 分（两科）；临考清单就绪'}
   ]
 };
-buildGenDaily(RUANKAO_CFG);
+boot('软考每日中心', function(){ buildGenDaily(RUANKAO_CFG); });
 
 /* ---- 数据开发工程师 配置（ACP → Databricks，2027-05-15 → 2027-08-07，13 周） ---- */
 const DATADEV_CFG={
@@ -7090,7 +7103,7 @@ const DATADEV_CFG={
     {w:13,meta:'Databricks·排错+模拟考',watch:'Spark UI 排错（数据倾斜/shuffle/spill）、预测优化；3–5 套全真模拟（限时）',read:'对照官方 exam guide（2026-05 版）复盘错题',self:'模拟考 ≥70%（32/45）；临考清单就绪'}
   ]
 };
-buildGenDaily(DATADEV_CFG);
+boot('数据开发每日中心', function(){ buildGenDaily(DATADEV_CFG); });
 
 /* ---- CDGP 数据治理专家 配置（2027-08-08 → 2028-02-07，26 周） ---- */
 const CDGP_CFG={
@@ -7126,7 +7139,31 @@ const CDGP_CFG={
     {w:26,meta:'临考·模拟+清单',watch:'最后 1 套全真模拟；临考清单（证件/时间/答题顺序）',read:'先答有把握题、不会立刻跳过，保证全部作答',self:'模拟 ≥60 且三部分各≥40%；临考清单就绪'}
   ]
 };
-buildGenDaily(CDGP_CFG);
+boot('CDGP每日中心', function(){ buildGenDaily(CDGP_CFG); });
+
+/* ===== 启动执行器：await initCloud（7s 超时兜底，云端失败则按本地数据渲染）
+ * → 依注册顺序渲染全部 UI → 隐藏 bootSplash。全程无需 reload、无需手动操作。
+ */
+async function bootAll(){
+  var sp = document.getElementById('bootSplash');
+  try {
+    await Promise.race([
+      initCloud(),
+      new Promise(function(resolve){ setTimeout(resolve, 7000); })
+    ]);
+  } catch (e) {
+    console.warn('bootAll: 云端初始化异常，按本地数据渲染 →', (e && e.message) || e);
+  }
+  var task;
+  for (var i = 0; i < _bootTasks.length; i++) {
+    task = _bootTasks[i];
+    safe(task[0], task[1]);
+  }
+  _bootTasks = [];
+  if (sp) { sp.style.opacity = '0'; setTimeout(function(){ sp.style.display = 'none'; }, 300); }
+  console.log('✅ 页面渲染完成，共执行 ' + i + ' 个模块');
+}
+bootAll();
 </script>
 </body>
 </html>
